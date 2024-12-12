@@ -1,0 +1,33 @@
+.modal-header {
+  background-color: #c1d1e2;
+  color: white;
+  padding: 8px 16px;
+}
+
+.modal-footer {
+  justify-content: space-between;
+  padding: 8px 16px;
+}
+
+.small-form .form-label {
+  font-size: 0.875rem; /* Smaller labels */
+}
+
+.small-form input,
+.small-form textarea,
+.small-form select {
+  font-size: 0.875rem; /* Smaller font size */
+  padding: 4px 8px;
+  border-radius: 6px; /* Slightly rounded corners */
+}
+
+.small-form textarea {
+  resize: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+  border-color: #007bff;
+}

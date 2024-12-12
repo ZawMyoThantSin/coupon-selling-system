@@ -1,0 +1,125 @@
+// /* .card {
+//   border-radius: 15px;
+//   overflow: hidden;
+// }
+
+// .card-header {
+//   font-size: 1.5rem;
+//   font-weight: bold;
+// }
+
+// .card-body {
+//   padding: 2rem;
+// }
+
+// .list-group-item {
+//   font-size: 1rem;
+//   margin-bottom: 0.5rem;
+// }
+
+// .btn-rounded {
+//   border-radius: 25px;
+// } */
+
+
+
+// .vh-100 {
+//   height: 100vh;
+// }
+
+// .card {
+//   border-radius: 15px;
+//   max-width: 900px; /* Restrict maximum width for readability */
+//   overflow: hidden;
+// }
+
+// .card-header {
+//   font-size: 1.5rem;
+//   font-weight: bold;
+// }
+
+// .card-body {
+//   padding: 2rem;
+// }
+
+// .list-group-item {
+//   font-size: 1rem;
+//   margin-bottom: 0.5rem;
+// }
+
+// .btn-rounded {
+//   border-radius: 25px;
+// }
+
+
+
+
+.business-detail-page {
+  .business-header {
+    position: relative;
+
+    img {
+      max-height: 250px;
+      object-fit: cover;
+    }
+
+    .business-info-overlay {
+      top: 10%;
+      left: 10%;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+    }
+  }
+
+  .business-description,
+  .business-stream,
+  .business-info {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .rating {
+    display: flex;
+    align-items: center;
+
+    i {
+      color: gold; // Bright gold color for stars
+      font-size: 1.5rem; // Optional: Adjust size
+      margin-right: 5px;
+    }
+
+    .fa-star-o {
+      color: lightgray; // Unfilled stars in light gray
+    }
+
+    span {
+      color: #333; // Text color for the rating number
+      font-weight: bold;
+    }
+  }
+
+  .actions {
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #6c757d;
+
+  .fa-spinner {
+    margin-right: 0.5rem;
+  }
+}
+
+.no-data {
+  color: #6c757d;
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+}
+
+

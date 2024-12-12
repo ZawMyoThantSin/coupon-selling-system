@@ -1,0 +1,129 @@
+<!-- app.component.html -->
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light border-bottom bg-light py-md-2 fixed-top">
+
+  <div class="container-fluid ">
+    <div class="mx-3 d-flex align-items-center ">
+      <a
+      class="text-dark me-3"
+      type="button"
+      (click)="toggleSidebar()"
+      aria-label="Toggle sidebar"
+    >
+    <i class="fa-solid fa-bars fs-5"></i>
+      </a>
+      <a class="navbar-brand" href="">Coupon Sell</a>
+    </div>
+
+    <div class="me-3">
+      <ul class="navbar-nav flex-row d-flex align-items-center">
+        <li *ngIf="!isLoggedIn" class="nav-item me-3"><a routerLink="/login" class="text-decoration-underline text-dark">Login</a></li>
+        <li *ngIf="isLoggedIn" mdbDropdown class="nav-item me-3 me-lg-1">
+          <a class="nav-link d-sm-flex align-items-sm-center"
+          href="#"
+          id="m1"
+          role="button"
+          mdbDropdownToggle
+          aria-expanded="false"
+          >
+            <img
+              src="https://mdbootstrap.com/img/new/avatars/1.webp"
+              class="rounded-circle"
+              height="22"
+              alt=""
+              loading="lazy"
+            />
+            <strong class="d-none d-sm-block ms-1">John</strong>
+          </a>
+          <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="m1">
+            <li>
+              <a class="dropdown-item" href="#">My profile</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">Settings</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">Logout</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    </div>
+
+</nav>
+
+<!-- Sidebar -->
+<div [class.open]="sidebarOpen" class="sidebar border-end fixed-left">
+  <!-- Sidebar Home Link -->
+  <a routerLink="/d" class="mt-5">
+    <i class="fas fa-home me-3"></i> Home
+  </a>
+
+  <!-- Business Link with Collapse -->
+  <a
+    class="d-flex align-items-center"
+    (click)="toggleBusinessCollapse()"
+    role="button"
+    [attr.aria-expanded]="!isBusinessCollapsed"
+    aria-controls="businessCollapse"
+  >
+    <i class="fa-solid fa-business-time me-2"></i> Business
+    <i
+      class="fas ms-auto"
+      [class.fa-chevron-down]="isBusinessCollapsed"
+      [class.fa-chevron-up]="!isBusinessCollapsed"
+    ></i>
+  </a>
+
+  <!-- Collapsible Content -->
+  <div
+    id="businessCollapse"
+    [class.collapse]="isBusinessCollapsed"
+    class="ps-4 mt-2"
+  >
+  <!-- Show Loading Spinner While Data is Being Fetched -->
+  <div *ngIf="loading" class="loading-spinner">
+    <i class="fas fa-spinner fa-spin me-2"></i> Loading...
+  </div>
+
+    <div *ngIf=" !loading && !isBusinessCollapsed" class="business-list">
+      <a
+        *ngFor="let business of businesses"
+        routerLink="/d/b/detail/{{ business.id }}"
+        routerLinkActive="active"
+        class="business-item"
+      >
+        {{ business.name }}
+      </a>
+    </div>
+
+     <!-- Show Message if No Businesses are Available -->
+  <div *ngIf="!loading && businesses.length === 0" class="no-data">
+    No businesses available.
+  </div>
+  </div>
+
+  <!-- Additional Sidebar Links -->
+  <a
+    routerLink="/d/business"
+    routerLinkActive="active"
+    class="d-block mt-2"
+  >
+    <i class="fas fa-chalkboard-teacher me-3"></i> All Businesses
+  </a>
+</div>
+
+
+<!-- Content Area -->
+<div class="content-area">
+
+  <router-outlet></router-outlet>
+  <!-- <div *ngIf="decodedToken">
+    <h3>Decoded JWT:</h3>
+    <pre>{{ decodedToken | json }}</pre>
+  </div> -->
+
+</div>

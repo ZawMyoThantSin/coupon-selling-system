@@ -1,0 +1,64 @@
+.card {
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  width: 100%;
+  max-width: 500px; /* Adjust the maximum width for smaller screens */
+}
+
+.form-outline {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+label {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  transition: all 0.2s ease-in-out;
+  font-size: 1rem;
+  color: #6c757d;
+  padding: 0 4px;
+}
+
+input:focus + label,
+textarea:focus + label,
+input:not(:placeholder-shown) + label,
+textarea:not(:placeholder-shown) + label,
+select:focus + label {
+  top: -10px;
+  font-size: 0.8rem;
+  color: #1976d2;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border: 2px solid #1976d2;
+  box-shadow: 0 0 3px rgba(25, 118, 210, 0.5);
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: transparent;
+}
+
+.row-inline {
+  display: flex;
+  gap: 1rem;
+}
+
+.row-inline > .form-outline {
+  flex: 1;
+}

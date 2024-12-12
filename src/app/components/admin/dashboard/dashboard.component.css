@@ -1,0 +1,96 @@
+/* Sidebar Styling */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Initially hidden */
+  bottom: 0;
+  width: 250px;
+  color: black; /* Updated text color to black */
+  padding-top: 20px;
+  background-color: #f8f9fa; /* Lighter background color */
+  transition: left 0.3s ease;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Lighter shadow for depth */
+}
+
+.sidebar.open {
+  left: 0; /* Show sidebar when open */
+}
+
+/* Active link styling */
+.active {
+  background-color: #e2e6ea; /* Soft active background color */
+  border-radius: 20px;
+  color: #495057; /* Slightly darker text for active item */
+  font-weight: bold; /* Make active links more prominent */
+}
+
+/* Sidebar links */
+.sidebar a {
+  text-decoration: none;
+  color: #495057; /* Updated default link color to dark gray */
+  padding: 10px 20px;
+  display: block;
+  font-size: 16px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover effect for links */
+.sidebar a:hover {
+  background-color: #e2e6ea; /* Soft hover background */
+  color: #10171f; /* Blue color for links on hover */
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+/* Business list styling */
+.business-list .business-item {
+  padding: 8px 20px;
+  color: #495057; /* Default text color */
+  font-size: 15px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.business-list .business-item:hover {
+  background-color: #e2e6ea; /* Hover effect for business items */
+  color: #4a5058; /* Blue text color for hover */
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+/* Content area for scrollable content */
+.content-area {
+  margin-left: 0; /* By default, the content takes full width */
+  margin-top: 50px; /* Space for navbar */
+  padding: 20px;
+  height: 100vh;
+  overflow-y: auto;
+  transition: margin-left 0.3s ease;
+}
+
+/* Adjust content area when sidebar is open */
+.sidebar.open + .content-area {
+  margin-left: 250px; /* Shift content to the right when sidebar is open */
+}
+
+/* Optional: Customizing navbar for better visibility */
+.navbar {
+  z-index: 1050; /* Ensure navbar is on top */
+}
+
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.loading-spinner .fa-spinner {
+  margin-right: 0.5rem;
+}
+
+.no-data {
+  color: #6c757d;
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+}
