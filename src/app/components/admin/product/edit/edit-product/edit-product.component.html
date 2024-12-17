@@ -1,0 +1,160 @@
+<div class="card shadow-sm" *ngIf="product">
+  <div class="card-header bg-light">
+    <h4 class="modal-title mb-0">Edit Product</h4>
+    <button type="button" class="btn-close" (click)="closeModal()"></button>
+  </div>
+  <div class="card-body">
+    <form #productForm="ngForm" (ngSubmit)="onSubmit()">
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <mdb-form-control>
+            <input 
+              mdbInput 
+              type="text" 
+              id="name" 
+              class="form-control" 
+              [(ngModel)]="product.name" 
+              name="name" 
+              required
+            />
+            <label mdbLabel class="form-label" for="name">Product Name</label>
+          </mdb-form-control>
+          <div *ngIf="productForm.form.controls['name']?.invalid && productForm.form.controls['name']?.touched" class="text-danger">
+            Name is required.
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <mdb-form-control>
+            <input
+              type="text"
+              id="category"
+              class="form-control"
+              mdbInput
+              [(ngModel)]="product.category"
+              name="category" 
+              required
+            />
+            <label mdbLabel for="category" class="form-label">Category</label>
+          </mdb-form-control>
+          <div *ngIf="productForm.form.controls['category']?.invalid && productForm.form.controls['category']?.touched" class="text-danger">
+            Category is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <mdb-form-control>
+            <input 
+              mdbInput 
+              type="number" 
+              id="price" 
+              class="form-control" 
+              [(ngModel)]="product.price" 
+              name="price" 
+              required
+              min="0"
+              placeholder="0"
+            />
+            <label mdbLabel class="form-label" for="price">Price</label>
+          </mdb-form-control>
+          <div *ngIf="productForm.form.controls['price']?.invalid && productForm.form.controls['price']?.touched" class="text-danger">
+            Price is required and must be greater than or equal to 0.
+          </div>
+        </div>
+
+
+        <div class="col-md-4">
+          <mdb-form-control>
+            <input 
+              mdbInput 
+              type="text" 
+              id="businessId" 
+              class="form-control" 
+              [(ngModel)]="product.businessId" 
+              name="businessId" 
+              required
+            />
+            <label mdbLabel class="form-label" for="businessId" aria-readonly="true">Business Id</label>
+          </mdb-form-control>
+          <div *ngIf="productForm.form.controls['businessId']?.invalid && productForm.form.controls['businessId']?.touched" class="text-danger">
+            Business Id is required.
+          </div>
+        </div>
+        
+
+        
+      
+        <div class="col-md-4">
+          <mdb-form-control>
+            <input
+              mdbInput
+              type="number"
+              id="discount"
+              class="form-control"
+              [(ngModel)]="product.discount"
+              name="discount"
+              required
+              min="0"
+              max="100"
+              placeholder="0"
+            />
+            <label mdbLabel for="discount" class="form-label">Discount (%)</label>
+          </mdb-form-control>
+          <div 
+            *ngIf="productForm.form.controls['discount']?.invalid && productForm.form.controls['discount']?.touched" 
+            class="text-danger">
+            Discount must be between 0% and 100%.
+          </div>
+        </div>
+      
+        <div class="col-md-4">
+          <mdb-form-control>
+            <select
+              id="status"
+              class="form-select"
+              [(ngModel)]="product.status"
+              name="status"
+              required
+            >
+              <option [ngValue]="true">Active</option>
+              <option [ngValue]="false">Inactive</option>
+            </select>
+          </mdb-form-control>
+          <div *ngIf="productForm.form.controls['status']?.invalid && productForm.form.controls['status']?.touched" class="text-danger">
+            Status is required.
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <mdb-form-control>
+          <textarea
+            id="description"
+            class="form-control"
+            mdbInput
+            [(ngModel)]="product.description"
+            name="description"
+            rows="3"
+            required
+          ></textarea>
+          <label mdbLabel for="description" class="form-label">Description</label>
+        </mdb-form-control>
+        <div
+          *ngIf="productForm.form.controls['description']?.invalid && productForm.form.controls['description']?.touched"
+          class="text-danger"
+        >
+          Description is required.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]="productForm.form.invalid || isSaving">
+        {{ isSaving ? 'Saving...' : 'Save Product' }}
+      </button>
+    </form>
+  </div>
+</div>
+
+
+

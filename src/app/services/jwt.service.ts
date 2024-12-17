@@ -18,9 +18,11 @@ export class JwtService {
       return 'null';
     }
   }
-  getEmail(token: string): any {
+  getUserId(token: string): any {
     try {
-      return jwtDecode(token);
+      const decodedToken:any = jwtDecode(token);
+      return decodedToken.id;
+
     } catch (error) {
       console.error('Invalid token', error);
       return null;

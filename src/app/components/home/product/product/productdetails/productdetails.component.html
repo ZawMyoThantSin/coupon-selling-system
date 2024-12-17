@@ -1,0 +1,27 @@
+<div class="container">
+  <div *ngIf="product" class="product-card">
+    <img
+      src="/images/product/clothes-rail-sale-sign-final-sale-discounts-clothes-rail-sale-sign-final-sale-discounts-high-quality-218245029.webp"
+      alt="{{ product.name }}"
+      class="product-image"
+    />
+    <div class="product-details">
+      <h2 class="product-title">{{ product.name }}</h2>
+      <p class="product-description">{{ product.description }}</p>
+      <div class="product-price">
+        <span>Price: {{ product.price | currency }}</span>
+      </div>
+      <div class="product-discount">
+        <p>Discount: {{ product.discount }}</p>
+      </div>
+      <div class="product-actions">
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" [(ngModel)]="quantity" min="1" value="1" />
+      </div>
+      <div class="card-buttons">
+        <button class="add-to-cart" (click)="addToCart()">Add To Cart</button>
+        <button class="back-button" (click)="goBack()">Back to Products</button>
+      </div>
+    </div>
+  </div>
+</div>

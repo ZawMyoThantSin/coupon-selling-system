@@ -27,9 +27,8 @@ export class BusinessService {
     return null;
   }
 
-  getAllBusiness():Observable<any>{
-    return this.http.get(this.BASE_URL +'api/businesses',{
-      headers:this.createAuthHeader(),
+  getAllBusiness(id: number):Observable<any>{
+    return this.http.get(this.BASE_URL +'api/businesses/user/'+id,{
       responseType:'json'
     })
   }

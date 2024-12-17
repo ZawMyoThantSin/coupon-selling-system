@@ -1,0 +1,50 @@
+<div class="container mt-4">
+    <h3 class="text-center mb-4">Coupon History</h3>
+    
+    <!-- Statistics Overview -->
+    <div class="row mb-4">
+      <div class="col-md-4 mb-3">
+        <div class="card p-3 shadow-sm">
+          <h5>Total Coupons</h5>
+          <p>{{ totalCoupons }}</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card p-3 shadow-sm">
+          <h5>Used Coupons</h5>
+          <p>{{ usedCoupons }}</p>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3">
+        <div class="card p-3 shadow-sm">
+          <h5>Remaining Coupons</h5>
+          <p>{{ remainingCoupons }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Coupon History List -->
+    <div *ngIf="couponHistory.length > 0">
+      <h4>Purchased Coupons</h4>
+      <ul class="list-group">
+        <li *ngFor="let coupon of couponHistory" class="list-group-item">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{{ coupon.couponName }}</strong> - 
+              <span class="badge bg-info">{{ coupon.shopName }}</span>
+            </div>
+            <div>
+              <span *ngIf="coupon.usedAt" class="badge bg-success">Used</span>
+              <span *ngIf="!coupon.usedAt" class="badge bg-warning">Remaining</span>
+              <p class="text-muted mt-2">Purchased at: {{ coupon.purchasedAt | date:'short' }}</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  
+    <div *ngIf="couponHistory.length === 0" class="alert alert-info mt-3">
+      You haven't bought any coupons yet.
+    </div>
+  </div>
+  

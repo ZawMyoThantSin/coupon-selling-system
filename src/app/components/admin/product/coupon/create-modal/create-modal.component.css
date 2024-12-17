@@ -1,0 +1,66 @@
+.modal-header {
+  background-color: #c1d1e2;
+  color: white;
+  padding: 8px 16px;
+  align-items: center;;
+}
+
+
+.modal-footer {
+  justify-content: space-between;
+  padding: 8px 50px;
+}
+
+.small-form .form-label {
+  font-size: .950rem; /* Smaller labels */
+}
+
+.small-form input,
+.small-form textarea,
+.small-form select {
+  font-size: 0.975rem; /* Smaller font size */
+  padding: 7px 8px ;
+  border-radius: 10px; /* Slightly rounded corners */
+}
+
+.small-form textarea {
+  resize: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.5);
+  border-color: #007bff;
+}
+/* Floating Label Styles */
+.floating-label {
+position: absolute;
+top: 50%;
+left: 10px;
+font-size: 1rem;
+color: #6c757d;
+pointer-events: none; /* Prevent label from interfering with input */
+transition: all 0.3s ease; /* Smooth transition for floating effect */
+transform: translateY(-50%);
+}
+
+.form-control-sm:focus {
+border-color: #007bff; /* Color when input is focused */
+box-shadow: 0 0 5px rgba(8, 15, 23, 0.5); /* Focus shadow */
+}
+
+/* When the input has content (either initially or after user interaction), move the label */
+.form-control-sm:not(:placeholder-shown) + .floating-label,
+.form-control-sm:focus + .floating-label {
+top: -8px;
+left: 10px;
+font-size: 0.875rem; /* Shrink the label size */
+color: #0b1117; /* Color when label is floating */
+}
+
+/* Optional: Adjust spacing of the form control */
+input.form-control-sm {
+padding-left: 8px; /* Ensure input text doesn't overlap with label */
+}
+

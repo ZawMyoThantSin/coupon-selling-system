@@ -6,14 +6,44 @@ import { BusinessComponent } from './components/admin/business/business.componen
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { BusinessDetailComponent } from './components/admin/business/business-detail/business-detail.component';
 import { BusinessEditComponent } from './components/admin/business/business-edit/business-edit.component';
+import { CouponComponent } from './components/admin/product/coupon/coupon.component';
+import { ProductComponent } from './components/admin/product/product.component';
+import { CreateProductModalComponent } from './components/admin/product/create-product/modals/create-modal/create-modal.component';
+import { DetailProductComponent } from './components/admin/product/detail/detail-product/detail-product.component';
+import { HomeComponent } from './components/home/home.component';
+import { UserprofileComponent } from './components/home/user/userprofile/userprofile.component';
+import { FriendComponent } from './components/home/friends/friend/friend.component';
+import { AboutusComponent } from './components/home/aboutus/aboutus/aboutus.component';
+import { HistoryComponent } from './components/home/history/history.component';
+import { CardComponent } from './components/home/product/product/card/card.component';
+import { ProductdetailsComponent } from './components/home/product/product/productdetails/productdetails.component';
+import { HomeCarouselComponent } from './components/home/home-carousel/home-carousel.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
   {path:'d', component:DashboardComponent,
     children:[
+      {path:'carousel', component:HomeCarouselComponent},
       {path:'business', component:BusinessComponent, title:'Business'},
-      {path:'b/detail/:id', component:BusinessDetailComponent, title:'Details'},
-      {path:'b/edit/:id', component:BusinessEditComponent, title:'Edit'}
+      {path:'b/detail/:id', component:BusinessDetailComponent,
+        children: [
+        {path: '',component: ProductComponent, },
+      ]},
+      {path:'b/edit/:id', component:BusinessEditComponent, title:'Edit'},
+      {path:'b/c', component:CouponComponent, title:''},
+      {path:'product',component:ProductComponent},
+      {path:'p/create-product',component:CreateProductModalComponent},
+      {path:'p/detail-product/:id',component:DetailProductComponent},
+
+    ]
+  },{path:'homepage', component:HomeComponent, title:'Home Page',
+    children:[
+      {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
+      {path:'friends', component:FriendComponent, title:'Friends'},
+      {path:'aboutus', component:AboutusComponent, title:'About Us'},
+      {path:'history', component:HistoryComponent, title:'History'},
+      {path:'c',component:CardComponent,title:'card'},
+      {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},
     ]
   },
   {path:'login', component:LoginComponent, title:'Login'},

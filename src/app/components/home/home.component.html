@@ -1,0 +1,211 @@
+<!-- app.component.html -->
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light border-bottom bg-light py-md-2 fixed-top">
+
+    <div class="container-fluid ">
+      <div class="mx-3 d-flex align-items-center ">
+        <a
+        class="text-dark me-3"
+        type="button"
+        (click)="toggleSidebar()"
+        aria-label="Toggle sidebar"
+      >
+      <i class="fa-solid fa-bars fs-5"></i>
+        </a>
+        <a class="navbar-brand" routerLink="/homepage">Coupon Sell Home Page</a><i class="fa-solid fa-ticket"></i>
+      </div>
+
+      <div class="me-3">
+        <ul class="navbar-nav flex-row d-flex align-items-center">
+          <!-- Notifications Dropdown -->
+          <li class="nav-item me-3" mdbDropdown>
+            <a
+              class="nav-link position-relative"
+              id="notificationDropdown"
+              role="button"
+              mdbDropdownToggle
+              aria-expanded="false"
+            >
+              <i class="fa-solid fa-bell fs-5"></i>
+              <span
+                *ngIf="unreadNotifications > 0"
+                class="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle"
+                style="font-size: 0.6em;"
+              >
+                {{ unreadNotifications }}
+              </span>
+            </a>
+            <ul
+              mdbDropdownMenu
+              class="dropdown-menu dropdown-menu-end"
+              aria-labelledby="notificationDropdown"
+            >
+              <!-- Notifications List -->
+              <li *ngIf="notifications.length === 0" class="dropdown-item text-center">
+                No notifications
+              </li>
+              <li *ngFor="let notification of notifications">
+                <a
+                  class="dropdown-item"
+                  [routerLink]="notification.link"
+                  (click)="markAsRead(notification.id)"
+                >
+                  {{ notification.message }}
+                </a>
+              </li>
+              <!-- Manage Notifications -->
+              <li>
+                <a class="dropdown-item text-center" routerLink="/settings/notifications">
+                  Manage Notifications
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li *ngIf="!isLoggedIn" class="nav-item me-3"><a routerLink="/login" class="text-decoration-underline text-dark">Login</a></li>
+          <li *ngIf="isLoggedIn" mdbDropdown class="nav-item me-3 me-lg-1">
+            <a class="nav-link d-sm-flex align-items-sm-center"
+            id="m1"
+            role="button"
+            mdbDropdownToggle
+            aria-expanded="false"
+            >
+              <img
+                src="https://mdbootstrap.com/img/new/avatars/1.webp"
+                class="rounded-circle"
+                height="22"
+                alt=""
+                loading="lazy"
+              />
+              <strong class="d-none d-sm-block ms-1">John</strong>
+            </a>
+            <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="m1">
+              <li>
+                <a class="dropdown-item"
+                routerLink="/homepage/userprofile"
+                routerLinkActive="active">My profile</a>
+              </li>
+              <li>
+                <a class="dropdown-item">Settings</a>
+              </li>
+              <li>
+                <a class="dropdown-item">Logout</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
+      </div>
+
+  </nav>
+
+  <!-- Sidebar -->
+  <div [class.open]="sidebarOpen" class="sidebar border-end fixed-left">
+    <a routerLink="/homepage"
+      class="mt-5">
+      <i class="fas fa-home me-3"></i> Home
+    </a>
+
+    <!-- Business Link -->
+    <a
+      routerLink="/hp/business"
+      routerLinkActive="active"
+      class="">
+      <i class="fas fa-store"></i> Business
+    </a>
+
+    <a
+      routerLink="/homepage/c"
+      routerLinkActive="active"
+      class="">
+      <i class="fas fa-shopping-bag"></i> Products
+    </a>
+
+    <a
+        routerLink="/homepage/friends"
+        routerLinkActive="active"
+        class="">
+        <i class="fas fa-user-friends me-2"></i> Friends
+    </a>
+
+    <a
+        routerLink="/homepage/history"
+        routerLinkActive="active"
+        class="">
+        <i class="fa-solid fa-clock-rotate-left"></i> History
+    </a>
+
+    <a
+        routerLink="/homepage/aboutus"
+        routerLinkActive="active"
+        class="">
+        <i class="fa-regular fa-address-card"></i> About Us
+    </a>
+  </div>
+
+  <!-- Content Area -->
+  <div class="content-area mb-5">
+  <app-home-carousel ></app-home-carousel>
+
+
+    <router-outlet></router-outlet>
+    <!-- <div *ngIf="decodedToken">
+      <h3>Decoded JWT:</h3>
+      <pre>{{ decodedToken | json }}</pre>
+    </div> -->
+    <div class="cc "></div>
+    <hr>
+    <footer class="bg-light text-dark py-4">
+      <div class="container">
+        <div class="row">
+          <!-- Quick Links -->
+          <div class="col-md-3">
+            <h5>Quick links</h5>
+            <ul class="list-unstyled">
+              <li><a href="#" class="text-dark">About</a></li>
+              <li><a href="#" class="text-dark">Terms and conditions</a></li>
+              <li><a href="#" class="text-dark">Privacy policy</a></li>
+              <li><a href="#" class="text-dark">Faq</a></li>
+            </ul>
+          </div>
+
+          <!-- Categories -->
+          <div class="col-md-3">
+            <h5>Categories</h5>
+            <ul class="list-unstyled">
+              <li><a href="#" class="text-dark">Restaurant</a></li>
+              <li><a href="#" class="text-dark">Shopping</a></li>
+              <li><a href="#" class="text-dark">Fitness</a></li>
+              <li><a href="#" class="text-dark">Beauty</a></li>
+              <li><a href="#" class="text-dark">Food</a></li>
+              <li><a href="#" class="text-dark">General Service</a></li>
+              <li><a href="#" class="text-primary">View all categories</a></li>
+            </ul>
+          </div>
+
+          <!-- Contacts -->
+          <div class="col-md-3">
+            <h5>Contacts</h5>
+            <ul class="list-unstyled">
+              <li><i class="fas fa-home me-2 text-primary"></i> Yangon Myanmar</li>
+              <li><i class="fas fa-phone me-2 text-primary"></i> +95-9-795 500 555</li>
+              <li><i class="fas fa-envelope me-2 text-primary"></i> admi.com</li>
+            </ul>
+          </div>
+
+          <!-- Social Media -->
+          <div class="col-md-3">
+            <h5>Follow us</h5>
+            <a href="#" class="text-dark me-3"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-dark me-3"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-dark me-3"><i class="fab fa-google-plus"></i></a>
+            <a href="#" class="text-dark me-3"><i class="fab fa-pinterest"></i></a>
+            <a href="#" class="text-dark"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>

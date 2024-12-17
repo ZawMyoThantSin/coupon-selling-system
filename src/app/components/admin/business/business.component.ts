@@ -23,16 +23,21 @@ export class BusinessComponent implements OnInit {
     modalRef: MdbModalRef<CreateModalComponent> | null = null;//
     modalRef1: MdbModalRef<AddBusinessOwnerComponent> | null = null;
     businesses:Business[]  =[];
+    userId:any;
+    token:any;
 
     constructor(private modalService: MdbModalService,
                 private toastr:ToastrService,
                 private businessService:BusinessService,
                 private tokenService:JwtService,
                 private storageService:StorageService,
-                private router: Router
+                private router: Router,
+                private jwtService: JwtService
     ) {}
     ngOnInit(): void {
-      this.businessService.getAllBusiness().subscribe(
+      this.token = this.storageService.getItem("token");
+      this.userId = this.jwtService.getUserId(this.token);
+      this.businessService.getAllBusiness(this.userId).subscribe(
         response =>{
           this.businesses = response
           console.log("RES: ",response)

@@ -1,0 +1,58 @@
+/* Container styling for the card */
+.product-details-container {
+  height: 90vh; /* Increased height for better fit */
+  padding: 40px; /* Larger padding */
+  background-color: #f8f9fa; /* Subtle background color */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card styling */
+.product-card {
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+  border-radius: 20px; 
+  border: none; /* Remove border */
+  background-color: #ffffff; /* Crisp white background */
+}
+
+/* Header styling */
+.product-card .card-header {
+  color: rgb(14, 4, 4);
+  font-weight: bold;
+  font-size: 28px; 
+  padding: 20px; 
+  border-radius: 20px 20px 0 0;
+  background-color: #f0f0f0; 
+  text-align: center; 
+}
+
+/* Body styling */
+.product-card .card-body {
+  padding: 30px; /* Increased padding for body */
+}
+
+.product-card .card-body p {
+  margin-bottom: 20px; /* Larger spacing between paragraphs */
+  font-size: 20px; /* Bigger text for better readability */
+  color: #495057;
+  line-height: 1.6; /* Improved line spacing */
+}
+
+/* Footer styling */
+.product-card .card-footer {
+  background-color: #f9f9f9;
+  padding: 20px; /* More padding for footer */
+  border-radius: 0 0 20px 20px;
+  text-align: center; /* Center align footer content */
+}
+
+.button-group {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}

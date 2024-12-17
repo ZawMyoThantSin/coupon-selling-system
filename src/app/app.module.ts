@@ -14,7 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
 import { CreateProductComponent } from './components/owner/product/create-product/create-product.component';
@@ -23,28 +23,27 @@ import { BusinessDetailComponent } from './components/admin/business/business-de
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MdbRippleModule } from 'mdb-angular-ui-kit/ripple';
 import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
+import { authInterceptor } from './services/auth.interceptor';
+import { ProductComponent } from "./components/admin/product/product.component";
+import { HomeCarouselComponent } from "./components/home/home-carousel/home-carousel.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     LoginComponent,
     SignupComponent,
     CreateProductComponent,
     DashboardComponent,
-    BusinessDetailComponent,
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot(
-      { // Global toastr configuration
+    ToastrModule.forRoot({
         positionClass: 'toast-top-right',
         preventDuplicates: true,
-      }
-    ),
+    }),
     MdbCollapseModule,
     MdbDropdownModule,
     MdbRippleModule,
@@ -52,13 +51,14 @@ import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
     MdbTabsModule,
     MdbModalModule,
     FormsModule,
-    CommonModule
-
-
-  ],
+    CommonModule,
+    ProductComponent,
+    HomeCarouselComponent
+],
   providers: [
     provideClientHydration(),
     provideHttpClient(
+      withInterceptors([authInterceptor]),
       withFetch()
     ),
     provideAnimationsAsync()

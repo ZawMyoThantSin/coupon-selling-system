@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { Business } from '../../../../models/business';
 import { BusinessService } from '../../../../services/business/business.service';
-import { error } from 'console';
+import { ProductComponent } from '../../product/product.component';
+import { CommonModule } from '@angular/common';
+import { ProductService } from '../../../../services/product/product.service';
+import { Product } from '../../../../models/product';
 
 @Component({
+  standalone:true,
+  imports:[CommonModule,RouterOutlet],
   selector: 'app-business-detail',
   template: `
 
@@ -94,6 +99,8 @@ import { error } from 'console';
         </button>
       </div>
     </div>
+    <!-- <app-product businessId="{{businessId}}"></app-product> -->
+    <router-outlet></router-outlet>
   </div>
 </div>
 
@@ -109,17 +116,37 @@ import { error } from 'console';
 })
 export class BusinessDetailComponent implements OnInit {
   business!: Business;
-
+  businessId:any;
+  products!:Product[];
   constructor(private route: ActivatedRoute,
-              private businessService: BusinessService
+              private businessService: BusinessService,
+              private productService: ProductService
   ) {}
 
   ngOnInit(): void {
     // Fetch business data on route parameter change
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
-      this.getBusinessDetail(id);
+      if (id !== this.businessId) { // Only update if the id has changed
+        this.businessId = id;
+        this.getBusinessDetail(id);
+      }
     });
+  }
+  fetchBusinessAndProducts(businessId: number): void {
+    // Fetch business details
+    this.businessService.getById(businessId).subscribe(
+      business => (this.business = business),
+      error => console.error('Error fetching business details:', error)
+    );
+
+    // Fetch products for the business
+    this.productService.getAllProducts(businessId).subscribe(
+      products => {this.products = products
+        console.log(products)
+      },
+      error => console.error('Error fetching products:', error)
+    );
   }
 
   getBusinessDetail(id: number): void {
@@ -134,29 +161,6 @@ export class BusinessDetailComponent implements OnInit {
       }
     );
   }
-
-  // business = {
-  //   name: 'Tech Solutions Ltd.',
-  //   location: '123 Main St, Tech City',
-  //   description:
-  //     'Tech Solutions Ltd. is a leading provider of innovative IT solutions, offering a range of services to help businesses thrive in the digital age.',
-  //   category: 'Technology Services',
-  //   contactNumber: '+123 456 7890',
-  //   bannerPhoto: 'https://upload.wikimedia.org/wikipedia/commons/0/03/Mount_Fuji_as_seen_across_lake_Kawaguchi%2C_with_Fujikawaguchiko_town_in_the_foreground_seen_early_in_the_evening._Honshu_Island._Japan.jpg', // Replace with an actual photo URL
-  //   rating: 4.5, // Example rating
-  //   posts: [
-  //     {
-  //       author: 'John Doe',
-  //       date: new Date(),
-  //       content: 'We are excited to announce our new partnership with XYZ Corp!',
-  //     },
-  //     {
-  //       author: 'Jane Smith',
-  //       date: new Date(),
-  //       content: 'Our team will be attending the upcoming Tech Expo 2024. Join us!',
-  //     },
-  //   ],
-  // };
 
   // Expose Math for use in templates
   Math = Math;

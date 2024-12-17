@@ -1,0 +1,29 @@
+.container {
+    max-width: 800px;
+  }
+  
+  .card {
+    border-radius: 15px;
+  }
+  
+  h3, h4 {
+    color: #007bff;
+  }
+  
+  h5 {
+    margin-top: 10px;
+  }
+  
+  .list-group-item {
+    border-radius: 10px;
+    padding: 15px;
+  }
+  
+  .badge {
+    font-size: 14px;
+  }
+  
+  .text-muted {
+    font-size: 12px;
+  }
+  

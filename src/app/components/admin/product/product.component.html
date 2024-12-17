@@ -1,1 +1,57 @@
-<p>product works!</p>
+
+<h3 class="mt-4 text-center">Product List</h3>
+<div class="text-center mb-4">
+  <button class="btn btn-primary d-flex align-items-center" (click)="navigateToModal()" mdbRipple>
+    <i class="fas fa-plus" style="margin-left: 0;"></i> Add Product
+  </button>
+</div>
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-12">
+      <table class="table table-hover table-striped align-middle responsive-table">
+        <thead class="table-primary">
+          <tr>
+            <th>Photo</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Status</th>
+            <th scope="col">Discount</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products">
+            <td>
+              <img
+                src="/images/product/e.jpg"
+                alt="Product Photo"
+                style="width: 45px; height: 45px"
+                class="rounded-circle border"
+              />
+            </td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }} kyat</td>
+            <td>{{ product.status ? 'Active' : 'Inactive' }}</td>
+            <td>
+              <span *ngIf="!isEditing(product.id, 'discount')">{{ product.discount }}%</span>
+              <input *ngIf="isEditing(product.id, 'discount')" [(ngModel)]="editableProduct.discount" type="number" class="form-control" />
+              <button class="btn btn-link" (click)="toggleEdit(product.id, 'discount')">
+                <i *ngIf="isEditing(product.id, 'discount')" class="fas fa-check text-success"></i>
+                <i *ngIf="!isEditing(product.id, 'discount')" class="fas fa-edit text-warning"></i>
+              </button>
+            </td>
+            <td>
+              <a [routerLink]="['/d/p/detail-product', product.id]" class="btn btn-info btn-sm">
+                <i class="fas fa-info-circle"></i>
+              </a>
+
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

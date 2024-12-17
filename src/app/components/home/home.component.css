@@ -1,0 +1,117 @@
+/* Sidebar Styling */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Initially hidden */
+    bottom: 0;
+    width: 250px;
+    color: white;
+    padding-top: 20px;
+    transition: left 0.3s ease, background-color 0.3s ease;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1040;
+  }
+
+  .active{
+    background-color: #fcf9ddec;
+    border-radius: 20px;
+
+  }
+
+  .sidebar.open {
+    left: 0; /* Show sidebar when open */
+  }
+
+  .sidebar a {
+    text-decoration: none;
+    color: black;
+    padding: 10px 20px;
+    display: flex;
+    font-size: 16px;
+    align-items: center;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
+  }
+
+  .sidebar a i {
+    margin-right: 12px; /* Space between icon and text */
+    font-size: 18px; /* Consistent icon size */
+  }
+
+  .sidebar a:hover {
+    background-color: #e6d6d6;
+  }
+
+  /* Content area for scrollable content */
+  .content-area {
+    margin-left: 0; /* By default, the content takes full width */
+    margin-top: 50px; /* Space for navbar */
+    /* padding: 20px; */
+    height: 100vh;
+    overflow-y: auto;
+    transition: margin-left 0.3s ease;
+  }
+
+  /* Adjust content area when sidebar is open */
+  .sidebar.open + .content-area {
+    margin-left: 250px; /* Shift content to the right when sidebar is open */
+  }
+
+  /* Optional: Customizing navbar for better visibility */
+  .navbar {
+    z-index: 1050; /* Ensure navbar is on top */
+  }
+
+  /* Notifications Badge */
+.nav-link .badge {
+  font-size: 0.8rem;
+  padding: 0.4em 0.6em;
+}
+
+/* Dropdown Styling */
+.dropdown-menu {
+  width: 200px; /* Adjust width for dropdown menu */
+}
+
+.dropdown-item {
+  font-size: 0.9rem;
+  white-space: normal; /* Allow wrapping for longer messages */
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa; /* Subtle hover effect */
+}
+
+/* Alignments for Dropdown Menu */
+.dropdown-menu-end {
+  right: 0;
+  left: auto;
+}
+
+  /* Hamburger icon styles */
+  /* .navbar-toggler {
+    border: none;
+    background: transparent;
+  } */
+
+  /* .navbar-toggler .fas {
+    font-size: 28px;
+  } */
+
+
+.cc{
+  height: 100vh;
+}
+  /* footer */
+  footer a {
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    color: #007bff; /* Hover effect */
+  }
+
+  footer i {
+    font-size: 1.2rem;
+  }
+

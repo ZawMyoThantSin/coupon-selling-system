@@ -1,88 +1,74 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { Product } from '../../components/modal/product.modal';
+import { StorageService } from '../storage.service';
+import { Product } from '../../models/product';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  // private apiUrl='http://localhost:8080/api/products';
+  BASE_URL = "http://localhost:8080/";
+  public token: any;
 
+  constructor(private http: HttpClient, private storageService: StorageService) {
+    this.token = this.storageService.getItem("token");
+  }
 
-  // constructor(private http:HttpClient) { }
+   private createAuthHeader(): any{
 
-  // getProduct():Observable<any[]>{
-  //   return this.http.get<any[]>(this.apiUrl);
-  // }
-
-  // addProduct(product:any):Observable<any>{
-  //   return this.http.post<any>(this.apiUrl,product);
-  // }
-
-  // updateProduct(id:number,product:any):Observable<any>{
-  //   return this.http.put<any>(`${this.apiUrl}/${id}`,product)
-  // }
-
-  // deleteProduct(id: number): Observable<any> {
-  //   return this.http.delete<any>(`${this.apiUrl}/${id}`);
-  // }
-
-
-
-    // Sample product data (simulating backend data)
-    private products: Product[] = [
-      new Product(1, 1, 'Product 1', 'Description of Product 1', 100, 'Category 1', true, 10, new Date(), new Date()),
-      new Product(2, 1, 'Product 2', 'Description of Product 2', 200, 'Category 2', true, 15, new Date(), new Date())
-    ];
-
-    constructor() { }
-
-    // Get list of products
-    getProducts(): Observable<Product[]> {
-      return of(this.products);
-    }
-
-    // Add a new product
-    addProduct(product: Product): Observable<Product> {
-     if(product.id){
-      const newProduct = this.products.findIndex((p)=>p.id === product.id);
-     if(newProduct !== -1){
-      this.products[newProduct]=product;
-     }
+    if(this.token){
+      console.log('Token found in storage..', this.token);
+      return new HttpHeaders().set(
+        "Authorization", "Bearer "+ this.token
+      )
     }else{
-      product.id=this.products.length +1;
-      this.products.push(product);
+      console.log("Not Found!");
     }
-    return of(product);
-    }
+    return null;
+  }
 
-    // Delete a product
-    deleteProduct(id: number): Observable<void> {
-      // Find and remove the product with the given ID
-      this.products = this.products.filter(product => product.id !== id);
-      return of(undefined); // Return void as there is no data to return
-    }
+  // Fetch all products
+  getAllProducts(id:any): Observable<Product[]> {
+    return this.http.get<Product[]>(this.BASE_URL + 'api/products/b/'+id, {
+      responseType: 'json'
+    });
+  }
 
 
-    updateProduct(productId: number, updatedProduct: any): Observable<any> {
-      const index = this.products.findIndex((p) => p.id === productId);
+  // Fetch product by ID
+  getProductById(id: number): Observable<any> {
+    return this.http.get(`${this.BASE_URL}api/products/${id}`, {
+      headers: this.createAuthHeader(),
+      responseType: 'json'
+    });
+  }
 
-      if (index !== -1) {
-        this.products[index] = { ...updatedProduct }; // Replace product data in memory
-        console.log('Product updated in memory:', this.products[index]);
-        return of({ success: true });
-      }
+  // Create a new product
+  createProduct(product: any): Observable<Product> {
+    return this.http.post<Product>(this.BASE_URL + 'api/products', product, {
+      responseType: 'json'
+    });
+  }
 
-      console.error('Product not found for update');
-      return of({ success: false });
-    }
 
-    // Get a single product by ID from in-memory data
-  getProductById(productId: number): Observable<Product | undefined> {
-    const product = this.products.find(p => p.id === productId);
-    return of(product); // Return the found product wrapped in an observable
+  // Update an existing product by ID
+  updateProduct(id: number, data: any): Observable<any> {
+    const header = new HttpHeaders({'Content-Type':'application/json'})
+
+    return this.http.put(`${this.BASE_URL}api/products/${id}`, data, {
+      headers: this.createAuthHeader(),
+      responseType: 'json'
+    });
+  }
+
+  // Delete a product by ID
+  deleteProduct(id: number): Observable<any> {
+    return this.http.delete(`${this.BASE_URL}api/products/${id}`, {
+      headers: this.createAuthHeader(),
+      responseType: 'json'
+    });
   }
 
 }

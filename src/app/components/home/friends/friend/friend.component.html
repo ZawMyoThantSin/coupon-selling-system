@@ -1,0 +1,65 @@
+<div class="container mt-4">
+  <h3 class="text-center mb-4">Friends Management</h3>
+
+  <!-- Search Box -->
+  <div class="mb-3">
+    <div class="input-group">
+      <input 
+        type="text" 
+        class="form-control" 
+        placeholder="Search Friends..." 
+        [(ngModel)]="searchQuery" 
+        (input)="searchFriends()"
+      />
+      <button class="btn btn-primary" (click)="searchFriends()">Search</button>
+    </div>
+  </div>
+
+  <!-- Add Friend -->
+  <div class="mb-4">
+    <button 
+      class="btn btn-success" 
+      mdbBtn 
+      mdbRipple 
+      (click)="addFriend(('Enter Friend Name:'))"
+    >
+      <i class="fas fa-user-plus me-2"></i>Add Friend
+    </button>
+  </div>
+
+  <!-- Pending Friend Requests -->
+  <div *ngIf="pendingRequests.length > 0" class="mb-4">
+    <h5>Pending Friend Requests</h5>
+    <ul class="list-group">
+      <li *ngFor="let request of pendingRequests" class="list-group-item">
+        {{ request.senderName }} wants to be friends!
+        <button 
+          class="btn btn-sm btn-primary ms-3" 
+          (click)="acceptRequest(request.id)"
+        >
+          Accept
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Friends List -->
+  <div>
+    <h5>Friends List</h5>
+    <ul class="list-group">
+      <li *ngFor="let friend of filteredFriends" class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center">
+          <span>
+            <strong>{{ friend.accepterName }}</strong> ({{ friend.senderName }})
+          </span>
+          <button 
+            class="btn btn-sm btn-danger" 
+            (click)="unfriend(friend.id)"
+          >
+            <i class="fas fa-user-minus"></i> Unfriend
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
