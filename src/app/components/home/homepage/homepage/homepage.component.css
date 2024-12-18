@@ -1,0 +1,99 @@
+/* General Container Styling */
+.container {
+  max-width: 1200px;
+}
+
+/* Section Styling */
+.section {
+  margin-bottom: 50px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.section-divider {
+  border: 0;
+  height: 2px;
+  background: linear-gradient(to right, #1266f1, #00c851);
+  width: 50%;
+  margin: 0 auto;
+}
+
+/* Swiper Styling */
+.swiper-container {
+  width: 100%;
+  height: auto;
+}
+
+.swiper-slide {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Card Styling */
+.card {
+  border: none;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 90%;
+  margin: auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px 10px 0 0;
+}
+
+.card-body {
+  padding: 15px;
+  text-align: center;
+}
+
+.card-title {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.card-text {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Pagination Styling */
+.swiper-pagination {
+  bottom: 10px !important;
+  margin-top: 100px;
+  z-index: 1;
+}
+
+.swiper-pagination-bullet {
+  background: #1067f3;
+  opacity: 0.6;
+  transition: opacity 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  background: #1266f1;
+  opacity: 1;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .swiper-slide {
+    width: 80%;
+  }
+
+  .card {
+    width: 100%;
+  }
+}

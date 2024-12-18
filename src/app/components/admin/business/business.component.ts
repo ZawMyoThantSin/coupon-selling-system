@@ -32,7 +32,7 @@ export class BusinessComponent implements OnInit {
                 private tokenService:JwtService,
                 private storageService:StorageService,
                 private router: Router,
-                private jwtService: JwtService
+                private jwtService: JwtService,
     ) {}
     ngOnInit(): void {
       this.token = this.storageService.getItem("token");
@@ -78,41 +78,59 @@ export class BusinessComponent implements OnInit {
       }
 
 
-    openModal() {
+      openModal() {
+        this.modalRef = this.modalService.open(CreateModalComponent, {
+          modalClass: 'modal-lg',
+        });
 
-      this.modalRef = this.modalService.open(CreateModalComponent, {
-        modalClass: 'modal-lg',// Optional: specify modal size (e.g., 'modal-sm', 'modal-lg')
-      });
+        this.modalRef.onClose.subscribe((data) => {
+          if (data) {
+            const token = this.storageService.getItem('token');
+            let user_id;
+            if (token != null) {
+              var decodeToken: any = this.tokenService.decodeToken(token);
+              user_id = decodeToken.id;
+            }
 
+            const formData = new FormData();
 
-      this.modalRef.onClose.subscribe((data) => {
-        if (data) {
-          const token = this.storageService.getItem("token");
-          let user_id;
-          if(token!= null){
-            var decodeToken:any = this.tokenService.decodeToken(token);
-            user_id = decodeToken.id;
-          }
+            // Append all fields from the data object
+            formData.append('name', data.get('name') || '');
+            formData.append('location', data.get('location') || '');
+            formData.append('description', data.get('description') || '');
+            formData.append('contactNumber', data.get('contactNumber') || '');
+            formData.append('category', data.get('category') || '');
+            formData.append('userId', user_id);
 
-          const requestData = {
-            ...data, // Spread existing form data
-            userId: user_id, // Append userId
-          };
-          console.log('Form submitted:', requestData);
-          this.businessService.createBusiness(requestData).subscribe(
-              response => {
-                console.log("Server Response: ", response)
-                location.reload()
-                this.router.navigate(['business'])
+            // Append the image file if present
+            const image = data.get('image');
+            if (image) {
+              formData.append('image', image, image.name || 'uploaded_image');
+            }
+
+            // Debugging: Log FormData contents
+            // console.log('FormData Contents:');
+            // formData.forEach((value, key) => {
+            //   console.log(`${key}:`, value);
+            // });
+
+            this.businessService.createBusiness(formData).subscribe(
+              (response) => {
+                this.toastr.success("Business Create Successfully!","Success")
+                this.router.navigate(['/d/b/detail',response.id]);
+                // location.reload();
+                // this.router.navigate(['business']);
               },
-              error => {
-                console.error("Error In Business Create: ",error)
+              (error) => {
+                console.error('Error In Business Create: ', error);
               }
-          )
+            );
+          }
+        });
+      }
 
-
-        }
-      });
-    }
+      getImageUrl(imagePath: string): string {
+        return this.businessService.getImageUrl(imagePath);
+      }
 
 }

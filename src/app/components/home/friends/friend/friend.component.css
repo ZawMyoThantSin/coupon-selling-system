@@ -5,4 +5,12 @@
     border-radius: 10px;
     margin-bottom: 10px;
   }
+
+  .h3,h5,h6 {
+    color: #1266f1; /* MDB Primary Color */
+  }
+
+  .text-center{
+    color: #1266f1;
+  }
   

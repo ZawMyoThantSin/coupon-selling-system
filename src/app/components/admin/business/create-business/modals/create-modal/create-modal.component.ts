@@ -10,23 +10,45 @@ import { FormsModule, NgForm } from '@angular/forms';
   styleUrl: './create-modal.component.css'
 })
 export class CreateModalComponent {
-  constructor(public modalRef: MdbModalRef<CreateModalComponent>) {}
   formData = {
     name: '',
     location: '',
     description: '',
     contactNumber: '',
-    photo: '',
     category: '',
   };
+
+  selectedFile: File | null = null; // For the uploaded file
+
+  constructor(public modalRef: MdbModalRef<CreateModalComponent>) {}
+
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    } else {
+      console.log("No file selected.");
+    }
+  }
 
   close(): void {
     this.modalRef.close();
   }
 
   submitForm(): void {
+
     if (this.modalRef) {
-      this.modalRef.close(this.formData); // Pass form data on close
+      const formData = new FormData();
+      formData.append('name', this.formData.name);
+      formData.append('location', this.formData.location);
+      formData.append('description', this.formData.description);
+      formData.append('contactNumber', this.formData.contactNumber);
+      formData.append('category', this.formData.category);
+      if (this.selectedFile) {
+        formData.append('image', this.selectedFile);
+      }
+      this.modalRef.close(formData); // Pass FormData to the parent
     }
   }
 }
+

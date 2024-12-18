@@ -7,37 +7,29 @@
       <input 
         type="text" 
         class="form-control" 
-        placeholder="Search Friends..." 
+        placeholder="Search Friends by Email..." 
         [(ngModel)]="searchQuery" 
-        (input)="searchFriends()"
+        (input)="onInput()"
+        autocomplete="off"
       />
-      <button class="btn btn-primary" (click)="searchFriends()">Search</button>
     </div>
-  </div>
 
-  <!-- Add Friend -->
-  <div class="mb-4">
-    <button 
-      class="btn btn-success" 
-      mdbBtn 
-      mdbRipple 
-      (click)="addFriend(('Enter Friend Name:'))"
-    >
-      <i class="fas fa-user-plus me-2"></i>Add Friend
-    </button>
-  </div>
-
-  <!-- Pending Friend Requests -->
-  <div *ngIf="pendingRequests.length > 0" class="mb-4">
-    <h5>Pending Friend Requests</h5>
-    <ul class="list-group">
-      <li *ngFor="let request of pendingRequests" class="list-group-item">
-        {{ request.senderName }} wants to be friends!
+    <ul *ngIf="emailSuggestions.length > 0" class="list-group mt-2">
+      <li 
+        *ngFor="let user of emailSuggestions" 
+        class="list-group-item d-flex justify-content-between align-items-center">
+        <span>{{ user.email }}</span>
         <button 
-          class="btn btn-sm btn-primary ms-3" 
-          (click)="acceptRequest(request.id)"
-        >
-          Accept
+          *ngIf="!isAlreadyFriend(user.id)" 
+          class="btn btn-primary btn-sm" 
+          (click)="sendFriendRequest(user.id)">
+          Add
+        </button>
+        <button 
+          *ngIf="isAlreadyFriend(user.id)" 
+          class="btn btn-secondary btn-sm" 
+          disabled>
+          Already Friends
         </button>
       </li>
     </ul>
@@ -47,19 +39,60 @@
   <div>
     <h5>Friends List</h5>
     <ul class="list-group">
-      <li *ngFor="let friend of filteredFriends" class="list-group-item">
+      <li *ngFor="let friend of friends" class="list-group-item">
         <div class="d-flex justify-content-between align-items-center">
-          <span>
-            <strong>{{ friend.accepterName }}</strong> ({{ friend.senderName }})
-          </span>
+          <span>{{ friend.friendName }}</span>
+          <button (click)="sendCoupon(friend.id)" [disabled]="!selectedCouponId">
+            Send Coupon
+          </button>
           <button 
             class="btn btn-sm btn-danger" 
-            (click)="unfriend(friend.id)"
-          >
+            (click)="unfriend(friend.friendId)">
             <i class="fas fa-user-minus"></i> Unfriend
           </button>
         </div>
       </li>
     </ul>
   </div>
+
+  <!-- Pending Friend Requests -->
+  <div *ngIf="pendingRequests.length > 0" class="mt-4">
+    <h5>Pending Friend Requests</h5>
+    <ul class="list-group">
+      <li *ngFor="let request of pendingRequests" class="list-group-item">
+        <span>{{ request.senderName }} wants to connect with you!</span>
+        <button 
+          class="btn btn-sm btn-primary ms-3" 
+          (click)="acceptRequest(request.id)">
+          Accept
+        </button>
+        <button 
+          class="btn btn-sm btn-secondary ms-2" 
+          (click)="denyRequest(request.id)">
+          Deny
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <div>
+    <h5>Pending Transfers</h5>
+    <ul>
+      <li *ngFor="let transfer of incomingTransfers">
+        Coupon {{ transfer.saleCouponId }} from {{ transfer.senderId }}
+        <button (click)="acceptTransfer(transfer.transferId)">Accept</button>
+        <button (click)="denyTransfer(transfer.transferId)">Deny</button>
+      </li>
+    </ul>
+  </div>
+  
+  <div>
+    <h5>Transfer History</h5>
+    <ul>
+      <li *ngFor="let transfer of transferHistory">
+        Transfer {{ transfer.transferId }} | Status: {{ transfer.status }} | Sent by: {{ transfer.senderId }}
+      </li>
+    </ul>
+  </div>
+
 </div>

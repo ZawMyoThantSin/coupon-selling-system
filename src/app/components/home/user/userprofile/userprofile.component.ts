@@ -2,39 +2,44 @@ import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { UserResponse } from '../../../../models/user-response.models';
 import { UserService } from '../../../../services/user/user.service';
-import { DatePipe } from '@angular/common';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { StorageService } from '../../../../services/storage.service';
 
 @Component({
   selector: 'app-userprofile',
   standalone: true,
-  imports: [DatePipe, CommonModule],
+  imports: [CommonModule, DatePipe],
   templateUrl: './userprofile.component.html',
   styleUrl: './userprofile.component.css'
 })
 export class UserprofileComponent implements OnInit {
-  userDetails!: UserResponse;
+
   searchResults: UserResponse[] = [];
   isLoading: boolean = false;
+  userInfo!:UserResponse;
+  token!: any;
+  isLoggedIn: boolean = false;
 
-  constructor(private userService: UserService) {}
+  constructor(private storageService: StorageService
+    ,private userService: UserService) {}
 
   ngOnInit(): void {
     this.fetchUserDetails();
   }
 
   fetchUserDetails(): void {
-    this.isLoading = true;
-    this.userService.getUserById(this.userDetails.id).subscribe({
-      next: (data: UserResponse) => {
-        this.userDetails = data;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error fetching user details:', err);
-        this.isLoading = false;
-      }
-    });
+    this.userService.getUserInfo().subscribe((response)=>{
+      console.log("UserInfo: ",response)
+      this.userInfo = response;
+    },error => console.log('Error in Fetching UserInfo', error));
+
+    this.token = this.storageService.getItem('token');
+    if (this.token == '' || this.token == null) {
+      console.log('Token is not defined or is invalid.');
+      this.isLoggedIn = false;
+    } else {
+      this.isLoggedIn = true;
+    }
   }
 }
 

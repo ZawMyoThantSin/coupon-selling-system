@@ -49,13 +49,16 @@ export class BusinessService {
   }
 
   createBusiness(data:any): Observable<any>{
-    const header = new HttpHeaders({'Content-Type':'application/json'})
-
     return this.http.post(this.BASE_URL+'api/businesses',data,{
-      headers:this.createAuthHeader(),
-      responseType:'json'
+      // responseType:'json'
     });
   }
+
+// get business images
+getImageUrl(imagePath: string): string {
+
+  return `http://localhost:8080/public/businesses/images/${imagePath}`;
+}
 
 
 }

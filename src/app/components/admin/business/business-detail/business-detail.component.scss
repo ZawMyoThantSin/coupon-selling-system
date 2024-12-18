@@ -52,7 +52,11 @@
 // }
 
 
-// toggle button
+.active {
+  font-weight: bold;
+  color: blue;
+}
+
 /* From Uiverse.io by Yaya12085 */
 .radio-inputs {
   position: relative;
@@ -95,8 +99,6 @@
   font-weight: 600; /* Optional: make the selected button text bold */
 }
 
-
-// -----
 .business-detail-page {
   .business-header {
     position: relative;
@@ -164,5 +166,3 @@
   font-size: 0.9rem;
   padding: 0.5rem 0;
 }
-
-

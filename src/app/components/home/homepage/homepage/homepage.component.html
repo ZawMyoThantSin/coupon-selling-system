@@ -1,0 +1,58 @@
+<div class="container mt-5">
+  <h2 class="text-center mb-4 text-primary font-weight-bold">Welcome To Our Platform</h2>
+
+  <div class="section">
+    <h3 class="text-center section-title text-primary mb-4">Our Businesses</h3>
+    <div class="swiper-container businesses-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" *ngFor="let business of businesses">
+          <div class="card shadow-lg">
+            <img
+              [src]="business.photo || 'public/images/business/logos/i1.png'"
+              class="card-img-top img-fluid"
+              alt="{{ business.name }}"
+            />
+            <div class="card-body">
+              <h5 class="card-title text-primary">{{ business.name }}</h5>
+              <p class="card-text text-muted">
+                <strong>Location:</strong> {{ business.location }}<br />
+                <strong>Category:</strong> {{ business.category }}<br />
+                {{ business.description | slice: 0:60 }}...
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="swiper-pagination businesses-pagination"></div> -->
+      </div>
+      
+    </div>
+  </div>
+  <hr class="section-divider my-5" />
+
+
+  <div class="section">
+    <h3 class="text-center section-title text-success mb-4">Our Products</h3>
+    <div class="swiper-container products-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide" *ngFor="let product of products">
+          <div class="card shadow-lg">
+            <img
+              [src]="'assets/product-placeholder.jpg'"
+              class="card-img-top img-fluid"
+              alt="{{ product.name }}"
+            />
+            <div class="card-body">
+              <h5 class="card-title text-dark">{{ product.name }}</h5>
+              <p class="card-text text-muted">
+                {{ product.description | slice: 0:60 }}...
+              </p>
+              <p class="text-primary fw-bold">Price: ${{ product.price }}</p>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="swiper-pagination products-pagination"></div> -->
+      </div>
+      
+    </div>
+  </div>
+</div>

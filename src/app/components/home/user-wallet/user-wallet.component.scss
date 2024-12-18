@@ -1,0 +1,188 @@
+.user-wallet-page {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+
+  // Wallet Container
+  .wallet-container {
+    background-color: #fff;
+    width: 100%;
+    max-width: 800px; // Larger for PC screens
+    min-height: 500px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+
+    // Wallet Info
+    .wallet-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #000, #333);
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 500;
+      margin-bottom: 30px;
+      min-height: 130px;
+
+      .wallet-details {
+        .name {
+          font-size: 1.4rem;
+          font-weight: bold;
+        }
+
+        .card-number {
+          font-size: 1.1rem;
+          color: #ccc;
+          margin-top: 5px;
+        }
+      }
+
+      .balance {
+        font-size: 2rem;
+        font-weight: bold;
+      }
+    }
+
+    // Actions (Button Container)
+    .wallet-actions {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 25px;
+
+      // Action Button Container
+      .action-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        border-radius: 12px;
+        padding: 15px;
+        gap: 15px;
+
+        button {
+          background-color: transparent; /* Transparent background */
+          border: none;
+          color: #333;
+          padding: 10px 20px;
+          font-size: 1rem;
+          font-weight: 500;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+
+          &:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          }
+
+          &.withdraw {
+            color: #e53935;
+
+            &:hover {
+              background-color: #fce4e4;
+            }
+          }
+
+          &.transfer {
+            color: #1e88e5;
+
+            &:hover {
+              background-color: #e3f2fd;
+            }
+          }
+
+          &.deposit {
+            color: #4caf50;
+
+            &:hover {
+              background-color: #e8f5e9;
+            }
+          }
+        }
+      }
+    }
+
+    // Transactions Section
+    .transactions {
+      .transaction {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 15px 0;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+
+        .transaction-details {
+          display: flex;
+          align-items: center;
+
+          .avatar {
+            width: 45px;
+            height: 45px;
+            background-color: #ddd;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            font-weight: bold;
+            color: #555;
+            font-size: 1.1rem;
+          }
+
+          .name {
+            font-size: 1.1rem;
+            color: #333;
+          }
+        }
+
+        .amount {
+          font-weight: bold;
+          font-size: 1.1rem;
+
+          &.positive {
+            color: #4caf50;
+          }
+
+          &.negative {
+            color: #e53935;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .wallet-container {
+    max-width: 100%;
+    padding: 15px;
+
+    .wallet-card {
+      flex-direction: column;
+      text-align: center;
+      min-height: 100px;
+    }
+
+    .wallet-actions {
+      flex-direction: column;
+      .action-container {
+        flex-direction: column;
+        width: 100%;
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

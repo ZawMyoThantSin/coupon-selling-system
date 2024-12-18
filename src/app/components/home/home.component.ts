@@ -3,12 +3,17 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import { JwtService } from '../../services/jwt.service';
-import { HomeCarouselComponent } from './home-carousel/home-carousel.component';
+import { UserService } from '../../services/user/user.service';
+import { UserResponse } from '../../models/user-response.models';
+import { FriendsService } from '../../services/user/friends.service';
+import { SharedService } from '../../services/shared/shared.service';
 import { CommonModule } from '@angular/common';
+import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
+import { UserWalletComponent } from './user-wallet/user-wallet.component';
 
 @Component({
   standalone:true,
-  imports:[HomeCarouselComponent, RouterLink, CommonModule, RouterOutlet],
+  imports:[CommonModule,RouterLink,RouterOutlet,MdbDropdownModule,UserWalletComponent ],
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -18,8 +23,10 @@ export class HomeComponent implements OnInit{
   activeRoute:any = '';
   isLoggedIn: boolean = false;
   decodedToken!:string;
-  token!:any;
+  userInfo!:UserResponse;
+  pendingFriendRequestsCount: number = 0;
 
+  token!:any;
 
   notifications: Array<{ id: number; message: string; link: string; read: boolean }> = [];
   unreadNotifications: number = 0;
@@ -27,7 +34,10 @@ export class HomeComponent implements OnInit{
   constructor(private router: Router,
               private route: ActivatedRoute,
               private storageService: StorageService,
-              private jwtService: JwtService
+              private jwtService: JwtService,
+              private userService: UserService,
+              private sharedService: SharedService,
+              private friendService: FriendsService
               ) {
     this.router.events.subscribe(() => {
       this.activeRoute = this.router.url; // Get the active URL
@@ -36,27 +46,25 @@ export class HomeComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.token = this.storageService.getItem("token");
-    if (this.token == '' || this.token ==  null) {
+    this.userService.getUserInfo().subscribe((response)=>{
+      console.log("UserInfo: ",response)
+      this.userInfo = response;
+      this.loadPendingFriendRequestsCount();
+    },error => console.log('Error in Fetching UserInfo', error));
+
+    this.token = this.storageService.getItem('token');
+    if (this.token == '' || this.token == null) {
       console.log('Token is not defined or is invalid.');
-      this.isLoggedIn= false;
-    }else{
-      this.isLoggedIn = true
+      this.isLoggedIn = false;
+    } else {
+      this.isLoggedIn = true;
     }
-
-    // this.decodedToken = this.jwtService.decodeToken(this.token)
-    // if(this.token != null && this.token != ''){
-    //   console.log("DECODED:: "+this.decodedToken);
-    //   this.isLoggedIn = true;
-    // }else this.isLoggedIn= false;
-
   }
 
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen; // Toggle the sidebar visibility
   }
 
-  // Load notifications (simulating API call)
   loadNotifications() {
     // Example data; replace with a service call to fetch notifications
     this.notifications = [
@@ -81,6 +89,30 @@ export class HomeComponent implements OnInit{
   // Update unread notifications count
   updateUnreadCount() {
     this.unreadNotifications = this.notifications.filter((n) => !n.read).length;
+  }
+
+  loadPendingFriendRequestsCount() {
+    const loggedInUserId = this.userInfo?.id;
+    if (!loggedInUserId) {
+      console.error('Logged-in user ID is missing.');
+      return;
+    }
+
+    this.friendService.getPendingRequests(loggedInUserId).subscribe({
+      next: (requests) => {
+
+        this.pendingFriendRequestsCount = requests.length;
+        this.sharedService.setPendingRequestsCount(this.pendingFriendRequestsCount);
+      },
+      error: (err) => {
+        console.error('Error fetching pending friend requests:', err);
+      },
+    });
+  }
+
+  logoutButton(): void{
+    this.storageService.removeItem("token");
+    this.router.navigate(['login']);
   }
 
 }

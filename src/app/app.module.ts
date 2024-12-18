@@ -26,6 +26,7 @@ import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
 import { authInterceptor } from './services/auth.interceptor';
 import { ProductComponent } from "./components/admin/product/product.component";
 import { HomeCarouselComponent } from "./components/home/home-carousel/home-carousel.component";
+import { RouterModule, RouterOutlet } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { HomeCarouselComponent } from "./components/home/home-carousel/home-caro
     FormsModule,
     CommonModule,
     ProductComponent,
-    HomeCarouselComponent
+    HomeCarouselComponent,
+    RouterOutlet
 ],
   providers: [
     provideClientHydration(),

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet, UrlSegment } from '@angular/router';
 import { Business } from '../../../../models/business';
 import { BusinessService } from '../../../../services/business/business.service';
 import { ProductComponent } from '../../product/product.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgStyle } from '@angular/common';
 import { ProductService } from '../../../../services/product/product.service';
 import { Product } from '../../../../models/product';
 import { Coupon } from '../../../../models/coupon.modal';
@@ -11,7 +11,7 @@ import { CouponService } from '../../../../services/coupon/coupon.service';
 
 @Component({
   standalone:true,
-  imports:[CommonModule,RouterOutlet,RouterLink],
+  imports:[CommonModule,RouterOutlet,RouterLink,RouterLinkActive],
   selector: 'app-business-detail',
   template: `
 
@@ -20,7 +20,7 @@ import { CouponService } from '../../../../services/coupon/coupon.service';
   <!-- Business Header Section with Photo Banner -->
   <div class="business-header rounded mb-4 position-relative overflow-hidden">
     <img
-      [src]="['https://upload.wikimedia.org/wikipedia/commons/0/03/Mount_Fuji_as_seen_across_lake_Kawaguchi%2C_with_Fujikawaguchiko_town_in_the_foreground_seen_early_in_the_evening._Honshu_Island._Japan.jpg']"
+      [src]="getImageUrl(business.photo)"
       alt="Business Banner"
       class="img-fluid w-100 rounded"
     />
@@ -104,25 +104,39 @@ import { CouponService } from '../../../../services/coupon/coupon.service';
     <div class="row">
   <div class="col-md-4">
     <div class="radio-inputs bg-light p-3 rounded mb-3 shadow-sm">
-     <label class="radio me-3 ">
-      <input
-        type="radio"
-        name="viewToggle"
-        [checked]="showProduct"
-        (click)="toggleView('product')" />
-      <span class="name">Product List</span>
-      </label>
-      <label class="radio">
-      <!-- Dynamically bind the route based on the current route or selected view -->
-      <input
-        type="radio"
-        name="viewToggle"
-        [routerLink]="['/d/b/detail', currentBusinessId, 'coupon']"
-        [checked]="!showProduct"
-        (click)="onViewToggle('coupon')"
-      />
-      <span class="name">Coupon List</span>
-    </label>
+     <!-- Product List Button -->
+<label class="radio me-3">
+  <input
+    type="radio"
+    name="viewToggle"
+    [checked]="showProduct"
+    (click)="toggleView('product')"
+  />
+  <span
+    class="name"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    [routerLink]="['/d/b/detail', currentBusinessId]">
+    Product List
+  </span>
+</label>
+
+<!-- Coupon List Button -->
+<label class="radio">
+  <input
+    type="radio"
+    name="viewToggle"
+    [checked]="!showProduct"
+    (click)="toggleView('coupon')"
+    [routerLink]="['/d/b/detail', currentBusinessId, 'coupon']"
+  />
+  <span
+    class="name"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }">
+    Coupon List
+  </span>
+</label>
       </div>
       </div>
     </div>
@@ -141,7 +155,7 @@ import { CouponService } from '../../../../services/coupon/coupon.service';
   styleUrl: './business-detail.component.scss'
 })
 export class BusinessDetailComponent implements OnInit {
-  currentBusinessId: string | null = null;
+  currentBusinessId!: number;
 
   showProduct: boolean = true;
   business!: Business;
@@ -156,15 +170,23 @@ export class BusinessDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Fetch business data on route parameter change
-    this.route.paramMap.subscribe(params => {
+
+    // Route Change Subscription
+    this.route.url.subscribe((urlSegments: UrlSegment[]) => {
+      const lastSegment = urlSegments[urlSegments.length - 1]?.path || '';
+      this.showProduct = lastSegment !== 'coupon'; // Set based on route
+    });
+
+    // Param Change Subscription
+    this.route.paramMap.subscribe((params) => {
       const id = Number(params.get('id'));
-      if (id !== this.businessId) { // Only update if the id has changed
-        this.businessId = id;
-        this.getBusinessDetail(id);
+      if (id !== this.currentBusinessId) {
+        this.currentBusinessId = id;
+        this.getBusinessDetail(id); // Fetch relevant business details
       }
     });
   }
+
   fetchBusinessAndProducts(businessId: number): void {
     // Fetch business details
     this.businessService.getById(businessId).subscribe(
@@ -204,26 +226,28 @@ export class BusinessDetailComponent implements OnInit {
     );
   }
   // toggle buttons
-  onViewToggle(view: string): void {
-    if (view === 'coupon') {
-      this.showProduct = false;
-      this.router.navigate(['coupon'], { relativeTo: this.route });
-    } else {
-      this.showProduct = true;
-      this.router.navigate([''], { relativeTo: this.route });
-    }
-  }
+  // onViewToggle(view: string): void {
+  //   if (view === 'coupon') {
+  //     this.showProduct = false;
+  //     this.router.navigate(['coupon'], { relativeTo: this.route });
+  //   } else {
+  //     this.showProduct = true;
+  //     this.router.navigate([''], { relativeTo: this.route });
+  //   }
+  // }
   toggleView(view: string): void {
     if (view === 'product') {
-      this.router.navigate(['.'], { relativeTo: this.route }); // Stay on the current route
-      this.showProduct = true;
-    } else {
-      this.showProduct = false;
+      this.router.navigate(['.'], { relativeTo: this.route });
+    } else if (view === 'coupon') {
+      this.router.navigate(['coupon'], { relativeTo: this.route });
     }
   }
   // end
 
   // Expose Math for use in templates
   Math = Math;
+  getImageUrl(imagePath: string): string {
+    return this.businessService.getImageUrl(imagePath);
+  }
 
 }
