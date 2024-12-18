@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Product } from '../../../../../../models/product';
 import { ProductService } from '../../../../../../services/product/product.service';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
@@ -15,6 +15,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./create-modal.component.css']
 })
 export class CreateProductModalComponent implements OnInit {
+  @Input() businessId!: number;
   products: Product[] = [];
   newProduct: {
     businessId: number | null,
@@ -42,7 +43,13 @@ export class CreateProductModalComponent implements OnInit {
     public route: ActivatedRoute
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.businessId) {
+      this.newProduct.businessId = this.businessId;
+    } else {
+      alert('Business ID is not available. Cannot create product.');
+    }
+  }
 
   onImageChange(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
@@ -66,9 +73,9 @@ export class CreateProductModalComponent implements OnInit {
   saveProduct(productForm: NgForm): void {
     if (productForm.valid && this.newProduct.imageFile) {
       this.isSaving = true;
-      this.newProduct.businessId = 2;
-      const i = this.route.snapshot.paramMap.get('id');
-      console.log("id",i)
+      //this.newProduct.businessId = 1;
+      //const i = this.route.snapshot.paramMap.get('id');
+      //console.log("id",i)
       const formData = new FormData();
       formData.append('businessId', this.newProduct.businessId!.toString());
       formData.append('name', this.newProduct.name);

@@ -71,4 +71,11 @@ export class ProductService {
     });
   }
 
+
+// get product images
+  getImageUrl(imagePath: string): string {
+
+    return `http://localhost:8080/public/products/images/${imagePath}`;
+  }
+
 }

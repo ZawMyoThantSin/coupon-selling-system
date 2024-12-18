@@ -27,7 +27,8 @@ const routes: Routes = [
       {path:'business', component:BusinessComponent, title:'Business'},
       {path:'b/detail/:id', component:BusinessDetailComponent,
         children: [
-        {path: '',component: ProductComponent, },
+        {path: '',component: ProductComponent},
+        {path:'coupon',component:CouponComponent}
       ]},
       {path:'b/edit/:id', component:BusinessEditComponent, title:'Edit'},
       {path:'b/c', component:CouponComponent, title:''},

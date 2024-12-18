@@ -7,7 +7,7 @@
       <!-- Image Section -->
       <div class="col-md-5 d-flex justify-content-center align-items-center mb-4 mb-md-0">
         <img
-          src="./images/product/c74341106106015.5f8835d79d68e.jpg"
+        [src]="getImageUrl(selectedProduct.imagePath)"
           alt="Product Photo"
           style="width: 100%; max-width: 300px; height: auto; border-radius: 10px; border: 2px solid #ccc;"
         />
@@ -15,12 +15,9 @@
       <!-- Details Section -->
       <div class="col-md-7">
         <p><strong>Name:</strong> {{ selectedProduct.name }}</p>
-        <p><strong>Description:</strong> {{ selectedProduct.description }}</p>
         <p><strong>Price:</strong> {{ selectedProduct.price }} kyat</p>
-        <p><strong>Category:</strong> {{ selectedProduct.category }}</p>
-        <p><strong>Status:</strong> {{ selectedProduct.status ? 'Active' : 'Inactive' }}</p>
         <p><strong>Discount:</strong> {{ selectedProduct.discount }}%</p>
-        <p><strong>Created Date:</strong> {{ selectedProduct.createdAt }}</p>
+        <p><strong>Description:</strong> {{ selectedProduct.description }}</p>
       </div>
     </div>
     <div class="card-footer ">
@@ -29,7 +26,7 @@
       </button>
 
       <button class="btn btn-danger btn-rounded me-2" (click)="deleteProduct(selectedProduct.id)">
-        <i class="fas fa-trash-alt me-2"> Delete</i> 
+        <i class="fas fa-trash-alt me-2"> Delete</i>
       </button>
     </div>
   </div>

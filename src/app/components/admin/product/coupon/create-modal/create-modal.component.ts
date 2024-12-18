@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { CouponService } from '../../../../../services/coupon/coupon.service';
 import { FormsModule } from '@angular/forms';
@@ -114,6 +114,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './create-modal.component.css'
 })
 export class CreateModalComponent {
+  @Input() productId:any;
   discountprice:any;
   generateCouponCode(): string {
    return 'COUPON-' + Math.random().toString(36).substr(2, 8).toUpperCase();
@@ -122,7 +123,7 @@ export class CreateModalComponent {
              private couponService:CouponService,) {
  }
  formData: any = { // Default initialization
-   productId: 4,
+   productId: 0,
    price: '', // default empty string for price
    couponCode: '',
    description: '',
@@ -133,12 +134,12 @@ export class CreateModalComponent {
  ngOnInit(): void {
 
 
-   this.couponService.getCaculate(4).subscribe(
+   this.couponService.getCaculate(this.productId).subscribe(
      response =>{
        this.discountprice = response
        console.log("RES: ",response)
        this.formData = {
-         productId:4,
+         productId:this.productId,
          price: this.discountprice ,
          couponCode: this.generateCouponCode(),
          description: '',
@@ -148,7 +149,7 @@ export class CreateModalComponent {
        };
      },
      error =>{
-       console.error("ERROR IN FETCHING: ", error);
+       console.error("create coupon : ERROR IN FETCHING: ", error);
      }
    )}
 

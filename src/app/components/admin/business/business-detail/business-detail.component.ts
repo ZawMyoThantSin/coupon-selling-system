@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { Business } from '../../../../models/business';
 import { BusinessService } from '../../../../services/business/business.service';
 import { ProductComponent } from '../../product/product.component';
 import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../../services/product/product.service';
 import { Product } from '../../../../models/product';
+import { Coupon } from '../../../../models/coupon.modal';
+import { CouponService } from '../../../../services/coupon/coupon.service';
 
 @Component({
   standalone:true,
-  imports:[CommonModule,RouterOutlet],
+  imports:[CommonModule,RouterOutlet,RouterLink],
   selector: 'app-business-detail',
   template: `
 
@@ -99,7 +101,31 @@ import { Product } from '../../../../models/product';
         </button>
       </div>
     </div>
-    <!-- <app-product businessId="{{businessId}}"></app-product> -->
+    <div class="row">
+  <div class="col-md-4">
+    <div class="radio-inputs bg-light p-3 rounded mb-3 shadow-sm">
+     <label class="radio me-3 ">
+      <input
+        type="radio"
+        name="viewToggle"
+        [checked]="showProduct"
+        (click)="toggleView('product')" />
+      <span class="name">Product List</span>
+      </label>
+      <label class="radio">
+      <!-- Dynamically bind the route based on the current route or selected view -->
+      <input
+        type="radio"
+        name="viewToggle"
+        [routerLink]="['/d/b/detail', currentBusinessId, 'coupon']"
+        [checked]="!showProduct"
+        (click)="onViewToggle('coupon')"
+      />
+      <span class="name">Coupon List</span>
+    </label>
+      </div>
+      </div>
+    </div>
     <router-outlet></router-outlet>
   </div>
 </div>
@@ -115,12 +141,18 @@ import { Product } from '../../../../models/product';
   styleUrl: './business-detail.component.scss'
 })
 export class BusinessDetailComponent implements OnInit {
+  currentBusinessId: string | null = null;
+
+  showProduct: boolean = true;
   business!: Business;
   businessId:any;
   products!:Product[];
+  coupons!:Coupon[];
   constructor(private route: ActivatedRoute,
               private businessService: BusinessService,
-              private productService: ProductService
+              private productService: ProductService,
+              private couponService: CouponService,
+              private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -146,7 +178,17 @@ export class BusinessDetailComponent implements OnInit {
         console.log(products)
       },
       error => console.error('Error fetching products:', error)
+
     );
+
+    this.couponService.getAllCoupons(businessId).subscribe(
+      coupons => {
+        this.coupons = coupons;
+        console.log('Coupons:', this.coupons);
+      },
+      error => console.error('Error fetching coupons:', error)
+    );
+
   }
 
   getBusinessDetail(id: number): void {
@@ -161,6 +203,25 @@ export class BusinessDetailComponent implements OnInit {
       }
     );
   }
+  // toggle buttons
+  onViewToggle(view: string): void {
+    if (view === 'coupon') {
+      this.showProduct = false;
+      this.router.navigate(['coupon'], { relativeTo: this.route });
+    } else {
+      this.showProduct = true;
+      this.router.navigate([''], { relativeTo: this.route });
+    }
+  }
+  toggleView(view: string): void {
+    if (view === 'product') {
+      this.router.navigate(['.'], { relativeTo: this.route }); // Stay on the current route
+      this.showProduct = true;
+    } else {
+      this.showProduct = false;
+    }
+  }
+  // end
 
   // Expose Math for use in templates
   Math = Math;

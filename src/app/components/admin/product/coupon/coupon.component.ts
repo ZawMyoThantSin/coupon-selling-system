@@ -26,15 +26,15 @@ export class CouponComponent {
   ) {}
   ngOnInit(): void {
 
-    this.couponService.getAllCoupons().subscribe(
-      response =>{
-        this.businesses = response
-        console.log("RES: ",response)
-      },
-      error =>{
-        console.error("ERROR IN FETCHING: ", error);
-      }
-    )
+    // this.couponService.getAllCoupons().subscribe(
+    //   response =>{
+    //     this.businesses = response
+    //     console.log("RES: ",response)
+    //   },
+    //   error =>{
+    //     console.error("ERROR IN FETCHING: ", error);
+    //   }
+    // )
   }
 
   openModal() {

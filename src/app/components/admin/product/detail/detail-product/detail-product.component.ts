@@ -74,10 +74,13 @@ export class DetailProductComponent implements OnInit {
       this.message = 'Error deleting product.';
     });
   }
-  
+
   // New method to navigate back to the product list
   goBackToProductList(): void {
     this.router.navigate(['/product']);
   }
-}
 
+  getImageUrl(imagePath: string): string {
+    return this.productService.getImageUrl(imagePath);
+  }
+}

@@ -18,8 +18,8 @@ export class EditProductComponent implements OnInit {
   product: Product | null = null; // Initially null until product is loaded
   isLoading: boolean = true;
   errorMessage: string = '';
-  modalRef: MdbModalRef<any> | null = null; 
-  isSaving: boolean = false; 
+  modalRef: MdbModalRef<any> | null = null;
+  isSaving: boolean = false;
 
   @ViewChild('editProductModal') editProductModal: any; // Reference to modal template
 
@@ -27,7 +27,7 @@ export class EditProductComponent implements OnInit {
     private productService: ProductService,
     private modalService: MdbModalService,
     private route: ActivatedRoute,
-  
+
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +71,7 @@ export class EditProductComponent implements OnInit {
           this.product = updatedProduct;
           alert('Product updated successfully');
           this.modalRef?.close();
-          window.location.reload(); 
+          window.location.reload();
         },
         error: (error) => {
           this.isSaving = false;
@@ -85,6 +85,8 @@ export class EditProductComponent implements OnInit {
   // Close modal safely
   closeModal(): void {
     this.modalRef?.close();
-   
+
   }
+
+
 }

@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StorageService } from '../storage.service';
+import { Coupon } from '../../models/coupon.modal';
 
 @Injectable({
   providedIn: 'root'
@@ -29,9 +30,9 @@ export class CouponService {
     return null;
   }
 
-  getAllCoupons():Observable<any>{
-    return this.http.get(this.BASE_URL +'api/coupon',{
-      headers:this.createAuthHeader(),
+  getAllCoupons(id:any):Observable<Coupon[]>{
+    return this.http.get<Coupon[]>(this.BASE_URL +'api/coupon/b/'+id,{
+      // headers:this.createAuthHeader(),
       responseType:'json'
     })
   }
