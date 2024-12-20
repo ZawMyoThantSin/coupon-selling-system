@@ -18,6 +18,7 @@ import { HistoryComponent } from './components/home/history/history.component';
 import { CardComponent } from './components/home/product/product/card/card.component';
 import { ProductdetailsComponent } from './components/home/product/product/productdetails/productdetails.component';
 import { HomeCarouselComponent } from './components/home/home-carousel/home-carousel.component';
+import { CustomersComponent } from './components/admin/customers/customers.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -25,6 +26,7 @@ const routes: Routes = [
     children:[
       {path:'carousel', component:HomeCarouselComponent},
       {path:'business', component:BusinessComponent, title:'Business'},
+      {path:'customers', component:CustomersComponent, title:'Customers'},
       {path:'b/detail/:id', component:BusinessDetailComponent,
         children: [
         {path: '',component: ProductComponent},
@@ -37,7 +39,8 @@ const routes: Routes = [
       {path:'p/detail-product/:id',component:DetailProductComponent},
 
     ]
-  },{path:'homepage', component:HomeComponent, title:'Home Page',
+  },
+  {path:'homepage', component:HomeComponent, title:'Home Page',
     children:[
       {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
       {path:'friends', component:FriendComponent, title:'Friends'},

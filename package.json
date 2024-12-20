@@ -29,6 +29,7 @@
     "mdb-angular-ui-kit": "^7.1.0",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
+    "simple-datatables": "^9.2.1",
     "swiper": "^11.1.15",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"
@@ -37,8 +38,10 @@
     "@angular-devkit/build-angular": "^18.2.11",
     "@angular/cli": "^18.2.11",
     "@angular/compiler-cli": "^18.2.0",
+    "@types/datatables.net": "^1.10.28",
     "@types/express": "^4.17.17",
     "@types/jasmine": "~5.1.0",
+    "@types/jquery": "^3.5.32",
     "@types/node": "^18.18.0",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",

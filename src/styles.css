@@ -1,6 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 @import '@fortawesome/fontawesome-free/css/all.css';
 @import 'mdb-angular-ui-kit/assets/scss/mdb.scss';
+/* In your styles.css */
+@import "simple-datatables/dist/style.css";
+
 
 
 html, body { height: 100%; }
