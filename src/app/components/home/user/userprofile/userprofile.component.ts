@@ -4,16 +4,23 @@ import { UserResponse } from '../../../../models/user-response.models';
 import { UserService } from '../../../../services/user/user.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { StorageService } from '../../../../services/storage.service';
+import { EditUserprofileComponent } from '../edit-userprofile/edit-userprofile.component';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-userprofile',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe,MatButtonModule,MatCardModule,MatIconModule,MatDividerModule,MatChipsModule],
   templateUrl: './userprofile.component.html',
   styleUrl: './userprofile.component.css'
 })
 export class UserprofileComponent implements OnInit {
-
+  modalRef: MdbModalRef<EditUserprofileComponent> | null = null;//
   searchResults: UserResponse[] = [];
   isLoading: boolean = false;
   userInfo!:UserResponse;
@@ -21,7 +28,9 @@ export class UserprofileComponent implements OnInit {
   isLoggedIn: boolean = false;
 
   constructor(private storageService: StorageService
-    ,private userService: UserService) {}
+    ,private userService: UserService,
+     private modalService: MdbModalService
+  ) {}
 
   ngOnInit(): void {
     this.fetchUserDetails();
@@ -40,6 +49,17 @@ export class UserprofileComponent implements OnInit {
     } else {
       this.isLoggedIn = true;
     }
+  }
+
+  openModal(): void {
+    this.modalRef = this.modalService.open(EditUserprofileComponent);
+  }
+
+  closeModal(): void {
+    this.modalRef?.close();
+  }
+  getImageUrl(imagePath: string): string {
+    return this.userService.getImageUrl(imagePath);
   }
 }
 

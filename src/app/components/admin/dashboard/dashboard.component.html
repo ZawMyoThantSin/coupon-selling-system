@@ -57,7 +57,7 @@
     aria-expanded="false"
   >
     <img
-      [src]="userInfo?.profile"
+      [src]="userInfo.profile || 'images/business/logos/i1.png'"
       class="rounded-circle"
       height="40"
       width="40"
@@ -67,8 +67,8 @@
 
   <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
     <div class="px-2">
-      <span class="d-block"><strong>{{ userInfo?.name || 'John Doe' }}</strong></span>
-      <span class="text-muted">{{ userInfo?.email || 'johndoe@example.com' }}</span>
+      <span class="d-block"><strong>{{ userInfo.name || 'John Doe' }}</strong></span>
+      <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
     </div>
 
     <div class="dropdown-divider mt-2 mb-2"></div>

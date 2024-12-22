@@ -1,63 +1,71 @@
 /* Form styles */
 .form-control, .form-select {
-    margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+mdb-form-control {
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Responsive adjustments for small screens */
+@media (max-width: 767px) {
+  .modal-body {
+    padding: 1rem;
   }
-  
-  mdb-form-control {
+
+  .row {
+    margin-bottom: 0;
+  }
+
+  .col-md-4, .col-md-6 {
     margin-bottom: 1rem;
-    display: block;
   }
-  
-  /* Responsive adjustments for small screens */
-  @media (max-width: 767px) {
-    .modal-body {
-      padding: 1rem;
-    }
-  
-    .row {
-      margin-bottom: 0;
-    }
-  
-    .col-md-4, .col-md-6 {
-      margin-bottom: 1rem;
-    }
-  
-    mdb-form-control {
-      margin-bottom: 0.5rem;
-    }
-  
-    .form-control, .form-select {
-      margin-bottom: 0.25rem;
-    }
-  
-    .text-danger {
-      margin-bottom: 0.5rem;
-    }
-  }
-  
-  /* Additional spacing for form groups */
-  .form-group {
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Ensure consistent spacing for all form elements */
-  input[type="text"],
-  input[type="number"],
-  select,
-  textarea {
+
+  mdb-form-control {
     margin-bottom: 0.5rem;
   }
-  
-  /* Add some space between label and input */
-  label {
+
+  .form-control, .form-select {
     margin-bottom: 0.25rem;
-    display: inline-block;
   }
-  
-  /* Ensure error messages don't crowd the inputs */
+
   .text-danger {
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
   }
-  
-  
+}
+
+/* Additional spacing for form groups */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Ensure consistent spacing for all form elements */
+input[type="text"],
+input[type="number"],
+select,
+textarea {
+  margin-bottom: 0.5rem;
+}
+
+/* Add some space between label and input */
+label {
+  margin-bottom: 0.25rem;
+  display: inline-block;
+}
+
+/* Ensure error messages don't crowd the inputs */
+.text-danger {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+}
+
+/* styles.css */
+.toast-success {
+background-color: #28a745 !important;
+color: #fff !important;
+}
+.toast-error {
+background-color: #dc3545 !important;
+color: #fff !important;
+}

@@ -28,7 +28,7 @@ export class FriendComponent implements OnInit {
   isLoading = false;
   filteredFriends: any[] = [];
   pendingRequests: any[] = [];
-  loggedInUserEmail: string = '';
+  loggedInUserEmail: string | any = '';
   loggedInUserId: number | null = null;
   searchTimeout: any;
   friendIds: Set<number> = new Set();

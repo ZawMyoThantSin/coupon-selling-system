@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-product',
@@ -16,10 +17,28 @@ import { MdbFormsModule } from 'mdb-angular-ui-kit/forms';
 })
 export class EditProductComponent implements OnInit {
   product: Product | null = null; // Initially null until product is loaded
+  updatedProduct: {
+    businessId: number | null,
+    name: string;
+    price: number | null;
+    discount: number | null;
+    description: string;
+    imageFile: File | null; // Allow File or null
+  } = {
+    businessId: null,
+    name: '',
+    price: null,
+    discount: null,
+    description: '',
+    imageFile: null // Initialize as null
+  };
+
   isLoading: boolean = true;
   errorMessage: string = '';
   modalRef: MdbModalRef<any> | null = null;
   isSaving: boolean = false;
+  imagePreview: string | ArrayBuffer | null = null;
+  imageError: string | null = null;
 
   @ViewChild('editProductModal') editProductModal: any; // Reference to modal template
 
@@ -27,7 +46,7 @@ export class EditProductComponent implements OnInit {
     private productService: ProductService,
     private modalService: MdbModalService,
     private route: ActivatedRoute,
-
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -65,28 +84,74 @@ export class EditProductComponent implements OnInit {
   onSubmit(): void {
     if (this.product && this.product.id) {
       this.isSaving = true;
-      this.productService.updateProduct(this.product.id, this.product).subscribe({
-        next: (updatedProduct) => {
-          this.isSaving = false;
-          this.product = updatedProduct;
-          alert('Product updated successfully');
-          this.modalRef?.close();
-          window.location.reload();
-        },
-        error: (error) => {
-          this.isSaving = false;
-          console.error('Error updating product:', error);
-          this.errorMessage = 'Failed to update product';
-        },
+
+      // Prepare FormData for the request
+      const formData = new FormData();
+    formData.append('name', this.product.name ?? ''); // Default to empty string if name is null/undefined
+    formData.append('price', this.product.price?.toString() ?? '0'); // Default to '0'
+    formData.append('discount', this.product.discount?.toString() ?? '0'); // Default to '0'
+    formData.append('description', this.product.description ?? '');
+
+     // Only append imageFile if a new file is selected
+     if (this.product.imageFile) {
+      formData.append('imageFile', this.product.imageFile);
+    }
+
+    this.productService.updateProduct(this.product.id, formData).subscribe({
+      next: (updatedProduct) => {
+        this.isSaving = false;
+        this.product = updatedProduct;
+        this.toastr.success('Product updated successfully!', 'Success'); // Toastr for success
+        this.closeModal();
+        window.location.reload();
+      },
+      error: (error) => {
+        this.isSaving = false;
+        console.error('Error updating product:', error);
+        this.toastr.error('Failed to update product', 'Error'); // Toastr for error
+        this.errorMessage = 'Failed to update product';
+      },
       });
     }
   }
 
+
   // Close modal safely
   closeModal(): void {
-    this.modalRef?.close();
-
+    if (this.modalRef) {
+      this.modalRef.close();
+    } else {
+      console.log('Modal reference is not defined!');
+    }
   }
 
+
+  onImageChange(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        this.imageError = 'Only image files are allowed.';
+        return;
+      }
+
+      this.imageError = null;
+      if (this.product) {
+        this.product.imageFile= file; // Assign the file object here
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imagePreview = reader.result;
+      };
+      reader.readAsDataURL(file);
+      console.log('Uploaded File Name:', file.name);
+    }
+  }
+
+
+
+
+  getImageUrl(imagePath: string): string {
+    return this.productService.getImageUrl(imagePath);
+  }
 
 }

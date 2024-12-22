@@ -45,7 +45,15 @@ export class UserService {
       responseType: 'json'
     });
   }
+  updateUserProfile(id: number, data: any): Observable<any> {
+    return this.http.put(`${this.BASE_URL}/${id}`, data, {
+      responseType: 'json'
+    });
+  }
+getImageUrl(imagePath: string): string {
 
+  return `http://localhost:8080/public/profile/images/${imagePath}`;
+}
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.BASE_URL}/${id}`, {
       headers: this.createAuthHeader()

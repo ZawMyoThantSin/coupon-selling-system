@@ -1,0 +1,163 @@
+<div class="row mt-4">
+  <div class="col-md-10 offset-1">
+    <div class="d-flex flex-sm-column flex-lg-row align-items-lg-start align-items-sm-center justify-content-center ">
+
+        <!-- Table Section -->
+        <div class="table-container mb-4 mb-lg-0 me-2 " style="flex: 1;">
+          <table class="table align-middle mb-0 bg-white table-responsive table-responsive-sm">
+            <thead class="bg-light">
+              <tr>
+                <th></th>
+                <th class="col-2 text-center">Name</th>
+                <th class="col-2 text-center">Quantity</th>
+                <th class="col-2">Price</th>
+                <th>Exp Date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of cartData">
+                <!-- Product -->
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img
+                      [src]="getImageUrl(item.productImage)"
+                      alt=""
+                      style="width: 45px; height: 45px"
+                      class="rounded-circle"
+                    />
+                  </div>
+                </td>
+                <!-- Name -->
+                <td>
+                  <p class="fw-normal mb-1">{{ item.productName }}</p>
+                </td>
+
+                <!-- Quantity with + and - Buttons -->
+                <td>
+                  <div class="d-flex align-items-center">
+                    <button
+                      class="btn btn-link px-2"
+                      (click)="updateQuantity(item.cartId, 'decrement')"
+                    >
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <input
+                      type="number"
+                      [value]="item.quantity"
+                      class="form-control form-control-sm text-center"
+                      style="width: 60px;"
+                      readonly
+                    />
+                    <button
+                      class="btn btn-link px-2"
+                      (click)="updateQuantity(item.cartId, 'increment')"
+                    >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                </td>
+                <!-- Price -->
+                <td>{{ item.price}} MMK </td>
+                <!-- Expiration Date -->
+                <td>{{ item.expireDate | date}}</td>
+                <td>
+                  <button class="btn btn-sm btn-link" >
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323">
+                      <path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Card Section -->
+        <div class="card shadow-2-strong mb-5 mb-lg-0" style="border-radius: 16px; width: 100%; max-width: 350px;">
+          <div class="card-body p-4">
+            <div class="row">
+              <div class="col-md-6 col-lg-12">
+                <form>
+                  <div class="d-flex flex-row pb-3" style="cursor: pointer;">
+                    <div class="d-flex align-items-center pe-2"  >
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="radioNoLabel"
+                        id="radioNoLabel1v"
+                        value=""
+                        aria-label="..."
+                        checked
+                      />
+                    </div>
+                    <div class="rounded border w-100 p-3">
+                      <p class="d-flex align-items-center mb-0">
+                        <img
+                        src="/images/product/kpay.png"
+                        alt="Kay Pay"
+                        style="width: 24px; height: 24px; margin-right: 8px;"
+                      />KBZ Pay
+                      </p>
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row pb-3" style="cursor: pointer;">
+                    <div class="d-flex align-items-center pe-2">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="radioNoLabel"
+                        id="radioNoLabel2v"
+                        value=""
+                        aria-label="..."
+                      />
+                    </div>
+                    <div class="rounded border w-100 p-3">
+                      <p class="d-flex align-items-center mb-0">
+                        <img
+                        src="/images/product/wave.jpg"
+                        alt="KPay"
+                        style="width: 24px; height: 24px; margin-right: 8px;"
+                      />Wave Pay
+                      </p>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <div class="col-lg-12">
+                <div class="d-flex justify-content-between" style="font-weight: 500;">
+                  <p class="mb-2">Subtotal</p>
+                  <p class="mb-2">{{ calculateSubtotal()}} MMK</p>
+                </div>
+
+                <div class="d-flex justify-content-between" style="font-weight: 500;">
+                  <p class="mb-0">Shipping</p>
+                  <p class="mb-0">{{ shipping }} MMK</p>
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-between mb-4" style="font-weight: 500;">
+                  <p class="mb-2">Total (tax included)</p>
+                  <p class="mb-2">{{ calculateTotal()}} MMK</p>
+                </div>
+
+                <button
+                  type="button"
+                  data-mdb-button-init
+                  data-mdb-ripple-init
+                  class="btn btn-primary btn-block btn-lg"
+                >
+                  <div class="d-flex justify-content-between">
+                    <span>Checkout</span>
+                    <span>{{ calculateTotal() }} MMK</span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

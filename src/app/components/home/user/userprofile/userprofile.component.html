@@ -1,60 +1,84 @@
-<div class="container my-5">
-  <div class="card shadow-lg p-4">
-    <div class="row g-0 align-items-center">
-      <!-- User Profile Picture -->
-      <div class="col-md-4 text-center bg-light py-4">
-        <img
-          [src]="userInfo.profile || './images/user/avatar.png'"
-          class="rounded-circle img-fluid"
-          alt="User Profile"
-          width="150"
-          height="150">
-        <h5 class="mt-3">{{ userInfo.name }}</h5>
-      </div>
-
-      <!-- User Details -->
-      <div class="col-md-8">
-        <div class="card-body">
-          <h4 class="card-title text-primary">
-            <strong>{{ userInfo.name }}</strong>
-          </h4>
-          <p class="text-muted"><i class="fas fa-envelope me-2"></i>{{ userInfo.email || 'Required' }}</p>
-          <p class="badge bg-success text-wrap">{{ userInfo.role || 'Required' }}</p>
-
-          <hr>
-          <!-- Notification and Created Date -->
-          <div class="row">
-            <div class="col-md-6">
-              <p>
-                <strong>Notifications:</strong>
-                <button
-                  type="button"
-                  class="btn btn-sm"
-                  [ngClass]="userInfo.enableNoti ? 'btn-success' : 'btn-danger'">
-                  {{ userInfo.enableNoti ? 'Enabled' : 'Disabled' }}
-                </button>
-              </p>
-            </div>
-            <div class="col-md-6">
-              <p><strong>Member Since: {{ userInfo.created_At | date:'yyyy-MM-dd' }}</strong></p>
-            </div>
+<div class="container my-1">
+  <mat-card class="shadow-sm py-5">
+    <mat-card-content>
+      <div class="row g-0 align-items-center">
+        <!-- User Profile Picture -->
+        <div class="col-md-4 text-center py-4">
+          <!-- Profile Image -->
+          <div class="d-inline-block">
+            <img
+              [src]="getImageUrl(userInfo.profile)"
+              class="rounded-circle img-fluid profile-image"
+              alt="User Profile"
+              width="150"
+              height="150"
+            />
           </div>
-          <div class="row mt-3">
-            <div class="col-md-6">
-              <p><i class="fas fa-phone me-2"></i><strong>Phone: {{ userInfo.phone || 'N/A' }}</strong> </p>
+          <h4 class="mt-3 mat-subheading-1">{{ userInfo.name }}</h4>
+
+          <!-- Edit Icon below the name -->
+          <button
+            class="edit-icon mt-3"
+            style="background-color: rgba(255, 255, 255, 0.8); border: none; border-radius: 50%; padding: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);"
+            (click)="openModal()"
+          >
+            <mat-icon>edit</mat-icon>
+
+          </button>
+        </div>
+
+        <!-- User Details -->
+        <div class="col-md-8">
+          <div class="p-3">
+            <h4 class="mat-headline text-primary">
+              <strong>{{ userInfo.name }}</strong>
+            </h4>
+
+            <p class="text-muted">
+              <mat-icon>email</mat-icon>
+              {{ userInfo.email || 'Required' }}
+            </p>
+
+            <mat-divider class="my-3"></mat-divider>
+
+            <!-- Notification and Created Date -->
+            <div class="row">
+              <div class="col-md-6">
+                <p>
+                  <strong>Notifications:</strong>
+                  <button
+                    mat-raised-button
+                    color="{{ userInfo.enableNoti ? 'primary' : 'warn' }}"
+                  >
+                    {{ userInfo.enableNoti ? 'Enabled' : 'Disabled' }}
+                  </button>
+                </p>
+              </div>
+              <div class="col-md-6">
+                <p>
+                  <strong>Member Since:</strong>
+                  <strong>{{ userInfo.create_at | date: 'yyyy-MM-dd' }}</strong>
+                </p>
+              </div>
             </div>
-            <div class="col-md-6">
-              <p><i class="fas fa-map-marker-alt me-2"></i><strong>Address:{{ userInfo.address || 'N/A' }}</strong></p>
+
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <p>
+                  <mat-icon>phone</mat-icon>
+                  <strong>Phone: {{ userInfo.phone || 'N/A' }}</strong>
+                </p>
+              </div>
+              <div class="col-md-6">
+                <p>
+                  <mat-icon>location_on</mat-icon>
+                  <strong>Address: {{ userInfo.address || 'N/A' }}</strong>
+                </p>
+              </div>
             </div>
-          </div>
-          <!-- Edit Button -->
-          <div class="text-end mt-3">
-            <button type="button" class="btn btn-primary btn-rounded">
-              <i class="fas fa-edit me-2"></i>Edit Profile
-            </button>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </mat-card-content>
+  </mat-card>
 </div>

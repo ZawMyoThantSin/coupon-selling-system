@@ -71,6 +71,12 @@ export class ProductService {
     });
   }
 
+  updateDiscount(id: number, discount: any): Observable<any> {
+    return this.http.put(`${this.BASE_URL}api/products/${id}/discount`, { discount }, {
+      responseType: 'json'
+    });
+  }
+
 
 // get product images
   getImageUrl(imagePath: string): string {
