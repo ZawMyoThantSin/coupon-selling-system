@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit{
   isBusinessCollapsed: boolean = true; // Tracks if the business section is collapsed
   token!: any;
   loading: boolean = false; // Flag to track if data is being fetched
+  seeAll = false;
   userInfo!:UserResponse;
   userId:any;
 
@@ -85,5 +86,8 @@ export class DashboardComponent implements OnInit{
   logoutButton(): void{
     this.storageService.removeItem("token");
     this.router.navigate(['login']);
+  }
+  getImageUrl(imagePath: string): string {
+    return this.businessService.getImageUrl(imagePath);
   }
 }

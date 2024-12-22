@@ -32,7 +32,7 @@ export class CouponService {
 
   getAllCoupons(id:any):Observable<Coupon[]>{
     return this.http.get<Coupon[]>(this.BASE_URL +'api/coupon/b/'+id,{
-      // headers:this.createAuthHeader(),
+
       responseType:'json'
     })
   }

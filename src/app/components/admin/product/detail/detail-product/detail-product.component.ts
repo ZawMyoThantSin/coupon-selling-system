@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { EditProductComponent } from '../../edit/edit-product/edit-product.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-detail-product',
@@ -15,7 +16,7 @@ import { EditProductComponent } from '../../edit/edit-product/edit-product.compo
   styleUrls: ['./detail-product.component.css'],
 })
 export class DetailProductComponent implements OnInit {
-  selectedProduct?: Product;
+  selectedProduct: Product | undefined;
   message: string | null = null;
 
   modalRef: MdbModalRef<EditProductComponent> | null = null;
@@ -24,7 +25,8 @@ export class DetailProductComponent implements OnInit {
     private modalService: MdbModalService,
     private productService: ProductService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -40,6 +42,7 @@ export class DetailProductComponent implements OnInit {
         this.selectedProduct = product;
       } else {
         console.error('Product not found');
+        this.toastr.error('Product not found.', 'Error');
         this.selectedProduct = undefined;
       }
     });
@@ -53,7 +56,7 @@ export class DetailProductComponent implements OnInit {
     this.modalRef.onClose.subscribe((updatedProduct: Product | null) => {
       if (updatedProduct) {
         this.selectedProduct = updatedProduct;
-        this.message = 'Product updated successfully.';
+        this.toastr.success('Product updated successfully.', 'Success');
       }
     });
   }
@@ -64,20 +67,35 @@ export class DetailProductComponent implements OnInit {
   }
 
   deleteProduct(id: number): void {
-    this.productService.deleteProduct(id).subscribe(() => {
-      alert('Product deleted successfully');
-      // Optionally navigate away or reset selected product after deletion
-      this.selectedProduct = undefined;  // Clear the product details after deletion
-      this.router.navigate(['/d/product']);
-    }, (error) => {
+   const businessId=localStorage.getItem('currentBusinessId');
+   if (!businessId) {
+    console.error('Business ID not found in localStorage');
+    this.toastr.error('Cannot delete product: Business ID is missing.', 'Error');
+    return;
+  }
+
+  this.productService.deleteProduct(id).subscribe({
+    next: () => {
+      this.toastr.success('Product deleted successfully.', 'Success');
+      this.router.navigate(['/d/b/detail', businessId]);
+    },
+    error: (error) => {
       console.error(error);
-      this.message = 'Error deleting product.';
+      this.toastr.error('Error deleting product.', 'Error');
+    }
     });
   }
 
-  // New method to navigate back to the product list
-  goBackToProductList(): void {
-    this.router.navigate(['/product']);
+
+  goBack() {
+    const businessId = localStorage.getItem('currentBusinessId');
+    if (businessId) {
+      this.router.navigate(['/d/b/detail', businessId]);
+    } else {
+      console.error('Business ID not found in localStorage');
+      this.toastr.warning('Business ID not found. Redirecting to home.', 'Warning');
+      this.router.navigate(['']);
+    }
   }
 
   getImageUrl(imagePath: string): string {

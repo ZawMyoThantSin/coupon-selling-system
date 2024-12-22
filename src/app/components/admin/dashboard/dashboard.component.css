@@ -44,17 +44,36 @@
 
 /* Business list styling */
 .business-list .business-item {
+  /* Keeping your original styles intact */
   padding: 8px 20px;
-  color: #495057; /* Default text color */
+  color: #495057;
   font-size: 15px;
   transition: background-color 0.3s, color 0.3s;
+  display: flex;
+  flex-direction: row; /* Ensures avatar is above the name */
+  align-items: center;
+  justify-content: start; /* Centers avatar and text */
 }
 
 .business-list .business-item:hover {
-  background-color: #e2e6ea; /* Hover effect for business items */
-  color: #4a5058; /* Blue text color for hover */
+  /* Keeping your original hover effect */
+  background-color: #e2e6ea;
+  color: #4a5058;
   border-radius: 15px;
   cursor: pointer;
+  text-decoration: none;
+}
+
+.business-avatar {
+  margin-bottom: 8px; /* Adds spacing between avatar and name */
+}
+
+.avatar {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
 }
 
 /* Content area for scrollable content */

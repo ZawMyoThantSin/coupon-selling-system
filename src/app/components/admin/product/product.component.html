@@ -40,19 +40,20 @@
               [(ngModel)]="editableProduct.discount"
               type="number"
               class="form-control form-control-sm"
-              style="width: 50px; display: inline-block;" />
+              style="width: 70px; display: inline-block;" />
 
-              <button class="btn btn-link" (click)="toggleEdit(product.id, 'discount')">
+              <button class="btn btn-link" (click)="toggleEditDiscount(product.id)" [disabled]="isSaving">
                 <i *ngIf="!isEditing(product.id, 'discount')" class="fas fa-edit text-warning"></i>
-                <i *ngIf="isEditing(product.id, 'discount')" class="fas fa-check text-success me-2 fs-6"></i>
-                <i *ngIf="isEditing(product.id, 'discount')" (click)="closeEdit()" class="fas fa-times text-danger fs-6 "></i>
+                <i *ngIf="isEditing(product.id, 'discount')" class="fas fa-check text-success"></i>
               </button>
-
+              <button *ngIf="isEditing(product.id, 'discount')" class="btn btn-link" (click)="closeEdit()" [disabled]="isSaving">
+                <i class="fas fa-times text-danger"></i>
+              </button>
             </td>
             <td>
-              <a [routerLink]="['/d/p/detail-product', product.id]" class="btn btn-info btn-sm me-3">
+              <button (click)="navigateToProductDetail(product.id)" class="btn btn-info btn-sm">
                 <i class="fas fa-info-circle"></i>
-              </a>
+              </button>
               <button
               *ngIf="product.discount"
               class="btn btn-warning rounded rounded-circle btn-sm"

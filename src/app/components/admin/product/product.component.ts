@@ -4,7 +4,7 @@ import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CreateProductModalComponent } from './create-product/modals/create-modal/create-modal.component';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProductService } from '../../../services/product/product.service';
 import { MdbRippleModule } from 'mdb-angular-ui-kit/ripple';
 import { CreateModalComponent } from './coupon/create-modal/create-modal.component';
@@ -39,8 +39,9 @@ export class ProductComponent {
     private productService: ProductService,
     private modalService: MdbModalService,
     private storageService: StorageService,
-    private couponService: CouponService,
     private tokenService: JwtService,
+    private couponService: CouponService,
+    private router: Router,
     private toastr: ToastrService
   ) {}
 
@@ -51,24 +52,26 @@ export class ProductComponent {
       this.businessId = Number(params.get('id'));
       this.productService.getAllProducts(this.businessId).subscribe((data: Product[]) => {
         this.products = data;
+        this.products = data.filter(product => product.status );
       });
     });
   }
 
   loadProducts(): void {
     this.productService.getAllProducts(this.businessId).subscribe((data: Product[]) => {
-      this.products = data;
+
     });
   }
 
   // Open modal directly with MDB modal service
   navigateToModal(): void {
-    if(!this.businessId){
+    if (!this.businessId) {
       return;
     }
+
     this.modalRef = this.modalService.open(CreateProductModalComponent, {
       modalClass: 'modal-lg modal-dialog-centered',
-      data:{businessId: this.businessId},
+      data: { businessId: this.businessId },
     });
 
     this.modalRef.onClose.subscribe((result: any) => {
@@ -79,32 +82,44 @@ export class ProductComponent {
   }
 
 
-  toggleEdit(productId: number, field: string): void {
-    if (this.editingProduct?.id === productId && this.editingProduct?.field === field) {
-      if (this.editableProduct) {
-        this.productService.updateProduct(productId, this.editableProduct).subscribe(() => {
-          this.editingProduct = null;
-          this.toastr.success("Updated Successfully", "Success!")
-          this.loadProducts();
-        });
-      } else {
-        this.toastr.warning('No changes to save');
-      }
+  toggleEditDiscount(productId: number): void {
+    if (this.editingProduct?.id === productId && this.editingProduct?.field === 'discount') {
+      this.saveDiscountChanges(productId);
     } else {
-      this.editingProduct = { id: productId, field };
-      this.productService.getProductById(productId).subscribe({
-        next: (product) => {
-          if (product) {
-            this.editableProduct = { ...product };
-          } else {
-            alert('Product not found');
-          }
-        },
-        error: () => alert('Failed to fetch product for editing'),
-      });
+      this.editingProduct = { id: productId, field: 'discount' };
+      this.editableProduct = { ...this.products.find(p => p.id === productId) };
     }
   }
 
+  saveDiscountChanges(productId: number): void {
+    if (this.editableProduct && this.editableProduct.discount !== undefined) {
+      this.isSaving = true;
+      this.productService.updateDiscount(productId, this.editableProduct.discount).subscribe({
+        next: (updatedProduct) => {
+          const index = this.products.findIndex(p => p.id === productId);
+          if (index !== -1) {
+            this.products[index] = updatedProduct;
+          }
+          this.editingProduct = null;
+          this.editableProduct = {};
+          this.isSaving = false;
+
+          // Show success alert
+          this.toastr.success('Discount updated successfully', 'Success');
+        },
+        error: (error) => {
+          console.error('Error updating discount:', error);
+          this.isSaving = false;
+
+          // Show error alert
+          this.toastr.error('Failed to update discount', 'Error');
+        }
+      });
+    } else {
+      // Show warning if no changes to save
+      this.toastr.warning('No changes to save', 'Warning');
+    }
+  }
   // coupon create modal
   openModal(id:any):void {
     if(!id){
@@ -143,17 +158,30 @@ export class ProductComponent {
 
           }
         });
-      }
+  }
+
 
   isEditing(productId: number, field: string): boolean {
     return this.editingProduct?.id === productId && this.editingProduct?.field === field;
   }
+
   closeEdit(): void {
-    this.editingProduct = null; // Exit edit mode
-    this.editableProduct = null; // Clear the editable product
+    this.editingProduct = null;
+    this.editableProduct = null;
   }
 
   getImageUrl(imagePath: string): string {
     return this.productService.getImageUrl(imagePath);
   }
+
+  navigateToProductDetail(productId: number): void {
+    if (!this.businessId) {
+      console.error('Business ID is not available');
+      return;
+    }
+    localStorage.setItem('currentBusinessId', this.businessId.toString());
+    this.router.navigate(['/d/p/detail-product', productId]);
+  }
+
+
 }

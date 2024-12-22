@@ -77,6 +77,9 @@ export class HomeComponent implements OnInit{
     this.updateUnreadCount();
   }
 
+  getImageUrl(imagePath: string): string {
+    return this.userService.getImageUrl(imagePath);
+  }
   // Mark notification as read
   markAsRead(notificationId: number) {
     const notification = this.notifications.find((n) => n.id === notificationId);
