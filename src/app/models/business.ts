@@ -9,4 +9,5 @@ export interface Business {
   status:boolean,
   userName:string,
   userEmail:string
+  imageFile?:File | null;
 }

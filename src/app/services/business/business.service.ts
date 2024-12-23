@@ -67,4 +67,14 @@ getAllBusinesses(): Observable<any> {
   });
 }
 
+// Update an existing product by ID
+update(id: number, data: any): Observable<any> {
+  const header = new HttpHeaders({'Content-Type':'application/json'})
+
+  return this.http.put(`${this.BASE_URL}api/businesses/${id}`, data, {
+    headers: this.createAuthHeader(),
+    responseType: 'json'
+  });
+}
+
 }
