@@ -4,7 +4,7 @@ export interface UserResponse {
   email: string ;
   role: string;
   profile: string ;
-  enableNoti: number;
+  enableNoti: boolean | any;
   phone: string;
   address: string;
   create_at: string;

@@ -11,11 +11,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-userprofile',
   standalone: true,
-  imports: [CommonModule, DatePipe,MatButtonModule,MatCardModule,MatIconModule,MatDividerModule,MatChipsModule],
+  imports: [CommonModule,FormsModule, DatePipe,MatButtonModule,MatCardModule,MatIconModule,MatDividerModule,MatChipsModule],
   templateUrl: './userprofile.component.html',
   styleUrl: './userprofile.component.css'
 })
@@ -26,6 +27,7 @@ export class UserprofileComponent implements OnInit {
   userInfo!:UserResponse;
   token!: any;
   isLoggedIn: boolean = false;
+  cond: boolean = true;
 
   constructor(private storageService: StorageService
     ,private userService: UserService,
@@ -38,13 +40,13 @@ export class UserprofileComponent implements OnInit {
 
   fetchUserDetails(): void {
     this.userService.getUserInfo().subscribe((response)=>{
-      console.log("UserInfo: ",response)
+      // console.log("UserInfo: ",response)
       this.userInfo = response;
     },error => console.log('Error in Fetching UserInfo', error));
 
     this.token = this.storageService.getItem('token');
     if (this.token == '' || this.token == null) {
-      console.log('Token is not defined or is invalid.');
+      // console.log('Token is not defined or is invalid.');
       this.isLoggedIn = false;
     } else {
       this.isLoggedIn = true;

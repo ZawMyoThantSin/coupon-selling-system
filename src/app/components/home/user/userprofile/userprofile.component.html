@@ -1,4 +1,4 @@
-<div class="container my-1">
+<div class="container mt-3">
   <mat-card class="shadow-sm py-5">
     <mat-card-content>
       <div class="row g-0 align-items-center">
@@ -16,15 +16,6 @@
           </div>
           <h4 class="mt-3 mat-subheading-1">{{ userInfo.name }}</h4>
 
-          <!-- Edit Icon below the name -->
-          <button
-            class="edit-icon mt-3"
-            style="background-color: rgba(255, 255, 255, 0.8); border: none; border-radius: 50%; padding: 10px; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);"
-            (click)="openModal()"
-          >
-            <mat-icon>edit</mat-icon>
-
-          </button>
         </div>
 
         <!-- User Details -->
@@ -35,7 +26,8 @@
             </h4>
 
             <p class="text-muted">
-              <mat-icon>email</mat-icon>
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720v480q0 33-23.5 56.5T800-160H160Zm320-280L160-640v400h640v-400L480-440Zm0-80 320-200H160l320 200ZM160-640v-80 480-400Z"/></svg>
+
               {{ userInfo.email || 'Required' }}
             </p>
 
@@ -46,12 +38,16 @@
               <div class="col-md-6">
                 <p>
                   <strong>Notifications:</strong>
-                  <button
-                    mat-raised-button
-                    color="{{ userInfo.enableNoti ? 'primary' : 'warn' }}"
-                  >
+                  <label class="switch">
+                    <input
+                      type="checkbox"
+                      [(ngModel)]="userInfo.enableNoti"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                  <span>
                     {{ userInfo.enableNoti ? 'Enabled' : 'Disabled' }}
-                  </button>
+                  </span>
                 </p>
               </div>
               <div class="col-md-6">
@@ -76,6 +72,9 @@
                 </p>
               </div>
             </div>
+          </div>
+          <div class="d-flex justify-content-end  me-5">
+            <button class="btn btn-primary" (click)="openModal()">Edit Profile</button>
           </div>
         </div>
       </div>

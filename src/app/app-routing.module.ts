@@ -43,7 +43,7 @@ const routes: Routes = [
   },
   {path:'homepage', component:HomeComponent, title:'Home Page',
     children:[
-      {path:'cart-test', component:AddToCartComponent},
+      {path:'cart', component:AddToCartComponent},
       {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
       {path:'friends', component:FriendComponent, title:'Friends'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
