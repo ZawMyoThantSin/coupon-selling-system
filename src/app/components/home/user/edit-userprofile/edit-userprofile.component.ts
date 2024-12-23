@@ -12,28 +12,35 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [FormsModule,CommonModule],
   template: `
-   <div class="card shadow-sm rounded border-0" *ngIf="user">
+   <div class="card shadow-sm rounded border-0 pb-5" *ngIf="user">
   <div class="card-header bg-white" style="display: flex; justify-content: center; align-items: center;">
     <h5 class="modal-title" style="color: rgb(6, 8, 8);">Edit User Profile</h5>
 
   </div>
 
-  <div class="card-body" style="background-color: white; padding: 15px; border-radius: 5px;">
+  <div class="card-body px-5" >
     <form #userForm="ngForm" (ngSubmit)="onSubmit()">
-
       <!-- Profile Image Section -->
       <div class="row mb-4">
         <div class="col-12 text-center">
           <!-- <label for="Profile" class="form-label font-weight-bold text-dark">Upload Image</label> -->
           <div class="mt-3 mb-3" >
-            <img
+            <img *ngIf="user.authProvider =='LOCAL'; else elsNoProfile"
               [src]="imagePreview ?? getImageUrl(user.profile)"
               alt="Image Preview"
               class="img-thumbnail rounded-circle border"
               style="width: 150px; height: 150px; object-fit: cover;"
             />
+            <ng-template #elsNoProfile>
+            <img
+              [src]="user.profile"
+              alt="Image Preview"
+              class="img-thumbnail rounded-circle border"
+              style="width: 150px; height: 150px; object-fit: cover;"
+            />
+            </ng-template>
           </div>
-          <input
+          <input *ngIf="user.authProvider == 'LOCAL'"
             type="file"
             id="Profile"
             name="Profile"
@@ -45,8 +52,6 @@ import { CommonModule } from '@angular/common';
           </div>
         </div>
       </div>
-
-
 
       <!-- User Details Section -->
       <div class="row">
@@ -79,7 +84,7 @@ import { CommonModule } from '@angular/common';
               name="email"
               readonly
             />
-            <label for="useremail">User Email</label>
+            <label for="useremail">Email</label>
           </div>
         </div>
       </div>
@@ -94,15 +99,16 @@ import { CommonModule } from '@angular/common';
               class="form-control form-control-sm"
               [(ngModel)]="user.phone"
               name="phone"
-              required
-              pattern="09[0-9]{9}"
+              pattern="^[0-9]{9,11}$"
+              #phone="ngModel"
             />
             <label for="phone">Phone Number</label>
-            <div *ngIf="userForm.form.controls['phone']?.invalid && userForm.form.controls['phone']?.touched" class="text-danger">
-              Valid Phone Number is required.
+            <div *ngIf="phone.invalid && phone.touched" class="text-danger">
+                Valid Phone Number is required.
+              </div>
             </div>
           </div>
-        </div>
+
 
         <!-- Address Section -->
         <div class="col-md-6 mb-2">
@@ -120,14 +126,18 @@ import { CommonModule } from '@angular/common';
       </div>
 
       <!-- Submit Button -->
-      <div class="text-end">
+      <div class="text-end pt-3">
+      <button
+      class="btn btn-outline-secondary btn-sm me-2"
+      (click)="closeModal()">Cancel</button>
         <button
           type="submit"
           class="btn btn-primary btn-sm"
           [disabled]="userForm.form.invalid || isSaving"
         >
-          {{ isSaving ? 'Saving...' : 'Save User' }}
+          {{ isSaving ? 'Saving...' : 'Save' }}
         </button>
+
       </div>
     </form>
   </div>
@@ -210,7 +220,7 @@ selectedFile: File | null = null;
             this.isSaving = false;
             this.user = updatedUser;
             this.toastr.success('User updated successfully!', 'Success'); // Toastr for success
-            this.closeModal();
+            // this.closeModal();
             window.location.reload();
           },
           error: (error) => {

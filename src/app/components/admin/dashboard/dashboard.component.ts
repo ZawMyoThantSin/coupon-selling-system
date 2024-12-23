@@ -44,7 +44,8 @@ export class DashboardComponent implements OnInit{
     this.userId = this.jwtService.getUserId(this.token);
 
     this.userService.getUserInfo().subscribe((response)=>{
-      console.log("UserInfo: ",response)
+      // console.log("Provider: " , response.authProvider)
+      // console.log("UserInfo: ",response)
       this.userInfo = response;
     },error => console.log('Error in Fetching UserInfo', error));
 
@@ -86,6 +87,9 @@ export class DashboardComponent implements OnInit{
   logoutButton(): void{
     this.storageService.removeItem("token");
     this.router.navigate(['login']);
+  }
+  getUserProfile(imagePath: string): string {
+    return this.userService.getImageUrl(imagePath);
   }
   getImageUrl(imagePath: string): string {
     return this.businessService.getImageUrl(imagePath);
