@@ -11,17 +11,17 @@
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     z-index: 1040;
   }
-  
+
   .active{
     background-color: #fcf9ddec;
     border-radius: 20px;
-  
+
   }
-  
+
   .sidebar.open {
     left: 0; /* Show sidebar when open */
   }
-  
+
   .sidebar a {
     text-decoration: none;
     color: black;
@@ -37,11 +37,11 @@
     margin-right: 12px; /* Space between icon and text */
     font-size: 18px; /* Consistent icon size */
   }
-  
+
   .sidebar a:hover {
     background-color: #e6d6d6;
   }
-  
+
   /* Content area for scrollable content */
   .content-area {
     margin-left: 0; /* By default, the content takes full width */
@@ -51,12 +51,12 @@
     overflow-y: auto;
     transition: margin-left 0.3s ease;
   }
-  
+
   /* Adjust content area when sidebar is open */
   .sidebar.open + .content-area {
     margin-left: 250px; /* Shift content to the right when sidebar is open */
   }
-  
+
   /* Optional: Customizing navbar for better visibility */
   .navbar {
     z-index: 1050; /* Ensure navbar is on top */
@@ -69,9 +69,7 @@
 }
 
 /* Dropdown Styling */
-.dropdown-menu {
-  width: 200px; /* Adjust width for dropdown menu */
-}
+
 
 .dropdown-item {
   font-size: 0.9rem;
@@ -87,14 +85,13 @@
   right: 0;
   left: auto;
 }
-  
+
   /* Hamburger icon styles */
   /* .navbar-toggler {
     border: none;
     background: transparent;
   } */
-  
+
   /* .navbar-toggler .fas {
     font-size: 28px;
   } */
-  

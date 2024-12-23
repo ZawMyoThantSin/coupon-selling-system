@@ -15,55 +15,98 @@
         </a>
         <a class="navbar-brand" routerLink="/homepage">Coupon Sell Home Page</a><i class="fa-solid fa-ticket"></i>
       </div>
-
-      <div class="me-3">
-
-        <ul class="navbar-nav flex-row d-flex align-items-center">
-          <li class="nav-item me-3">
-            <a routerLink="/homepage/cart">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#666666"><path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/></svg>
-            </a>
-          </li>
-
+      <div class="me-5">
+        <ul class="navbar-nav flex-row d-flex align-items-center me-4">
           <li *ngIf="!isLoggedIn" class="nav-item me-3"><a routerLink="/login" class="text-decoration-underline text-dark">Login</a></li>
-          <li *ngIf="isLoggedIn" mdbDropdown class="nav-item ">
-            <a
-              class="nav-link d-flex align-items-center"
-              id="m1"
-              role="button"
-              mdbDropdownToggle
-              aria-expanded="false"
+          <!-- <li *ngIf="isLoggedIn" mdbDropdown class="nav-item me-3 me-lg-1">
+            <a class="nav-link d-sm-flex align-items-sm-center"
+            id="m1"
+            role="button"
+            mdbDropdownToggle
+            aria-expanded="false"
             >
               <img
-                [src]="getImageUrl(userInfo.profile)"
+                src="https://mdbootstrap.com/img/new/avatars/1.webp"
                 class="rounded-circle"
-                height="40"
-                width="40"
-                alt="User Avatar"
+                height="22"
+                alt=""
+                loading="lazy"
               />
+              <strong class="d-none d-sm-block ms-1">{{userInfo.name || 'John'}}</strong>
             </a>
-
-            <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="m1">
-              <div class="px-2">
-                <span class="d-block"><strong>{{ userInfo.name }}</strong></span>
-                <span class="text-muted">{{ userInfo.email}}</span>
-              </div>
-
-              <div class="dropdown-divider mt-2 mb-2"></div>
-
+            <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="m1">
               <li>
-                <a class="dropdown-item" routerLink="/homepage/userprofile">Profile</a>
+                <a class="dropdown-item" href="#">My profile</a>
               </li>
               <li>
-                <a class="dropdown-item" routerLink="/change-password">Change Password</a>
+                <a class="dropdown-item" href="#">Settings</a>
               </li>
               <li>
-                <a class="dropdown-item" (click)="logoutButton()" >Logout</a>
+                <a class="dropdown-item" href="#">Logout</a>
               </li>
             </ul>
-          </li>
+          </li> -->
+          <!-- User Avatar Dropdown -->
+
+  <li *ngIf="isLoggedIn" mdbDropdown class="nav-item ">
+    <a
+      class="nav-link d-flex align-items-center"
+      id="userMenuButton"
+      role="button"
+      mdbDropdownToggle
+      aria-expanded="false"
+    >
+      <img *ngIf="userInfo.authProvider == 'LOCAL'; else elseNoProfile"
+        [src]="getImageUrl(userInfo.profile)"
+        class="rounded-circle"
+        height="40"
+        width="40"
+        alt="User Avatar"
+      />
+      <ng-template #elseNoProfile>
+        <img
+        [src]="userInfo.profile"
+        class="rounded-circle"
+        height="40"
+        width="40"
+        alt="User Avatar"
+      />
+      </ng-template>
+    </a>
+
+    <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end " aria-labelledby="userMenuButton">
+      <div class="px-3 py-2">
+        <span class="d-block fw-bold">{{ userInfo.name || 'John Doe' }}</span>
+        <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
+      </div>
+
+      <div class="dropdown-divider mt-2 mb-2"></div>
+
+      <li>
+        <a class="dropdown-item" routerLink="/homepage/userprofile">
+          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+          <span class="ms-2">Profile</span>
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item" routerLink="/change-password">
+          <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+         <span class="ms-2">Change Password</span>
+        </a>
+      </li>
+      <div class="dropdown-divider"></div>
+      <li>
+        <a class="dropdown-item" (click)="logoutButton()" >
+          <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+         <span class="ms-2">Logout</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
         </ul>
       </div>
+
 
       </div>
 
