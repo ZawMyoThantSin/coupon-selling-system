@@ -37,6 +37,13 @@ export class CouponService {
     })
   }
 
+  getAllUserCoupons():Observable<Coupon[]>{
+    return this.http.get<Coupon[]>(this.BASE_URL +'api/coupon',{
+      // headers:this.createAuthHeader(),
+      responseType:'json'
+    })
+  }
+
   getById(id:number):Observable<any>{
     return this.http.get(`${this.BASE_URL}api/coupon/${id}`,{
       headers:this.createAuthHeader(),

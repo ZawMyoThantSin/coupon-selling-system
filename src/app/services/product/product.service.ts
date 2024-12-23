@@ -36,6 +36,13 @@ export class ProductService {
     });
   }
 
+  getEveryProducts(): Observable<any> {
+    return this.http.get(`${this.BASE_URL}api/products`, {
+      headers: this.createAuthHeader(),
+      responseType: 'json',
+    });
+  }
+
 
   // Fetch product by ID
   getProductById(id: number): Observable<any> {

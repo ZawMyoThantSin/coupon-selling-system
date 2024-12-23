@@ -1,0 +1,222 @@
+  
+  .content-container {
+  display: flex;
+  justify-content: space-between; /* Space out the figure and tabs */
+  align-items: stretch;
+  width: auto; /* Ensure it spans the full width */
+  max-width: 2000px; /* Optional: Limit the maximum width */
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+  .figure {
+  flex: 2;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 2000px; /* Optional: Limit the maximum width */
+  height: 300px; /* Fixed height for the rectangular shape */
+  overflow: hidden;
+  position: relative;
+  border-radius: 15px; /* Rounded corners for a modern look */
+  background-color: beige;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+  
+  .figure-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    filter: brightness(0.8); 
+    transition: transform 0.5s ease; 
+
+}
+  
+  .figure-caption {
+    position: absolute;
+    bottom: 10%; /* Distance from the bottom of the figure */
+    right: 10%; /* Distance from the right of the figure */
+    transform: translate(0, 0); /* No need for negative translation here */
+    text-align: right;
+    color: rgb(32, 32, 161);
+    font-size: 1rem; /* Base font size for caption */
+    padding: 0.5rem; /* Add padding for better spacing */
+    border-radius: 8px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 700; /* Bold text */
+    font-style: italic;
+  }
+
+  .figure-caption .business-name {
+    display: block; /* Ensure the name is on its own line */
+    font-size: 1.2rem; /* Larger size for prominence */
+    font-weight: 700; /* Bold */
+  }
+  
+  .figure-caption .business-category {
+    display: block; /* Ensure it appears below the name */
+    font-size: 1rem; /* Slightly smaller size for the subtitle */
+    font-weight: 400; /* Normal weight for contrast */
+    font-style: normal; /* Remove italics for a cleaner look */
+    color: rgb(80, 80, 160); /* Slightly different color for distinction */
+  }
+  
+  
+  .tabs-section {
+    padding-left: 1rem;
+    flex: 1; 
+    text-align: left;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  .tabs-section .tab-content {
+    padding: 1rem;
+    background: #fff; /* White background for tab content */
+    border: 1px solid #ddd; /* Light border for separation */
+    border-radius: 8px;
+    margin-top: 1rem; /* Spacing between tabs */
+    color: #333; /* Text color */
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+  
+  .tabs-section .tab-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #007bff; /* Primary color for headings */
+  }
+  
+  .tabs-section .tab-content p {
+    font-size: 1rem;
+    margin: 0;
+    color: #555; /* Subtle gray for body text */
+  }
+
+
+
+  
+
+
+/* Style for the circular back button */
+.back-button {
+  position: absolute;
+  top: 1rem; /* Distance from the top of the figure */
+  left: 1rem; /* Distance from the left of the figure */
+  z-index: 10; /* Ensure it appears above the image */
+}
+
+.btn-back-icon {
+  width: 40px; /* Make the button circular */
+  height: 40px; /* Equal width and height */
+  border-radius: 50%; /* Full rounding for a circle */
+  background-color: #6c757d; /* Secondary button color */
+  border: none; /* Remove border */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.25rem; /* Icon size */
+  color: #fff; /* White icon color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-back-icon:hover {
+  background-color: #5a6268; /* Darker shade for hover */
+  transform: scale(1.1); /* Slight zoom effect */
+}
+
+.btn-back-icon:active {
+  transform: scale(0.95); /* Slight shrink on click */
+}
+
+.back-button i {
+  margin: 0; /* Remove any default spacing for the icon */
+}
+
+
+
+/* About Tab Styling */
+.about-title {
+  font-size: 1.75rem;
+  color: #007bff; /* Primary color */
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.about-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* Space between items */
+  background: #f8f9fa; /* Light background */
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.about-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.about-icon {
+  font-size: 1.5rem;
+  color: #007bff; /* Primary color */
+}
+
+.text-success {
+  color: #28a745; /* Green for active */
+}
+
+.text-danger {
+  color: #dc3545; /* Red for inactive */
+}
+
+
+  @media screen and (max-width: 768px) {
+    
+    .content-container {
+      flex-direction: column; /* Stack items vertically */
+      align-items: stretch; /* Stretch items to full width */
+    }
+
+    .figure {
+      height: 200px; /* Reduce height for smaller screens */
+    }
+
+    .tabs-section {
+      padding-left: 0; /* Remove left padding for smaller screens */
+      margin-top: 1rem; /* Add space between figure and tabs */
+    }
+    
+    .figure-caption {
+        bottom: 5%; /* Adjust bottom position */
+        right: 5%; /* Adjust right position */
+        font-size: 0.875rem; /* Slightly smaller font size */
+        padding: 0.25rem; 
+      }
+      .figure-caption .business-name {
+        font-size: 1rem; /* Adjust size for smaller screens */
+      }
+    
+      .figure-caption .business-category {
+        font-size: 0.875rem; /* Adjust size for smaller screens */
+      }
+
+
+      .btn-back-icon {
+        width: 35px; /* Slightly smaller button for small screens */
+        height: 35px;
+        font-size: 1rem; /* Reduce icon size */
+      }
+
+
+}
+  

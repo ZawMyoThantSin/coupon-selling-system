@@ -60,5 +60,11 @@ getImageUrl(imagePath: string): string {
   return `http://localhost:8080/public/businesses/images/${imagePath}`;
 }
 
+getAllBusinesses(): Observable<any> {
+  return this.http.get(`${this.BASE_URL}api/businesses`, {
+    headers: this.createAuthHeader(),
+    responseType: 'json',
+  });
+}
 
 }

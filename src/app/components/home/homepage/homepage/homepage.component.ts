@@ -1,110 +1,167 @@
-import { Component,OnInit,AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ElementRef,
+  ViewChild,
+  Renderer2,
+  QueryList
+} from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
 import { BusinessService } from '../../../../services/business/business.service';
-import { Business } from '../../../../models/business';
-import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../../services/product/product.service';
+import { Business } from '../../../../models/business';
 import { Product } from '../../../../models/product';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-
+import { SearchFilterComponent } from '../search-filter/search-filter.component';
+import { CouponCardComponent } from '../coupon-card/coupon-card.component';
+import { Router, RouterModule } from '@angular/router';
+import { UserBusinessComponent } from '../user-business/user-business.component';
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SearchFilterComponent, CouponCardComponent, RouterModule],
   templateUrl: './homepage.component.html',
-  styleUrl: './homepage.component.css',
-  schemas: [NO_ERRORS_SCHEMA]
+  styleUrls: ['./homepage.component.css'],
+  providers: [DatePipe],
 })
 export class HomepageComponent implements OnInit, AfterViewInit {
-  
-  businesses: Business[] = []; 
-  errorMessage: string = '';   
+  businesses: Business[] = [];
   products: Product[] = [];
+  errorMessage: string = '';
+
+  @ViewChild('businessTrack', { static: false }) businessTrack!: ElementRef<HTMLDivElement>;
+  @ViewChild('productTrack', { static: false }) productTrack!: ElementRef<HTMLDivElement>;
 
 
+  businessArray: Business[] = [];
+  productArray: Product[] = [];
+  
+  filteredBusinesses: Business[] = [];
+  filteredProducts: Product[] = [];
 
-  constructor(private businessService: BusinessService,
-              private productService: ProductService
+
+  //Products
+
+  couponPrices: { [key: number]: number } = {};
+  couponCreateDates: { [key: number]: Date } = {}; 
+  couponExpDates: { [key: number]: Date } = {};  
+
+  constructor(
+    private businessService: BusinessService,
+    private productService: ProductService,
+    private renderer: Renderer2,
+    private datePipe: DatePipe,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
     this.loadBusinesses();
-    this.loadProduct();
+    this.loadProducts();
   }
 
   ngAfterViewInit(): void {
-    this.initializeBusinessesSwiper();
-    this.initializeProductsSwiper();
+    console.log('View Initialized');
   }
 
   loadBusinesses(): void {
     this.businessService.getAllBusinesses().subscribe({
       next: (data) => {
-        console.log('Businesses fetched:', data);
         this.businesses = data;
+        this.businessArray = [...this.businesses];
+        this.filteredBusinesses = [...this.businesses];
       },
       error: (err) => {
         this.errorMessage = 'Failed to load businesses.';
         console.error(err);
-      }
+      },
     });
   }
 
-  loadProduct(): void {
+  loadProducts(): void {
     this.productService.getEveryProducts().subscribe({
       next: (data) => {
-        console.log('Products fetched:', data); 
         this.products = data;
+        this.productArray = [...this.products];
+        this.filteredProducts = [...this.products];
       },
       error: (err) => {
         this.errorMessage = 'Failed to load products.';
         console.error(err);
+      },
+    });
+  }
+
+  scrollLeft(track: HTMLDivElement, items: any[]): void {
+    const trackEl = track;
+    const currentScroll = trackEl.scrollLeft;
+
+    if (currentScroll === 0) {
+      const lastItem = items.pop();
+      if (lastItem) {
+        items.unshift(lastItem); // Move the last item to the beginning
       }
-    });
+      this.renderer.setStyle(trackEl, 'scroll-behavior', 'auto'); // Disable smooth scroll for reset
+      trackEl.scrollLeft = trackEl.scrollWidth; // Jump to the end
+      setTimeout(() => {
+        this.renderer.setStyle(trackEl, 'scroll-behavior', 'smooth'); // Re-enable smooth scroll
+      });
+    } else {
+      trackEl.scrollBy({ left: -300, behavior: 'smooth' });
+    }
   }
 
-  private initializeBusinessesSwiper(): void {
-    const Swiper = (window as any).Swiper;
-    new Swiper('.businesses-swiper', {
-      slidesPerView: 3,
-      spaceBetween: 20,
-      loop: this.businesses.length > 3,
-      pagination: {
-        el: '.businesses-pagination',
-        clickable: true,
-      },
-      breakpoints: {
-        768: {
-          slidesPerView: 2,
-          spaceBetween: 10,
-        },
-        480: {
-          slidesPerView: 1,
-        },
-      },
-    });
+  scrollRight(track: HTMLDivElement, items: any[]): void {
+    const trackEl = track;
+    const currentScroll = trackEl.scrollLeft;
+
+    if (currentScroll + trackEl.clientWidth >= trackEl.scrollWidth) {
+      const firstItem = items.shift();
+      if (firstItem) {
+        items.push(firstItem);
+      }
+      this.renderer.setStyle(trackEl, 'scroll-behavior', 'auto'); 
+      trackEl.scrollLeft = 0; 
+      setTimeout(() => {
+        this.renderer.setStyle(trackEl, 'scroll-behavior', 'smooth'); 
+      });
+    } else {
+      trackEl.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  }
+  
+
+  viewBusinessDetails(id: number): void {
+    this.router.navigate(['/homepage/business/detail' + id])
+    
   }
 
-  private initializeProductsSwiper(): void {
-    const Swiper = (window as any).Swiper;
-    new Swiper('.products-swiper', {
-      slidesPerView: 3,
-      spaceBetween: 20,
-      loop: this.products.length > 3,
-      pagination: {
-        el: '.products-pagination',
-        clickable: true,
-      },
-      breakpoints: {
-        768: {
-          slidesPerView: 2,
-          spaceBetween: 10,
-        },
-        480: {
-          slidesPerView: 1,
-        },
-      },
-    });
+  viewProductDetails(id: number): void {
+  }     
+
+  filterItems(searchTerm: string): void {
+    this.filteredBusinesses = this.businesses.filter((business) =>
+      business.name.toLowerCase().includes(searchTerm)
+    );
+    this.filteredProducts = this.products.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm)
+    );
   }
+
+
+
+  //Products *** 
+  getImageUrl(imagePath: string): any {
+    return this.productService.getImageUrl(imagePath);
+  }
+
+  getCouponPrice(productId: number): number {
+    return this.couponPrices[productId] || 0; // Default to 0 if no coupon price is available
+  }
+  // getCouponValidity(productId: number): string {
+  //   const createDate = this.datePipe.transform(this.couponCreateDates[productId], 'MMM d EEE');
+  //   const expDate = this.datePipe.transform(this.couponExpDates[productId], 'MMM d EEE');
+  //   return createDate && expDate ? `${createDate} ~ ${expDate}` : '';
+  // }
 
 }
