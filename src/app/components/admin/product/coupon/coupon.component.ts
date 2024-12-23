@@ -1,75 +1,123 @@
-import { Component } from '@angular/core';
-import { CreateModalComponent } from './create-modal/create-modal.component';
-import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
-import { Coupon } from '../../../../models/coupon.modal';
-import { JwtService } from '../../../../services/jwt.service';
-import { StorageService } from '../../../../services/storage.service';
-import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { AgGridModule } from 'ag-grid-angular';
+import { ColDef, GridOptions, Module } from 'ag-grid-community';
+import { CommonModule } from '@angular/common';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { CouponService } from '../../../../services/coupon/coupon.service';
+import { ClientSideRowModelModule } from 'ag-grid-community';
+
+import { Coupon } from '../../../../models/coupon.modal';
+import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { GridApi } from 'ag-grid-community';
 
 @Component({
   selector: 'app-coupon',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, RouterModule, AgGridModule, FormsModule],
   templateUrl: './coupon.component.html',
-  styleUrl: './coupon.component.css'
+  styleUrls: ['./coupon.component.css']
 })
-export class CouponComponent {
-  modalRef: MdbModalRef<CreateModalComponent> | null = null;//
-  businesses:Coupon[]  =[];
-  discountprice:any;
-  constructor(private modalService: MdbModalService,
-              private couponService:CouponService,
-              private tokenService:JwtService,
-              private storageService:StorageService,
-              private router: Router
-  ) {}
+export class CouponComponent implements OnInit {
+  businessId: number | null = null;
+  allCoupons: Coupon[] = [];
+  displayedCoupons: Coupon[] = [];
+  currentPage = 1;
+  totalPages = 10;
+
+  pagination = true;
+  paginationPageSize = 3;
+  paginationPageSizeSelector = [3,5,10];
+
+  
+
+
+  columnDefs: ColDef[] = [
+    { field: 'price', headerName: 'Price', valueFormatter: (params) => `${params.value} kyat`, filter: 'agNumberColumnFilter' },
+    { field: 'couponCode', headerName: 'Coupon Code', filter: 'agTextColumnFilter' },
+    { field: 'expiredDate', headerName: 'Expired Date', filter: 'agDateColumnFilter', valueFormatter: (params) => new Date(params.value).toLocaleString() },
+    { field: 'quantity', headerName: 'Quantity', filter: 'agNumberColumnFilter' },
+    { field: 'description', headerName: 'Description', filter: 'agTextColumnFilter' },
+  ];
+
+  defaultColDef: ColDef = {
+    sortable: true,
+    filter: true,
+  };
+
+  modules: Module[] = [ClientSideRowModelModule];
+  rowSelection: 'multiple' | 'single' = 'multiple';
+
+  hasNextPage = false;
+  hasPreviousPage = false;
+
+  constructor(private couponService: CouponService, private route: ActivatedRoute) {}
+
   ngOnInit(): void {
-
-    // this.couponService.getAllCoupons().subscribe(
-    //   response =>{
-    //     this.businesses = response
-    //     console.log("RES: ",response)
-    //   },
-    //   error =>{
-    //     console.error("ERROR IN FETCHING: ", error);
-    //   }
-    // )
-  }
-
-  openModal() {
-
-    this.modalRef = this.modalService.open(CreateModalComponent, {
-      modalClass: 'modal-lg',// Optional: specify modal size (e.g., 'modal-sm', 'modal-lg')
-    });
-
-
-    this.modalRef.onClose.subscribe((data) => {
-      if (data) {
-        const token = this.storageService.getItem("token");
-        let user_id;
-        if(token!= null){
-          var decodeToken:any = this.tokenService.decodeToken(token);
-          user_id = decodeToken.id;
-        }
-
-        const requestData = {
-          ...data, // Spread existing form data
-          userId: user_id, // Append userId
-        };
-        console.log('Form submitted:', requestData);
-        this.couponService.createCoupon(requestData).subscribe(
-            response => {
-              console.log("Server Response: ", response)
-
-            },
-            error => {
-              console.error("Error In Coupon Create: ",error)
-            }
-        )
-
-
+    this.route.parent?.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.businessId = +id;
+        this.loadCoupons();
+      } else {
+        console.error('Error: Missing business ID in route.');
       }
     });
+  }
+
+  loadCoupons(): void {
+    if (this.businessId !== null) {
+      this.couponService.getAllCoupons(this.businessId).subscribe(
+        (data) => {
+          console.log('Coupons Data:', data);
+          this.allCoupons = data;
+          this.updatePagination();
+        },
+        (error) => {
+          console.error('Error fetching coupons:', error);
+        }
+      );
+    }
+  }
+
+  updatePagination(): void {
+    const totalItems = this.allCoupons.length;
+    this.totalPages = Math.ceil(totalItems / this.paginationPageSize);
+    this.hasNextPage = this.currentPage < this.totalPages;
+    this.hasPreviousPage = this.currentPage > 1;
+
+    // Display the coupons for the current page
+    const startIndex = (this.currentPage - 1) * this.paginationPageSize;
+    const endIndex = startIndex + this.paginationPageSize;
+    this.displayedCoupons = this.allCoupons.slice(startIndex, endIndex);
+  }
+
+  onPageSizeChange(): void {
+    this.currentPage = 1; // Reset to the first page
+    this.updatePagination();
+  }
+
+  onNextPage(): void {
+    if (this.hasNextPage) {
+      this.currentPage++;
+      this.updatePagination();
+    } else {
+      console.log("Next page button error");
+    }
+  }
+
+  onPreviousPage(): void {
+    if (this.hasPreviousPage) {
+      this.currentPage--;
+      this.updatePagination();
+    }
+  }
+
+  onPaginationChanged(): void {
+    this.updatePagination();
+  }
+
+  ngAfterViewInit(): void {
+    // No longer need to check for gridOptions.api here
+    console.log('Grid API not used here anymore');
   }
 }
