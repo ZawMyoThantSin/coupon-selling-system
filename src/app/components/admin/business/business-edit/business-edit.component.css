@@ -13,12 +13,12 @@
 
 label {
   position: absolute;
-  top: 50%;
+  top: -30%;
   left: 12px;
   transform: translateY(-50%);
   transition: all 0.2s ease-in-out;
-  font-size: 1rem;
-  color: #6c757d;
+  font-size: 0.8rem;
+  color: #0c89f6;
   padding: 0 4px;
 }
 
