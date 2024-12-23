@@ -1,58 +1,71 @@
-<div class="container mt-5">
-  <h2 class="text-center mb-4 text-primary font-weight-bold">Welcome To Our Platform</h2>
+<!-- <div class="container mt-5"> -->
 
-  <div class="section">
-    <h3 class="text-center section-title text-primary mb-4">Our Businesses</h3>
-    <div class="swiper-container businesses-swiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" *ngFor="let business of businesses">
-          <div class="card shadow-lg">
+  <h2 class="text-center mb-4 text-gradient font-weight-bold">Welcome To Our Platform</h2>
+
+  <div class="search-container mb-5">
+    <app-search-filter (searchTermChange)="filterItems($event)"></app-search-filter>
+  </div>
+
+  <!-- No Results Message -->
+  <div class="text-center text-muted mt-5 no-results" *ngIf="filteredBusinesses.length === 0 && filteredProducts.length === 0">
+    <h4>No matches found. Please adjust your search.</h4>
+  </div>
+
+  <!-- Businesses Section -->
+  <div class="section" *ngIf="filteredBusinesses.length > 0">
+    <h3 class="text-center section-title mb-4">Explore Businesses</h3>
+    <div class="slider-container">
+      <button class="slider-btn left-btn" (click)="scrollLeft(businessTrack, businessArray)"><i class="fas fa-chevron-left"></i></button>
+      <div class="slider-track" #businessTrack>
+        <div class="slider-item" *ngFor="let business of filteredBusinesses">
+          <div class="card">
             <img
-              [src]="business.photo || 'public/images/business/logos/i1.png'"
-              class="card-img-top img-fluid"
+              [src]="'/images/business/logos/i1.png'"
+              class="card-img-top"
               alt="{{ business.name }}"
             />
             <div class="card-body">
-              <h5 class="card-title text-primary">{{ business.name }}</h5>
-              <p class="card-text text-muted">
+              <h5 class="card-title">{{ business.name }}</h5>
+              <p class="card-text">
                 <strong>Location:</strong> {{ business.location }}<br />
-                <strong>Category:</strong> {{ business.category }}<br />
                 {{ business.description | slice: 0:60 }}...
               </p>
+              <button class="btn btn-primary btn-business" [routerLink]="['/homepage/u/detail-business' , business.id]">View</button>
             </div>
           </div>
         </div>
-        <!-- <div class="swiper-pagination businesses-pagination"></div> -->
       </div>
-      
+      <button class="slider-btn right-btn" (click)="scrollRight(businessTrack, businessArray)"><i class="fas fa-chevron-right"></i></button>
     </div>
   </div>
-  <hr class="section-divider my-5" />
 
+  <hr class="section-divider my-5" *ngIf="filteredBusinesses.length > 0" />
+  <!-- Products Section -->
+        <!-- <div class="slider-item" *ngFor="let product of filteredProducts">
+          <div class="card">
 
-  <div class="section">
-    <h3 class="text-center section-title text-success mb-4">Our Products</h3>
-    <div class="swiper-container products-swiper">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide" *ngFor="let product of products">
-          <div class="card shadow-lg">
+            <div class="discount-badge" *ngIf="product.discount">
+              {{ product.discount }}% OFF
+            </div>
+
             <img
-              [src]="'assets/product-placeholder.jpg'"
-              class="card-img-top img-fluid"
+              [src]="getImageUrl(product.imagePath) || 'images/product/e.jpg'"
+              class="card-img-top"
               alt="{{ product.name }}"
             />
             <div class="card-body">
-              <h5 class="card-title text-dark">{{ product.name }}</h5>
-              <p class="card-text text-muted">
-                {{ product.description | slice: 0:60 }}...
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">
+                {{ product.description.length > 70 ? (product.description | slice: 0: 70) + '...' : product.description }}
               </p>
-              <p class="text-primary fw-bold">Price: ${{ product.price }}</p>
+
+              
+              <button class="btn btn-primary btn-product" (click)="viewProductDetails(product.id)">View</button>
             </div>
           </div>
-        </div>
-        <!-- <div class="swiper-pagination products-pagination"></div> -->
-      </div>
-      
-    </div>
-  </div>
-</div>
+        </div> -->
+
+        <app-coupon-card></app-coupon-card>
+
+      <!-- </div> -->
+

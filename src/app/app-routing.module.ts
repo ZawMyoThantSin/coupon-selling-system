@@ -20,6 +20,8 @@ import { ProductdetailsComponent } from './components/home/product/product/produ
 import { HomeCarouselComponent } from './components/home/home-carousel/home-carousel.component';
 import { CustomersComponent } from './components/admin/customers/customers.component';
 import { AddToCartComponent } from './components/home/add-to-cart/add-to-cart.component';
+import { HomepageComponent } from './components/home/homepage/homepage/homepage.component';
+import { UserBusinessComponent } from './components/home/homepage/user-business/user-business.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -43,13 +45,16 @@ const routes: Routes = [
   },
   {path:'homepage', component:HomeComponent, title:'Home Page',
     children:[
+      {path: '', redirectTo: 'page', pathMatch: 'full' },
       {path:'cart', component:AddToCartComponent},
       {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
       {path:'friends', component:FriendComponent, title:'Friends'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},
+      {path:'page', component:HomepageComponent, title:'Home'},
       {path:'c',component:CardComponent,title:'card'},
       {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},
+      {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}
     ]
   },
   {path:'login', component:LoginComponent, title:'Login'},
