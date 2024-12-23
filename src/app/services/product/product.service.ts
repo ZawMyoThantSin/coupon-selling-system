@@ -36,9 +36,8 @@ export class ProductService {
     });
   }
 
-  getEveryProducts(): Observable<any> {
-    return this.http.get(`${this.BASE_URL}api/products`, {
-      headers: this.createAuthHeader(),
+  getEveryProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.BASE_URL}api/products`, {
       responseType: 'json',
     });
   }
