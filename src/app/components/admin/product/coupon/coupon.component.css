@@ -1,0 +1,48 @@
+.coupon-container {
+    padding: 20px;
+  }
+  
+  .action-bar {
+    margin-bottom: 10px;
+  }
+  
+  .pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .pagination-controls button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+  }
+  
+  .pagination-controls button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+  
+  
+  /* Styling for the Ag-Grid Table */
+  .ag-theme-alpine {
+    font-family: Arial, sans-serif; /* Adjust the font for the grid */
+  }
+  
+  /* Style for Ag-Grid headers */
+  .ag-theme-alpine .ag-header-cell-label {
+    font-weight: bold;  /* Make headers bold */
+    background-color: black;  /* Set black background for headers */
+    color: white;  /* Set text color to white for contrast */
+  }
+  
+  /* Row styles */
+  .ag-theme-alpine .ag-row {
+    font-size: 14px;  /* Adjust font size of the rows */
+    color: #333; /* Set text color for rows */
+  }
+  
+  
