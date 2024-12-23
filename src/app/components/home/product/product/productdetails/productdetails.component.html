@@ -1,26 +1,116 @@
-<div class="container">
-  <div *ngIf="product" class="product-card">
-    <img
-      src="/images/product/clothes-rail-sale-sign-final-sale-discounts-clothes-rail-sale-sign-final-sale-discounts-high-quality-218245029.webp"
-      alt="{{ product.name }}"
-      class="product-image"
-    />
-    <div class="product-details">
-      <h2 class="product-title">{{ product.name }}</h2>
-      <p class="product-description">{{ product.description }}</p>
-      <div class="product-price">
-        <span>Price: {{ product.price | currency }}</span>
+<div class="container-fluid full-page-container">
+  <div *ngIf="product" class="product-card full-page-card" style="position: relative;">
+    <button class="btn btn-secondary" (click)="goBack()" style="position: absolute; top: 10px; right: 10px;">
+      Back to Products
+    </button>
+
+    <div class="row align-items-center">
+      <!-- Product Image Section -->
+      <div class="col-md-6 text-center">
+        <img
+          [src]="getImageUrl(product.imagePath)"
+          alt="{{ product.name }}"
+          class="product-image img-fluid"
+        />
       </div>
-      <div class="product-discount">
-        <p>Discount: {{ product.discount }}</p>
+
+      <!-- Product Details Section -->
+      <div class="col-md-6">
+        <div class="product-details text-left" style="line-height: 1.8; display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+          <!-- Product Name -->
+          <h2 class="product-title" style="margin-bottom: 15px;">{{ product.name }}</h2>
+
+          <!-- Product Price Section -->
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+            <img
+              src="/images/product/sign.jpg"
+              alt="Coupon Image"
+              style="width: 24px; height: 24px; vertical-align: middle; margin-right: 10px;"
+            />
+            <span class="text-decoration-line-through">{{ product.price }}</span>
+            <span class="text-success">{{ getCouponPrice(product.id) }} Ks</span>
+          </div>
+
+          <!-- Quantity Section -->
+          <div class="product-actions mb-3 d-flex align-items-center" style="margin-bottom: 15px;">
+            <label for="quantity" class="me-2">Quantity:</label>
+            <button class="btn btn-link px-2" (click)="updateQuantity('decrement')">
+              <i class="fas fa-minus"></i>
+            </button>
+            <input
+              type="number"
+              id="quantity"
+              [(ngModel)]="quantity"
+              min="1"
+              class="form-control text-center quantity-input"
+              readonly
+            />
+            <button class="btn btn-link px-2" (click)="updateQuantity('increment')">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+
+          <!-- Add to Cart Button -->
+          <div class="card-buttons d-flex">
+            <button class="btn btn-primary mr-2" (click)="addToCart()">Add To Cart</button>
+            <button class="btn btn-primary" (click)="Buy()">Buy</button>
+          </div>
+          
+        </div>
       </div>
-      <div class="product-actions">
-        <label for="quantity">Quantity:</label>
-        <input type="number" id="quantity" [(ngModel)]="quantity" min="1" value="1" />
-      </div>
-      <div class="card-buttons">
-        <button class="add-to-cart" (click)="addToCart()">Add To Cart</button>
-        <button class="back-button" (click)="goBack()">Back to Products</button>
+    </div>
+
+    <!-- Additional Words Within Card Boundary -->
+    <div class="text-left mt-3 mb-3">
+      <p class="product-description">{{ getCouponDescription(product.id) }}</p>
+      <br />
+
+      <!-- Horizontal Grouping for "What you get" and "When you get" -->
+      <div style="width:100%; display: flex; gap: 20px;">
+        <div class="d-flex justify-content-between mb-3" style="width: 50%; display: flex; flex-direction: column;">
+          <!-- What you get -->
+          <div class="what-you-get">
+            <h3>What you get</h3>
+            <ul>
+              <li *ngFor="let sentence of product.description.split('.')">
+                {{ sentence.trim() }}
+              </li>
+            </ul>
+          </div>
+  
+          <!-- When you get -->
+          <div class="when-you-get">
+            <h3>When you get</h3>
+            <ul>
+              <li>Sunday 05:00 PM ~ 11:00 PM</li>
+            </ul>
+          </div>
+        </div>
+  
+        <!-- Horizontal Grouping for "How to use" and "Fine Print" -->
+        <div class="d-flex justify-content-between" style="width:50%; display: flex; flex-direction: column;">
+          <!-- How to use -->
+          <div class="how-to-use">
+            <h4>How To Use</h4>
+            <ul>
+              <li>Get or Buy coupon</li>
+              <li>Go to the coupon section and select your coupon to redeem</li>
+              <li>At the outlet, show the redemption QR to the staff</li>
+            </ul>
+          </div>
+  
+          <!-- Fine Print -->
+          <div class="fine-print">
+            <h4>Fine Print</h4>
+            <ul>
+              <li>This Coupon is only for one day, on December 29, 2024.</li>
+              <li>This ticket is valid for the date of show issued only.</li>
+              <li>Tickets are non-refundable.</li>
+              <li>No extension of the redemption of coupon that is expired.</li>
+              <li>Present your WOWme coupon QR at the outlet.</li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>

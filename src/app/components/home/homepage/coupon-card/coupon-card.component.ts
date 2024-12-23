@@ -13,7 +13,8 @@ import { Coupon } from '../../../../models/coupon.modal';
   standalone: true,
   imports: [CommonModule,FormsModule],
   templateUrl: './coupon-card.component.html',
-  styleUrl: './coupon-card.component.css'
+  styleUrl: './coupon-card.component.css',
+  providers: [DatePipe]
 })
 export class CouponCardComponent implements OnInit{
 
@@ -92,14 +93,14 @@ export class CouponCardComponent implements OnInit{
   getCouponPrice(productId: number): number {
     return this.couponPrices[productId] || 0; // Default to 0 if no coupon price is available
   }
-  // getCouponValidity(productId: number): string {
-  //   const createDate = this.datePipe.transform(this.couponCreateDates[productId], 'MMM d EEE');
-  //   const expDate = this.datePipe.transform(this.couponExpDates[productId], 'MMM d EEE');
-  //   return createDate && expDate ? `${createDate} ~ ${expDate}` : '';
-  // }
-  // getCouponExpDate(productId: number): any {
-  //   return this.couponExpDates[productId] ;
-  // }
+  getCouponValidity(productId: number): string {
+    const createDate = this.datePipe.transform(this.couponCreateDates[productId], 'MMM d EEE');
+    const expDate = this.datePipe.transform(this.couponExpDates[productId], 'MMM d EEE');
+    return createDate && expDate ? `${createDate} ~ ${expDate}` : '';
+  }
+  getCouponExpDate(productId: number): any {
+    return this.couponExpDates[productId] ;
+  }
   getCouponCreateDate(productId: number): any {
     return this.couponCreateDates[productId] ;
   }
