@@ -20,7 +20,7 @@
         <div class="slider-item" *ngFor="let business of filteredBusinesses">
           <div class="card">
             <img
-              [src]="'/images/business/logos/i1.png'"
+             [src]="getImageUrl(business.photo)"
               class="card-img-top"
               alt="{{ business.name }}"
             />

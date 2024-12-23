@@ -152,7 +152,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
 
   //Products *** 
   getImageUrl(imagePath: string): any {
-    return this.productService.getImageUrl(imagePath);
+    return this.businessService.getImageUrl(imagePath);
   }
 
   getCouponPrice(productId: number): number {
