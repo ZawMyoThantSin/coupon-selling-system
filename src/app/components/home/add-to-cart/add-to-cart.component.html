@@ -1,8 +1,7 @@
-<div class="row mt-4">
+<div class="row mt-4"  *ngIf="cartData.length>0; else nocartdata">
   <div class="col-md-10 offset-1">
     <div class="d-flex flex-sm-column flex-lg-row align-items-lg-start align-items-sm-center justify-content-center ">
 
-      <div *ngIf="cartData == []; else nocartdata">
           <!-- Table Section -->
         <div class="table-container mb-4 mb-lg-0 me-2 mt-5 " style="flex: 1;">
           <table class="table align-middle mb-0 bg-white table-responsive table-responsive-sm">
@@ -44,7 +43,7 @@
                       <i class="fas fa-minus"></i>
                     </button>
                     <input
-                      type="number"
+                      type="text"
                       [value]="item.quantity"
                       class="form-control form-control-sm text-center"
                       style="width: 60px;"
@@ -159,15 +158,17 @@
             </div>
           </div>
         </div>
-      </div>
-      <ng-template #nocartdata>
-        <div class="nothing-added-to-cart">
-          <mat-icon fas icon="shopping-cart" class="cart-icon"></mat-icon>
-          <p>Your cart is empty!</p>
-          <button mdbBtn color="primary" outline="true">Browse Products</button>
-        </div>
 
-      </ng-template>
+
     </div>
   </div>
 </div>
+<ng-template #nocartdata>
+    <div class="nothing-added-to-cart">
+      <span class="border border-lg border-secondary rounded-circle p-4">
+        <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+      </span>
+      <p>Your cart is empty!</p>
+      <button class="btn btn-primary" routerLink="/homepage/page">Browse Products</button>
+    </div>
+</ng-template>
