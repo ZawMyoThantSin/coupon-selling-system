@@ -15,7 +15,7 @@ import { UserprofileComponent } from './components/home/user/userprofile/userpro
 import { FriendComponent } from './components/home/friends/friend/friend.component';
 import { AboutusComponent } from './components/home/aboutus/aboutus/aboutus.component';
 import { HistoryComponent } from './components/home/history/history.component';
-import { CardComponent } from './components/home/product/product/card/card.component';
+
 import { ProductdetailsComponent } from './components/home/product/product/productdetails/productdetails.component';
 import { HomeCarouselComponent } from './components/home/home-carousel/home-carousel.component';
 import { CustomersComponent } from './components/admin/customers/customers.component';
@@ -52,7 +52,7 @@ const routes: Routes = [
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},
       {path:'page', component:HomepageComponent, title:'Home'},
-      {path:'c',component:CardComponent,title:'card'},
+      
       {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},
       {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}
     ]

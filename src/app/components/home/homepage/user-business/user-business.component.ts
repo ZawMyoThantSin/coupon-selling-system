@@ -20,6 +20,7 @@ export class UserBusinessComponent implements OnInit {
   businessId: any;
 
   constructor(private businessService : BusinessService,
+              
               private router: ActivatedRoute,
               private location: Location
   ){}
@@ -48,6 +49,10 @@ export class UserBusinessComponent implements OnInit {
     );
   }
 
+  getBusinessImageUrl(imagePath: string): any {
+    return this.businessService.getImageUrl(imagePath);
+  }
+  
   goBack(): void {
     this.location.back(); // Navigate to the previous page
   }

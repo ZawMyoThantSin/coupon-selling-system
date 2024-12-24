@@ -1,53 +1,64 @@
   
   .content-container {
-  display: flex;
-  justify-content: space-between; /* Space out the figure and tabs */
-  align-items: stretch;
-  width: auto; /* Ensure it spans the full width */
-  max-width: 2000px; /* Optional: Limit the maximum width */
-  margin: 0 auto; /* Center the container horizontally */
-}
+    display: flex;
+    justify-content: space-between; /* Spread items out evenly */
+    align-items: flex-start; /* Align items at the top */
+    width: 100%; /* Ensure full-width usage */
+    max-width: 2000px; /* Optional: Limit the maximum width */
+    margin: 0 auto; /* Center the container */
+    gap: 30px; /* Space between figure and tabs */
+  }
+  
 
   .figure {
-  flex: 2;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  max-width: 2000px; /* Optional: Limit the maximum width */
-  height: 300px; /* Fixed height for the rectangular shape */
-  overflow: hidden;
-  position: relative;
-  border-radius: 15px; /* Rounded corners for a modern look */
-  background-color: beige;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    flex: 1; /* Allows figure to occupy the desired space */
+    margin: 20px; /* Add spacing around the figure */
+    padding: 0;
+    height: auto; /* Adjust to fit content naturally */
+    overflow: hidden;
+    position: relative;
+    border-radius: 15px; /* Rounded corners for a modern look */
+    background-color: beige;
+    display: flex;
+    flex-direction: column; /* Stack image and caption vertically */
+    align-items: center; /* Center align the image and caption */
+    gap: 15px; /* Space between image and caption */
   }
-  
+
   .figure-img {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center;
-    filter: brightness(0.8); 
-    transition: transform 0.5s ease; 
-
-}
-  
-  .figure-caption {
-    position: absolute;
-    bottom: 10%; /* Distance from the bottom of the figure */
-    right: 10%; /* Distance from the right of the figure */
-    transform: translate(0, 0); /* No need for negative translation here */
-    text-align: right;
-    color: rgb(32, 32, 161);
-    font-size: 1rem; /* Base font size for caption */
-    padding: 0.5rem; /* Add padding for better spacing */
-    border-radius: 8px;
-    font-family: 'Times New Roman', Times, serif;
-    font-weight: 700; /* Bold text */
-    font-style: italic;
+    max-height: 300px; /* Set max height for responsiveness */
+    object-fit: cover; /* Ensure the image covers the container */
+    object-position: center; /* Center the image content */
+    border-radius: 10px; /* Add slight rounding to the image */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
   }
+
+  
+.image-container {
+  position: relative; /* Enable positioning for child elements */
+  display: inline-block; /* Optional: Adjusts the layout */
+}
+
+/* Business image styling */
+.business-image {
+  width: 100%; /* Make the image responsive */
+  height: auto; /* Maintain aspect ratio */
+  display: block; /* Prevents inline-block gap */
+}
+
+/* Figcaption styling */
+.figure-caption {
+  position: absolute; /* Position over the image */
+  bottom: 10px; /* Slightly above the bottom edge */
+  left: 50px; /* Add a small margin from the left */
+  background-color: rgba(0, 0, 0, 0.7); /* Dark transparent background (70%) */
+  color: white; /* White text color */
+  padding: 5px 10px; /* Smaller padding for a compact background */
+  border-radius: 5px; /* Add rounded corners */
+  font-size: 12px; /* Smaller font size */
+  max-width: 90%; /* Ensure the caption doesn't stretch too wide */
+}
 
   .figure-caption .business-name {
     display: block; /* Ensure the name is on its own line */
@@ -60,7 +71,7 @@
     font-size: 1rem; /* Slightly smaller size for the subtitle */
     font-weight: 400; /* Normal weight for contrast */
     font-style: normal; /* Remove italics for a cleaner look */
-    color: rgb(80, 80, 160); /* Slightly different color for distinction */
+    color: white/* Slightly different color for distinction */
   }
   
   

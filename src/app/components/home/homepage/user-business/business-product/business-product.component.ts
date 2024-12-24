@@ -5,13 +5,15 @@ import { BusinessService } from '../../../../../services/business/business.servi
 import { ProductService } from '../../../../../services/product/product.service';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
+import { CouponService } from '../../../../../services/coupon/coupon.service';
 
 @Component({
   selector: 'app-business-product',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule],
   templateUrl: './business-product.component.html',
-  styleUrl: './business-product.component.css'
+  styleUrl: './business-product.component.css',
+  providers:[DatePipe]
 })
 export class BusinessProductComponent implements OnInit{
 
@@ -26,7 +28,10 @@ export class BusinessProductComponent implements OnInit{
 
   constructor(private bService: BusinessService,
               private pService: ProductService,
+              private couponService:CouponService,
               private route: ActivatedRoute,
+              private datePipe:DatePipe,
+              private router: Router
              
   ){}
 
@@ -40,6 +45,25 @@ export class BusinessProductComponent implements OnInit{
         this.fetchProducts(id);
       }
     });
+    // Fetch coupon prices and populate the map
+  this.couponService.getAllUserCoupons().subscribe(
+    (coupons: any) => {
+      console.log('Coupons:', coupons); // Check the expDate field here
+      coupons.forEach((coupon:any) => {
+        console.log(coupon);
+        
+        this.couponPrices[coupon.productId] = coupon.price;  // Map productId to discount price
+        console.log("DATE",coupon.expiredDate )
+        this.couponCreateDates[coupon.productId]= new Date(coupon.createdDate)
+        this.couponExpDates[coupon.productId] = new Date(coupon.expiredDate); 
+      });
+    
+    },
+    (error) => {
+      console.error('Error fetching coupons:', error);
+    }
+  );
+    
       
   }
 
@@ -54,17 +78,19 @@ export class BusinessProductComponent implements OnInit{
     );
   }
 
-  getImageUrl(imagePath: string): any {
+  getProductImageUrl(imagePath: string): any {
     return this.pService.getImageUrl(imagePath);
   }
   getCouponPrice(productId: number): number {
     return this.couponPrices[productId] || 0; // Default to 0 if no coupon price is available
   }
-  // getCouponValidity(productId: number): string {
-  //   const createDate = this.datePipe.transform(this.couponCreateDates[productId], 'MMM d EEE');
-  //   const expDate = this.datePipe.transform(this.couponExpDates[productId], 'MMM d EEE');
-  //   return createDate && expDate ? `${createDate} ~ ${expDate}` : '';
-  // }
-
+  getCouponValidity(productId: number): string {
+    const createDate = this.datePipe.transform(this.couponCreateDates[productId], 'MMM d EEE');
+    const expDate = this.datePipe.transform(this.couponExpDates[productId], 'MMM d EEE');
+    return createDate && expDate ? `${createDate} ~ ${expDate}` : '';
+  }
+  viewProductDetails(id: number) {
+    this.router.navigate(['/homepage/p', id]);
+  }
 
 }
