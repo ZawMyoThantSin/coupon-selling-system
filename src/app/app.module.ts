@@ -27,6 +27,7 @@ import { authInterceptor } from './services/auth.interceptor';
 import { ProductComponent } from "./components/admin/product/product.component";
 import { HomeCarouselComponent } from "./components/home/home-carousel/home-carousel.component";
 import { RouterModule, RouterOutlet } from '@angular/router';
+import { UserOrderComponent } from './components/home/user-order/user-order.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
     SignupComponent,
     CreateProductComponent,
     DashboardComponent,
+    UserOrderComponent,
 
   ],
   imports: [
