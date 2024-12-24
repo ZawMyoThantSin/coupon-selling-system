@@ -15,10 +15,6 @@ import { Product } from '../../../../models/product';
 import { SearchFilterComponent } from '../search-filter/search-filter.component';
 import { CouponCardComponent } from '../coupon-card/coupon-card.component';
 import { Router, RouterModule } from '@angular/router';
-<<<<<<< HEAD
-
-=======
->>>>>>> 3b67d55cd7c63de23bd26cb48f83c4936d694c58
 
 @Component({
   selector: 'app-homepage',

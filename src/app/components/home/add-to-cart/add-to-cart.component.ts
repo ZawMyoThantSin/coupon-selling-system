@@ -10,15 +10,17 @@ import { ToastrService } from 'ngx-toastr';
 import { StorageService } from '../../../services/storage.service';
 import { JwtService } from '../../../services/jwt.service';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-add-to-cart',
   standalone: true,
-  imports: [CommonModule,MatIconModule],
+  imports: [CommonModule,MatIconModule,RouterLink],
   templateUrl: './add-to-cart.component.html',
   styleUrl: './add-to-cart.component.css'
 })
 export class AddToCartComponent {
+
     userId:number = 0;
     cartData:CartData[] = [];
     coupons:Coupon[]=[];
@@ -45,6 +47,7 @@ export class AddToCartComponent {
       this.cartService.getCartData(id).subscribe(
         (res: CartData[]) => {
           this.cartData = res;
+          console.log("cart",this.cartData)
           this.totalPrice = this.calculateSubtotal(); // Calculate initial total
         },
         (error) => console.error("Error fetching cart data: ", error)
@@ -111,18 +114,4 @@ export class AddToCartComponent {
     }
 
 }
-
-
-     // calculateTotal(): void {
-     //   this.totalAmount = this.coupons.reduce(
-     //     (sum, item) => sum + item.totalPrice,
-     //     0
-     //   );
-     // }
-
-     // clearCart(): void {
-     //   this.cartcartService.clearCart();
-     //   this.coupons = [];
-     //   this.totalAmount = 0;
-     // }
 
