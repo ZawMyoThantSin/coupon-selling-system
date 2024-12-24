@@ -15,12 +15,11 @@ import { Product } from '../../../../models/product';
 import { SearchFilterComponent } from '../search-filter/search-filter.component';
 import { CouponCardComponent } from '../coupon-card/coupon-card.component';
 import { Router, RouterModule } from '@angular/router';
-import { UserBusinessComponent } from '../user-business/user-business.component';
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule, SearchFilterComponent, CouponCardComponent, RouterModule],
+  imports: [CommonModule, SearchFilterComponent, CouponCardComponent, RouterModule,],
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css'],
   providers: [DatePipe],
@@ -36,7 +35,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
 
   businessArray: Business[] = [];
   productArray: Product[] = [];
-  
+
   filteredBusinesses: Business[] = [];
   filteredProducts: Product[] = [];
 
@@ -44,8 +43,8 @@ export class HomepageComponent implements OnInit, AfterViewInit {
   //Products
 
   couponPrices: { [key: number]: number } = {};
-  couponCreateDates: { [key: number]: Date } = {}; 
-  couponExpDates: { [key: number]: Date } = {};  
+  couponCreateDates: { [key: number]: Date } = {};
+  couponExpDates: { [key: number]: Date } = {};
 
   constructor(
     private businessService: BusinessService,
@@ -120,24 +119,24 @@ export class HomepageComponent implements OnInit, AfterViewInit {
       if (firstItem) {
         items.push(firstItem);
       }
-      this.renderer.setStyle(trackEl, 'scroll-behavior', 'auto'); 
-      trackEl.scrollLeft = 0; 
+      this.renderer.setStyle(trackEl, 'scroll-behavior', 'auto');
+      trackEl.scrollLeft = 0;
       setTimeout(() => {
-        this.renderer.setStyle(trackEl, 'scroll-behavior', 'smooth'); 
+        this.renderer.setStyle(trackEl, 'scroll-behavior', 'smooth');
       });
     } else {
       trackEl.scrollBy({ left: 300, behavior: 'smooth' });
     }
   }
-  
+
 
   viewBusinessDetails(id: number): void {
     this.router.navigate(['/homepage/business/detail' + id])
-    
+
   }
 
   viewProductDetails(id: number): void {
-  }     
+  }
 
   filterItems(searchTerm: string): void {
     this.filteredBusinesses = this.businesses.filter((business) =>
@@ -150,7 +149,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
 
 
 
-  //Products *** 
+  //Products ***
   getImageUrl(imagePath: string): any {
     return this.productService.getImageUrl(imagePath);
   }

@@ -5,6 +5,10 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CouponService } from '../../../../../services/coupon/coupon.service';
+import { CartService } from '../../../../../services/cart/cart.service';
+import { JwtService } from '../../../../../services/jwt.service';
+import { StorageService } from '../../../../../services/storage.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -20,14 +24,24 @@ export class ProductdetailsComponent {
     private router: Router,
     private productService: ProductService,
     private couponService: CouponService,
+    private cartService: CartService,
+    private tokenService: JwtService,
+    private storageService: StorageService,
+    private toastr: ToastrService
   ) {}
 
+    userId: number = 0;
     product:any;
     quantity: number = 1;
     couponPrices: { [key: number]: number } = {};
     couponDescriptions: { [key: number]: string } = {};
     couponIds: { [key: number]: number } = {};
     ngOnInit(): void {
+      const token = this.storageService.getItem("token");
+      if(token){
+        this.userId = this.tokenService.getUserId(token);
+      }
+
       const productId = this.route.snapshot.params['id'];
       this.productService.getProductById(productId).subscribe((data) => {
         this.product = data;
@@ -38,29 +52,32 @@ this.couponService.getAllUserCoupons().subscribe(
     console.log('Coupons:', coupons); // Check the expDate field here
     coupons.forEach((coupon:any) => {
       console.log(coupon);
-      
+
       this.couponPrices[coupon.productId] = coupon.price;  // Map productId to discount price
-      console.log("des"+coupon.description);
       this.couponDescriptions[coupon.productId] = coupon.description;
       this.couponIds[coupon.productId] = coupon.id;
     });
-  
+
   },
   (error) => {
-    console.log('couponIds:', this.couponIds); 
+    console.log('couponIds:', this.couponIds);
     console.error('Error fetching coupons:', error);
   }
 );
 
     }
     addToCart() {
-      
-      const productId=this.product.id;
       const couponId = this.couponIds[this.product.id];
-    const couponPrice = this.couponPrices[this.product.id];
-    const quantity = this.quantity;
-    console.log(`Added ${quantity} item(s) of coupon ID ${couponId} to the cart.`);
-    console.log(`Coupon Price for product ID ${productId}: ${couponPrice}Ks`);
+      const quantity = this.quantity;
+      const cartDataToSend = {
+        "userId":this.userId,
+        "couponId":couponId,
+        "quantity":quantity
+      }
+    this.cartService.addToCart(cartDataToSend).subscribe((res)=> {
+      this.toastr.success("Add To Cart Successfully", "Success");
+    },err => console.log("Error in add to Cart")
+    );
 
     }
     goBack(){
@@ -85,5 +102,5 @@ this.couponService.getAllUserCoupons().subscribe(
     Buy(){
 
     }
-    
+
 }

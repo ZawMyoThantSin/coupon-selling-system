@@ -1,0 +1,26 @@
+.nothing-added-to-cart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  color: #6c757d;
+}
+
+.nothing-added-to-cart .cart-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #007bff;
+}
+
+.nothing-added-to-cart p {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.nothing-added-to-cart button {
+  padding: 0.5rem 1.5rem;
+  font-size: 1rem;
+}

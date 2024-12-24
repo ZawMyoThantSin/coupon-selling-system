@@ -7,15 +7,19 @@ import { error } from 'console';
 import { Product } from '../../../models/product';
 import { ProductService } from '../../../services/product/product.service';
 import { ToastrService } from 'ngx-toastr';
+import { StorageService } from '../../../services/storage.service';
+import { JwtService } from '../../../services/jwt.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-add-to-cart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,MatIconModule],
   templateUrl: './add-to-cart.component.html',
   styleUrl: './add-to-cart.component.css'
 })
 export class AddToCartComponent {
+    userId:number = 0;
     cartData:CartData[] = [];
     coupons:Coupon[]=[];
     totalPrice: number = 0;
@@ -23,11 +27,18 @@ export class AddToCartComponent {
 
      constructor(private cartService: CartService,
                  private productService: ProductService,
-                 private toastr: ToastrService
+                 private toastr: ToastrService,
+                 private storageService: StorageService,
+                 private tokenService: JwtService
      ) {}
 
      ngOnInit(): void {
-      this.getCartData(23); // Replace '23' with dynamic user/cart ID if necessary
+      const token = this.storageService.getItem("token");
+      if(token){
+        this.userId = this.tokenService.getUserId(token);
+        this.getCartData(this.userId);
+      }
+
     }
 
     getCartData(id: number): void {

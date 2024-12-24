@@ -1,6 +1,7 @@
-<!-- <div class="container mt-5"> -->
 
-  <h2 class="text-center mb-4 text-gradient font-weight-bold">Welcome To Our Platform</h2>
+<div class="container mt-3">
+
+  <!-- <h2 class="text-center mb-4 text-gradient font-weight-bold">Welcome To Our Platform</h2> -->
 
   <div class="search-container mb-5">
     <app-search-filter (searchTermChange)="filterItems($event)"></app-search-filter>
@@ -59,7 +60,7 @@
                 {{ product.description.length > 70 ? (product.description | slice: 0: 70) + '...' : product.description }}
               </p>
 
-              
+
               <button class="btn btn-primary btn-product" (click)="viewProductDetails(product.id)">View</button>
             </div>
           </div>
@@ -67,5 +68,5 @@
 
         <app-coupon-card></app-coupon-card>
 
-      <!-- </div> -->
+      </div>
 
