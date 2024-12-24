@@ -61,8 +61,9 @@ export class CartService {
       expDate: '2024-11-25',
     },
   ];
-  addToCart() {
 
+  addToCart(data:any):Observable<any> {
+    return this.http.post(`${this.BASE_URL}/add`, data);
   }
 
   getCartData(id:number):Observable<any>{

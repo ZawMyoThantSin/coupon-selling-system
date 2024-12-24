@@ -13,11 +13,12 @@ import { StorageService } from '../../../services/storage.service';
 import { CouponService } from '../../../services/coupon/coupon.service';
 import { JwtService } from '../../../services/jwt.service';
 import { ToastrService } from 'ngx-toastr';
+import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
 
 @Component({
   selector: 'app-product',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, MdbRippleModule],
+  imports: [FormsModule, CommonModule, RouterModule, MdbRippleModule,MdbDropdownModule],
   templateUrl: './product.component.html',
   styleUrl: './product.component.css'
 })
@@ -54,7 +55,17 @@ export class ProductComponent {
         this.products = data;
         this.products = data.filter(product => product.status );
       });
+
+       // Fetch all coupons
+       this.couponService.getAllCoupons(this.businessId).subscribe((data: Coupon[]) => {
+        this.coupons = data;
+      });
     });
+  }
+
+  hasCoupon(productId: number): boolean {
+    // Check if a coupon exists for the product
+    return this.coupons.some(coupon => coupon.productId === productId);
   }
 
   loadProducts(): void {
