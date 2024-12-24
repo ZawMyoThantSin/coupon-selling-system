@@ -23,25 +23,17 @@
   transform: scale(1.05);
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
 }
-
-/* .discount-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background-color: red;
-  color: white;
-  font-size: 12px;
-  font-weight: bold;
-  padding: 5px 10px;
-  z-index: 1;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  border-bottom-right-radius: 5px;
+.card-body {
+  flex-grow: 1;
   display: flex;
-  align-items: center;
-} */
-
-
-
+  flex-direction: column;
+  justify-content: space-between; /* Ensures content is spaced out evenly */
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 .discount-badge {
   position: absolute;
   top: 0;

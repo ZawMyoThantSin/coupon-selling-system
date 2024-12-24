@@ -36,33 +36,39 @@ export class CouponCardComponent implements OnInit{
       // Fetch all products
       this.productService.getEveryProducts().subscribe(
         (data) => {
-          console.log('Products data:', data);
+          console.log('Products:', data);  // Log the fetched products to check the data
           this.products = data;
-          this.filteredProducts = [...this.products];
+    
+          // Fetch coupons after fetching products
+          this.couponService.getAllUserCoupons().subscribe(
+            (coupons: any) => {
+              console.log('Coupons:', coupons);  // Log the fetched coupons to check the data
+              
+              // Populate coupon prices map
+              coupons.forEach((coupon: any) => {
+                this.couponPrices[coupon.productId] = coupon.price;  // Map productId to discount price
+                this.couponCreateDates[coupon.productId] = new Date(coupon.createdDate);
+                this.couponExpDates[coupon.productId] = new Date(coupon.expiredDate);
+              });
+    
+              // Filter products to only include those that have a coupon price
+              this.filteredProducts = this.products.filter(
+                (product) => this.couponPrices[product.id] !== undefined
+              );
+    
+              console.log('Filtered Products:', this.filteredProducts);  // Log the filtered products
+            },
+            (error) => {
+              console.error('Error fetching coupons:', error);
+            }
+          );
         },
         (error) => {
           console.error('Error fetching products:', error);
         }
       );
-  // Fetch coupon prices and populate the map
-  this.couponService.getAllUserCoupons().subscribe(
-    (coupons: any) => {
-      console.log('Coupons:', coupons); // Check the expDate field here
-      coupons.forEach((coupon:any) => {
-        console.log(coupon);
-        
-        this.couponPrices[coupon.productId] = coupon.price;  // Map productId to discount price
-        console.log("DATE",coupon.expiredDate )
-        this.couponCreateDates[coupon.productId]= new Date(coupon.createdDate)
-        this.couponExpDates[coupon.productId] = new Date(coupon.expiredDate); 
-      });
-    
-    },
-    (error) => {
-      console.error('Error fetching coupons:', error);
     }
-  );
-  }
+    
   viewProductDetails(id: number) {
     this.router.navigate(['/homepage/p', id]);
   }
