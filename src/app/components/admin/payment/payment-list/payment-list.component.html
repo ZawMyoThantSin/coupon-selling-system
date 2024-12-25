@@ -1,0 +1,46 @@
+<div class="container mt-4">
+  <table class="table table-hover  table-responsive table-bordered">
+    <thead class="table-secondary ">
+      <tr>
+        <th>#</th>
+        <th>Payment Type</th>
+        <th>Account Name</th>
+        <th>Account Number</th>
+        <th>QR Image</th>
+        <th class="col-2"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let payment of paymentList | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ payment.paymentType }}</td>
+        <td>{{ payment.accountName }}</td>
+        <td>{{ payment.accountNumber }}</td>
+        <td class="d-flex justify-content-center">
+          <img [src]="getImageUrl(payment.qrImage)" alt="QR Image" class="img-thumbnail" style="max-width:50px; max-height:50px;" />
+        </td>
+        <td class="px-0 ">
+          <span class="btn btn-link btn-sm" (click)="editPayment(payment)">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#434343">
+              <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h357l-80 80H200v560h560v-278l80-80v358q0 33-23.5 56.5T760-120H200Zm280-360ZM360-360v-170l367-367q12-12 27-18t30-6q16 0 30.5 6t26.5 18l56 57q11 12 17 26.5t6 29.5q0 15-5.5 29.5T897-728L530-360H360Zm481-424-56-56 56 56ZM440-440h56l232-232-28-28-29-28-231 231v57Zm260-260-29-28 29 28 28 28-28-28Z"/>
+            </svg>
+          </span>
+          <span class="btn btn-link btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#EA3323"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+          </span>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+  <!-- Pagination Controls -->
+   <div class="d-flex justify-content-end">
+      <pagination-controls
+      (pageChange)="currentPage = $event"
+      [responsive]="true"
+      previousLabel="Previous"
+      nextLabel="Next"
+    ></pagination-controls>
+   </div>
+
+</div>

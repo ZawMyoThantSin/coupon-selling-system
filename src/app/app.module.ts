@@ -34,7 +34,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
     LoginComponent,
     SignupComponent,
     CreateProductComponent,
-    DashboardComponent,
+    DashboardComponent
 
   ],
   imports: [

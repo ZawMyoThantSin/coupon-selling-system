@@ -15,7 +15,7 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="!loading">
               <tr *ngFor="let item of cartData">
                 <!-- Product -->
                 <td>
@@ -70,6 +70,11 @@
                 </td>
               </tr>
             </tbody>
+            <div *ngIf="loading" class="d-flex justify-content-center mt-3">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
           </table>
         </div>
 
@@ -163,6 +168,9 @@
     </div>
   </div>
 </div>
+
+
+
 <ng-template #nocartdata>
     <div class="nothing-added-to-cart">
       <span class="border border-lg border-secondary rounded-circle p-4">

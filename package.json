@@ -30,6 +30,7 @@
     "express": "^4.18.2",
     "jwt-decode": "^4.0.0",
     "mdb-angular-ui-kit": "^7.1.0",
+    "ngx-pagination": "^6.0.3",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "simple-datatables": "^9.2.1",

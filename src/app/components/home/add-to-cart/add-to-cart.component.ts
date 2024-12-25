@@ -15,7 +15,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-add-to-cart',
   standalone: true,
-  imports: [CommonModule,MatIconModule,RouterLink],
+  imports: [CommonModule,MatIconModule,RouterLink,],
   templateUrl: './add-to-cart.component.html',
   styleUrl: './add-to-cart.component.css'
 })
@@ -26,6 +26,7 @@ export class AddToCartComponent {
     coupons:Coupon[]=[];
     totalPrice: number = 0;
     shipping: number = 1500;
+    loading :boolean = false;
 
      constructor(private cartService: CartService,
                  private productService: ProductService,
@@ -96,18 +97,36 @@ export class AddToCartComponent {
     calculateTotal(): number {
       return this.calculateSubtotal() + this.shipping;
     }
-
-    clearCart(id:number): void{
+    clearCart(id: number): void {
+      this.loading = true;
       this.cartService.clearCart(id).subscribe(
         response => {
-          const cartItem = this.cartData.find((item) => item.cartId === id);
-          this.toastr.success("Delete Successfully!",  "Success" )
+          const index = this.cartData.findIndex((item) => item.cartId === id);
+          if (index !== -1) {
+            this.cartData.splice(index, 1);
+            this.totalPrice = this.calculateSubtotal();
+            this.toastr.success("Item removed successfully!", "Success");
+          }
+          this.loading = false;
         },
-        err=> {
-          this.toastr.error("Erorr")
+        err => {
+          this.toastr.error("Error removing item", "Error");
+          this.loading = false;
         }
       );
     }
+
+    // clearCart(id:number): void{
+    //   this.cartService.clearCart(id).subscribe(
+    //     response => {
+    //       const cartItem = this.cartData.find((item) => item.cartId === id);
+    //       this.toastr.success("Delete Successfully!",  "Success" )
+    //     },
+    //     err=> {
+    //       this.toastr.error("Erorr")
+    //     }
+    //   );
+    // }
 
      getImageUrl(imagePath: string): string | null{
       return this.productService.getImageUrl(imagePath);
