@@ -1,0 +1,33 @@
+<div class="payment-container">
+  <div class="owner-info">
+    <!-- QR code photo dynamically changes based on selected payment method -->
+    <img [src]="getImageUrl(selectedMethod?.qrImage)" alt="QR Owner Photo" />
+    <p>{{ selectedMethod?.accountName }}</p>
+    <p>{{ selectedMethod?.accountNumber }}</p>
+  </div>
+
+  <div class="form-section">
+    <div class="form-group">
+      <label for="paymentMethod">Payment Method:</label>
+      <select id="paymentMethod" (change)="onPaymentMethodChange($event)">
+        <option *ngFor="let method of paymentMethods" [value]="method.paymentType">
+          {{ method.paymentType }}
+        </option>
+      </select>
+    </div>
+
+     <div class="form-group" >
+      <label for="totalPrice">Total Price:</label>
+      <input type="number" id="totalPrice" [value]="total" readonly>
+    </div>
+
+    <div class="form-group">
+      <label>Products and Quantity:</label>
+      <div class="scroll-div">
+        <ul>
+          <li *ngFor="let item of cartData">
+            {{ item.productName }}-Qty: {{ item.quantity }}-{{item.price}}
+          </li>
+        </ul>
+      </div>
+    </div>

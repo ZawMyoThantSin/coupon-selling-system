@@ -1,0 +1,104 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.payment-container {
+  width: 600px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  gap: 20px;
+}
+.owner-info {
+  flex: 1;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.owner-info img {
+  width: 180px; /* Increased size */
+  height: 180px; /* Increased size */
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+.owner-info p {
+  margin: 5px 0;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+.form-section {
+  flex: 2;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.form-group select,
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.scroll-div {
+  max-height: 100px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: #f9f9f9;
+}
+.scroll-div ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.scroll-div ul li {
+  margin: 5px 0;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+.btn {
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn-cancel {
+  background-color: #f44336;
+  color: white;
+}
+.btn-ok {
+  background-color: #4caf50;
+  color: white;
+}
+.scroll-div {
+  max-height: 150px; /* Set max height for scrolling */
+  overflow-y: auto;  /* Enable vertical scrolling */
+  border: 1px solid #ddd;
+  padding: 8px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
