@@ -1,0 +1,25 @@
+<div class="custom-tabs">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [routerLink]="['/d/payments']"
+        routerLinkActive="active"
+      >
+        <span><i class="fas fa-list"></i> Payment List</span>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        [routerLink]="['/d/payments/create']"
+        routerLinkActive="active"
+      >
+        <span><i class="fas fa-plus-circle"></i> Create Payment</span>
+      </a>
+    </li>
+  </ul>
+  <div class="tab-content">
+    <router-outlet></router-outlet>
+  </div>
+</div>

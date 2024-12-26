@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { BusinessComponent } from './components/admin/business/business.component';
-import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { BusinessDetailComponent } from './components/admin/business/business-detail/business-detail.component';
 import { BusinessEditComponent } from './components/admin/business/business-edit/business-edit.component';
 import { CouponComponent } from './components/admin/product/coupon/coupon.component';
@@ -22,6 +21,11 @@ import { CustomersComponent } from './components/admin/customers/customers.compo
 import { AddToCartComponent } from './components/home/add-to-cart/add-to-cart.component';
 import { HomepageComponent } from './components/home/homepage/homepage/homepage.component';
 import { UserBusinessComponent } from './components/home/homepage/user-business/user-business.component';
+import { PaymentCreateComponent } from './components/admin/payment/payment-create/payment-create.component';
+import { PaymentComponent } from './components/admin/payment/payment.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { PaymentListComponent } from './components/admin/payment/payment-list/payment-list.component';
+import { PaymentEditComponent } from './components/admin/payment/payment-edit/payment-edit.component';
 import { UserOrderComponent } from './components/home/user-order/user-order.component';
 
 const routes: Routes = [
@@ -30,6 +34,11 @@ const routes: Routes = [
     children:[
       {path:'carousel', component:HomeCarouselComponent},
       {path:'business', component:BusinessComponent, title:'Business'},
+      {path:'payments',component:PaymentComponent, title:'Payments',children:[
+        {path:'', component:PaymentListComponent},
+        {path:'create', component:PaymentCreateComponent},
+        {path:'edit', component:PaymentEditComponent}
+      ]},
       {path:'customers', component:CustomersComponent, title:'Customers'},
       {path:'b/detail/:id', component:BusinessDetailComponent,
         children: [
@@ -53,7 +62,7 @@ const routes: Routes = [
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},
       {path:'page', component:HomepageComponent, title:'Home'},
-      
+
       {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},
       {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}
     ]

@@ -1,0 +1,50 @@
+/* Center container, make it responsive, and set full height */
+.custom-tabs {
+  max-width: 1000px; /* Adjust width to make it narrower */
+  margin: 0 auto; /* Center the container */
+  padding: 20px; /* Add padding around the content */
+  height: 100vh; /* Full height of the viewport */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Align content at the top */
+  background-color: #f8f9fa; /* Optional: Light background for the page */
+}
+
+/* Tabs styling */
+.custom-tabs .nav-tabs {
+  margin-bottom: 20px; /* Add margin below the tabs */
+  justify-content: center; /* Center tabs horizontally */
+  border-bottom: none; /* Remove default bottom border */
+}
+
+/* Individual tab styles */
+.custom-tabs .nav-tabs .nav-link {
+  border: 1px solid #dee2e6;
+  border-bottom: none;
+  padding: 10px 20px;
+  margin: 0 5px; /* Add spacing between tabs */
+  cursor: pointer;
+  color: #495057;
+  border-radius: 5px 5px 0 0; /* Rounded top corners for tabs */
+  transition: all 0.3s ease;
+}
+
+/* Active tab styling */
+.custom-tabs .nav-tabs .nav-link.active {
+  background-color: #cf4d4d;
+  border: 1px solid #dee2e6;
+  border-bottom: 3px solid #0d6efd;
+  color: #0d6efd;
+  font-weight: 500;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for active tab */
+}
+
+/* Tab content styling */
+.custom-tabs .tab-content {
+  border: 1px solid #dee2e6;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 0 0 8px 8px; /* Rounded bottom corners */
+  flex: 1; /* Allow tab content to stretch and fill remaining height */
+  overflow-y: auto; /* Scrollable if content overflows */
+}

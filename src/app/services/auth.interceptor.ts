@@ -2,11 +2,13 @@ import { HttpErrorResponse, HttpInterceptorFn } from '@angular/common/http';
 import { catchError, tap, throwError } from 'rxjs';
 import { StorageService } from './storage.service';
 import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const tokenService = inject(StorageService);
+  const router = inject(Router);
   const authToken = tokenService.getItem("token");
-  console.log("In Interceptor: " , authToken)
+  // console.log("In Interceptor: " , authToken)
 
   // 1. Attach authentication token to outgoing requests
   const modifiedReq = req.clone({
@@ -17,18 +19,18 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   console.log(`Outgoing request to ${req.url}`, modifiedReq);
 
-  // 2. Log request and response
   return next(modifiedReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      // 3. Handle errors globally
       console.error(`Error occurred while calling ${req.url}:`, error);
-      let errorMessage = 'An unexpected error occurred';
-      if (error.status === 403) {
-        errorMessage = 'Unauthorized access - please log in again.';
-        // Example: Redirect to login or clear session
-        // authService.logout();
-      } else if (error.status === 404) {
-        errorMessage = 'Resource not found.';
+      let errorMessage = '';
+      if (error.status === 498) {
+        errorMessage = 'Token has expired - please log in again.';
+        tokenService.removeItem("token");
+        router.navigate(['/login'],)
+      }else if(error.status===400){
+        errorMessage = 'Invalid token signature.';
+      }else if (error.status === 401) {
+        errorMessage = 'Invalid token signature.';
       } else if (error.status >= 500) {
         errorMessage = 'Server error. Please try again later.';
       }

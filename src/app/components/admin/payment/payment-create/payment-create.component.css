@@ -1,0 +1,17 @@
+.container {
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+}
