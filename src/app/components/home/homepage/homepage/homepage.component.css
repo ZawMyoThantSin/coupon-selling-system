@@ -1,15 +1,40 @@
 
 .text-gradient {
-  background: linear-gradient(to right, #004080, #007ea7);
+  background: linear-gradient(to right, #003366, #0073e6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   font-size: 2.5rem;
+  font-weight: bold;
 }
 
 .search-container {
-  text-align: center;
-  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
 }
+
+.search-box {
+  position: relative;
+  width: 70%;
+  max-width: 600px;
+}
+
+.search-box app-search-filter {
+  width: 100%;
+  padding: 10px 20px;
+  border: 2px solid #ddd;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  font-size: 1.2rem;
+  color: #0073e6;
+}
+
 
 .no-results {
   animation: fadeIn 0.5s;
@@ -22,25 +47,24 @@
 }
 
 .section-title {
-  font-size: 28px;
-  font-weight: bold;
+  font-size: 24px;
+  font-weight: 700;
   text-align: center;
-  color: #fff;
-  padding: 10px;
-  background: linear-gradient(45deg, #004080, #007ea7);
-  border-radius: 25px;
+  padding: 10px 20px;
+  background: linear-gradient(to right, #003366, #0073e6);
+  color: white;
+  border-radius: 50px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   display: inline-block;
-  margin-bottom: 30px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  margin: auto;
 }
 
 .section-divider {
-  border: 0;
-  height: 3px;
-  background: linear-gradient(to right, #004080, #007ea7);
-  width: 60%;
+  height: 2px;
+  background: linear-gradient(to right, #003366, #0073e6);
+  width: 70%;
   margin: 40px auto;
-  border-radius: 15px;
+  border-radius: 5px;
 }
 
 /****** Slider Styling *******/

@@ -22,6 +22,8 @@ import { CustomersComponent } from './components/admin/customers/customers.compo
 import { AddToCartComponent } from './components/home/add-to-cart/add-to-cart.component';
 import { HomepageComponent } from './components/home/homepage/homepage/homepage.component';
 import { UserBusinessComponent } from './components/home/homepage/user-business/user-business.component';
+import { CategoryComponent } from './components/admin/category/category.component';
+import { PaymentComponent } from './components/admin/payment/payment.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -40,6 +42,8 @@ const routes: Routes = [
       {path:'product',component:ProductComponent},
       {path:'p/create-product',component:CreateProductModalComponent},
       {path:'p/detail-product/:id',component:DetailProductComponent},
+      {path:'category', component:CategoryComponent, title:'Business Category'},
+      {path:'payment', component:PaymentComponent, title:'Payment'},
 
     ]
   },

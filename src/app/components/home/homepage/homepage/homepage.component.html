@@ -2,8 +2,12 @@
 
   <h2 class="text-center mb-4 text-gradient font-weight-bold">Welcome To Our Platform</h2>
 
+  <!-- Stylish Search Bar -->
   <div class="search-container mb-5">
-    <app-search-filter (searchTermChange)="filterItems($event)"></app-search-filter>
+    <div class="search-box">
+      <app-search-filter (searchTermChange)="filterItems($event)"></app-search-filter>
+      <i class="fas fa-search search-icon"></i>
+    </div>
   </div>
 
   <!-- No Results Message -->
@@ -13,14 +17,14 @@
 
   <!-- Businesses Section -->
   <div class="section" *ngIf="filteredBusinesses.length > 0">
-    <h3 class="text-center section-title mb-4">Explore Businesses</h3>
+  <h3 class="section-title mb-4">Discover Top Businesses</h3>
     <div class="slider-container">
       <button class="slider-btn left-btn" (click)="scrollLeft(businessTrack, businessArray)"><i class="fas fa-chevron-left"></i></button>
       <div class="slider-track" #businessTrack>
         <div class="slider-item" *ngFor="let business of filteredBusinesses">
           <div class="card">
             <img
-              [src]="'/images/business/logos/i1.png'"
+              [src]=" getBusinessImageUrl(business.photo) "
               class="card-img-top"
               alt="{{ business.name }}"
             />

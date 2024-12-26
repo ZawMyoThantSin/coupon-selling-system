@@ -148,7 +148,10 @@ export class HomepageComponent implements OnInit, AfterViewInit {
     );
   }
 
-
+  getBusinessImageUrl(imagePath: string): string {
+    return this.businessService.getImageUrl(imagePath);
+  }
+  
 
   //Products *** 
   getImageUrl(imagePath: string): any {

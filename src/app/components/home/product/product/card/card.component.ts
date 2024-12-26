@@ -56,6 +56,10 @@ filterByCharacter(char: string): void {
     product.name.toLowerCase().startsWith(char.toLowerCase())
   );
 }
+
+getImageUrl(imagePath: string): any {
+  return this.service.getImageUrl(imagePath);
+}
 // onSearch(): void {
 //   const query = this.searchQuery.trim().toLowerCase();
 //   if (query) {

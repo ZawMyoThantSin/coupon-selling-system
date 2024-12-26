@@ -99,7 +99,7 @@ export class BusinessComponent implements OnInit {
             formData.append('location', data.get('location') || '');
             formData.append('description', data.get('description') || '');
             formData.append('contactNumber', data.get('contactNumber') || '');
-            formData.append('category', data.get('category') || '');
+            formData.append('categoryId', data.get('categoryId') || '');
             formData.append('userId', user_id);
 
             // Append the image file if present
