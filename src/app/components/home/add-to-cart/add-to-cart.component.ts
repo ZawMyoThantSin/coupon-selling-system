@@ -7,33 +7,48 @@ import { error } from 'console';
 import { Product } from '../../../models/product';
 import { ProductService } from '../../../services/product/product.service';
 import { ToastrService } from 'ngx-toastr';
+import { StorageService } from '../../../services/storage.service';
+import { JwtService } from '../../../services/jwt.service';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-add-to-cart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,MatIconModule,RouterLink,],
   templateUrl: './add-to-cart.component.html',
   styleUrl: './add-to-cart.component.css'
 })
 export class AddToCartComponent {
+
+    userId:number = 0;
     cartData:CartData[] = [];
     coupons:Coupon[]=[];
     totalPrice: number = 0;
     shipping: number = 1500;
+    loading :boolean = false;
 
      constructor(private cartService: CartService,
                  private productService: ProductService,
-                 private toastr: ToastrService
+                 private toastr: ToastrService,
+                 private storageService: StorageService,
+                 private tokenService: JwtService
      ) {}
 
      ngOnInit(): void {
-      this.getCartData(23); // Replace '23' with dynamic user/cart ID if necessary
+      const token = this.storageService.getItem("token");
+      if(token){
+        this.userId = this.tokenService.getUserId(token);
+        this.getCartData(this.userId);
+      }
+
     }
 
     getCartData(id: number): void {
       this.cartService.getCartData(id).subscribe(
         (res: CartData[]) => {
           this.cartData = res;
+          console.log("cart",this.cartData)
           this.totalPrice = this.calculateSubtotal(); // Calculate initial total
         },
         (error) => console.error("Error fetching cart data: ", error)
@@ -82,36 +97,40 @@ export class AddToCartComponent {
     calculateTotal(): number {
       return this.calculateSubtotal() + this.shipping;
     }
-
-    clearCart(id:number): void{
+    clearCart(id: number): void {
+      this.loading = true;
       this.cartService.clearCart(id).subscribe(
         response => {
-          const cartItem = this.cartData.find((item) => item.cartId === id);
-          this.toastr.success("Delete Successfully!",  "Success" )
+          const index = this.cartData.findIndex((item) => item.cartId === id);
+          if (index !== -1) {
+            this.cartData.splice(index, 1);
+            this.totalPrice = this.calculateSubtotal();
+            this.toastr.success("Item removed successfully!", "Success");
+          }
+          this.loading = false;
         },
-        err=> {
-          this.toastr.error("Erorr")
+        err => {
+          this.toastr.error("Error removing item", "Error");
+          this.loading = false;
         }
       );
     }
+
+    // clearCart(id:number): void{
+    //   this.cartService.clearCart(id).subscribe(
+    //     response => {
+    //       const cartItem = this.cartData.find((item) => item.cartId === id);
+    //       this.toastr.success("Delete Successfully!",  "Success" )
+    //     },
+    //     err=> {
+    //       this.toastr.error("Erorr")
+    //     }
+    //   );
+    // }
 
      getImageUrl(imagePath: string): string | null{
       return this.productService.getImageUrl(imagePath);
     }
 
 }
-
-
-     // calculateTotal(): void {
-     //   this.totalAmount = this.coupons.reduce(
-     //     (sum, item) => sum + item.totalPrice,
-     //     0
-     //   );
-     // }
-
-     // clearCart(): void {
-     //   this.cartcartService.clearCart();
-     //   this.coupons = [];
-     //   this.totalAmount = 0;
-     // }
 

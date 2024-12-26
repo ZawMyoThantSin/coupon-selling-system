@@ -1,9 +1,31 @@
-<p>coupon works!</p>
-<button
-class="btn btn-sm btn-primary"
-mdbRipple
-mdbTooltip="Add new Business "
-placement="right"
-(click)="openModal()" mdbRipple>
- <i class="fas fa-plus"></i>
-</button>
+<div class="coupon-container">
+   
+    <ag-grid-angular style="width: 90%; height: 150px;"  
+    [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [pagination]="true" 
+    [pagination]="pagination" [paginationPageSize]="paginationPageSize"
+    [paginationPageSizeSelector]="paginationPageSizeSelector"
+    [rowSelection]="rowSelection"
+    [modules]="modules"
+ 
+    [rowData]="displayedCoupons"
+    (paginationChanged)="onPaginationChanged()"
+    class="ag-theme-quartz">
+  
+</ag-grid-angular>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls">
+
+ <!-- Page Size Control -->
+ <div class="action-bar">
+  <label for="pageSize">Page Size:</label>
+  <select id="pageSize" [(ngModel)]="paginationPageSize" (change)="onPageSizeChange()">
+    <option *ngFor="let size of paginationPageSizeSelector" [value]="size">{{ size }}</option>
+  </select>
+
+      <button [disabled]="!hasPreviousPage" (click)="onPreviousPage()">Previous</button>
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+      <button [disabled]="!hasNextPage" (click)="onNextPage()">Next</button>
+    </div>
+  </div>
+  

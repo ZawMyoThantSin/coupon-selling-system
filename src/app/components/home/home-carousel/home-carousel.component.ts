@@ -1,9 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, HostListener, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
-import SwiperCore from 'swiper';
-import Navigation from 'swiper/modules';
-import Pagination from 'swiper/modules';
-import Autoplay from 'swiper/modules';
+
 
 @Component({
   selector: 'app-home-carousel',

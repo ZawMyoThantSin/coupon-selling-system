@@ -1,9 +1,9 @@
-<div class="row mt-4">
+<div class="row mt-4"  *ngIf="cartData.length>0; else nocartdata">
   <div class="col-md-10 offset-1">
     <div class="d-flex flex-sm-column flex-lg-row align-items-lg-start align-items-sm-center justify-content-center ">
 
-        <!-- Table Section -->
-        <div class="table-container mb-4 mb-lg-0 me-2 " style="flex: 1;">
+          <!-- Table Section -->
+        <div class="table-container mb-4 mb-lg-0 me-2 mt-5 " style="flex: 1;">
           <table class="table align-middle mb-0 bg-white table-responsive table-responsive-sm">
             <thead class="bg-light">
               <tr>
@@ -15,7 +15,7 @@
                 <th></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody *ngIf="!loading">
               <tr *ngFor="let item of cartData">
                 <!-- Product -->
                 <td>
@@ -43,7 +43,7 @@
                       <i class="fas fa-minus"></i>
                     </button>
                     <input
-                      type="number"
+                      type="text"
                       [value]="item.quantity"
                       class="form-control form-control-sm text-center"
                       style="width: 60px;"
@@ -70,11 +70,16 @@
                 </td>
               </tr>
             </tbody>
+            <div *ngIf="loading" class="d-flex justify-content-center mt-3">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
           </table>
         </div>
 
         <!-- Card Section -->
-        <div class="card shadow-2-strong mb-5 mb-lg-0" style="border-radius: 16px; width: 100%; max-width: 350px;">
+        <div class="card shadow-2-strong mb-5 mb-lg-0 mt-4" style="border-radius: 16px; width: 100%; max-width: 350px;">
           <div class="card-body p-4">
             <div class="row">
               <div class="col-md-6 col-lg-12">
@@ -158,6 +163,20 @@
             </div>
           </div>
         </div>
+
+
     </div>
   </div>
 </div>
+
+
+
+<ng-template #nocartdata>
+    <div class="nothing-added-to-cart">
+      <span class="border border-lg border-secondary rounded-circle p-4">
+        <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#434343"><path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z"/></svg>
+      </span>
+      <p>Your cart is empty!</p>
+      <button class="btn btn-primary" routerLink="/homepage/page">Browse Products</button>
+    </div>
+</ng-template>

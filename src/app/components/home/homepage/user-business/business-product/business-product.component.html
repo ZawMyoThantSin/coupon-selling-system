@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let product of products">
-    <div class="card m-2 card-clickable">
+    <div class="card m-2 card-clickable" (click)="viewProductDetails(product.id)">
       <!-- Discount Badge -->
       <div class="discount-badge" *ngIf="product.discount">
         
@@ -9,7 +9,7 @@
 
       <!-- Product Image -->
       <img
-        [src]=" 'images/business/logos/i3.jpg' "
+        [src]=" getProductImageUrl(product.imagePath) "
         class="card-img-top card-img-custom"
         alt="{{ product.name }}"
       />
@@ -22,21 +22,22 @@
         <div>
           <div style="display: flex; align-items: center;">
             <img
-              src="/images/sign.jpg"
+              src="/images/product/sign.jpg"
               alt="Coupon Image"
               style="width: 24px; height: 24px; vertical-align: middle; margin-right: 10px;"
             />
-            <span class="text-decoration-line-through" style="margin-right: 15px;">
+            <span *ngIf="getCouponPrice(product.id)" class="text-decoration-line-through" style="margin-right: 15px;">
               {{ product.price }}
             </span>
-            <span>{{ getCouponPrice(product.id) }} Ks</span>
+            <span>{{ getCouponPrice(product.id) || product.price }} Ks</span>
+         
           </div>
           
           <!-- Horizontal Line -->
           <hr style="border: 0; border-top: 1px solid black; margin: 10px 0;" />
           
           <!-- Coupon Validity -->
-          <p>{{ (product.id) }}</p>
+          <p>{{ getCouponValidity(product.id) }}</p>
         </div>
       </div>
     </div>

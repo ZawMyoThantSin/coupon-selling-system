@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { BusinessComponent } from './components/admin/business/business.component';
-import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { BusinessDetailComponent } from './components/admin/business/business-detail/business-detail.component';
 import { BusinessEditComponent } from './components/admin/business/business-edit/business-edit.component';
 import { CouponComponent } from './components/admin/product/coupon/coupon.component';
@@ -15,7 +14,7 @@ import { UserprofileComponent } from './components/home/user/userprofile/userpro
 import { FriendComponent } from './components/home/friends/friend/friend.component';
 import { AboutusComponent } from './components/home/aboutus/aboutus/aboutus.component';
 import { HistoryComponent } from './components/home/history/history.component';
-import { CardComponent } from './components/home/product/product/card/card.component';
+
 import { ProductdetailsComponent } from './components/home/product/product/productdetails/productdetails.component';
 import { HomeCarouselComponent } from './components/home/home-carousel/home-carousel.component';
 import { CustomersComponent } from './components/admin/customers/customers.component';
@@ -24,6 +23,11 @@ import { HomepageComponent } from './components/home/homepage/homepage/homepage.
 import { UserBusinessComponent } from './components/home/homepage/user-business/user-business.component';
 import { CategoryComponent } from './components/admin/category/category.component';
 import { PaymentComponent } from './components/admin/payment/payment.component';
+import { PaymentCreateComponent } from './components/admin/payment/payment-create/payment-create.component';
+import { PaymentComponent } from './components/admin/payment/payment.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { PaymentListComponent } from './components/admin/payment/payment-list/payment-list.component';
+import { PaymentEditComponent } from './components/admin/payment/payment-edit/payment-edit.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -31,6 +35,11 @@ const routes: Routes = [
     children:[
       {path:'carousel', component:HomeCarouselComponent},
       {path:'business', component:BusinessComponent, title:'Business'},
+      {path:'payments',component:PaymentComponent, title:'Payments',children:[
+        {path:'', component:PaymentListComponent},
+        {path:'create', component:PaymentCreateComponent},
+        {path:'edit', component:PaymentEditComponent}
+      ]},
       {path:'customers', component:CustomersComponent, title:'Customers'},
       {path:'b/detail/:id', component:BusinessDetailComponent,
         children: [
@@ -56,7 +65,7 @@ const routes: Routes = [
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},
       {path:'page', component:HomepageComponent, title:'Home'},
-      {path:'c',component:CardComponent,title:'card'},
+
       {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},
       {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}
     ]

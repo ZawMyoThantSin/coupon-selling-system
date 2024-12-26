@@ -46,7 +46,7 @@
   .content-area {
     margin-left: 0; /* By default, the content takes full width */
     margin-top: 50px; /* Space for navbar */
-    padding: 20px;
+    /* padding: 20px; */
     height: 100vh;
     overflow-y: auto;
     transition: margin-left 0.3s ease;
