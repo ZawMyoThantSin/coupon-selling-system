@@ -1,1 +1,51 @@
-<p>user-order works!</p>
+<div class="payment-container">
+  <div class="owner-info">
+    <!-- QR code photo dynamically changes based on selected payment method -->
+    <img [src]="selectedMethod?.qrPhoto" alt="QR Owner Photo" />
+    <p>{{ selectedMethod?.accountName }}</p>
+    <p>{{ selectedMethod?.accountNumber }}</p>
+  </div>
+
+  <div class="form-section">
+    <div class="form-group">
+      <label for="paymentMethod">Payment Method:</label>
+      <select id="paymentMethod" (change)="onPaymentMethodChange($event)">
+        <option *ngFor="let method of paymentMethods" [value]="method.paymentType">
+          {{ method.paymentType }}
+        </option>
+      </select>
+    </div>
+
+     <div class="form-group" >
+      <label for="totalPrice">Total Price:</label>
+      <input type="number" id="totalPrice" [value]="total" readonly>
+    </div>
+
+    <div class="form-group">
+      <label>Products and Quantity:</label>
+      <div class="scroll-div">
+        <ul>
+          <li *ngFor="let item of cartData">
+            {{ item.productName }}-Qty: {{ item.quantity }}-{{item.price}}
+          </li>
+        </ul>
+      </div>
+    </div> 
+    
+
+    <div class="form-group">
+      <label for="screenshot">Upload Screenshot:</label>
+      <input type="file" id="screenshot" accept="image/*">
+    </div>
+
+    <div class="form-group">
+      <label for="phoneNumber">Phone Number:</label>
+      <input type="text" id="phoneNumber" placeholder="Enter phone number" required>
+    </div>
+
+    <div class="buttons">
+      <button type="button" class="btn btn-cancel">Cancel</button>
+      <button type="submit" class="btn btn-ok">OK</button>
+    </div>
+  </div>
+</div>

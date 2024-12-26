@@ -22,6 +22,7 @@ import { CustomersComponent } from './components/admin/customers/customers.compo
 import { AddToCartComponent } from './components/home/add-to-cart/add-to-cart.component';
 import { HomepageComponent } from './components/home/homepage/homepage/homepage.component';
 import { UserBusinessComponent } from './components/home/homepage/user-business/user-business.component';
+import { UserOrderComponent } from './components/home/user-order/user-order.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -57,6 +58,7 @@ const routes: Routes = [
       {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}
     ]
   },
+  {path:'order', component:UserOrderComponent, title:'order'},
   {path:'login', component:LoginComponent, title:'Login'},
   {path:'signup', component:SignupComponent, title:'Signup'}
 ];
