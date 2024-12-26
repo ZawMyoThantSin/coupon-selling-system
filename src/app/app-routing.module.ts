@@ -24,7 +24,6 @@ import { UserBusinessComponent } from './components/home/homepage/user-business/
 import { CategoryComponent } from './components/admin/category/category.component';
 import { PaymentComponent } from './components/admin/payment/payment.component';
 import { PaymentCreateComponent } from './components/admin/payment/payment-create/payment-create.component';
-import { PaymentComponent } from './components/admin/payment/payment.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { PaymentListComponent } from './components/admin/payment/payment-list/payment-list.component';
 import { PaymentEditComponent } from './components/admin/payment/payment-edit/payment-edit.component';
