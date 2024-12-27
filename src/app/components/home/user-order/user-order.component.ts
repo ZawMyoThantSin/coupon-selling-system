@@ -1,26 +1,41 @@
-import { Component,OnInit } from '@angular/core';
-import { UserPayment } from '../../../models/userpayment';
-import { UserOrderService } from '../../../services/user-order/user-order.service';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { UserOrderService } from '../../../services/user-order/user-order.service';
+import { UserPayment } from '../../../models/userpayment';
+import { CommonModule } from '@angular/common';
+import { PaymentService } from '../../../services/payment/payment.service';
+
 @Component({
   selector: 'app-user-order',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './user-order.component.html',
   styleUrl: './user-order.component.css'
 })
-export class UserOrderComponent implements OnInit {
+export class UserOrderComponent {
   paymentMethods: UserPayment[] = [];
   selectedMethod: UserPayment | undefined;
   //add-to-cart
   action = '';
   cartData: any[] = [];
   total = 0;
+<<<<<<< HEAD
   
   //Buy
   
+=======
+
+  //Buy
+
+>>>>>>> f5e11067ea1bc0a5c1f9f11bdfe642a839d95469
   productName = '';
   quantity = 1;
   totalPrice = 0;
   constructor(private userOrderService: UserOrderService,
+<<<<<<< HEAD
+=======
+    private paymentService: PaymentService,
+>>>>>>> f5e11067ea1bc0a5c1f9f11bdfe642a839d95469
     private route: ActivatedRoute
   ) {}
 
@@ -36,6 +51,7 @@ export class UserOrderComponent implements OnInit {
       this.cartData = state.cartData;
       this.total = state.total;
     }
+<<<<<<< HEAD
   
 
   console.log("Retrieved Cart Data: ", this.cartData);
@@ -68,12 +84,24 @@ export class UserOrderComponent implements OnInit {
     //   }
     // }
   
+=======
+  // console.log("Retrieved Cart Data: ", this.cartData);
+  // console.log("Retrieved Total Price: ", this.total);
+
+>>>>>>> f5e11067ea1bc0a5c1f9f11bdfe642a839d95469
   }
 
   // This method will update the selected payment method and its details
   onPaymentMethodChange(event: any): void {
     const methodValue = event.target.value;
     this.selectedMethod = this.paymentMethods.find(method => method.paymentType === methodValue) || this.paymentMethods[0];
+<<<<<<< HEAD
     
+=======
+  }
+
+  getImageUrl(imagePath: any): string {
+    return this.paymentService.getImageUrl(imagePath) ;
+>>>>>>> f5e11067ea1bc0a5c1f9f11bdfe642a839d95469
   }
 }

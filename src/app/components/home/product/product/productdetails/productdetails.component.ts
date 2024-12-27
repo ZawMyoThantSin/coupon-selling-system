@@ -9,7 +9,10 @@ import { CartService } from '../../../../../services/cart/cart.service';
 import { JwtService } from '../../../../../services/jwt.service';
 import { StorageService } from '../../../../../services/storage.service';
 import { ToastrService } from 'ngx-toastr';
+<<<<<<< HEAD
 import { log } from 'console';
+=======
+>>>>>>> f5e11067ea1bc0a5c1f9f11bdfe642a839d95469
 import { CartData } from '../../../../../models/cartData';
 
 
@@ -101,6 +104,7 @@ this.couponService.getAllUserCoupons().subscribe(
     getCouponDescription(productId: number): string {
       return this.couponDescriptions[productId] || '';  // Ensure full description is returned
     }
+
     Buy(productName: string, quantity: number, totalPrice: number,price:number): void {
       const cartData = [
         {
@@ -110,16 +114,12 @@ this.couponService.getAllUserCoupons().subscribe(
           price:price
         },
       ];
-    
-      console.log("Cart Data being passed: ", cartData);
-    
-      this.router.navigate(['/order'], {
+
+      // console.log("Cart Data being passed: ", cartData);
+
+      this.router.navigate(['/homepage/order'], {
         state: { cartData: cartData, total: totalPrice },
       });
-    }
-    
-    
-
     }
   
 

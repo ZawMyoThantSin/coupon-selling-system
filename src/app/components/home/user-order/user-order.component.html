@@ -1,7 +1,7 @@
 <div class="payment-container">
   <div class="owner-info">
     <!-- QR code photo dynamically changes based on selected payment method -->
-    <img [src]="selectedMethod?.qrImage" alt="QR Owner Photo" />
+    <img [src]="getImageUrl(selectedMethod?.qrImage)" alt="QR Owner Photo" />
     <p>{{ selectedMethod?.accountName }}</p>
     <p>{{ selectedMethod?.accountNumber }}</p>
   </div>

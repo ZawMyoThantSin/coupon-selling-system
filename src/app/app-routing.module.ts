@@ -45,6 +45,7 @@ const routes: Routes = [
         {path: '',component: ProductComponent},
         {path:'coupon',component:CouponComponent}
       ]},
+      // {path:'order', component:UserOrderComponent, title:'order'},
       {path:'b/edit/:id', component:BusinessEditComponent, title:'Edit'},
       {path:'b/c', component:CouponComponent, title:''},
       {path:'product',component:ProductComponent},
@@ -57,6 +58,7 @@ const routes: Routes = [
     children:[
       {path: '', redirectTo: 'page', pathMatch: 'full' },
       {path:'cart', component:AddToCartComponent},
+      {path:'order', component:UserOrderComponent, },
       {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
       {path:'friends', component:FriendComponent, title:'Friends'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
