@@ -52,59 +52,6 @@ body {
 .form-group select,
 .form-group input,
 .form-group textarea {
-<<<<<<< HEAD
-    width: 100%;
-    padding: 10px;
-    font-size: 1em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-.scroll-div {
-    max-height: 100px;
-    overflow-y: auto;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 15px;
-    background-color: #f9f9f9;
-}
-.scroll-div ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-.scroll-div ul li {
-    margin: 5px 0;
-}
-.buttons {
-    display: flex;
-    justify-content: space-between;
-}
-.btn {
-    padding: 10px 20px;
-    font-size: 1em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.btn-cancel {
-    background-color: #f44336;
-    color: white;
-}
-.btn-ok {
-    background-color: #4caf50;
-    color: white;
-}
-.scroll-div {
-    max-height: 150px; /* Set max height for scrolling */
-    overflow-y: auto;  /* Enable vertical scrolling */
-    border: 1px solid #ddd;
-    padding: 8px;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-  }
-  
-=======
   width: 100%;
   padding: 10px;
   font-size: 1em;
@@ -155,4 +102,3 @@ body {
   background-color: #f9f9f9;
   border-radius: 5px;
 }
->>>>>>> f5e11067ea1bc0a5c1f9f11bdfe642a839d95469

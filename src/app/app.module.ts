@@ -36,7 +36,7 @@ import { UserOrderComponent } from './components/home/user-order/user-order.comp
     SignupComponent,
     CreateProductComponent,
     DashboardComponent,
-    UserOrderComponent,
+   
 
   ],
   imports: [

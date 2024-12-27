@@ -9,10 +9,6 @@ import { CartService } from '../../../../../services/cart/cart.service';
 import { JwtService } from '../../../../../services/jwt.service';
 import { StorageService } from '../../../../../services/storage.service';
 import { ToastrService } from 'ngx-toastr';
-<<<<<<< HEAD
-import { log } from 'console';
-=======
->>>>>>> f5e11067ea1bc0a5c1f9f11bdfe642a839d95469
 import { CartData } from '../../../../../models/cartData';
 
 
@@ -123,3 +119,4 @@ this.couponService.getAllUserCoupons().subscribe(
     }
   
 
+  }
