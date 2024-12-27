@@ -153,6 +153,8 @@
                   data-mdb-button-init
                   data-mdb-ripple-init
                   class="btn btn-primary btn-block btn-lg"
+                  [routerLink]="['/homepage/order']"
+                  [state]="{ cartData: cartData, total: calculateTotal() }"
                 >
                   <div class="d-flex justify-content-between">
                     <span>Checkout</span>
