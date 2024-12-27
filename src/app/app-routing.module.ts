@@ -21,8 +21,9 @@ import { CustomersComponent } from './components/admin/customers/customers.compo
 import { AddToCartComponent } from './components/home/add-to-cart/add-to-cart.component';
 import { HomepageComponent } from './components/home/homepage/homepage/homepage.component';
 import { UserBusinessComponent } from './components/home/homepage/user-business/user-business.component';
-import { PaymentCreateComponent } from './components/admin/payment/payment-create/payment-create.component';
+import { CategoryComponent } from './components/admin/category/category.component';
 import { PaymentComponent } from './components/admin/payment/payment.component';
+import { PaymentCreateComponent } from './components/admin/payment/payment-create/payment-create.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { PaymentListComponent } from './components/admin/payment/payment-list/payment-list.component';
 import { PaymentEditComponent } from './components/admin/payment/payment-edit/payment-edit.component';
@@ -51,6 +52,8 @@ const routes: Routes = [
       {path:'product',component:ProductComponent},
       {path:'p/create-product',component:CreateProductModalComponent},
       {path:'p/detail-product/:id',component:DetailProductComponent},
+      {path:'category', component:CategoryComponent, title:'Business Category'},
+      {path:'payment', component:PaymentComponent, title:'Payment'},
 
     ]
   },

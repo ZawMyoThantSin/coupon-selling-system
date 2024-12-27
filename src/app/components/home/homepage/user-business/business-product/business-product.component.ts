@@ -22,8 +22,8 @@ export class BusinessProductComponent implements OnInit{
 
   products!: Product[];
   couponPrices: { [key: number]: number } = {};
-  couponCreateDates: { [key: number]: Date } = {}; 
-  couponExpDates: { [key: number]: Date } = {};  
+  couponCreateDates: { [key: number]: Date } = {};
+  couponExpDates: { [key: number]: Date } = {};
 
 
   constructor(private bService: BusinessService,
@@ -32,7 +32,7 @@ export class BusinessProductComponent implements OnInit{
               private route: ActivatedRoute,
               private datePipe:DatePipe,
               private router: Router
-             
+
   ){}
 
 
@@ -40,7 +40,7 @@ export class BusinessProductComponent implements OnInit{
     // Fetch business data on route parameter change
     this.route.paramMap.subscribe(params => {
       const id = Number(params.get('id'));
-      if (id !== this.businessId) { 
+      if (id !== this.businessId) {
         this.businessId = id;
         this.fetchProducts(id);
       }
@@ -50,21 +50,20 @@ export class BusinessProductComponent implements OnInit{
     (coupons: any) => {
       console.log('Coupons:', coupons); // Check the expDate field here
       coupons.forEach((coupon:any) => {
-        console.log(coupon);
-        
+
         this.couponPrices[coupon.productId] = coupon.price;  // Map productId to discount price
-        console.log("DATE",coupon.expiredDate )
+        // console.log("DATE",coupon.expiredDate )
         this.couponCreateDates[coupon.productId]= new Date(coupon.createdDate)
-        this.couponExpDates[coupon.productId] = new Date(coupon.expiredDate); 
+        this.couponExpDates[coupon.productId] = new Date(coupon.expiredDate);
       });
-    
+
     },
     (error) => {
       console.error('Error fetching coupons:', error);
     }
   );
-    
-      
+
+
   }
 
   fetchProducts(businessId: number): void {

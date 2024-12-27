@@ -173,6 +173,15 @@
   <span>Customers</span>
   </a>
 
+  <a routerLink="/d/category" routerLinkActive="active" class="d-block mt-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+      <path d="M12 2L2 7l10 5 10-5-10-5zm0 7.77L4.61 7 12 11l7.39-4-7.39 3.77zM2 17l10 5 10-5-2-1.2-8 4-8-4-2 1.2z"/>
+    </svg>
+
+
+  <span>Categories</span>
+  </a>
+
 </div>
 
 
@@ -180,9 +189,5 @@
 <div class="content-area">
 
   <router-outlet></router-outlet>
-  <!-- <div *ngIf="decodedToken">
-    <h3>Decoded JWT:</h3>
-    <pre>{{ decodedToken | json }}</pre>
-  </div> -->
 
 </div>

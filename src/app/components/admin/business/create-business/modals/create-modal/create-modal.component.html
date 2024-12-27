@@ -71,10 +71,10 @@
         [(ngModel)]="formData.category"
         required
       >
-        <option value="" disabled>Select category</option>
-        <option value="hotel">Hotel</option>
-        <option value="restaurant">Restaurant</option>
-        <option value="spa">Spa</option>
+      <option value="" disabled>Select category</option>
+      <option *ngFor="let category of categories" [value]="category.id">
+        {{ category.name }}
+      </option>
       </select>
     </div>
 

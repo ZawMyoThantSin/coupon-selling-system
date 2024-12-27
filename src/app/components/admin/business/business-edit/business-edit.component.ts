@@ -6,6 +6,8 @@ import { Business } from '../../../../models/business';
 import { BusinessService } from '../../../../services/business/business.service';
 import { JwtService } from '../../../../services/jwt.service';
 import { StorageService } from '../../../../services/storage.service';
+import { CategoryService } from '../../../../services/category/category.service';
+import { businessCategory } from '../../../../models/business-category';
 
 @Component({
   selector: 'app-business-edit',
@@ -105,10 +107,10 @@ import { StorageService } from '../../../../services/storage.service';
       <div class="form-outline">
       <label for="contactNumber" class="form-label">Category</label>
         <select id="category" class="form-control" formControlName="category">
-          <option disabled selected>Select Category</option>
-          <option value="hotel">Hotel</option>
-          <option value="restaurant">Restaurant</option>
-          <option value="spa">Spa</option>
+          <option value="" disabled>Select category</option>
+          <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }}
+          </option>
         </select>
       </div>
 
@@ -133,6 +135,8 @@ export class BusinessEditComponent implements OnInit{
   userId!:any ;
   businesses: any[] | null = null;
 
+  categories: businessCategory[] = [];
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -141,6 +145,7 @@ export class BusinessEditComponent implements OnInit{
     private tokenService: JwtService,
      private jwtService: JwtService,
      private storageService: StorageService,
+     private categoryService: CategoryService
   ) {}
 
   ngOnInit(): void {
@@ -154,6 +159,8 @@ export class BusinessEditComponent implements OnInit{
       userName: [{ value: '', disabled: true }],
       userEmail: [{value:'',disabled: true}],
     });
+
+    this.loadCategories();
 
     this.businessId = +this.route.snapshot.paramMap.get('id')!;
 
@@ -228,7 +235,7 @@ export class BusinessEditComponent implements OnInit{
     formData.append('location', formValue.location ?? '');
     formData.append('description', formValue.description ?? '');
     formData.append('contactNumber', formValue.contactNumber ?? '');
-    formData.append('category', formValue.category ?? '');
+    formData.append('categoryId', formValue.category ?? '');
    
 
 
@@ -252,6 +259,17 @@ if (this.business.imageFile) {
 
   goBack(): void {
     this.router.navigate(['/d/business']); 
+  }
+
+  loadCategories(): void {
+    this.categoryService.getAllCategories().subscribe({
+      next: (data) => {
+        this.categories = data;
+      },
+      error: (error) => {
+        console.error('Error fetching categories:', error);
+      },
+    });
   }
   
 }
