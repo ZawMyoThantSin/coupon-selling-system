@@ -5,7 +5,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown'; // Dropdown
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip'; // Tooltip (if needed)
-
+import { AgGridModule } from 'ag-grid-angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -38,6 +38,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 
   ],
   imports: [
+    AgGridModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,

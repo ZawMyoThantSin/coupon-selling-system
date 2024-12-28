@@ -1,4 +1,4 @@
-<h3 class="mt-4 text-center">Product List</h3>
+ <!-- <h3 class="mt-4 text-center">Product List</h3>
 <div class="text-center mb-4">
 
 </div>
@@ -82,4 +82,30 @@
       </table>
     </div>
   </div>
+</div>  -->
+
+
+<div class="d-flex justify-content-between align-items-center mb-6">
+  <!-- Add Product Button -->
+  <button class="btn btn-primary d-flex align-items-center" (click)="navigateToModal()" mdbRipple>
+    <i class="fas fa-plus mr-2"></i> Add Product
+  </button>
+  
+  <!-- Import Excel Button -->
+  <button class="btn btn-success d-flex align-items-center" (click)="openExcelImportModal()">
+    <i class="fa-solid fa-file-excel mr-2"></i> Import Excel
+  </button>
 </div>
+
+
+<ag-grid-angular
+  style="width: 100%; height: 500px;"
+  class="ag-theme-alpine"
+  [rowData]="products"
+  [columnDefs]="columnDefs"
+  [gridOptions]="gridOptions"
+  (gridReady)="onGridReady($event)"
+  (gridSizeChanged)="onGridSizeChanged($event)"
+>
+</ag-grid-angular>
+

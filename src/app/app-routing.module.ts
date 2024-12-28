@@ -28,6 +28,7 @@ import { DashboardComponent } from './components/admin/dashboard/dashboard.compo
 import { PaymentListComponent } from './components/admin/payment/payment-list/payment-list.component';
 import { PaymentEditComponent } from './components/admin/payment/payment-edit/payment-edit.component';
 import { UserOrderComponent } from './components/home/user-order/user-order.component';
+import { ExcelImportComponent } from './components/admin/product/excel-import/excel-import.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -54,7 +55,7 @@ const routes: Routes = [
       {path:'p/detail-product/:id',component:DetailProductComponent},
       {path:'category', component:CategoryComponent, title:'Business Category'},
       {path:'payment', component:PaymentComponent, title:'Payment'},
-
+      { path: 'excel-import', component: ExcelImportComponent },
     ]
   },
   {path:'homepage', component:HomeComponent, title:'Home Page',
