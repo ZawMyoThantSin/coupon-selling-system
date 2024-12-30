@@ -1,0 +1,11 @@
+.text-success {
+  color: #28a745; /* Green for accepted */
+}
+
+.text-warning {
+  color: #ffc107; /* Yellow for pending */
+}
+
+.text-danger {
+  color: #dc3545; /* Red for rejected */
+}

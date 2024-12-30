@@ -5,10 +5,6 @@ import { SignupComponent } from './components/signup/signup.component';
 import { BusinessComponent } from './components/admin/business/business.component';
 import { BusinessDetailComponent } from './components/admin/business/business-detail/business-detail.component';
 import { BusinessEditComponent } from './components/admin/business/business-edit/business-edit.component';
-import { CouponComponent } from './components/admin/product/coupon/coupon.component';
-import { ProductComponent } from './components/admin/product/product.component';
-import { CreateProductModalComponent } from './components/admin/product/create-product/modals/create-modal/create-modal.component';
-import { DetailProductComponent } from './components/admin/product/detail/detail-product/detail-product.component';
 import { HomeComponent } from './components/home/home.component';
 import { UserprofileComponent } from './components/home/user/userprofile/userprofile.component';
 import { FriendComponent } from './components/home/friends/friend/friend.component';
@@ -28,32 +24,57 @@ import { DashboardComponent } from './components/admin/dashboard/dashboard.compo
 import { PaymentListComponent } from './components/admin/payment/payment-list/payment-list.component';
 import { PaymentEditComponent } from './components/admin/payment/payment-edit/payment-edit.component';
 import { UserOrderComponent } from './components/home/user-order/user-order.component';
+import { OrdersComponent } from './components/admin/orders/orders.component';
+import { OrderListComponent } from './components/admin/orders/order-list/order-list.component';
+import { OrderDetailComponent } from './components/admin/orders/order-detail/order-detail.component';
+import { OwnerDashboardComponent } from './components/owner/owner-dashboard/owner-dashboard.component';
+import { ShopComponent } from './components/owner/shop/shop.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { ProductComponent } from './components/owner/product/product.component';
+import { CouponComponent } from './components/owner/product/coupon/coupon.component';
+import { ExcelImportComponent } from './components/owner/product/excel-import/excel-import.component';
+import { DetailProductComponent } from './components/owner/product/detail/detail-product/detail-product.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
-  {path:'d', component:DashboardComponent,
+  {path:'d', component:DashboardComponent, title:'Dashboard',
     children:[
       {path:'carousel', component:HomeCarouselComponent},
       {path:'business', component:BusinessComponent, title:'Business'},
+      {path:'orders', component:OrdersComponent, title:'Orders'},
+      {path:'order' , component:OrderListComponent},
+      {path:'order/:id', component:OrderDetailComponent},
       {path:'payments',component:PaymentComponent, title:'Payments',children:[
         {path:'', component:PaymentListComponent},
         {path:'create', component:PaymentCreateComponent},
         {path:'edit', component:PaymentEditComponent}
       ]},
       {path:'customers', component:CustomersComponent, title:'Customers'},
-      {path:'b/detail/:id', component:BusinessDetailComponent,
-        children: [
-        {path: '',component: ProductComponent},
-        {path:'coupon',component:CouponComponent}
-      ]},
+      // {path:'b/detail/:id', component:BusinessDetailComponent,
+      //   children: [
+      //   {path: '',component: ProductComponent},
+      //   {path:'coupon',component:CouponComponent}
+      // ]},
       // {path:'order', component:UserOrderComponent, title:'order'},
       {path:'b/edit/:id', component:BusinessEditComponent, title:'Edit'},
-      {path:'b/c', component:CouponComponent, title:''},
-      {path:'product',component:ProductComponent},
-      {path:'p/create-product',component:CreateProductModalComponent},
-      {path:'p/detail-product/:id',component:DetailProductComponent},
+      // {path:'b/c', component:CouponComponent, title:''},
+      // {path:'product',component:ProductComponent},
+      // {path:'p/create-product',component:CreateProductModalComponent},
+      // {path:'p/detail-product/:id',component:DetailProductComponent},
       {path:'category', component:CategoryComponent, title:'Business Category'},
       {path:'payment', component:PaymentComponent, title:'Payment'},
+      {path: 'excel-import', component: ExcelImportComponent },
+
+    ]
+  },
+  {path:'o', component:OwnerDashboardComponent,
+    children:[
+      {path:'shop/:id', component:ShopComponent, title:'Shop' ,children:[
+        {path:'', component:ProductComponent},
+        {path:'coupon',component:CouponComponent}
+      ]
+    },
+    {path:'p/detail-product/:id',component:DetailProductComponent},
 
     ]
   },
@@ -73,7 +94,8 @@ const routes: Routes = [
     ]
   },
   {path:'login', component:LoginComponent, title:'Login'},
-  {path:'signup', component:SignupComponent, title:'Signup'}
+  {path:'signup', component:SignupComponent, title:'Signup'},
+  {path: '**', component: NotFoundComponent,title:'404' }
 ];
 
 @NgModule({

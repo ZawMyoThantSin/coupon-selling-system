@@ -33,6 +33,12 @@ export class BusinessService {
     })
   }
 
+  getByUserId(id: number):Observable<any>{
+    return this.http.get(this.BASE_URL +'api/businesses/user/'+id,{
+      responseType:'json'
+    })
+  }
+
   getById(id:number):Observable<any>{
     return this.http.get(`${this.BASE_URL}api/businesses/${id}`,{
       headers:this.createAuthHeader(),

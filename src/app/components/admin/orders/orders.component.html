@@ -1,0 +1,120 @@
+<div class="container">
+  <!-- Filters -->
+  <div class="card p-4 mb-4">
+    <div class="d-flex gap-3 align-items-center">
+      <div class="flex-grow-1">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Search orders..."
+          class="form-control"
+        />
+      </div>
+      <select [(ngModel)]="statusFilter" class="form-select">
+        <option value="all">All Status</option>
+        <option value="pending">Pending</option>
+        <option value="accepted">Accepted</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <!-- No Orders Found -->
+  <div *ngIf="!loading && filteredOrders.length === 0" class="text-center py-4 text-muted">
+    No orders found
+  </div>
+
+  <!-- Orders List                               !error in here       -->
+  <div *ngFor="let order of filteredOrders; trackBy: trackByOrderId" class="card mb-4">
+    <!-- Order Header -->
+    <div class="card-header d-flex justify-content-between align-items-start">
+      <div>
+        <h5 class="mb-1">
+          Order #{{ order.id }}
+          <span [ngClass]="getStatusBadgeClass(order.status)">
+            {{ order.status }}
+          </span>
+        </h5>
+        <div class="small text-muted">
+          <p class="mb-1">{{ order.customerName }}</p>
+          <p class="mb-1">{{ order.email }}</p>
+          <p class="mb-1">{{ order.phone }}</p>
+        </div>
+        <p class="text-muted small mb-0">
+          Ordered on {{ order.createdAt | date: 'medium' }}
+        </p>
+      </div>
+      <div class="text-end">
+        <p class="fw-bold mb-1">${{ order.total.toFixed(2) }}</p>
+        <p class="text-muted small mb-0">{{ order.items.length }} items</p>
+      </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="card-body border-bottom">
+      <h6 class="mb-3">Order Items</h6>
+      <ul class="list-unstyled">
+        <li
+          *ngFor="let item of order.items; trackBy: trackByItemId"
+          class="d-flex align-items-center mb-3"
+        >
+          <img
+            *ngIf="item.image"
+            [src]="item.image"
+            [alt]="item.name"
+            class="rounded me-3"
+            style="width: 64px; height: 64px; object-fit: cover;"
+          />
+          <div class="flex-grow-1">
+            <h6 class="mb-1">{{ item.name }}</h6>
+            <p *ngIf="item.description" class="text-muted small mb-1">{{ item.description }}</p>
+            <p class="small mb-0">
+              Quantity: {{ item.quantity }} × ${{ item.price.toFixed(2) }}
+            </p>
+          </div>
+          <div class="text-end">
+            <p class="fw-bold mb-0">${{ (item.quantity * item.price).toFixed(2) }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Payment Proof -->
+    <div class="card-body border-bottom">
+      <h6 class="mb-3">Payment Proof</h6>
+      <img
+        [src]="order.paymentProof.url"
+        alt="Payment Proof"
+        class="img-fluid rounded shadow-sm cursor-pointer"
+        (click)="openImageInNewTab(order.paymentProof.url)"
+        style="max-width: 100%;"
+      />
+      <p class="small text-muted mt-2 mb-0">
+        Uploaded on {{ order.paymentProof.uploadedAt | date: 'medium' }}
+      </p>
+    </div>
+
+    <!-- Actions -->
+    <div *ngIf="order.status === 'pending'" class="card-footer bg-light">
+      <div class="d-flex gap-3">
+        <button
+          (click)="updateStatus(order.id, 'accepted')"
+          class="btn btn-success"
+        >
+          Accept Order
+        </button>
+        <button
+          (click)="updateStatus(order.id, 'rejected')"
+          class="btn btn-danger"
+        >
+          Reject Order
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
