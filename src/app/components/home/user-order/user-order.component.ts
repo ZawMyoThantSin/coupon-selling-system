@@ -4,6 +4,7 @@ import { UserOrderService } from '../../../services/user-order/user-order.servic
 import { UserPayment } from '../../../models/userpayment';
 import { CommonModule } from '@angular/common';
 import { PaymentService } from '../../../services/payment/payment.service';
+import { CartData } from '../../../models/cartData';
 
 @Component({
   selector: 'app-user-order',
@@ -40,6 +41,7 @@ export class UserOrderComponent {
       const state = history.state;
     if (state && state.cartData) {
       this.cartData = state.cartData;
+      this.cartData.map(d => console.log("Id",d.couponId))
       this.total = state.total;
     }
   // console.log("Retrieved Cart Data: ", this.cartData);
