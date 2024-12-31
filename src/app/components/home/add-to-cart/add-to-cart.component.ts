@@ -49,6 +49,7 @@ export class AddToCartComponent {
         (res: CartData[]) => {
           this.cartData = res;
           console.log("cart",this.cartData)
+          
           this.totalPrice = this.calculateSubtotal(); // Calculate initial total
         },
         (error) => console.error("Error fetching cart data: ", error)
