@@ -1,0 +1,66 @@
+<div class="container my-4">
+  <!-- Search and Filter Section -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <!-- Search Box -->
+    <input
+      type="text"
+      class="form-control w-50"
+      placeholder="Search by Order ID or Customer Name"
+      [(ngModel)]="searchTerm"
+      (input)="filterOrders()"
+    />
+
+    <!-- Status Filter -->
+    <select
+      class="form-select w-25"
+      [(ngModel)]="statusFilter"
+      (change)="filterOrders()"
+    >
+      <option value="">All</option>
+      <option value="pending">Pending</option>
+      <option value="accepted">Accepted</option>
+      <option value="rejected">Rejected</option>
+    </select>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer Name</th>
+          <th>Phone</th>
+          <th>Total Amount</th>
+          <th>Status</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders">
+          <td>{{ order.id }}</td>
+          <td>
+            <strong>{{ order.customerName }}</strong><br>
+            <span>{{ order.email }}</span>
+          </td>
+          <td>{{ order.phone }}</td>
+          <td>{{ order.total | currency }}</td>
+          <td>
+            <span [ngClass]="{
+              'text-success': order.status === 'accepted',
+              'text-warning': order.status === 'pending',
+              'text-danger': order.status === 'rejected'
+            }">
+              {{ order.status  }}
+            </span>
+          </td>
+          <td>{{ order.createdAt | date: 'short' }}</td>
+          <td>
+            <button class="btn btn-info" (click)="viewOrderDetails(order.id)">View</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

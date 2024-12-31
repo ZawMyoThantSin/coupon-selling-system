@@ -1,0 +1,61 @@
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  background: linear-gradient(135deg, #f3f4f6, #e2e8f0);
+  color: #333;
+  font-family: 'Arial', sans-serif;
+}
+
+.not-found-title {
+  font-size: 8rem;
+  font-weight: bold;
+  margin: 0;
+  color: #ff6b6b;
+}
+
+.not-found-message {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+  color: #4a5568;
+}
+
+.not-found-link {
+  text-decoration: none;
+  color: white;
+  background-color: #3182ce;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.not-found-link:hover {
+  background-color: #2c5282;
+}
+
+.not-found-image {
+  max-width: 400px;
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}
+
+
+@media (max-width: 768px) {
+  .not-found-title {
+    font-size: 5rem;
+  }
+
+  .not-found-message {
+    font-size: 1.2rem;
+  }
+
+  .not-found-link {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+}

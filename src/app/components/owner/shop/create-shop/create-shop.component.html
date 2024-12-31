@@ -1,0 +1,164 @@
+<div class="modal-header px-5">
+  <h5 class="modal-title" id="createShopModalLabel">Create Shop</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+</div>
+
+<div class="modal-body px-4">
+  <div class="d-flex">
+    <!-- Image Preview Section -->
+    <div class="image-preview-container">
+      <div
+        class="image-preview"
+        *ngIf="selectedFile"
+        [style.backgroundImage]="'url(' + previewUrl + ')'"
+      ></div>
+      <div class="image-placeholder" *ngIf="!selectedFile">
+        <p>No image selected</p>
+      </div>
+    </div>
+
+    <!-- Form Section -->
+    <form
+      #dataForm="ngForm"
+      class="form-container flex-fill d-flex flex-column px-4"
+
+    >
+         <!-- Name -->
+         <div class="form-floating mb-3">
+          <input
+            mdbInput
+            type="text"
+            id="name"
+            name="name"
+            class="form-control"
+            placeholder="Shop Name"
+            [(ngModel)]="formData.name"
+            #name="ngModel"
+            required
+          />
+          <label for="name">Shop Name</label>
+          <div *ngIf="name.invalid && name.touched" class="text-danger">
+            Shop name is required.
+          </div>
+        </div>
+
+
+
+      <!-- Location -->
+      <div class="form-floating mb-3">
+        <input
+          mdbInput
+          type="text"
+          id="location"
+          name="location"
+          class="form-control"
+          placeholder="Location"
+          [(ngModel)]="formData.location"
+          #location="ngModel"
+          required
+        />
+        <label for="location">Location</label>
+        <div *ngIf="location.invalid && location.touched" class="text-danger">
+          Location is required.
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-floating mb-3">
+        <textarea
+          mdbInput
+          id="description"
+          name="description"
+          class="form-control"
+          rows="3"
+          placeholder="Enter description"
+          [(ngModel)]="formData.description"
+          #description="ngModel"
+          required
+        ></textarea>
+        <label for="description">Description</label>
+        <div
+          *ngIf="description.invalid && description.touched"
+          class="text-danger"
+        >
+          Description is required.
+        </div>
+      </div>
+
+
+      <!-- Contact Number -->
+      <div class="form-floating mb-3">
+        <input
+          mdbInput
+          type="text"
+          id="contactNumber"
+          name="contactNumber"
+          class="form-control"
+          placeholder="Contact Number"
+          [(ngModel)]="formData.contactNumber"
+          #contactNumber="ngModel"
+          pattern="^[0-9]+$"
+          maxlength="15"
+          required
+        />
+        <label for="contactNumber">Contact Number</label>
+        <div *ngIf="contactNumber.invalid && contactNumber.touched" class="text-danger">
+          Contact number is required and must be numeric.
+        </div>
+      </div>
+
+       <!-- Category -->
+       <div class="form-floating mb-3">
+        <select
+          class="form-select"
+          id="category"
+          name="category"
+          [(ngModel)]="formData.category"
+          #category="ngModel"
+          required
+        >
+          <option value="" disabled>Select category</option>
+          <option
+            *ngFor="let category of categories"
+            [value]="category.id"
+          >
+            {{ category.name }}
+          </option>
+        </select>
+        <label for="category">Category</label>
+        <div *ngIf="category.invalid && category.touched" class="text-danger">
+          Please select a category.
+        </div>
+      </div>
+      <!-- Image Upload -->
+      <div class="form-floating mb-3">
+        <input
+          mdbInput
+          type="file"
+          id="image"
+          name="image"
+          class="form-control"
+          placeholder="Upload Image"
+          (change)="onFileChange($event)"
+        />
+        <label for="image">Upload Image</label>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="modal-footer px-5">
+  <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+  <button
+    type="button"
+    class="btn btn-primary"
+    [disabled]="!dataForm.valid"
+    (click)="submitForm()"
+  >
+    Save
+  </button>
+</div>
