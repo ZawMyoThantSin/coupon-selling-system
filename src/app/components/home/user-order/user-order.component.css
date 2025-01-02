@@ -7,9 +7,22 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  position: relative;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 .payment-container {
-  width: 600px;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.payment-container {
+  width: 700px;
   background-color: white;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
@@ -17,6 +30,7 @@ body {
   display: flex;
   gap: 20px;
 }
+
 .owner-info {
   flex: 1;
   text-align: center;
@@ -25,30 +39,36 @@ body {
   padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 .owner-info img {
-  width: 180px; /* Increased size */
-  height: 180px; /* Increased size */
+  width: 180px;
+  height: 180px;
   border-radius: 10px;
   border: 1px solid #ccc;
   object-fit: cover;
   margin-bottom: 10px;
 }
+
 .owner-info p {
   margin: 5px 0;
   font-size: 0.9em;
   font-weight: bold;
 }
+
 .form-section {
   flex: 2;
 }
+
 .form-group {
   margin-bottom: 15px;
 }
+
 .form-group label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
 }
+
 .form-group select,
 .form-group input,
 .form-group textarea {
@@ -58,27 +78,37 @@ body {
   border: 1px solid #ccc;
   border-radius: 5px;
 }
+
+textarea {
+  resize: none;
+  height: 80px;
+}
+
 .scroll-div {
   max-height: 100px;
   overflow-y: auto;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  padding: 8px;
   background-color: #f9f9f9;
+  border-radius: 5px;
 }
+
 .scroll-div ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
+
 .scroll-div ul li {
   margin: 5px 0;
 }
+
 .buttons {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
 }
+
 .btn {
   padding: 10px 20px;
   font-size: 1em;
@@ -86,19 +116,53 @@ body {
   border-radius: 5px;
   cursor: pointer;
 }
+
 .btn-cancel {
   background-color: #f44336;
   color: white;
 }
+
 .btn-ok {
   background-color: #4caf50;
   color: white;
 }
-.scroll-div {
-  max-height: 150px; /* Set max height for scrolling */
-  overflow-y: auto;  /* Enable vertical scrolling */
-  border: 1px solid #ddd;
-  padding: 8px;
-  background-color: #f9f9f9;
-  border-radius: 5px;
+.preview-image {
+  max-width: 200px; /* Set the maximum width */
+  max-height: 200px; /* Set the maximum height */
+  object-fit: contain; /* Preserve aspect ratio */
+  border: 1px solid #ccc; /* Optional: Add a border */
+  margin-top: 10px; /* Optional: Add spacing */
 }
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  max-width: 80%;
+}
+
+.modal-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+.close {
+  display: none;
+}
+

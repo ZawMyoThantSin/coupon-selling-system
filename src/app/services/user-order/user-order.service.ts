@@ -18,4 +18,12 @@ export class UserOrderService {
         responseType: 'json'
       });
   }
+
+  submitOrder(orderData: FormData): Observable<any> {
+    return this.http.post<any>(this.BASE_URL + 'api/orders', orderData, {
+      reportProgress: true,
+      observe: 'events'
+    });
+}
+
 }
