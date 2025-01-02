@@ -8,6 +8,8 @@ import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { StorageService } from '../../../services/storage.service';
 import { JwtService } from '../../../services/jwt.service';
+import { CartService } from '../../../services/cart/cart.service';
+import { ProductService } from '../../../services/product/product.service';
 
 @Component({
   selector: 'app-user-order',
@@ -19,7 +21,7 @@ import { JwtService } from '../../../services/jwt.service';
 export class UserOrderComponent {
   paymentMethods: UserPayment[] = [];
   selectedMethod: UserPayment | undefined;
-
+  cartIds!: any[]
   //add-to-cart
   action = '';
   cartData: any[] = [];
@@ -30,8 +32,8 @@ export class UserOrderComponent {
   couponId: number | null = null;
 
   selectedCoupons : any;
-
-
+  selectedProduct: any = null;
+  previewUrl: string | null = null;
 
   //Buy
 
@@ -43,6 +45,8 @@ export class UserOrderComponent {
   token:any;
   constructor(private userOrderService: UserOrderService,
     private paymentService: PaymentService,
+    private productService: ProductService,
+    private cartService: CartService,
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private location: Location,
@@ -64,7 +68,7 @@ export class UserOrderComponent {
 
     if (this.action === 'add-to-cart' && state.cartData) {
       this.cartData = state.cartData;
-      this.cartData.map(d => console.log("Id",d.couponId))
+      this.cartIds = this.cartData.map(d => d.cartId)
       this.total = state.total;
       this.selectedCoupons = state.coupons || [];
     } else if (this.action === 'buy-now' && state.couponId) {
@@ -137,8 +141,13 @@ export class UserOrderComponent {
 
     this.userOrderService.submitOrder(formData).subscribe(
       (response) => {
-        console.log('Server Response:', response);
+        // console.log('Server Response:', response);
         this.toastr.success('Order submitted successfully!', 'Success');
+        this.cartIds.map( c => {
+          this.cartService.clearCart(c).subscribe(res => {
+            // console.log("REs", res)
+          });
+        })
         // Optionally reset the form or UI state here
       },
       (error) => {
@@ -158,7 +167,16 @@ export class UserOrderComponent {
   }
 
   onFileChange(event: any): void {
-    this.screenshot = event.target.files[0];
+    const file = event.target.files[0];
+    this.screenshot = file;
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewUrl = e.target.result; // Set the preview URL
+      };
+      reader.readAsDataURL(file); // Read the file as a Data URL
+    }
   }
 
   validatePhoneNumber(): boolean {
@@ -181,6 +199,22 @@ export class UserOrderComponent {
     this.total = 0;
     console.log('Order canceled and form reset.');
     this.location.back();
+  }
+  showProductDetails(product: any): void {
+    this.selectedProduct = product; // Assign the selected product
+  }
+
+  closeModal(event: Event): void {
+    if ((<HTMLElement>event.target).classList.contains('modal')) {
+      this.selectedProduct = null; // Close the modal if clicked outside the content
+    }
+  }
+  getProductImageUrl(imagePath: any): string {
+    if (!imagePath) {
+      console.warn('Image path is undefined');
+      return 'https://via.placeholder.com/150'; // Fallback placeholder
+    }
+    return this.productService.getImageUrl(imagePath);
   }
 
 }

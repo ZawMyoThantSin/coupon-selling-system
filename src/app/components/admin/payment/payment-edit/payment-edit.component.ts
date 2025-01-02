@@ -80,6 +80,7 @@ export class PaymentEditComponent implements OnInit{
           this.router.navigate(['d/payments']);
         },
         (error) => {
+          this.toastr.success('Fail to update the Payment!', 'Failed!');
           console.error('Error submitting payment data:', error);
         }
       );

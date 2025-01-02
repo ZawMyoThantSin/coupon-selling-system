@@ -1,6 +1,6 @@
-<div class="container">
+<!-- <div class="container"> -->
   <!-- Filters -->
-  <div class="card p-4 mb-4">
+  <!-- <div class="card p-4 mb-4">
     <div class="d-flex gap-3 align-items-center">
       <div class="flex-grow-1">
         <input
@@ -17,22 +17,22 @@
         <option value="rejected">Rejected</option>
       </select>
     </div>
-  </div>
+  </div> -->
 
   <!-- Loading State -->
-  <div *ngIf="loading" class="text-center py-4">
+  <!-- <div *ngIf="loading" class="text-center py-4">
     <div class="spinner-border text-primary" role="status"></div>
-  </div>
+  </div> -->
 
   <!-- No Orders Found -->
-  <div *ngIf="!loading && filteredOrders.length === 0" class="text-center py-4 text-muted">
+  <!-- <div *ngIf="!loading && filteredOrders.length === 0" class="text-center py-4 text-muted">
     No orders found
-  </div>
+  </div> -->
 
   <!-- Orders List                               !error in here       -->
-  <div *ngFor="let order of filteredOrders; trackBy: trackByOrderId" class="card mb-4">
+  <!-- <div *ngFor="let order of filteredOrders; trackBy: trackByOrderId" class="card mb-4"> -->
     <!-- Order Header -->
-    <div class="card-header d-flex justify-content-between align-items-start">
+    <!-- <div class="card-header d-flex justify-content-between align-items-start">
       <div>
         <h5 class="mb-1">
           Order #{{ order.id }}
@@ -53,10 +53,10 @@
         <p class="fw-bold mb-1">${{ order.total.toFixed(2) }}</p>
         <p class="text-muted small mb-0">{{ order.items.length }} items</p>
       </div>
-    </div>
+    </div> -->
 
     <!-- Order Items -->
-    <div class="card-body border-bottom">
+    <!-- <div class="card-body border-bottom">
       <h6 class="mb-3">Order Items</h6>
       <ul class="list-unstyled">
         <li
@@ -82,10 +82,10 @@
           </div>
         </li>
       </ul>
-    </div>
+    </div> -->
 
     <!-- Payment Proof -->
-    <div class="card-body border-bottom">
+    <!-- <div class="card-body border-bottom">
       <h6 class="mb-3">Payment Proof</h6>
       <img
         [src]="order.paymentProof.url"
@@ -97,10 +97,10 @@
       <p class="small text-muted mt-2 mb-0">
         Uploaded on {{ order.paymentProof.uploadedAt | date: 'medium' }}
       </p>
-    </div>
+    </div> -->
 
     <!-- Actions -->
-    <div *ngIf="order.status === 'pending'" class="card-footer bg-light">
+    <!-- <div *ngIf="order.status === 'pending'" class="card-footer bg-light">
       <div class="d-flex gap-3">
         <button
           (click)="updateStatus(order.id, 'accepted')"
@@ -117,4 +117,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
