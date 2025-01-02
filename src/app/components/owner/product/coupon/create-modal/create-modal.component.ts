@@ -47,10 +47,6 @@ import { FormsModule } from '@angular/forms';
         />
       </div>
 
-
-
-
-
     <!-- Expired Date and Quantity in same row -->
     <div class="row">
       <div class="col-6 mb-2">

@@ -1,0 +1,20 @@
+.status-pending {
+  color: #ffc107; /* Warning color */
+}
+
+.status-accepted {
+  color: #28a745; /* Success color */
+}
+
+.status-rejected {
+  color: #dc3545; /* Danger color */
+}
+
+.card img {
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.card img:hover {
+  opacity: 0.8;
+}

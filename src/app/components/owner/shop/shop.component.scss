@@ -1,0 +1,236 @@
+// /* .card {
+//   border-radius: 15px;
+//   overflow: hidden;
+// }
+
+// .card-header {
+//   font-size: 1.5rem;
+//   font-weight: bold;
+// }
+
+// .card-body {
+//   padding: 2rem;
+// }
+
+// .list-group-item {
+//   font-size: 1rem;
+//   margin-bottom: 0.5rem;
+// }
+
+// .btn-rounded {
+//   border-radius: 25px;
+// } */
+
+
+
+// .vh-100 {
+//   height: 100vh;
+// }
+
+// .card {
+//   border-radius: 15px;
+//   max-width: 900px; /* Restrict maximum width for readability */
+//   overflow: hidden;
+// }
+
+// .card-header {
+//   font-size: 1.5rem;
+//   font-weight: bold;
+// }
+
+// .card-body {
+//   padding: 2rem;
+// }
+
+// .list-group-item {
+//   font-size: 1rem;
+//   margin-bottom: 0.5rem;
+// }
+
+// .btn-rounded {
+//   border-radius: 25px;
+// }
+
+
+.active {
+  font-weight: bold;
+  color: blue;
+}
+
+/* From Uiverse.io by Yaya12085 */
+.radio-inputs {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 0.5rem;
+  background-color: #101010;
+  box-sizing: border-box;
+  box-shadow: 0 0 0px 1px rgba(0, 0, 0, 0.06);
+  padding: 0.25rem;
+  width: 300px;
+  font-size: 14px;
+}
+
+.radio-inputs .radio {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.radio-inputs .radio input {
+  display: none;
+}
+
+.radio-inputs .radio .name {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.5rem;
+  border: none;
+  padding: 0.5rem 0;
+  color: black; /* Default color for unselected buttons */
+  background-color: transparent; /* Default background */
+  transition: all 0.15s ease-in-out;
+}
+
+.radio-inputs .radio input:checked + .name {
+  background-color: #538af7; /* Background for selected button */
+  color: white; /* Text color for selected button */
+  font-weight: 600; /* Optional: make the selected button text bold */
+}
+
+.business-detail-page {
+  .business-header {
+    position: relative;
+
+    img {
+      max-height: 250px;
+      object-fit: cover;
+    }
+
+    .business-info-overlay {
+      top: 10%;
+      left: 10%;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 10px;
+    }
+  }
+
+  .business-description,
+  .business-stream,
+  .business-info {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .rating {
+    display: flex;
+    align-items: center;
+
+    i {
+      color: gold; // Bright gold color for stars
+      font-size: 1.5rem; // Optional: Adjust size
+      margin-right: 5px;
+    }
+
+    .fa-star-o {
+      color: lightgray; // Unfilled stars in light gray
+    }
+
+    span {
+      color: #333; // Text color for the rating number
+      font-weight: bold;
+    }
+  }
+
+  .actions {
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #6c757d;
+
+  .fa-spinner {
+    margin-right: 0.5rem;
+  }
+}
+
+.no-data {
+  color: #6c757d;
+  font-size: 0.9rem;
+  padding: 0.5rem 0;
+}
+
+
+/*  If not created Shop  */
+.shop-setup-placeholder {
+  text-align: center;
+  padding: 30px;
+  border-radius: 12px;
+  background: linear-gradient(to right, #fff9e6, #ffffff); /* Soft yellow gradient */
+  margin: 40px auto;
+  max-width: 700px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.shop-setup-placeholder:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.shop-setup-placeholder h2 {
+  color: #f1c40f; /* Soft yellow color for heading */
+  font-family: 'Roboto', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+
+.shop-setup-placeholder p {
+  color: #555;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 25px;
+  max-width: 500px;
+  margin: 0 auto 25px;
+}
+
+.action-buttons {
+  margin-top: 25px;
+}
+
+.action-buttons button {
+  padding: 12px 30px;
+  font-size: 16px;
+  background-color: #f1c40f; /* Soft yellow for button */
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.action-buttons button:hover {
+  background-color: #e0b80c; /* Slightly darker soft yellow */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+.action-buttons button:active {
+  background-color: #d39e09; /* Darker soft yellow when active */
+  transform: translateY(1px);
+}
+
