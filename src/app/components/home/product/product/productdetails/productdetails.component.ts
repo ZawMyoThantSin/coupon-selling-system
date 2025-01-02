@@ -102,6 +102,7 @@ this.couponService.getAllUserCoupons().subscribe(
     }
 
     Buy(productName: string, quantity: number, totalPrice: number,price:number): void {
+      const couponId = this.couponIds[this.product.id] || null;
       const cartData = [
         {
           productName: productName,
@@ -114,7 +115,7 @@ this.couponService.getAllUserCoupons().subscribe(
       // console.log("Cart Data being passed: ", cartData);
 
       this.router.navigate(['/homepage/order'], {
-        state: { cartData: cartData, total: totalPrice },
+        state: { action: 'buy-now', cartData: cartData, total: totalPrice, couponId: couponId },
       });
     }
   

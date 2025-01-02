@@ -47,10 +47,6 @@ import { FormsModule } from '@angular/forms';
         />
       </div>
 
-
-
-
-
     <!-- Expired Date and Quantity in same row -->
     <div class="row">
       <div class="col-6 mb-2">
@@ -62,6 +58,7 @@ import { FormsModule } from '@angular/forms';
           class="form-control form-control-sm"
           placeholder="Enter expired date"
           [(ngModel)]="formData.expiredDate"
+          [min]="minExpiredDate"
           required
         />
       </div>
@@ -116,6 +113,8 @@ import { FormsModule } from '@angular/forms';
 export class CreateModalComponent {
   @Input() productId:any;
   discountprice:any;
+  minExpiredDate: string = '';
+
   generateCouponCode(): string {
    return 'COUPON-' + Math.random().toString(36).substr(2, 8).toUpperCase();
  }
@@ -132,6 +131,11 @@ export class CreateModalComponent {
  };
 
  ngOnInit(): void {
+ // Calculate "today + 7 days"
+    const today = new Date();
+    const futureDate = new Date(today);
+    futureDate.setDate(today.getDate() + 7); // Add 7 days to the current date
+    this.minExpiredDate = futureDate.toISOString().split('T')[0]; // Format as YYYY-MM-DD
 
 
    this.couponService.getCaculate(this.productId).subscribe(

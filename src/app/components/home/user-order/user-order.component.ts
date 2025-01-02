@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FormsModule } from '@angular/forms';
 import { StorageService } from '../../../services/storage.service';
 import { JwtService } from '../../../services/jwt.service';
+import { CartService } from '../../../services/cart/cart.service';
 import { ProductService } from '../../../services/product/product.service';
 
 @Component({
@@ -20,18 +21,21 @@ import { ProductService } from '../../../services/product/product.service';
 export class UserOrderComponent {
   paymentMethods: UserPayment[] = [];
   selectedMethod: UserPayment | undefined;
+  cartIds!: any[]
   //add-to-cart
   action = '';
   cartData: any[] = [];
   total = 0;
   userMessage = '';
   phoneNumber = '';
-
   screenshot: File | null = null;
-  previewUrl: string | null = null; // New property for image preview
   couponId: number | null = null;
 
   selectedCoupons : any;
+  selectedProduct: any = null;
+  previewUrl: string | null = null;
+
+ 
 //Buy
 
   productName = '';
@@ -41,7 +45,8 @@ export class UserOrderComponent {
   token:any;
   constructor(private userOrderService: UserOrderService,
     private paymentService: PaymentService,
-    private productService:ProductService,
+    private productService: ProductService,
+    private cartService: CartService,
     private route: ActivatedRoute,
     private toastr: ToastrService,
     private location: Location,
@@ -54,33 +59,24 @@ export class UserOrderComponent {
     // Fetch payment methods from the service
     this.userOrderService.getPaymentMethods().subscribe((methods: UserPayment[]) => {
       this.paymentMethods = methods;
-      this.selectedMethod = this.paymentMethods[0]; // Default selection
+      this.selectedMethod = this.paymentMethods[0];
 
     });
       const state = history.state;
-    if (state && state.cartData) {
-      this.cartData = state.cartData;
-      this.total = state.total;
-      this.couponId = state.couponId || null;
-    }
     if (state && state.action) {
-      this.action = state.action; // "buy-now" or "add-to-cart"
+      this.action = state.action;
     }
-  
+
     if (this.action === 'add-to-cart' && state.cartData) {
       this.cartData = state.cartData;
+      this.cartIds = this.cartData.map(d => d.cartId)
       this.total = state.total;
       this.selectedCoupons = state.coupons || [];
     } else if (this.action === 'buy-now' && state.couponId) {
-      this.cartData = [
-        {
-          name: state.cartData[0].productName,
-          quantity: state.cartData[0].quantity,
-          price: state.cartData[0].price
-        }
-      ];
+      this.cartData = state.cartData;
       this.total = state.total;
       this.couponId = state.couponId;
+      console.log('Buy Now Cart Data:', this.cartData);
     }
 
     this.token = this.storageService.getItem('token');
@@ -88,7 +84,80 @@ export class UserOrderComponent {
 
   }
 
-  // This method will update the selected payment method and its details
+
+
+  submitOrder(): void {
+    if (!this.userId) {
+      this.toastr.error('User ID is missing. Please log in again.', 'Error!');
+      return;
+    }
+
+    if (!this.selectedMethod?.id) {
+      this.toastr.error('Please select a payment method.', 'Error!');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('user_id', this.userId.toString());
+    formData.append('payment_id', String(this.selectedMethod?.id));
+    formData.append('phoneNumber', this.phoneNumber);
+    formData.append('totalPrice', this.total.toString());
+    formData.append('screenshot', this.screenshot || '');
+
+    // Handle both actions ("add-to-cart" and "buy-now") consistently
+    if (this.action === 'add-to-cart' || this.action === 'buy-now') {
+      // Prepare `cartData` for "buy-now" if not already populated
+      if (this.action === 'buy-now' && this.couponId) {
+        this.cartData =this.cartData.map(item => ({
+          couponId: this.couponId,
+          quantity: item.quantity, // Use the correct quantity from cartData
+        }));
+      }
+
+      console.log("Cart Data (before processing):", this.cartData);
+
+      // Extract quantities and coupon IDs from cartData
+      const quantities = this.cartData.map((item: { quantity: number }) => item.quantity);
+
+      const couponIds = this.cartData
+        .map((item: { couponId: number | null }) => item.couponId)
+        .filter((id: number | null) => id !== null) as number[];
+
+      console.log("Quantities to be sent:", quantities);
+      console.log("Coupon IDs to be sent:", couponIds);
+
+      // Append coupon IDs and quantities to the form data
+      if (couponIds.length > 0) {
+        formData.append('coupon_ids', JSON.stringify(couponIds));
+      } else {
+        formData.append('coupon_ids', JSON.stringify([]));
+      }
+
+      if (quantities.length > 0) {
+        formData.append('quantities', JSON.stringify(quantities));
+      } else {
+        formData.append('quantities', JSON.stringify([]));
+      }
+    }
+
+    this.userOrderService.submitOrder(formData).subscribe(
+      (response) => {
+        // console.log('Server Response:', response);
+        this.toastr.success('Order submitted successfully!', 'Success');
+        this.cartIds.map( c => {
+          this.cartService.clearCart(c).subscribe(res => {
+            // console.log("REs", res)
+          });
+        })
+        // Optionally reset the form or UI state here
+      },
+      (error) => {
+        console.error('Error submitting order:', error);
+        this.toastr.error('Failed to submit order. Please try again.', 'Error!');
+      }
+    );
+  }
+
   onPaymentMethodChange(event: any): void {
     const methodValue = event.target.value;
     this.selectedMethod = this.paymentMethods.find(method => method.paymentType === methodValue) || this.paymentMethods[0];
@@ -121,79 +190,21 @@ export class UserOrderComponent {
     );
   }
 
-submitOrder(): void {
 
-  if (!this.userId) {
-    this.toastr.error('User ID is missing. Please log in again.', 'Error!');
-    return;
-  }
-
-  if (!this.selectedMethod?.id) {
-    this.toastr.error('Please select a payment method.', 'Error!');
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('user_id', this.userId.toString());
-  formData.append('payment_id', String(this.selectedMethod?.id));
-  formData.append('phoneNumber', this.phoneNumber);
-  formData.append('totalPrice', this.total.toString());
-  formData.append('quantity', this.quantity.toString());
-  formData.append('screenshot', this.screenshot || '');
-
-
-  if (this.action === 'add-to-cart') {
-    console.log("Selected Coupons (before submit):", this.selectedCoupons);
-    if (this.selectedCoupons && this.selectedCoupons.length > 0) {
-      // Send an array of coupon IDs in JSON format
-      const couponIdsJson = JSON.stringify(this.selectedCoupons.map((coupon: { id: number }) => coupon.id));
-      console.log("Coupon IDs to be sent:", couponIdsJson);
-      formData.append('coupon_ids', couponIdsJson);
-    } else {
-      // If no coupons are selected, append an empty array
-      formData.append('coupon_ids', JSON.stringify([]));
-    }
-  } else if (this.action === 'buy-now') {
-    if (this.couponId) {
-      console.log("Coupon ID to be sent:", this.couponId);
-      formData.append('coupon_ids', JSON.stringify([this.couponId]));
-    } else {
-      // If no coupon ID is provided, send an empty array or handle as needed
-      formData.append('coupon_ids', JSON.stringify([]));
-    }
-  }
-
-  
-
-  this.userOrderService.submitOrder(formData).subscribe(
-    (response) => {
-      console.log('Server Response:', response);
-      this.toastr.success('Order submitted successfully!', 'Success');
-      // this.resetOrder();
-    },
-    (error) => {
-      console.error('Error submitting order:', error);
-      this.toastr.error('Failed to submit order. Please try again.', 'Error!');
-    }
-  );
- }
-cancelOrder(): void {
+  cancelOrder(): void {
     this.phoneNumber = '';
     this.userMessage = '';
     this.screenshot = null;
-    this.previewUrl = null; // Reset the preview URL
     this.selectedMethod = this.paymentMethods[0];
-    this.cartData = []; 
+    this.cartData = [];
     this.total = 0;
     console.log('Order canceled and form reset.');
     this.location.back();
   }
-  selectedProduct: any = null; // Holds the currently selected product
-
   showProductDetails(product: any): void {
     this.selectedProduct = product; // Assign the selected product
   }
-  
+
   closeModal(event: Event): void {
     if ((<HTMLElement>event.target).classList.contains('modal')) {
       this.selectedProduct = null; // Close the modal if clicked outside the content
@@ -206,6 +217,4 @@ cancelOrder(): void {
     }
     return this.productService.getImageUrl(imagePath);
   }
-  
- 
 }

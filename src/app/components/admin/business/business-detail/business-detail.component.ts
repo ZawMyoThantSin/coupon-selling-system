@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink, RouterLinkActive, RouterOutlet, UrlSegment } from '@angular/router';
 import { Business } from '../../../../models/business';
 import { BusinessService } from '../../../../services/business/business.service';
-import { ProductComponent } from '../../product/product.component';
+// import { ProductComponent } from '../../product/product.component';
 import { CommonModule, NgStyle } from '@angular/common';
 import { ProductService } from '../../../../services/product/product.service';
 import { Product } from '../../../../models/product';

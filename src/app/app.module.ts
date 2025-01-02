@@ -17,35 +17,45 @@ import { SignupComponent } from './components/signup/signup.component';
 import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { MdbModalModule } from 'mdb-angular-ui-kit/modal';
 import { MdbTabsModule } from 'mdb-angular-ui-kit/tabs';
-import { CreateProductComponent } from './components/owner/product/create-product/create-product.component';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { BusinessDetailComponent } from './components/admin/business/business-detail/business-detail.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MdbRippleModule } from 'mdb-angular-ui-kit/ripple';
 import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
 import { authInterceptor } from './services/auth.interceptor';
-import { ProductComponent } from "./components/admin/product/product.component";
 import { HomeCarouselComponent } from "./components/home/home-carousel/home-carousel.component";
 import { RouterModule, RouterOutlet } from '@angular/router';
+<<<<<<< HEAD
 import { UserOrderComponent } from './components/home/user-order/user-order.component';
+=======
+import { AgGridModule } from 'ag-grid-angular';
+>>>>>>> e6f3b6e7481294316517509dff12eab6f1b73c40
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignupComponent,
+<<<<<<< HEAD
     CreateProductComponent,
     DashboardComponent,
    
+=======
+    DashboardComponent
+>>>>>>> e6f3b6e7481294316517509dff12eab6f1b73c40
 
   ],
   imports: [
+    AgGridModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-        positionClass: 'toast-top-right',
-        preventDuplicates: true,
+      closeButton:true,
+      progressBar:true,
+      timeOut:4000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
     }),
     MdbCollapseModule,
     MdbDropdownModule,
@@ -55,7 +65,6 @@ import { UserOrderComponent } from './components/home/user-order/user-order.comp
     MdbModalModule,
     FormsModule,
     CommonModule,
-    ProductComponent,
     HomeCarouselComponent,
     RouterOutlet
 ],

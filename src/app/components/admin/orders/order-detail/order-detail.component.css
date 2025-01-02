@@ -1,0 +1,28 @@
+/* Optional: Customize card and image appearance */
+.card {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-header h4 {
+  font-size: 1.5rem;
+}
+
+.list-group-item {
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.list-group-item img {
+  border-radius: 50%;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.actions button {
+  min-width: 120px;
+}

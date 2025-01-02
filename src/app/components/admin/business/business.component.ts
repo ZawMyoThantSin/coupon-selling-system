@@ -11,11 +11,12 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AddBusinessOwnerComponent } from './add-business-owner/add-business-owner.component';
 import { ToastrService } from 'ngx-toastr';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-business',
   standalone: true,
-  imports: [MdbTooltipModule, MdbRippleModule, CommonModule,RouterLink],
+  imports: [MdbTooltipModule, MdbRippleModule, CommonModule,RouterLink,NgxPaginationModule],
   templateUrl: './business.component.html',
   styleUrl: './business.component.css'
 })
@@ -25,6 +26,10 @@ export class BusinessComponent implements OnInit {
     businesses:Business[]  =[];
     userId:any;
     token:any;
+// For Pagination
+    currentPage = 1;
+    itemsPerPage = 4;
+
 
     constructor(private modalService: MdbModalService,
                 private toastr:ToastrService,
@@ -37,7 +42,7 @@ export class BusinessComponent implements OnInit {
     ngOnInit(): void {
       this.token = this.storageService.getItem("token");
       this.userId = this.jwtService.getUserId(this.token);
-      this.businessService.getAllBusiness(this.userId).subscribe(
+      this.businessService.getAllBusinesses().subscribe(
         response =>{
           this.businesses = response
           console.log("RES: ",response)

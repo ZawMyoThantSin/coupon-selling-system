@@ -90,7 +90,7 @@ export class DetailProductComponent implements OnInit {
   goBack() {
     const businessId = localStorage.getItem('currentBusinessId');
     if (businessId) {
-      this.router.navigate(['/d/b/detail', businessId]);
+      this.router.navigate(['/o/shop/', businessId]);
     } else {
       console.error('Business ID not found in localStorage');
       this.toastr.warning('Business ID not found. Redirecting to home.', 'Warning');

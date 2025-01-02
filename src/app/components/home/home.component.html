@@ -31,7 +31,7 @@
               aria-expanded="false"
             >
               <img *ngIf="userInfo.authProvider == 'LOCAL'; else elseNoProfile"
-                [src]="getImageUrl(userInfo.profile)"
+                [src]="userInfo.profile == null ? '/images/default-avatar.png' : getImageUrl(userInfo.profile)  " alt="User Avatar"
                 class="rounded-circle"
                 height="40"
                 width="40"
