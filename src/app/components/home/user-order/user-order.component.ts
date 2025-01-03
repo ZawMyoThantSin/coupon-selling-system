@@ -172,14 +172,17 @@ export class UserOrderComponent {
 
 
   cancelOrder(): void {
+    this.resetForm();
+    this.location.back();
+    this.toastr.info('Order canceled.', 'Info');
+  }
+
+  resetForm(): void {
     this.phoneNumber = '';
-    this.userMessage = '';
     this.screenshot = null;
     this.selectedMethod = this.paymentMethods[0];
-    this.cartData = []; 
+    this.cartData = [];
     this.total = 0;
-    console.log('Order canceled and form reset.');
-    this.location.back();
   }
 
 }

@@ -10,6 +10,7 @@ import { Output,EventEmitter } from '@angular/core';
 import { TransferResponse } from '../../../../models/transfer.models';
 import { SharedService } from '../../../../services/shared/shared.service';
 import { TransferService } from '../../../../services/transfer/transfer.service';
+import { WebsocketService } from '../../../../services/websocket/websocket.service';
 
 @Component({
   selector: 'app-friend',
@@ -46,7 +47,8 @@ export class FriendComponent implements OnInit {
               private userService: UserService,
               private toastr: ToastrService,
               private sharedService: SharedService,
-              private transferService: TransferService
+              private transferService: TransferService,
+              private webSocketService: WebsocketService,
   ) {}
 
   ngOnInit(): void {
@@ -56,7 +58,46 @@ export class FriendComponent implements OnInit {
     this.sharedService.pendingRequestsCount$.subscribe((count) => {
       this.pendingRequestsCount = count;
     });
+
+    // Subscribe to friend updates
+    this.webSocketService.getFriendUpdates().subscribe((update) => {
+      if (update) {
+        this.handleFriendUpdate(update);
+      }
+    });
+
+    // // Subscribe to transfer updates
+    // this.webSocketService.getTransferUpdates().subscribe((update) => {
+    //   if (update) {
+    //     this.handleTransferUpdate(update);
+    //   }
+    // });
   }
+
+  handleFriendUpdate(update: any): void {
+    // Example: Handle friend added, friend removed, etc.
+    if (update.type === 'FRIEND_ADDED') {
+      this.toastr.success(`${update.senderName} accepted your friend request!`, 'Friend Added');
+      this.loadFriends(); // Refresh the friend list
+    } else if (update.type === 'REQUEST_RECEIVED') {
+      this.toastr.info(`New friend request from ${update.senderName}`, 'Friend Request');
+      this.loadPendingRequests(); // Refresh pending requests
+    } else if (update.type === 'FRIEND_REMOVED') {
+      this.toastr.warning(`${update.senderName} unfriended you.`, 'Friend Removed');
+      this.loadFriends(); // Refresh the friend list
+    }
+  }
+
+  // handleTransferUpdate(update: any): void {
+  //   // Example: Handle incoming coupon transfer updates
+  //   if (update.type === 'COUPON_RECEIVED') {
+  //     this.toastr.success(`You received a coupon from ${update.senderName}!`, 'Coupon Received');
+  //     this.loadTransferHistory(); // Refresh transfer history
+  //   } else if (update.type === 'TRANSFER_ACCEPTED') {
+  //     this.toastr.info(`Your transfer was accepted by ${update.accepterName}.`, 'Transfer Accepted');
+  //   }
+  // }
+
 
   getLoggedInUserInfo(): void {
     this.userService.getUserInfo().subscribe({
