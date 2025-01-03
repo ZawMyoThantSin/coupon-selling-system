@@ -74,6 +74,7 @@ export class OwnerDashboardComponent {
     this.businessService.getByUserId(userId).subscribe(
       (response) => {
         this.businessData = response;
+        console.log("bu", this.businessData)
         this.businessId = this.businessData.id;
         this.shopExist = this.businessData.id != null ? true : false;
 
@@ -134,6 +135,7 @@ export class OwnerDashboardComponent {
             this.businessId = response.id;
             console.log("ID: ",this.businessId)
             this.toastr.success("Business Create Successfully!","Success")
+            this.fetchBusinessInfo(this.userId);
             this.router.navigate(['/o/shop',this.businessId]);
 
           },

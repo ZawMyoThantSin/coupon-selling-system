@@ -2,6 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
+import e from 'express';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +13,7 @@ import { StorageService } from '../../services/storage.service';
 export class LoginComponent implements OnInit {
   authService = inject(AuthService);
   storageService = inject(StorageService);
+  toastr = inject(ToastrService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   formData:any;
@@ -56,12 +59,9 @@ export class LoginComponent implements OnInit {
 // Method to handle form submission
 onLoginSubmit(form:any) {
   if (form.valid) {
-    // Log the loginData to the console
-    console.log('Login Data:', this.user);
-    // call login endpoint
     this.authService.login(this.user).subscribe(
       data => {
-        // console.log(data)
+        console.log(data)
         this.storageService.removeItem("formData");
         localStorage.setItem('token', data.token);
         this.user.email = '',
@@ -69,7 +69,8 @@ onLoginSubmit(form:any) {
         this.router.navigate(['/']);
       },
       error => {
-        console.error("Error in Login", error)
+        this.toastr.error('Username or password is invalid', 'Login Failed'); // Display error
+        // console.error("Error in Login", error)
       }
     );
 

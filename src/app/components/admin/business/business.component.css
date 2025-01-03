@@ -1,0 +1,50 @@
+/* Center the pagination controls */
+.pagination {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Style the pagination container */
+.pagination li {
+  margin: 0 5px;
+}
+
+/* Style pagination buttons */
+.pagination li a {
+  padding: 5px 10px;
+  text-decoration: none;
+  color: #007bff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover effect for pagination buttons */
+.pagination li a:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Active page styling */
+.pagination li.active a {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+}
+
+/* Disabled buttons styling */
+.pagination li.disabled a {
+  color: #6c757d;
+  background-color: #e9ecef;
+  border: 1px solid #ddd;
+  pointer-events: none;
+}
+
+/* Align previous and next buttons with text */
+.pagination-previous,
+.pagination-next {
+  font-weight: bold;
+}

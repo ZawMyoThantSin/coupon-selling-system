@@ -26,12 +26,26 @@
       <div class="scroll-div">
         <ul>
           <li *ngFor="let item of cartData">
-            {{ item.productName }} - Qty: {{ item.quantity }} - ${{ item.price }}
+            <a href="javascript:void(0)" (click)="showProductDetails(item)">
+              {{ item.productName }}
+            </a> - Qty: {{ item.quantity }}
           </li>
         </ul>
       </div>
     </div>
-
+    <!-- Modal Box -->
+<div
+class="modal"
+*ngIf="selectedProduct"
+(click)="closeModal($event)"
+>
+<div class="modal-content">
+  <span class="close" (click)="closeModal($event)">&times;</span>
+  <img [src]="getProductImageUrl(selectedProduct.productImage)" alt="Product Image" class="modal-image" />
+  <h2>{{ selectedProduct.productName }}</h2>
+  <p>Price: ${{ selectedProduct.price }}</p>
+</div>
+</div>
     <div class="form-group">
       <label for="phoneNumber">Phone Number:</label>
       <input
@@ -45,7 +59,12 @@
     <div class="form-group">
       <label for="screenshot">Upload Screenshot</label>
       <input type="file" id="screenshot" (change)="onFileChange($event)" />
+       <!-- Preview uploaded screenshot -->
+        <div *ngIf="previewUrl">
+        <img [src]="previewUrl" alt="Uploaded Screenshot Preview"  class="preview-image" />
+        </div>
     </div>
+
 
     <div class="buttons">
       <button class="btn btn-cancel" (click)="cancelOrder()">Cancel</button>

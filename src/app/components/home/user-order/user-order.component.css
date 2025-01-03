@@ -7,6 +7,18 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  position: relative;
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.payment-container {
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .payment-container {
@@ -73,7 +85,7 @@ textarea {
 }
 
 .scroll-div {
-  max-height: 150px;
+  max-height: 100px;
   overflow-y: auto;
   border: 1px solid #ddd;
   padding: 8px;
@@ -113,4 +125,43 @@ textarea {
 .btn-ok {
   background-color: #4caf50;
   color: white;
+}
+.preview-image {
+  max-width: 200px; /* Set the maximum width */
+  max-height: 200px; /* Set the maximum height */
+  object-fit: contain; /* Preserve aspect ratio */
+  border: 1px solid #ccc; /* Optional: Add a border */
+  margin-top: 10px; /* Optional: Add spacing */
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  width: 300px;
+  max-width: 80%;
+}
+
+.modal-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 15px;
+}
+
+.close {
+  display: none;
 }

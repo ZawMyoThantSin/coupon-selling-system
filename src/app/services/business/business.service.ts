@@ -68,7 +68,6 @@ getImageUrl(imagePath: string): string {
 
 getAllBusinesses(): Observable<any> {
   return this.http.get(`${this.BASE_URL}api/businesses`, {
-    headers: this.createAuthHeader(),
     responseType: 'json',
   });
 }
