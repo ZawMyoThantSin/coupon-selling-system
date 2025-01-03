@@ -13,13 +13,30 @@
 </div>
 
 
+<!-- ag-grid component -->
 <ag-grid-angular
-  style="width: 100%; height: 500px;"
+  style="width: 100%; height: 485px;"
   class="ag-theme-alpine"
   [rowData]="products"
   [columnDefs]="columnDefs"
   [gridOptions]="gridOptions"
+  [pagination]="true"
+  [paginationPageSize]="paginationPageSize"
+  [paginationPageSizeSelector]="paginationPageSizeSelector"
   (gridReady)="onGridReady($event)"
-  (gridSizeChanged)="onGridSizeChanged($event)"
->
+  (gridSizeChanged)="onGridSizeChanged($event)">
 </ag-grid-angular>
+
+<!-- Pagination Controls -->
+<div class="pagination-controls">
+  <div class="action-bar">
+    <label for="pageSize">Page Size:</label>
+    <select id="pageSize" [(ngModel)]="paginationPageSize" (change)="onPageSizeChange()">
+      <option *ngFor="let size of paginationPageSizeSelector" [value]="size">{{ size }}</option>
+    </select>
+
+    <button class="bt" [disabled]="!hasPreviousPage" (click)="onPreviousPage()">Previous</button>
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="bt" [disabled]="!hasNextPage" (click)="onNextPage()">Next</button>
+  </div>
+</div>

@@ -71,6 +71,7 @@ export class ShopComponent {
       //   this.coupons = data;
       // });
     });
+    
 
   }
 
