@@ -61,8 +61,19 @@ export class HomeComponent implements OnInit{
     }
   }
 
-  toggleSidebar() {
-    this.sidebarOpen = !this.sidebarOpen; // Toggle the sidebar visibility
+  // toggleSidebar() {
+  //   this.sidebarOpen = !this.sidebarOpen; // Toggle the sidebar visibility
+  // }
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
+    const navbar = document.querySelector('.inner-navbar');
+    if (navbar) {
+      if (this.sidebarOpen) {
+        navbar.classList.add('center'); // Align to start when sidebar is open
+      } else {
+        navbar.classList.add('center'); // Center items when sidebar is closed
+      }
+    }
   }
 
   loadNotifications() {

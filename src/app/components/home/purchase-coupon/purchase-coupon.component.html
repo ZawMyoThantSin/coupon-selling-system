@@ -1,0 +1,80 @@
+
+<!-- Inner Navbar -->
+<div class="inner-navbar">
+    <button
+      class="inner-nav-item"
+      *ngFor="let tab of innerTabs"
+      [class.active]="activeTab === tab.id"
+      (click)="selectTab(tab.id)"
+    >
+      {{ tab.name }}
+    </button>
+  </div>
+  
+  <div class="content">
+    <ng-container *ngIf="activeTab === 'available'">
+     
+      <div class="coupon-container">
+        <div class="coupon-card" *ngFor="let coupon of filteredAvailableCoupons" (click)="openModal(coupon)">
+          <div class="coupon-image">
+              <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
+          </div>
+          <div class="coupon-details">
+              <h3>{{ coupon.productName }}</h3>
+              <p>Discount: {{ coupon.discount }}%</p>
+          </div>
+          <div class="coupon-actions">
+              <button class="share-button" (click)="shareCoupon(coupon)">Share</button>
+              <p class="expiry-date">Expiry Date: {{ coupon.expiryDate | date: 'shortDate' }}</p>
+          </div>
+      </div>
+      </div>
+    </ng-container>
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal" *ngIf="isModalOpen">
+    <div class="modal-content">
+      <span class="close" (click)="closeModal()">&times;</span>
+      <h3>{{ selectedCoupon?.productName }}</h3>
+      <p>Discount: {{ selectedCoupon?.discount }}%</p>
+      <p>Expiry Date: {{ selectedCoupon?.expiryDate | date: 'shortDate' }}</p>
+      <div class="coupon-image">
+        <img [src]="getImageUrl(selectedCoupon?.imageUrl)" alt="{{ selectedCoupon?.productName }}" />
+      </div>
+      <!-- Add additional coupon details here -->
+    </div>
+  
+  
+    <ng-container *ngIf="activeTab === 'used'">
+      <p>Used Coupons</p>
+      <div class="coupon-container">
+        <div class="coupon-card" *ngFor="let coupon of filteredUsedCoupons">
+          <div class="coupon-image">
+            <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
+          </div>
+          <div class="coupon-details">
+            <h3>{{ coupon.productName }}</h3>
+            <p>Discount: {{ coupon.discount }}%</p>
+            <p>Expiry Date: {{ coupon.expiryDate | date: 'shortDate' }}</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  
+    <ng-container *ngIf="activeTab === 'transferred'">
+      <p>Transferred Coupons</p>
+      <div class="coupon-container">
+        <div class="coupon-card" *ngFor="let coupon of filteredTransferredCoupons">
+          <div class="coupon-image">
+            <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
+          </div>
+          <div class="coupon-details">
+            <h3>{{ coupon.productName }}</h3>
+            <p>Discount: {{ coupon.discount }}%</p>
+            <p>Expiry Date: {{ coupon.expiryDate | date: 'shortDate' }}</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>

@@ -34,6 +34,7 @@ import { ProductComponent } from './components/owner/product/product.component';
 import { CouponComponent } from './components/owner/product/coupon/coupon.component';
 import { ExcelImportComponent } from './components/owner/product/excel-import/excel-import.component';
 import { DetailProductComponent } from './components/owner/product/detail/detail-product/detail-product.component';
+import { PurchaseCouponComponent } from './components/home/purchase-coupon/purchase-coupon.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -87,6 +88,7 @@ const routes: Routes = [
       {path:'friends', component:FriendComponent, title:'Friends'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},
+      {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
       {path:'page', component:HomepageComponent, title:'Home'},
 
       {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},

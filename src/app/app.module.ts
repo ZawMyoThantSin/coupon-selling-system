@@ -25,24 +25,15 @@ import { MdbCollapseModule } from 'mdb-angular-ui-kit/collapse';
 import { authInterceptor } from './services/auth.interceptor';
 import { HomeCarouselComponent } from "./components/home/home-carousel/home-carousel.component";
 import { RouterModule, RouterOutlet } from '@angular/router';
-<<<<<<< HEAD
-import { UserOrderComponent } from './components/home/user-order/user-order.component';
-=======
 import { AgGridModule } from 'ag-grid-angular';
->>>>>>> e6f3b6e7481294316517509dff12eab6f1b73c40
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     SignupComponent,
-<<<<<<< HEAD
-    CreateProductComponent,
-    DashboardComponent,
-   
-=======
     DashboardComponent
->>>>>>> e6f3b6e7481294316517509dff12eab6f1b73c40
 
   ],
   imports: [
@@ -65,6 +56,7 @@ import { AgGridModule } from 'ag-grid-angular';
     MdbModalModule,
     FormsModule,
     CommonModule,
+    MatIconModule,
     HomeCarouselComponent,
     RouterOutlet
 ],
