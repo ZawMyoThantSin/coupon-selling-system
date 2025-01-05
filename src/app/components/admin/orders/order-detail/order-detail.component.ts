@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { AdminOrderService, Order } from '../../../../services/admin-orders/admin-order.service';
+import { AdminOrderService } from '../../../../services/admin-orders/admin-order.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { OrderDetail } from '../../../../models/orderDetail';
+import { ProductService } from '../../../../services/product/product.service';
 
 @Component({
   selector: 'app-order-detail',
@@ -11,9 +13,10 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './order-detail.component.css'
 })
 export class OrderDetailComponent {
-  order!: Order | null;
+  order!: OrderDetail;
 
   constructor(
+    private productService: ProductService,
     private adminOrderService: AdminOrderService,
     private route: ActivatedRoute,
     private router: Router
@@ -22,16 +25,34 @@ export class OrderDetailComponent {
   ngOnInit() {
     const orderId = this.route.snapshot.paramMap.get('id');
     if (orderId) {
-      this.adminOrderService.getOrders().subscribe(orders => {
-        this.order = orders.find(order => order.id === orderId) || null;
-      });
+      this.adminOrderService.getByOrderId(Number(orderId)).subscribe((response)=>{
+        this.order = response[0];
+      },error=> console.log("ERROR: ", error))
     }
   }
 
-  updateStatus(orderId: string, status: 'accepted' | 'rejected') {
-    this.adminOrderService.updateOrderStatus(orderId, status).subscribe(updatedOrder => {
-      this.order = updatedOrder;
-      this.router.navigate(['/admin/orders']);
-    });
+
+  acceptOrder(orderId: number){
+    this.adminOrderService.acceptOrder(orderId).subscribe((res)=>{
+      if(res){
+        this.router.navigate(['d/order']);
+      }
+    })
   }
+  rejectOrder(orderId: number){
+    this.adminOrderService.rejectOrder(orderId).subscribe((res)=>{
+      if(res){
+        this.router.navigate(['d/order']);
+      }
+   })
+  }
+
+  getProductImage(imagePath: string): string {
+    return this.productService.getImageUrl(imagePath);
+  }
+
+  getOrderImage(imagePath: string): string {
+    return this.adminOrderService.getImageUrl(imagePath);
+  }
+
 }

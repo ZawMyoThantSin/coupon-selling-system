@@ -42,17 +42,40 @@ export class ProductComponent implements OnInit{
   selectedProduct: Product | null = null;
   private gridApi!: GridApi;
 
+
+  allProducts: Product[] = [];
+
+  currentPage = 1;
+  totalPages = 10;
+
+  paginationPageSize = 5;
+  paginationPageSizeSelector = [5, 10, 15];
+
   gridOptions: GridOptions = {
     theme: 'legacy',
+    pagination: true,
+    paginationPageSize: this.paginationPageSize,
+    paginationPageSizeSelector: this.paginationPageSizeSelector,
     defaultColDef: {
       resizable: true,
       sortable: true,
       filter: true,
 
     },
-    rowModelType: 'clientSide' as RowModelType,
-    rowHeight: 60,
+    rowModelType: 'clientSide' ,
+    rowHeight: 62,
+    domLayout: 'normal',
+    onGridReady: (params) => {
+      this.gridApi = params.api;
+      this.updatePagination();
+    },
+    onFirstDataRendered: (params) => {
+      this.updatePagination();
+    }
+
+
   };
+
   columnDefs: ColDef[] = [
     {
       field: 'imagePath',
@@ -190,6 +213,9 @@ export class ProductComponent implements OnInit{
   subscriptions: any;
   //modalRef1: MdbModalRef<CreateModalComponent> | undefined ;
   modalRef2: MdbModalRef<ExcelImportComponent> | undefined;
+  hasNextPage: boolean | undefined;
+  hasPreviousPage: boolean | undefined;
+  pagination: true | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -208,8 +234,9 @@ export class ProductComponent implements OnInit{
     this.route.paramMap.subscribe(params => {
       this.businessId = Number(params.get('id'));
       this.productService.getAllProducts(this.businessId).subscribe((data: Product[]) => {
-        this.products = data;
-        this.products = data.filter(product => product.status );
+
+        this.allProducts = data.filter(product => product.status );
+        this.updatePagination();
       });
 
        // Fetch all coupons
@@ -247,6 +274,36 @@ export class ProductComponent implements OnInit{
     }
   }
 
+updatePagination(): void {
+    const totalItems = this.allProducts.length;
+    this.totalPages = Math.ceil(totalItems / this.paginationPageSize);
+    this.hasNextPage = this.currentPage < this.totalPages;
+    this.hasPreviousPage = this.currentPage > 1;
+
+    const startIndex = (this.currentPage - 1) * this.paginationPageSize;
+    const endIndex = startIndex + this.paginationPageSize;
+    this.products = this.allProducts.slice(startIndex, endIndex);
+  }
+
+
+  onPageSizeChange(): void {
+    this.currentPage = 1; // Reset to first page
+    this.updatePagination();
+  }
+
+  onNextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePagination();
+    }
+  }
+
+  onPreviousPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagination();
+    }
+  }
 
   // Open modal directly with MDB modal service
   navigateToModal(): void {

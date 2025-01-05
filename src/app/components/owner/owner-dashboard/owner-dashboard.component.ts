@@ -74,7 +74,6 @@ export class OwnerDashboardComponent {
     this.businessService.getByUserId(userId).subscribe(
       (response) => {
         this.businessData = response;
-        console.log("bu", this.businessData)
         this.businessId = this.businessData.id;
         this.shopExist = this.businessData.id != null ? true : false;
 
@@ -93,6 +92,8 @@ export class OwnerDashboardComponent {
       this.openModal();
     }, 1500);
   }
+
+
   openModal() {
     this.loading = false
     this.modalRef = this.modalService.open(CreateShopComponent, {

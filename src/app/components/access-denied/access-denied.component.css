@@ -1,0 +1,67 @@
+:root {
+  --primary-color: #ff4b5c;
+  --secondary-color: #ffffff;
+  --background-color: #f9f9f9;
+  --text-color: #333333;
+  --button-bg-color: #007bff;
+  --button-hover-color: #0056b3;
+  --error-icon-color: var(--primary-color);
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.access-denied-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.access-denied-card {
+  background: var(--secondary-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.error-icon {
+  font-size: 64px;
+  color: var(--error-icon-color);
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 0;
+  color: var(--primary-color);
+}
+
+p {
+  font-size: 16px;
+  margin: 10px 0;
+  color: var(--text-color);
+}
+
+.home-button {
+  background-color: var(--button-bg-color);
+  color: var(--secondary-color);
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.home-button:hover {
+  background-color: var(--button-hover-color);
+}

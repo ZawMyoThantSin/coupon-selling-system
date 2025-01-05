@@ -1,48 +1,56 @@
-.coupon-container {
-    padding: 20px;
-  }
-  
-  .action-bar {
-    margin-bottom: 10px;
-  }
-  
-  .pagination-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-  }
-  
-  .pagination-controls button {
-    padding: 5px 10px;
-    margin: 0 5px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
-  }
-  
-  .pagination-controls button:disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
-  }
-  
-  
-  /* Styling for the Ag-Grid Table */
-  .ag-theme-alpine {
-    font-family: Arial, sans-serif; /* Adjust the font for the grid */
-  }
-  
-  /* Style for Ag-Grid headers */
-  .ag-theme-alpine .ag-header-cell-label {
-    font-weight: bold;  /* Make headers bold */
-    background-color: black;  /* Set black background for headers */
-    color: white;  /* Set text color to white for contrast */
-  }
-  
-  /* Row styles */
-  .ag-theme-alpine .ag-row {
-    font-size: 14px;  /* Adjust font size of the rows */
-    color: #333; /* Set text color for rows */
-  }
-  
-  
+
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.action-bar {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Adds space between elements */
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+#pageSize {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+}
+
+#pageSize:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+button:disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:not(:disabled):hover {
+  background-color: #170b9a;
+  border-color: #0056b3;
+}
+
+span {
+  font-size: 16px;
+  font-weight: bold;
+}

@@ -34,6 +34,8 @@ import { ProductComponent } from './components/owner/product/product.component';
 import { CouponComponent } from './components/owner/product/coupon/coupon.component';
 import { ExcelImportComponent } from './components/owner/product/excel-import/excel-import.component';
 import { DetailProductComponent } from './components/owner/product/detail/detail-product/detail-product.component';
+import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
+import { PurchaseCouponComponent } from './components/home/purchase-coupon/purchase-coupon.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -88,14 +90,16 @@ const routes: Routes = [
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},
       {path:'page', component:HomepageComponent, title:'Home'},
-
+      {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
       {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},
       {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}
     ]
   },
   {path:'login', component:LoginComponent, title:'Login'},
   {path:'signup', component:SignupComponent, title:'Signup'},
-  {path: '**', component: NotFoundComponent,title:'404' }
+  {path: 'access-denied', component: AccessDeniedComponent,title:'403' },
+  {path: '**', component: NotFoundComponent,title:'404' },
+
 ];
 
 @NgModule({

@@ -1,0 +1,37 @@
+<div class="modal-header px-5">
+  <h5 class="modal-title" id="qrCodeModalLabel">QR Code</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="close()"
+  ></button>
+</div>
+
+<div class="modal-body d-flex justify-content-center align-items-center flex-column">
+  <div *ngIf="isLoading" class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+
+  <div *ngIf="!isLoading && !error">
+    <qrcode
+      #qrCanvas
+      [qrdata]="qrData"
+      [elementType]="'canvas'"
+      [width]="300"
+      [colorDark]="'#a88532'"
+      [imageSrc]="'/images/sign.jpg'"
+      [errorCorrectionLevel]="'M'">
+    </qrcode>
+    <button
+      class="btn btn-primary mt-3"
+      (click)="saveQrCode()"
+    >
+      Save to Device
+    </button>
+  </div>
+
+  <div *ngIf="error" class="text-danger text-center">
+    {{ error }}
+  </div>
+</div>
