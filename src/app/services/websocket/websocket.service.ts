@@ -1,57 +1,114 @@
-import { Injectable } from '@angular/core';
-import { Client, Message } from '@stomp/stompjs';
-import { BehaviorSubject } from 'rxjs';
-import SockJS from 'sockjs-client';
-import { Observable } from 'rxjs';
+import { Injectable, NgZone } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { StorageService } from '../storage.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebsocketService {
 
-  private client: Client;
-  private friendUpdates$: BehaviorSubject<any> = new BehaviorSubject(null);
-  private transferUpdates$: BehaviorSubject<any> = new BehaviorSubject(null);
+  private socket!: WebSocket;
+  private messageSubject = new Subject<any>();
+  private readonly serverUrl = 'ws://localhost:8080/ws';
+  private reconnectAttempts = 0;
+  private readonly maxReconnectAttempts = 10;
+  private readonly reconnectDelay = 5000;
+  private token!: string | null;
 
-  constructor() {
-    this.client = new Client({
-      webSocketFactory: () => new SockJS('http://localhost:8080/ws'),
-      reconnectDelay: 5000,
-      debug: (str) => console.log(str),
-    });
+  constructor(private ngZone: NgZone, private storageService: StorageService) {
+    this.token = this.storageService.getItem('token');
+  }
+  connect(): void {
+    if (this.socket && (this.socket.readyState === WebSocket.OPEN || this.socket.readyState === WebSocket.CONNECTING)) {
+      console.warn('WebSocket is already connected or connecting.');
+      return;
+    }
 
-    this.client.onConnect = () => {
-      console.log('Connected to WebSocket');
+    if (!this.token) {
+      console.error('WebSocket connection requires a valid JWT token.');
+      return;
+    }
 
-      // Subscribe to specific topics for updates
-      this.client.subscribe('/topic/friend-updates', (message: Message) => {
-        this.friendUpdates$.next(JSON.parse(message.body));
-      });
+    const wsUrl = `${this.serverUrl}?token=${encodeURIComponent(this.token)}`;
+    console.log('Attempting to connect to WebSocket:', wsUrl);
 
-      this.client.subscribe('/topic/transfer-updates', (message: Message) => {
-        this.transferUpdates$.next(JSON.parse(message.body));
+    console.log('Attempting to connect to WebSocket:', wsUrl);
+    this.socket = new WebSocket(wsUrl);
+
+    // On successful connection
+    this.socket.onopen = () => {
+      console.log('WebSocket connected');
+      this.reconnectAttempts = 0;
+    };
+
+    this.socket.onmessage = (event: MessageEvent) => {
+
+      console.log('WebSocket message received:', event.data);
+
+      this.ngZone.run(() => {
+        // Since messages are plain strings, no JSON parsing
+        this.messageSubject.next(event.data);
       });
     };
 
-    this.client.onStompError = (frame) => {
-      console.error('Broker reported error: ' + frame.headers['message']);
+    this.socket.onerror = (event: Event) => {
+      console.error('WebSocket error:', event);
     };
 
-    this.client.activate();
+    this.socket.onclose = (event: CloseEvent) => {
+      console.warn('WebSocket disconnected:', event.reason);
+      this.handleReconnection();
+    };
   }
 
-  // Expose friend updates as an observable
-  getFriendUpdates(): Observable<any> {
-    return this.friendUpdates$.asObservable();
+  disconnect(): void {
+    if (this.socket) {
+      this.socket.close();
+      console.log('WebSocket disconnected manually.');
+    }
   }
 
-  // Expose transfer updates as an observable
-  getTransferUpdates(): Observable<any> {
-    return this.transferUpdates$.asObservable();
+  /**
+   * Sends a message to the WebSocket server.
+   * @param message 
+   *  
+   */
+  send(message: string): void {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(message);
+      console.log('Message sent:', message);
+    } else {
+      console.warn('WebSocket is not connected. Message not sent.');
+    }
   }
 
-  // Optional: Publish messages to a specific topic
-  sendMessage(topic: string, message: any): void {
-    this.client.publish({ destination: topic, body: JSON.stringify(message) });
+  /**
+   * Subscribes to incoming WebSocket messages.
+   * @returns 
+   */
+  onMessage(): Observable<any> {
+    return this.messageSubject.asObservable();
   }
+
+  private handleReconnection(): void {
+    if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+      console.error(`WebSocket reconnection failed after ${this.maxReconnectAttempts} attempts.`);
+      return;
+    }
+
+    this.reconnectAttempts++;
+    const delay = this.calculateReconnectDelay();
+    console.log(`Reconnecting in ${delay / 1000} seconds (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})...`);
+
+    setTimeout(() => this.connect(), delay);
+  }
+
+  /**
+   * Calculates an exponential backoff delay for reconnection attempts.
+   * @returns 
+   */
+  private calculateReconnectDelay(): number {
+    return Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1), 30000); 
+  }
+
 }

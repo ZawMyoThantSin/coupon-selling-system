@@ -1,0 +1,10 @@
+<div *ngIf="show" class="modal-overlay">
+    <div class="modal-content">
+      <h4>{{ title }}</h4>
+      <p>{{ message }}</p>
+      <div class="modal-actions">
+        <button (click)="confirm()" class="btn btn-danger">Yes</button>
+        <button (click)="cancel()" class="btn btn-secondary">No</button>
+      </div>
+    </div>
+  </div>
