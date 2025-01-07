@@ -5,11 +5,12 @@ import { ActivatedRoute } from '@angular/router';
 import { Business } from '../../../../models/business';
 import { CommonModule, Location } from '@angular/common';
 import { BusinessProductComponent } from "./business-product/business-product.component";
+import { BusinessReviewComponent } from "./business-review/business-review.component";
 
 @Component({
   selector: 'app-user-business',
   standalone: true,
-  imports: [MdbTabsModule, CommonModule, BusinessProductComponent],
+  imports: [MdbTabsModule, CommonModule, BusinessProductComponent, BusinessReviewComponent],
   templateUrl: './user-business.component.html',
   styleUrl: './user-business.component.css',
   schemas:[CUSTOM_ELEMENTS_SCHEMA]
@@ -20,7 +21,7 @@ export class UserBusinessComponent implements OnInit {
   businessId: any;
 
   constructor(private businessService : BusinessService,
-              
+
               private router: ActivatedRoute,
               private location: Location
   ){}
@@ -44,7 +45,7 @@ export class UserBusinessComponent implements OnInit {
       },
       error => {
         console.error('Error in fetching business details:', error);
-        this.business= this.business; 
+        this.business= this.business;
       }
     );
   }
@@ -52,7 +53,7 @@ export class UserBusinessComponent implements OnInit {
   getBusinessImageUrl(imagePath: string): any {
     return this.businessService.getImageUrl(imagePath);
   }
-  
+
   goBack(): void {
     this.location.back(); // Navigate to the previous page
   }

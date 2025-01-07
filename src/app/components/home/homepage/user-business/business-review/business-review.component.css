@@ -1,0 +1,119 @@
+.business-review-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.stars {
+  display: flex;
+  flex-direction: row; /* Ensure left-to-right alignment */
+  justify-content: center;
+  gap: 0.25rem; /* Add spacing between stars */
+  margin-bottom: 10px;
+}
+
+.star {
+  font-size: 2rem;
+  cursor: pointer;
+  color: #ccc; /* Default color for unselected stars */
+}
+
+.star.selected {
+  color: gold; /* Color for selected stars */
+}
+
+textarea {
+  width: 90%;
+  height: 100px;
+  margin: 10px 0;
+  padding: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #1786c2;
+  color: white;
+  border: none;
+  cursor: pointer;
+
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.card {
+  background-color: rgba(243, 244, 246, 1);
+  padding: 1rem;
+  width: 100%; /* Ensure card takes full width of container */
+  max-width: 1000px; /* Adjust the max-width as needed */
+  height: auto; /* Auto height for dynamic content */
+  border-radius: 10px;
+  box-shadow: 0 20px 30px -20px rgba(5, 5, 5, 0.24);
+  margin-bottom: 1rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.header .image {
+  height: 2rem;
+  width: 2rem; /* Ensure the image is square */
+  border-radius: 50%; /* Circular profile image */
+  object-fit: cover;
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stars {
+  display: flex;
+  flex-direction: row; /* Left-to-right layout */
+  gap: 0.25rem; /* Add spacing between stars */
+  color: rgb(14, 14, 14); /* Default star color */
+  margin-left: 1rem; /* Adjust spacing to align with content */
+}
+
+.stars svg {
+  height: 1.5rem;
+  width: 1.5rem; /* Adjust icon size */
+}
+
+.stars .filled {
+  color: rgb(235, 215, 63); /* Highlighted star color */
+}
+
+.name-message {
+  display: flex;
+  flex-direction: column; /* Stack name and message vertically */
+  align-items: center;
+  margin-top: 0.5rem;
+  gap :10rem;
+}
+
+.name {
+  margin-top: 0.25rem;
+  font-size: 1.1rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  color: rgba(55, 65, 81, 1);
+}
+
+.card .message {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  gap: 10rem;
+}

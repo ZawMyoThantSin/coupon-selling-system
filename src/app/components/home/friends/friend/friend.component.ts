@@ -1,61 +1,54 @@
-import { Component, NgModule, OnInit } from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MdbRippleModule } from 'mdb-angular-ui-kit/ripple'; // MDBootstrap ripple effect
+import { MdbRippleModule } from 'mdb-angular-ui-kit/ripple';
 import { CommonModule } from '@angular/common';
 import { FriendsService } from '../../../../services/user/friends.service';
 import { StorageService } from '../../../../services/storage.service';
 import { UserService } from '../../../../services/user/user.service';
 import { ToastrService } from 'ngx-toastr';
-import { Output,EventEmitter } from '@angular/core';
-import { TransferResponse } from '../../../../models/transfer.models';
-import { SharedService } from '../../../../services/shared/shared.service';
-import { TransferService } from '../../../../services/transfer/transfer.service';
+import { WebsocketService } from '../../../../services/websocket/websocket.service';
+import { catchError, map, Observable, of } from 'rxjs';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { FriendDetailComponent } from './friend-detail/friend-detail.component';
+import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-friend',
-  standalone:true,
-  imports:[CommonModule,
-    FormsModule,
-    MdbRippleModule,],
+  standalone: true,
+  imports: [CommonModule, FormsModule, MdbRippleModule,ConfirmationModalComponent],
   templateUrl: './friend.component.html',
-  styleUrl: './friend.component.css'
+  styleUrls: ['./friend.component.css']
 })
 export class FriendComponent implements OnInit {
   friends: any[] = [];
   searchQuery: string = '';
   searchResults: any[] = [];
   emailSuggestions: any[] = [];
-  isLoading = false;
-  filteredFriends: any[] = [];
   pendingRequests: any[] = [];
-  loggedInUserEmail: string | any = '';
+  isLoading = false;
+  loggedInUserEmail: string | null = '';
   loggedInUserId: number | null = null;
-  searchTimeout: any;
   friendIds: Set<number> = new Set();
   pendingRequestsCount: number = 0;
-  @Output() updateFriendRequestsCount = new EventEmitter<void>();
+  currentFriendId: number | null = null;
+  selectedFriend: any | null = null;
+  showConfirmUnfriendModal = false;
+  showConfirmDenyModal = false;
+  friendIdToDelete: number = 0;
+  friendRequestIdToDelete: number = 0;
 
-
-  incomingTransfers: TransferResponse[] = [];
-  transferHistory: TransferResponse[] = [];
-  selectedCouponId: number | null = null;
-
-
-  constructor(private friendshipService: FriendsService,
-              private storageService: StorageService,
-              private userService: UserService,
-              private toastr: ToastrService,
-              private sharedService: SharedService,
-              private transferService: TransferService
-  ) {}
+  constructor(
+    private friendshipService: FriendsService,
+    private storageService: StorageService,
+    private userService: UserService,
+    private toastr: ToastrService,
+    private websocketService: WebsocketService,
+    private modalService: MdbModalService
+ ) {}
 
   ngOnInit(): void {
-    this.loadFriends();
-    this.loadPendingRequests();
     this.getLoggedInUserInfo();
-    this.sharedService.pendingRequestsCount$.subscribe((count) => {
-      this.pendingRequestsCount = count;
-    });
+    this.setupWebSocket();
   }
 
   getLoggedInUserInfo(): void {
@@ -65,276 +58,199 @@ export class FriendComponent implements OnInit {
         this.loggedInUserId = user.id;
         this.loadFriends();
         this.loadPendingRequests();
-        console.log('Logged-in user info:', user);
-      },
-      error: (err) => {
-        console.error('Error fetching logged-in user info:', err);
-      },
+       },
+       error: (err) => console.error('Error fetching user info:', err),
     });
   }
 
   onInput(): void {
     if (this.searchQuery.trim().length > 1) {
-      // Debounce API calls to avoid flooding the server
-      clearTimeout(this.searchTimeout);
-      this.searchTimeout = setTimeout(() => {
-        this.friendshipService.searchUsersByEmail(this.searchQuery).subscribe({
-          next: (results) => {
-            if (this.loggedInUserEmail) {
-              this.emailSuggestions = results
-              .filter(user => user.email !== this.loggedInUserEmail) // Exclude logged-in user
-              .filter(user => !this.friendIds.has(user.id)) // Exclude already friends
-              .filter(user => !this.pendingRequests.some(req => req.senderId === user.id || req.accepterId === user.id)); // Exclude pending requests
-            }
-          },
-          error: (err) => {
-            this.toastr.error('Error fetching email suggestions.', 'Error');
-          },
-        });
-      }, 300); // Wait 300ms before making the API call
+      this.friendshipService.searchUsersByEmail(this.searchQuery).subscribe({
+        next: (results) => {
+          this.emailSuggestions = results.filter(
+            (user) =>
+              user.email !== this.loggedInUserEmail &&
+              !this.friendIds.has(user.id) &&
+              !this.pendingRequests.some(
+                (req) => req.senderId === user.id || req.accepterId === user.id
+              )
+          );
+        },
+        error: () => this.toastr.error('Error fetching search suggestions.', 'Error'),
+      });
     } else {
       this.emailSuggestions = [];
     }
   }
 
-  searchFriends(): void {
-    if (!this.searchQuery.trim()) {
-      this.searchResults = [];
-      return;
-    }
-
-    this.isLoading = true;
-    this.friendshipService.searchUsersByEmail(this.searchQuery).subscribe({
-      next: (results) => {
-        // Filter out the logged-in user's email
-      if (this.loggedInUserEmail) {
-        this.searchResults = results
-        .filter(user => user.email !== this.loggedInUserEmail) // Exclude logged-in user
-        .filter(user => !this.friendIds.has(user.id)) // Exclude already friends
-        .filter(user => !this.pendingRequests.some(req => req.senderId === user.id || req.accepterId === user.id)); // Exclude pending requests
-      }
-        this.isLoading = false;
+  loadFriends(): void {
+    if (!this.loggedInUserId) return;
+    this.friendshipService.getFriends(this.loggedInUserId).subscribe({
+      next: (data) => {
+        this.friends = data;
+        this.friendIds = new Set(data.map((friend) => friend.id));
       },
-      error: (err) => {
-        console.error('Error fetching search results:', err);
-        this.isLoading = false;
-      },
+      error: () => this.toastr.error('Error loading friends.', 'Error'),
     });
   }
 
-  loadFriends() {
-
-    if (!this.loggedInUserId) {
-      console.error('Logged-in user ID is missing. Cannot load friends.');
-      return;
-    }
-
-    this.friendshipService.getFriends(this.loggedInUserId).subscribe({
-    next: (data) => {
-      this.friends = data;
-      this.friendIds = new Set(data.map(friend => friend.id));
-      console.log('Friends loaded:', this.friends);
-    },
-    error: (err) => {
-      console.error('Error fetching friends:', err);
-    },
-  });
-  }
-
-  loadPendingRequests() {
-    if (!this.loggedInUserId) {
-      console.error('Logged-in user ID is missing. Cannot load pending requests.');
-      return;
-    }
-
+  loadPendingRequests(): void {
+    if (!this.loggedInUserId) return;
     this.friendshipService.getPendingRequests(this.loggedInUserId).subscribe({
-    next: (data) => {
-      this.pendingRequests = data;
-      this.pendingRequestsCount = data.length;
-      console.log('Pending requests loaded:', this.pendingRequests);
-    },
-    error: (err) => {
-      console.error('Error fetching pending requests:', err);
-    },
-  });
+      next: (data) => {
+        this.pendingRequests = data;
+        this.pendingRequestsCount = data.length;
+      },
+      error: () => this.toastr.error('Error loading pending requests.', 'Error'),
+    });
   }
 
   sendFriendRequest(userId: number): void {
-    if (!this.loggedInUserEmail) {
-    this.toastr.error('Logged-in user email not found!', 'Error');
-      return;
-    }
-  if (!this.loggedInUserId || !userId) {
-    this.toastr.error('Sender or Accepter ID is missing', 'Error');
-    return;
-  }
-    const request = { senderId: this.loggedInUserId, accepterId: userId, message: 'Hi, let’s connect!' };
+    if (!this.loggedInUserId) return;
+    const request = { senderId: this.loggedInUserId, accepterId: userId };
 
     this.friendshipService.sendFriendRequest(request).subscribe({
-      next: (response) => {
+      next: () => {
         this.toastr.success('Friend request sent successfully!', 'Success');
-        console.log('Friend Request Sent:', response);
-        this.emailSuggestions = this.emailSuggestions.filter(user => user.id !== userId);
+        this.emailSuggestions = this.emailSuggestions.filter((user) => user.id !== userId);
       },
-      error: (err) => {
-        this.toastr.error('Error sending friend request.', 'Error');
-        console.error('Error sending friend request:', err);
-      }
+      error: () => this.toastr.error('Error sending friend request.', 'Error'),
     });
   }
 
-  addFriend(friendName: string): void {
-    console.log(`Send a friend request to ${friendName}`);
-  }
-
-
   acceptRequest(requestId: number): void {
     this.friendshipService.acceptFriendRequest(requestId).subscribe({
-      next: (response) => {
+      next: () => {
         this.toastr.success('Friend request accepted!', 'Success');
+        this.loadFriends();
         this.loadPendingRequests();
-        this.updateFriendRequestsCount.emit();
-        console.log('Friend request accepted:', response);
-        const acceptedRequest = this.pendingRequests.find(req => req.id === requestId);
-        if (acceptedRequest) {
-          this.friends.push({ friendName: acceptedRequest.senderName, id: acceptedRequest.senderId });
-          this.pendingRequests = this.pendingRequests.filter(req => req.id !== requestId);
-        }
       },
-      error: (err) => {
-        this.toastr.error('Error accepting friend request.', 'Error');
-      },
+      error: () => this.toastr.error('Error accepting friend request.', 'Error'),
     });
   }
 
   denyRequest(requestId: number): void {
     this.friendshipService.denyFriendRequest(requestId).subscribe({
-      next: (response) => {
+      next: () => {
         this.toastr.info('Friend request denied.', 'Info');
-        this.updateFriendRequestsCount.emit();
-        console.log('Friend request denied:', response);
-        this.pendingRequests = this.pendingRequests.filter(req => req.id !== requestId);
+        this.loadPendingRequests();
+        console.log('Denied request:', requestId);
+        this.showConfirmDenyModal = false;
       },
-      error: (err) => {
-        this.toastr.error('Error denying friend request.', 'Error');
-      },
+      error: () => this.toastr.error('Error denying friend request.', 'Error'),
     });
   }
 
-  unfriend(friendId: number): void {
-  if (!this.loggedInUserId) {
-    this.toastr.error('Logged-in user ID not found!', 'Error');
-    return;
+  confirmDenyRequest(requestId: number) {
+    this.friendRequestIdToDelete = requestId;
+    this.showConfirmDenyModal = true;
   }
 
-  this.friendshipService.unfriend(this.loggedInUserId, friendId).subscribe({
-    next: () => {
-      this.toastr.success('Friend removed successfully!', 'Success');
-      this.friends = this.friends.filter(friend => friend.friendId !== friendId);
-      this.friendIds.delete(friendId);
-      console.log(`User with ID ${friendId} unfriended.`);
-    },
-    error: (err) => {
-      this.toastr.error('Error removing friend.', 'Error');
-      console.error('Error unfriending user:', err);
-    },
-  });
-}
+  closeConfirmDenyModal() {
+    this.showConfirmDenyModal = false;
+ }
 
+ unfriend(friendId: number): void {
+  if (!this.loggedInUserId) return;
+  this.currentFriendId = friendId;
+  this.friendshipService.getFriendDetails(friendId).subscribe({
+    next: (friend) => {
+      const friendName = friend.name;
+      this.friendshipService.unfriend(this.loggedInUserId!, friendId).subscribe({
+        next: () => {
+          this.toastr.success(`${friendName} has been removed from your friends list.`, 'Success');
+          this.friends = this.friends.filter((friend) => friend.id !== friendId);
+          this.loadFriends();
+          console.log('Unfriended:', friendId);
+          this.showConfirmUnfriendModal = false;
+        },
+        error: () => this.toastr.error('Error removing friend.', 'Error'),
+      });
+    },
+    error: () => this.toastr.error('Error fetching friend details.', 'Error'),
+    });
+  }
+
+  confirmUnfriend(friendId: number) {
+    this.friendIdToDelete = friendId;
+    this.showConfirmUnfriendModal = true;
+  }
+
+  closeConfirmUnfriendModal() {
+    this.showConfirmUnfriendModal = false;
+  }
 
   isAlreadyFriend(userId: number): boolean {
     return this.friendIds.has(userId);
   }
+  private setupWebSocket(): void {
+    this.websocketService.connect();
 
-  sendCoupon(friendId: number): void {
-    if (this.selectedCouponId == null) {
-      this.toastr.error('Please select a coupon to send.', 'Error');
-      return;
+    this.websocketService.onMessage().subscribe((message) => {
+      this.handleWebSocketMessage(message);
+    });
+  }
+
+  openFriendModal(friendId: number): void {
+    this.modalService.open(FriendDetailComponent, {
+      modalClass: 'modal-md',
+      data: { friendId },
+    });
+  }
+
+  loadSelectedFriendProfile(): void {
+    if (this.currentFriendId !== null) {
+      this.friendshipService.getFriendDetails(this.currentFriendId).subscribe({
+        next: (friend) => {
+          this.selectedFriend = friend;
+        },
+        error: () => this.toastr.error('Error fetching friend details.', 'Error'),
+      });
     }
+  }
 
-    if (!this.isAlreadyFriend(friendId)) {
-      this.toastr.error('You can only send coupons to friends.', 'Error');
-      return;
+  getFriendImageUrl(profile: string | null): string {
+    return profile
+      ? this.userService.getImageUrl(profile)
+      : '/images/default-avatar.png';
+  }
+
+  private handleWebSocketMessage(message: string): void {
+    console.log('WebSocket update:', message);
+
+    switch (message) {
+      case 'FRIEND_REQUEST_RECEIVED':
+        this.toastr.info('You have a new friend request!', 'Info');
+        this.loadPendingRequests();
+        break;
+      case 'FRIEND_REQUEST_ACCEPTED':
+        this.toastr.success('Your friend request was accepted!', 'Success');
+        this.loadFriends();
+        break;
+      case 'FRIEND_REQUEST_DENIED':
+        this.toastr.info('Your friend request was denied.', 'Info');
+        this.loadPendingRequests();
+        break;
+      case 'UNFRIENDED':
+        console.log('Friend ID - ' , this.currentFriendId);
+        if (this.currentFriendId !== null) {
+
+          this.friendshipService.getFriendDetails(this.currentFriendId).subscribe({
+            next: (friend) => {
+              const friendName = friend.name;
+              this.toastr.warning(`${friendName} has unfriended you.`, 'Info');
+              this.loadFriends();
+            },
+            error: () => this.toastr.error('Error fetching friend details.', 'Error'),
+          });
+        } else {
+          this.toastr.warning('You have been unfriended by someone.', 'Info');
+          this.loadFriends();
+        }
+
+        break;
+      default:
+        console.warn('Unknown WebSocket message:', message);
     }
-
-    const transferRequest = {
-      senderId: this.loggedInUserId!,
-      accepterId: friendId,
-      saleCouponId: this.selectedCouponId,
-      status: 0, // Pending
-    };
-
-    this.transferService.transferCoupon(transferRequest).subscribe({
-      next: (response) => {
-        this.toastr.success('Coupon sent successfully!', 'Success');
-        this.loadTransferHistory(); // Refresh transfer history
-      },
-      error: (err) => {
-        this.toastr.error('Error sending coupon.', 'Error');
-        console.error('Error sending coupon:', err);
-      },
-    });
   }
-
-  acceptTransfer(transferId: number): void {
-    this.transferService.acceptTransfer(transferId).subscribe({
-      next: (response) => {
-        this.toastr.success('Transfer accepted!', 'Success');
-        this.loadIncomingTransfers(); // Refresh incoming transfers
-      },
-      error: (err) => {
-        this.toastr.error('Error accepting transfer.', 'Error');
-        console.error('Error accepting transfer:', err);
-      },
-    });
-  }
-
-  denyTransfer(transferId: number): void {
-    this.transferService.denyTransfer(transferId).subscribe({
-      next: (response) => {
-        this.toastr.info('Transfer denied.', 'Info');
-        this.loadIncomingTransfers(); // Refresh incoming transfers
-      },
-      error: (err) => {
-        this.toastr.error('Error denying transfer.', 'Error');
-        console.error('Error denying transfer:', err);
-      },
-    });
-  }
-
-  loadTransferHistory(): void {
-    if (!this.loggedInUserId) {
-      console.error('Logged-in user ID is missing. Cannot load transfer history.');
-      return;
-    }
-
-    this.transferService.getTransferHistory(this.loggedInUserId).subscribe({
-      next: (data) => {
-        this.transferHistory = data;
-        console.log('Transfer history loaded:', this.transferHistory);
-      },
-      error: (err) => {
-        console.error('Error fetching transfer history:', err);
-      },
-    });
-  }
-
-  loadIncomingTransfers(): void {
-    if (!this.loggedInUserId) {
-      console.error('Logged-in user ID is missing. Cannot load incoming transfers.');
-      return;
-    }
-
-    this.transferService.getTransferHistory(this.loggedInUserId).subscribe({
-      next: (data) => {
-        this.incomingTransfers = data.filter(transfer => transfer.status === 0); // Pending transfers
-        console.log('Incoming transfers loaded:', this.incomingTransfers);
-      },
-      error: (err) => {
-        console.error('Error fetching incoming transfers:', err);
-      },
-    });
-  }
-
-
 }

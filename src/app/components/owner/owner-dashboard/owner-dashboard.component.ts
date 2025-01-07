@@ -150,11 +150,6 @@ export class OwnerDashboardComponent {
 
 
 
-
-  toggleSidebar(): void {
-    this.sidebarOpen = !this.sidebarOpen; // Toggle the sidebar visibility
-  }
-
   logoutButton(): void{
     this.storageService.removeItem("token");
     this.router.navigate(['login']);
@@ -164,5 +159,39 @@ export class OwnerDashboardComponent {
   }
   getImageUrl(imagePath: string): string {
     return this.businessService.getImageUrl(imagePath);
+  }
+isSidebarCollapsed = false;
+
+  metrics = [
+    {
+      title: 'EARNINGS (MONTHLY)',
+      value: '$40,000',
+      color: '#4e73df',
+      icon: 'fas fa-dollar-sign'
+    },
+    {
+      title: 'EARNINGS (ANNUAL)',
+      value: '$215,000',
+      color: '#1cc88a',
+      icon: 'fas fa-dollar-sign'
+    },
+    {
+      title: 'TASKS',
+      value: '50%',
+      color: '#36b9cc',
+      icon: 'fas fa-list',
+      showProgress: true,
+      progress: 50
+    },
+    {
+      title: 'PENDING REQUESTS',
+      value: '18',
+      color: '#f6c23e',
+      icon: 'fas fa-comments'
+    }
+  ];
+
+  toggleSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 }

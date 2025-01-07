@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { StorageService } from '../storage.service';
 import { Observable } from 'rxjs';
 import { UserPayment } from '../../models/userpayment';
-import { userOrder } from '../../models/user-order';
 
 @Injectable({
   providedIn: 'root'
@@ -19,13 +18,7 @@ export class UserOrderService {
         responseType: 'json'
       });
   }
-  
-  // submitOrder(orderData: any): Observable<any> {
-  //   console.log('Order data received in service:', orderData);
-  //   return this.http.post<any>(this.BASE_URL + 'api/orders', orderData, {
-  //     responseType: 'json'
-  //   });
-  // }
+
 
   submitOrder(orderData: FormData): Observable<any> {
     return this.http.post<any>(this.BASE_URL + 'api/orders', orderData, {

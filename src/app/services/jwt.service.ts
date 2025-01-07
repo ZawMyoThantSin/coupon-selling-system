@@ -24,7 +24,7 @@ export class JwtService {
       return decodedToken.id;
 
     } catch (error) {
-      console.error('Invalid token', error);
+      console.error('Invalid token In jwt SErvice: ', error);
       return null;
     }
   }

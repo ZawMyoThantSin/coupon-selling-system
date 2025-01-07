@@ -1,0 +1,31 @@
+<!-- Friend Details Modal -->
+<div class="modal-header">
+  <h5 class="modal-title">Friend Details</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="closeModal()"
+  ></button>
+</div>
+<div class="modal-body">
+  <ng-container *ngIf="friendDetails; else loading">
+      <img
+    [src]="getFriendImageUrl(friendDetails?.profile)"
+    alt="{{ friendDetails?.name }}"
+    class="rounded-circle mb-3"
+    style="width: 100px; height: 100px;"
+  />
+    <p><strong>Name:</strong> {{ friendDetails?.name }}</p>
+    <p><strong>Email:</strong> {{ friendDetails?.email }}</p>
+    <p><strong>About:</strong> {{ friendDetails?.about }}</p>
+  </ng-container>
+  <ng-template #loading>
+    <p>Loading friend details...</p>
+  </ng-template>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="closeModal()">
+    Close
+  </button>
+</div>

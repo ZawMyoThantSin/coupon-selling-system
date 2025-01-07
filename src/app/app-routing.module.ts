@@ -36,6 +36,7 @@ import { ExcelImportComponent } from './components/owner/product/excel-import/ex
 import { DetailProductComponent } from './components/owner/product/detail/detail-product/detail-product.component';
 import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
 import { PurchaseCouponComponent } from './components/home/purchase-coupon/purchase-coupon.component';
+import { CouponSaleBarChartComponent } from './components/owner/owner-dashboard/chart/coupon-sale-bar-chart/coupon-sale-bar-chart.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -71,6 +72,7 @@ const routes: Routes = [
   },
   {path:'o', component:OwnerDashboardComponent,
     children:[
+      {path:'',  component:CouponSaleBarChartComponent},
       {path:'shop/:id', component:ShopComponent, title:'Shop' ,children:[
         {path:'', component:ProductComponent},
         {path:'coupon',component:CouponComponent}

@@ -1,16 +1,36 @@
-.container {
-    max-width: 800px;
-  }
-  .list-group-item {
-    border-radius: 10px;
-    margin-bottom: 10px;
-  }
+.card-img-top {
+  object-fit: cover;
+}
 
-  .h3,h5,h6 {
-    color: #1266f1; /* MDB Primary Color */
-  }
+.friend-card {
+  border: none;
+  background-color: #f8f9fa;
+  border-radius: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-  .text-center{
-    color: #1266f1;
-  }
-  
+.friend-card:hover {
+  transform: translateY(-5px);
+  transition: transform 0.3s ease;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #e2e6ea;
+}
+
+.table-light th {
+  background-color: #f8f9fa;
+}
+
+.suggestion-item:hover {
+  transform: scale(1.02);
+  background-color: #d1e7dd;
+}
+
+.text-muted {
+  font-size: 0.9rem;
+}
+
+.modal-content {
+  border-radius: 10px;
+}

@@ -2,97 +2,121 @@
   <h3 class="text-center mb-4">Friends Management</h3>
 
   <!-- Search Box -->
-  <div class="mb-3">
-    <div class="input-group">
-      <input 
-        type="text" 
-        class="form-control" 
-        placeholder="Search Friends by Email..." 
-        [(ngModel)]="searchQuery" 
-        (input)="onInput()"
-        autocomplete="off"
-      />
-    </div>
-
-    <ul *ngIf="emailSuggestions.length > 0" class="list-group mt-2">
-      <li 
-        *ngFor="let user of emailSuggestions" 
-        class="list-group-item d-flex justify-content-between align-items-center">
-        <span>{{ user.email }}</span>
-        <button 
-          *ngIf="!isAlreadyFriend(user.id)" 
-          class="btn btn-primary btn-sm" 
-          (click)="sendFriendRequest(user.id)">
-          Add
-        </button>
-        <button 
-          *ngIf="isAlreadyFriend(user.id)" 
-          class="btn btn-secondary btn-sm" 
-          disabled>
-          Already Friends
-        </button>
-      </li>
-    </ul>
-  </div>
-
-  <!-- Friends List -->
-  <div>
-    <h5>Friends List</h5>
-    <ul class="list-group">
-      <li *ngFor="let friend of friends" class="list-group-item">
+  <div class="search-box mb-4 p-3 shadow-sm">
+    <input
+      type="text"
+      class="form-control search-input"
+      placeholder="Search Friends by Email..."
+      [(ngModel)]="searchQuery"
+      (input)="onInput()"
+      autocomplete="off"
+    />
+    <ul *ngIf="emailSuggestions.length > 0" class="suggestions-list mt-3">
+      <li *ngFor="let user of emailSuggestions" class="suggestion-item">
         <div class="d-flex justify-content-between align-items-center">
-          <span>{{ friend.friendName }}</span>
-          <button (click)="sendCoupon(friend.id)" [disabled]="!selectedCouponId">
-            Send Coupon
-          </button>
-          <button 
-            class="btn btn-sm btn-danger" 
-            (click)="unfriend(friend.friendId)">
-            <i class="fas fa-user-minus"></i> Unfriend
+          <span>{{ user.email }}</span>
+          <button
+            class="btn btn-primary btn-sm"
+            *ngIf="!isAlreadyFriend(user.id)"
+            (click)="sendFriendRequest(user.id)"
+          >
+            Add Friend
           </button>
         </div>
       </li>
     </ul>
   </div>
 
-  <!-- Pending Friend Requests -->
-  <div *ngIf="pendingRequests.length > 0" class="mt-4">
-    <h5>Pending Friend Requests</h5>
-    <ul class="list-group">
-      <li *ngFor="let request of pendingRequests" class="list-group-item">
-        <span>{{ request.senderName }} wants to connect with you!</span>
-        <button 
-          class="btn btn-sm btn-primary ms-3" 
-          (click)="acceptRequest(request.id)">
-          Accept
-        </button>
-        <button 
-          class="btn btn-sm btn-secondary ms-2" 
-          (click)="denyRequest(request.id)">
-          Deny
-        </button>
-      </li>
-    </ul>
+  <!-- Friends List -->
+  <div class="friends-list mb-4">
+    <h5 class="section-title">Your Friends</h5>
+    <div *ngIf="friends.length > 0; else noFriends" class="row">
+      <div *ngFor="let friend of friends" class="col-md-4 mb-3">
+        <div class="card friend-card">
+          <img
+          [src]="getFriendImageUrl(friend.profile)"
+          alt="{{ friend.friendName }}"
+          class="card-img-top rounded-circle mx-auto d-block mt-3"
+          style="width: 100px; height: 100px;"
+        />
+          <div class="card-body text-center">
+            <h6 class="card-title">{{ friend.friendName }}</h6>
+            <button
+              class="btn btn-outline-primary btn-sm"
+              (click)="openFriendModal(friend.friendId)"
+            >
+              See More
+            </button>
+            <button
+              class="btn btn-outline-danger btn-sm mt-2"
+              (click)="confirmUnfriend(friend.friendId)"
+            >
+              Unfriend
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #noFriends>
+      <p class="text-center text-muted">
+        You don't have any friends yet. Start adding some!
+      </p>
+    </ng-template>
   </div>
 
-  <div>
-    <h5>Pending Transfers</h5>
-    <ul>
-      <li *ngFor="let transfer of incomingTransfers">
-        Coupon {{ transfer.saleCouponId }} from {{ transfer.senderId }}
-        <button (click)="acceptTransfer(transfer.transferId)">Accept</button>
-        <button (click)="denyTransfer(transfer.transferId)">Deny</button>
-      </li>
-    </ul>
+  <!-- Pending Friend Requests -->
+  <div class="pending-requests">
+    <h5 class="section-title">Pending Friend Requests</h5>
+    <div *ngIf="pendingRequests.length > 0; else noRequests">
+      <table class="table table-hover shadow-sm">
+        <thead class="table-light">
+          <tr>
+            <th>Requester</th>
+            <th style="text-align: center;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let request of pendingRequests">
+            <td>{{ request.senderName }}</td>
+            <td class="text-center">
+              <button
+                class="btn btn-sm btn-success me-3"
+                (click)="acceptRequest(request.id)"
+              >
+                Accept
+              </button>
+              <button
+                class="btn btn-sm btn-secondary"
+                (click)="confirmDenyRequest(request.id)"
+              >
+                Deny
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noRequests>
+      <p class="text-center text-muted">No pending friend requests.</p>
+    </ng-template>
   </div>
-  
-  <div>
-    <h5>Transfer History</h5>
-    <ul>
-      <li *ngFor="let transfer of transferHistory">
-        Transfer {{ transfer.transferId }} | Status: {{ transfer.status }} | Sent by: {{ transfer.senderId }}
-      </li>
-    </ul>
-  </div>
+
+    <!-- Use Confirmation Modal for Unfriend Action -->
+  <app-confirmation-modal
+  [show]="showConfirmUnfriendModal"
+  [title]="'Are you sure you want to unfriend this user?'"
+  [message]="'This action will remove this user from your friends list.'"
+  (confirmed)="unfriend(friendIdToDelete)"
+  (canceled)="showConfirmUnfriendModal = false"
+></app-confirmation-modal>
+
+<!-- Use Confirmation Modal for Deny Request Action -->
+<app-confirmation-modal
+  [show]="showConfirmDenyModal"
+  [title]="'Are you sure you want to deny this friend request?'"
+  [message]="'This action will deny the request from this user.'"
+  (confirmed)="denyRequest(friendRequestIdToDelete)"
+  (canceled)="showConfirmDenyModal = false"
+></app-confirmation-modal>
 
 </div>

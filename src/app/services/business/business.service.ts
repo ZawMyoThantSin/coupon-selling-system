@@ -14,18 +14,6 @@ export class BusinessService {
     this.token = this.storageService.getItem("token");
   }
 
-  private createAuthHeader(): any{
-
-    if(this.token){
-      console.log('Token found in storage..', this.token);
-      return new HttpHeaders().set(
-        "Authorization", "Bearer "+ this.token
-      )
-    }else{
-      console.log("Not Found!");
-    }
-    return null;
-  }
 
   getAllBusiness(id: number):Observable<any>{
     return this.http.get(this.BASE_URL +'api/businesses/user/'+id,{
@@ -41,15 +29,12 @@ export class BusinessService {
 
   getById(id:number):Observable<any>{
     return this.http.get(`${this.BASE_URL}api/businesses/${id}`,{
-      headers:this.createAuthHeader(),
       responseType:'json'
     })
   }
 
   addBusinessOwner(data:any): Observable<any>{
-    const header = new HttpHeaders({'Content-Type':'application/json'})
     return this.http.post(this.BASE_URL+'api/businesses/add/owner',data,{
-      headers:this.createAuthHeader(),
       responseType:'json'
     });
   }
@@ -60,6 +45,20 @@ export class BusinessService {
     });
   }
 
+  getBusinessCount(): Observable<number> {
+    return this.http.get<number>(`${this.BASE_URL}api/businesses/count`, {
+      responseType: 'json'
+    });
+  }
+
+  getCouponSalesData(businessId : number): Observable<{ businessId: number, soldCount: number, buyDate: string }[]> {
+    return this.http.get<{ businessId: number, soldCount: number, buyDate: string }[]>(
+      `${this.BASE_URL}api/sale-coupon/coupon-sales/${businessId}`,
+      {
+        responseType: 'json'
+      }
+    );
+  }
 // get business images
 getImageUrl(imagePath: string): string {
 
@@ -74,10 +73,8 @@ getAllBusinesses(): Observable<any> {
 
 // Update an existing product by ID
 update(id: number, data: any): Observable<any> {
-  const header = new HttpHeaders({'Content-Type':'application/json'})
 
   return this.http.put(`${this.BASE_URL}api/businesses/${id}`, data, {
-    headers: this.createAuthHeader(),
     responseType: 'json'
   });
 }
