@@ -26,13 +26,13 @@ export class OwnerDashboardComponent {
 
   businessId!:number;
   shopExist: boolean =false;
-  sidebarOpen: boolean = false; // Flag to control the sidebar visibility
+  sidebarOpen: boolean = false; 
   activeRoute: any = '';
   isLoggedIn: boolean = false;
-  businessData!: Business; // Array to store fetched businesses
-  isBusinessCollapsed: boolean = true; // Tracks if the business section is collapsed
+  businessData!: Business; 
+  isBusinessCollapsed: boolean = true; 
   token!: any;
-  loading: boolean = false; // Flag to track if data is being fetched
+  loading: boolean = false; 
   seeAll = false;
   userInfo!:UserResponse;
   userId:any;

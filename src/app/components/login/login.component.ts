@@ -38,25 +38,19 @@ export class LoginComponent implements OnInit {
         const token = params['token'];
 
         if (token) {
-          // Store the token in localStorage
           localStorage.setItem('token', token);
           console.log("REACH")
-          // Navigate to the normal dashboard URL without query params
           this.router.navigateByUrl('/d');
         } else {
-          // Redirect to login if neither a stored token nor query param token is available
           this.router.navigate(['/login']);
         }
       });
     } else {
-      // Token exists in localStorage; navigate to dashboard
       this.router.navigate(['/d']);
     }
   }
-// Define the data object to bind to the form
 
 
-// Method to handle form submission
 onLoginSubmit(form:any) {
   if (form.valid) {
     this.authService.login(this.user).subscribe(
@@ -64,13 +58,22 @@ onLoginSubmit(form:any) {
         console.log(data)
         this.storageService.removeItem("formData");
         localStorage.setItem('token', data.token);
-        this.user.email = '',
-        this.user.password =  ''
-        this.router.navigate(['/']);
+        
+
+        if (data.message === 'RESET_PASSWORD_REQUIRED') {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('userId', data.userId);
+          this.router.navigate(['/owner-password-reset']);
+        } else if (data.message === 'LOGIN_SUCCESSFUL') {
+          localStorage.setItem('token', data.token);
+          this.user.email = '',
+          this.user.password =  ''
+          this.router.navigate(['/']); 
+        }
+
       },
       error => {
-        this.toastr.error('Username or password is invalid', 'Login Failed'); // Display error
-        // console.error("Error in Login", error)
+        this.toastr.error('Username or password is invalid', 'Login Failed');
       }
     );
 

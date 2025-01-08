@@ -34,6 +34,7 @@ import { ProductComponent } from './components/owner/product/product.component';
 import { CouponComponent } from './components/owner/product/coupon/coupon.component';
 import { ExcelImportComponent } from './components/owner/product/excel-import/excel-import.component';
 import { DetailProductComponent } from './components/owner/product/detail/detail-product/detail-product.component';
+import { OwnerPasswordResetComponent } from './components/owner/owner-password-reset/owner-password-reset.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -67,6 +68,7 @@ const routes: Routes = [
 
     ]
   },
+  { path: 'owner-password-reset', component: OwnerPasswordResetComponent, title: 'Reset Password' },
   {path:'o', component:OwnerDashboardComponent,
     children:[
       {path:'shop/:id', component:ShopComponent, title:'Shop' ,children:[

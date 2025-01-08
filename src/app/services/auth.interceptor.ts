@@ -33,9 +33,12 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         errorMessage = 'Invalid token signature.';
       } else if (error.status >= 500) {
         errorMessage = 'Server error. Please try again later.';
+      } else if (error.status === 200) {
+        // Handle unexpected 200 response errors
+        errorMessage = 'Invalid response format from server.';
       }
       // Optionally, show a toast notification (replace with your UI framework)
-      console.warn(errorMessage);
+      console.warn("NEW ERROR MESSAGE" + errorMessage);
 
       return throwError(() => new Error(errorMessage)); // Re-throw the error
     }),
