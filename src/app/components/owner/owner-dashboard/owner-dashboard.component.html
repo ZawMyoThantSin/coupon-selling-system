@@ -107,26 +107,65 @@
       </div>
 
       <div class="d-flex align-items-center">
-        <!-- Notifications -->
-        <div class="d-flex me-3">
-          <button class="btn btn-link position-relative me-2">
+        <!-- QR Scanner -->
+        <div class="me-1" *ngIf="shopExist" >
+          <button
+           class="btn btn-link"
+           (click)="openQrScanner()"
+           >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#4e73df"><path d="M80-680v-200h200v80H160v120H80Zm0 600v-200h80v120h120v80H80Zm600 0v-80h120v-120h80v200H680Zm120-600v-120H680v-80h200v200h-80ZM700-260h60v60h-60v-60Zm0-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm120-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm240-320v240H520v-240h240ZM440-440v240H200v-240h240Zm0-320v240H200v-240h240Zm-60 500v-120H260v120h120Zm0-320v-120H260v120h120Zm320 0v-120H580v120h120Z"/></svg>
+          </button>
+        </div>
+
+        <!-- Notification button triggering the dropdown -->
+        <div mdbDropdown class="d-flex me-3" *ngIf="shopExist" >
+          <button
+            class="btn btn-link position-relative me-2"
+            id="notificationDropdown"
+            mdbDropdownToggle
+            aria-expanded="false"
+          >
             <i class="fas fa-bell fs-6"></i>
             <span class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger">
               3+
             </span>
           </button>
 
-          <button class="btn btn-link" href="">
-            <i class="fas fa-envelope fa-lg"></i>
-            <span class="badge rounded-pill badge-notification bg-danger">1</span>
-          </button>
-          <!-- <button class="btn btn-link position-relative">
-            <i class="fas fa-envelope fs-6"></i>
-            <span class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger">
-              7
-            </span>
-          </button> -->
+          <!-- Notification dropdown menu -->
+          <ul
+            mdbDropdownMenu
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="notificationDropdown"
+          >
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="fas fa-envelope me-2"></i>
+                New message received
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="fas fa-user-plus me-2"></i>
+                New follower
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                Alert: Action required
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item text-center" href="#">
+                View all notifications
+              </a>
+            </li>
+          </ul>
         </div>
+
 
         <!-- User Info -->
         <div class="me-5">

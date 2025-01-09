@@ -36,7 +36,8 @@ export type ChartOptions = {
     CommonModule],
   template: `
   <!-- Page Heading -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
+<div *ngIf="businessId">
+<div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 text-gray-800">Dashboard</h1>
         <button class="btn btn-primary">
           Generate Report
@@ -62,6 +63,7 @@ export type ChartOptions = {
     ></apx-chart>
   </div>
   <p class="no-data-message" *ngIf="chartOptions.series[0].data.length === 0">No data available to display for this business.</p>
+</div>
 </div>
 
   `,
@@ -110,7 +112,7 @@ export type ChartOptions = {
 })
 export class CouponSaleBarChartComponent {
   @ViewChild("chart") chart: ChartComponent | undefined;
-  @Input() businessId: number=36;
+  businessId: number | null = null;
   public chartOptions: ChartOptions;
   public view: 'daily' | 'monthly' = 'daily'; // Default to daily view
 
@@ -119,7 +121,13 @@ export class CouponSaleBarChartComponent {
   }
 
   ngOnInit() {
-    this.loadDailyCouponSalesData();
+    this.businessService.businessId$.subscribe((id) => {
+      this.businessId = id;
+    });
+    if(this.businessId){
+      this.loadDailyCouponSalesData();
+    }
+
   }
   private getInitialChartOptions(): ChartOptions {
     return {

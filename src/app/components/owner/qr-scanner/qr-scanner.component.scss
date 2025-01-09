@@ -1,0 +1,123 @@
+zxing-scanner {
+  width: 100%;
+  height: 100%;
+
+}
+
+header {
+  margin-bottom: 10px;
+
+  select {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    width: 100%;
+  }
+}
+
+.results {
+  margin-top: 15px;
+  background-color: #e0f7fa;
+  padding: 10px;
+  border-radius: 5px;
+
+  strong {
+    color: #00796b;
+  }
+}
+
+.scanner-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  border: 2px solid #000;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+
+  .scan-area {
+    position: relative;
+    width: 100%;
+    height: 300px; // Adjust as needed
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.8); // Slightly darker for contrast
+
+    .scan-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(123, 226, 6, 0.8);
+      box-shadow: 0 0 10px rgb(41, 248, 0);
+      animation: scan-line-bounce 1.2s ease-in-out infinite alternate; // Enable alternate direction
+    }
+  }
+}
+
+@keyframes scan-line-bounce {
+  0% {
+    transform: translateY(0); // Start at the top
+  }
+  100% {
+    transform: translateY(300px); // Move to the bottom
+  }
+}
+
+
+
+// loading
+/* From Uiverse.io by adamgiebl */
+.dots-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25%;
+  width: 100%;
+}
+
+.dot {
+  height: 20px;
+  width: 20px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background-color: #b3d4fc;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.dot:last-child {
+  margin-right: 0;
+}
+
+.dot:nth-child(1) {
+  animation-delay: -0.3s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: -0.1s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.1s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    background-color: #b3d4fc;
+    box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: #6793fb;
+    box-shadow: 0 0 0 10px rgba(178, 212, 252, 0);
+  }
+
+  100% {
+    transform: scale(0.8);
+    background-color: #b3d4fc;
+    box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+  }
+}

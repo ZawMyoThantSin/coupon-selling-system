@@ -37,6 +37,10 @@ import { DetailProductComponent } from './components/owner/product/detail/detail
 import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
 import { PurchaseCouponComponent } from './components/home/purchase-coupon/purchase-coupon.component';
 import { CouponSaleBarChartComponent } from './components/owner/owner-dashboard/chart/coupon-sale-bar-chart/coupon-sale-bar-chart.component';
+import { QrScannerComponent } from './components/owner/qr-scanner/qr-scanner.component';
+import { QrResultComponent } from './components/owner/qr-result/qr-result.component';
+import { dashboardGuard } from './guards/dashboard.guard';
+import { OwnerPasswordResetComponent } from './components/owner/owner-password-reset/owner-password-reset.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -53,17 +57,7 @@ const routes: Routes = [
         {path:'edit', component:PaymentEditComponent}
       ]},
       {path:'customers', component:CustomersComponent, title:'Customers'},
-      // {path:'b/detail/:id', component:BusinessDetailComponent,
-      //   children: [
-      //   {path: '',component: ProductComponent},
-      //   {path:'coupon',component:CouponComponent}
-      // ]},
-      // {path:'order', component:UserOrderComponent, title:'order'},
       {path:'b/edit/:id', component:BusinessEditComponent, title:'Edit'},
-      // {path:'b/c', component:CouponComponent, title:''},
-      // {path:'product',component:ProductComponent},
-      // {path:'p/create-product',component:CreateProductModalComponent},
-      // {path:'p/detail-product/:id',component:DetailProductComponent},
       {path:'category', component:CategoryComponent, title:'Business Category'},
       {path:'payment', component:PaymentComponent, title:'Payment'},
       {path: 'excel-import', component: ExcelImportComponent },
@@ -73,6 +67,8 @@ const routes: Routes = [
   {path:'o', component:OwnerDashboardComponent,
     children:[
       {path:'',  component:CouponSaleBarChartComponent},
+      {path:'qr-scanner', component:QrScannerComponent},
+      {path:'qr-result', component:QrResultComponent},
       {path:'shop/:id', component:ShopComponent, title:'Shop' ,children:[
         {path:'', component:ProductComponent},
         {path:'coupon',component:CouponComponent}
@@ -97,6 +93,7 @@ const routes: Routes = [
       {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}
     ]
   },
+  {path:'password-reset', component:OwnerPasswordResetComponent, title:'Reset Password'},
   {path:'login', component:LoginComponent, title:'Login'},
   {path:'signup', component:SignupComponent, title:'Signup'},
   {path: 'access-denied', component: AccessDeniedComponent,title:'403' },

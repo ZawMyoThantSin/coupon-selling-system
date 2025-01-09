@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import e from 'express';
 import { ToastrService } from 'ngx-toastr';
+import { JwtService } from '../../services/jwt.service';
 
 @Component({
   selector: 'app-login',
@@ -13,10 +14,12 @@ import { ToastrService } from 'ngx-toastr';
 export class LoginComponent implements OnInit {
   authService = inject(AuthService);
   storageService = inject(StorageService);
+  tokenService = inject(JwtService);
   toastr = inject(ToastrService);
   route = inject(ActivatedRoute);
   router = inject(Router);
   formData:any;
+  userRole!: string;
   user = {
     email: "",
     password: '',
@@ -28,7 +31,7 @@ export class LoginComponent implements OnInit {
         email : this.formData.email || '',
         password: '',
       }
-    }
+  }
 
     const storedToken = this.storageService.getItem('token');
 
@@ -41,16 +44,16 @@ export class LoginComponent implements OnInit {
           // Store the token in localStorage
           localStorage.setItem('token', token);
           console.log("REACH")
+          this.userRole = this.tokenService.getUserRole(token);
           // Navigate to the normal dashboard URL without query params
-          this.router.navigateByUrl('/d');
+          this.router.navigateByUrl('/');
         } else {
           // Redirect to login if neither a stored token nor query param token is available
           this.router.navigate(['/login']);
         }
       });
     } else {
-      // Token exists in localStorage; navigate to dashboard
-      this.router.navigate(['/d']);
+      this.router.navigateByUrl('/');
     }
   }
 // Define the data object to bind to the form
@@ -64,13 +67,19 @@ onLoginSubmit(form:any) {
         console.log(data)
         this.storageService.removeItem("formData");
         localStorage.setItem('token', data.token);
-        this.user.email = '',
-        this.user.password =  ''
-        this.router.navigate(['/']);
+        if (data.message === 'RESET_PASSWORD_REQUIRED') {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('userId', data.userId);
+          this.router.navigate(['/password-reset']);
+        } else if (data.message === 'LOGIN_SUCCESSFUL') {
+          localStorage.setItem('token', data.token);
+          this.user.email = '',
+          this.user.password =  ''
+          this.router.navigate(['/']);
+        }
       },
       error => {
-        this.toastr.error('Username or password is invalid', 'Login Failed'); // Display error
-        // console.error("Error in Login", error)
+        this.toastr.error('Username or password is invalid', 'Login Failed');
       }
     );
 
@@ -79,5 +88,8 @@ onLoginSubmit(form:any) {
 
 loginWithGoogle() {
   window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+}
+loginWithGitHub() {
+  window.location.href = 'http://localhost:8080/oauth2/authorization/github';
 }
 }

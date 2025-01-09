@@ -1,12 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BusinessService {
+  private businessIdSource = new BehaviorSubject<number | null>(null);
+  businessId$ = this.businessIdSource.asObservable();
+
+  updateBusinessId(id: number): void {
+    this.businessIdSource.next(id);
+  }
   BASE_URL = "http://localhost:8080/";
   public token: any;
 
@@ -51,7 +57,7 @@ export class BusinessService {
     });
   }
 
-  getCouponSalesData(businessId : number): Observable<{ businessId: number, soldCount: number, buyDate: string }[]> {
+  getCouponSalesData(businessId : number | null): Observable<{ businessId: number, soldCount: number, buyDate: string }[]> {
     return this.http.get<{ businessId: number, soldCount: number, buyDate: string }[]>(
       `${this.BASE_URL}api/sale-coupon/coupon-sales/${businessId}`,
       {
