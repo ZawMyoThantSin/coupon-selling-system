@@ -6,10 +6,48 @@
   font-size: 2.5rem;
 }
 
+.search-category-wrapper {
+  display: flex;
+  justify-content: space-between; /* Space between the elements */
+  align-items: center; /* Vertically center the elements */
+  gap: 30px;
+}
+
 .search-container {
   text-align: center;
+  margin-top: 50px; /* You can adjust this value to your liking */
   margin-bottom: 30px;
+  width: 500px;
 }
+
+.category-boxes {
+  display: flex;
+  justify-content: flex-end; /* Align the boxes to the right */
+  gap: 30px; /* Space between the boxes */
+  margin: auto; /* Center vertically if container height is fixed */
+  width: 90%; /* Optional: Adjust width of the container */
+}
+
+.category-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+  cursor: pointer;
+  margin-top: 50px;
+  padding: 5px 0; /* Optional: Ensures padding is consistent */
+}
+
+.category-name {
+  font-size: 15px;  /* Your new font size */
+  color: #555;
+  display: inline-block; /* Ensures the text takes up only the space it needs */
+}
+
+.category-name.bold {
+  font-weight: bold;  /* Apply bold styling */
+}
+
 
 .no-results {
   animation: fadeIn 0.5s;

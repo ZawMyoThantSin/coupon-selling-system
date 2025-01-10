@@ -1,17 +1,27 @@
-<div class="coupon-container">
-   
-    <ag-grid-angular style="width: 90%; height: 150px;"  
-    [columnDefs]="columnDefs" [defaultColDef]="defaultColDef" [pagination]="true" 
-    [pagination]="pagination" [paginationPageSize]="paginationPageSize"
+
+
+<ag-grid-angular
+    style="width: 100%; height: 485px;"
+    [gridOptions]="gridOptions"
+    class="ag-theme-alpine"
+    [columnDefs]="columnDefs"
+    [pagination]="true"
+    [pagination]="pagination"
+    [paginationPageSize]="paginationPageSize"
     [paginationPageSizeSelector]="paginationPageSizeSelector"
     [rowSelection]="rowSelection"
     [modules]="modules"
- 
+
     [rowData]="displayedCoupons"
+    (gridReady)="onGridReady($event)"
     (paginationChanged)="onPaginationChanged()"
-    class="ag-theme-quartz">
-  
+
+    >
+
 </ag-grid-angular>
+
+
+
 
     <!-- Pagination Controls -->
     <div class="pagination-controls">
@@ -28,4 +38,4 @@
       <button [disabled]="!hasNextPage" (click)="onNextPage()">Next</button>
     </div>
   </div>
-  
+

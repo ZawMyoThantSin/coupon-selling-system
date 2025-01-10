@@ -26,6 +26,7 @@ import { authInterceptor } from './services/auth.interceptor';
 import { HomeCarouselComponent } from "./components/home/home-carousel/home-carousel.component";
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { AgGridModule } from 'ag-grid-angular';
+import { QRCodeComponent, QRCodeModule } from 'angularx-qrcode';
 import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
@@ -33,7 +34,8 @@ import { MatIconModule } from '@angular/material/icon';
     AppComponent,
     LoginComponent,
     SignupComponent,
-    DashboardComponent
+    DashboardComponent,
+    
 
   ],
   imports: [
@@ -48,6 +50,7 @@ import { MatIconModule } from '@angular/material/icon';
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
+    QRCodeModule,
     MdbCollapseModule,
     MdbDropdownModule,
     MdbRippleModule,
@@ -55,6 +58,7 @@ import { MatIconModule } from '@angular/material/icon';
     MdbTabsModule,
     MdbModalModule,
     FormsModule,
+    MatIconModule,
     CommonModule,
     MatIconModule,
     HomeCarouselComponent,

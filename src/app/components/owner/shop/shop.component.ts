@@ -36,11 +36,11 @@ export class ShopComponent {
   activeRoute: any = '';
   isLoggedIn: boolean = false;
   isBusinessCollapsed: boolean = true; // Tracks if the business section is collapsed
-  token!: any;
+  token!: string | null;
   loading: boolean = false; // Flag to track if data is being fetched
   seeAll = false;
   userInfo!:UserResponse;
-  userId:any;
+  userId!:number;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,35 +52,33 @@ export class ShopComponent {
     private userService: UserService,
     private modalService: MdbModalService
   ) {
-    this.router.events.subscribe(() => {
-      this.activeRoute = this.router.url; // Get the active URL
-    });
+
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.businessId = Number(params.get('id'));
-      this.fetchBusinessInfo(this.businessId);
-      // this.productService.getAllProducts(this.businessId).subscribe((data: Product[]) => {
-      //   this.products = data;
-      //   this.products = data.filter(product => product.status );
-      // });
-
-      //  // Fetch all coupons
-      //  this.couponService.getAllCoupons(this.businessId).subscribe((data: Coupon[]) => {
-      //   this.coupons = data;
-      // });
-    });
+    this.token = this.storageService.getItem("token");
+    if(this.token !=null){
+      this.userId = this.tokenService.getUserId(this.token);
+      this.route.paramMap.subscribe(params => {
+        this.businessId = Number(params.get('id'));
+        this.fetchBusinessInfo(this.businessId, this.userId);
+      });
+    }
 
   }
 
-  private fetchBusinessInfo(businessId: number){
+  private fetchBusinessInfo(businessId: number, userId: number){
     this.loading =true;
     this.businessService.getById(businessId).subscribe(
       (response) => {
-        this.business = response;
-        this.shopExist = this.business.id != null ? true : false;//data is null the shop isn't created yet!
-        this.loading = false;
+        if(this.userId == response.userId){
+          this.business = response;
+          this.shopExist = this.business.id != null ? true : false;//data is null the shop isn't created yet!
+          this.loading = false;
+        }else{
+          this.router.navigate(['/access-denied']);
+        }
+
       },
       (error) => {
         console.error('Error fetching businesses:', error);
@@ -88,47 +86,6 @@ export class ShopComponent {
       }
     );
   }
-// create business
-
-
-  // fetchBusinessAndProducts(businessId: number): void {
-  //   // Fetch business details
-  //   this.businessService.getById(30).subscribe(
-  //     business => (this.business = business),
-  //     error => console.error('Error fetching business details:', error)
-  //   );
-
-  //   // Fetch products for the business
-  //   this.productService.getAllProducts(30).subscribe(
-  //     products => {this.products = products
-  //       console.log(products)
-  //     },
-  //     error => console.error('Error fetching products:', error)
-
-  //   );
-
-  //   this.couponService.getAllCoupons(businessId).subscribe(
-  //     coupons => {
-  //       this.coupons = coupons;
-  //       console.log('Coupons:', this.coupons);
-  //     },
-  //     error => console.error('Error fetching coupons:', error)
-  //   );
-
-  // }
-
-  // getBusinessDetail(id: number): void {
-  //   this.businessService.getById(id).subscribe(
-  //     response => {
-  //       this.business = response;
-  //       console.log('Business details:', this.business);
-  //     },
-  //     error => {
-  //       console.error('Error in fetching business details:', error);
-  //       this.business= this.business; // Handle the error case gracefully
-  //     }
-  //   );
-  // }
 
   toggleView(view: string): void {
     if (view === 'product') {

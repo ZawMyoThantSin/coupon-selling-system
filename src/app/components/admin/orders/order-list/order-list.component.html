@@ -22,7 +22,6 @@
       <option value="rejected">Rejected</option>
     </select>
   </div>
-
   <!-- Orders Table -->
   <div class="table-responsive">
     <table class="table table-striped">
@@ -33,34 +32,43 @@
           <th>Phone</th>
           <th>Total Amount</th>
           <th>Status</th>
-          <th>Created At</th>
+          <th>Date</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let order of filteredOrders">
-          <td>{{ order.id }}</td>
+        <tr *ngFor="let order of filteredOrders | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage };">
+          <td class="fw-bold">#{{ order.order_id }}</td>
           <td>
-            <strong>{{ order.customerName }}</strong><br>
-            <span>{{ order.email }}</span>
+            <span class="fw-normal">{{ order.userName }}</span><br>
+            <span class="text-muted">{{ order.userEmail }}</span>
           </td>
-          <td>{{ order.phone }}</td>
-          <td>{{ order.total | currency }}</td>
+          <td>{{ order.phoneNumber }}</td>
+          <td>{{ order.totalPrice  }} MMK</td>
           <td>
             <span [ngClass]="{
-              'text-success': order.status === 'accepted',
-              'text-warning': order.status === 'pending',
-              'text-danger': order.status === 'rejected'
+              'text-success': order.status === 1,
+              'text-warning': order.status === 0,
+              'text-danger': order.status === 2
             }">
-              {{ order.status  }}
+              {{ statusFilterText(order.status) }}
             </span>
           </td>
           <td>{{ order.createdAt | date: 'short' }}</td>
           <td>
-            <button class="btn btn-info" (click)="viewOrderDetails(order.id)">View</button>
+            <button class="btn btn-info" (click)="viewOrderDetails(order.order_id)">View</button>
           </td>
         </tr>
       </tbody>
     </table>
+    <!-- Pagination Controls -->
+   <div class="d-flex justify-content-end">
+    <pagination-controls
+    (pageChange)="currentPage = $event"
+    [responsive]="true"
+    previousLabel="Previous"
+    nextLabel="Next"
+  ></pagination-controls>
+ </div>
   </div>
 </div>

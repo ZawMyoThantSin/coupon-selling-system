@@ -101,11 +101,12 @@ this.couponService.getAllUserCoupons().subscribe(
       return this.couponDescriptions[productId] || '';  // Ensure full description is returned
     }
 
-    Buy(productName: string, quantity: number, totalPrice: number,price:number): void {
+    Buy(productName: string,imagePath:string, quantity: number, totalPrice: number,price:number): void {
       const couponId = this.couponIds[this.product.id] || null;
       const cartData = [
         {
           productName: productName,
+          productImage:imagePath,
           quantity: quantity,
           totalPrice: totalPrice,
           price:price

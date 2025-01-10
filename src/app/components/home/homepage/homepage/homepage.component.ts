@@ -38,7 +38,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
 
   filteredBusinesses: Business[] = [];
   filteredProducts: Product[] = [];
-
+  selectedCategory: any = null;
 
   //Products
 
@@ -53,7 +53,15 @@ export class HomepageComponent implements OnInit, AfterViewInit {
     private datePipe: DatePipe,
     private router: Router,
   ) {}
-
+  categories = [
+    { id: 1, name:'Restaurant' },
+    { id: 2, name:'Hotel' },
+    { id: 3, name:'Spa' },
+    { id: 4, name:'Fitness' },
+    { id: 5, name:'Bar' },
+    { id: 6, name:'Bakery' },
+  ];
+  
   ngOnInit(): void {
     this.loadBusinesses();
     this.loadProducts();
@@ -66,6 +74,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
   loadBusinesses(): void {
     this.businessService.getAllBusinesses().subscribe({
       next: (data) => {
+        console.log(data);  // Check if the 'categoryId' is present in each business object
         this.businesses = data;
         this.businessArray = [...this.businesses];
         this.filteredBusinesses = [...this.businesses];
@@ -76,6 +85,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
       },
     });
   }
+  
 
   loadProducts(): void {
     this.productService.getEveryProducts().subscribe({
@@ -147,8 +157,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
     );
   }
 
-
-
+  
   //Products ***
   getImageUrl(imagePath: string): any {
     return this.businessService.getImageUrl(imagePath);
@@ -162,5 +171,22 @@ export class HomepageComponent implements OnInit, AfterViewInit {
   //   const expDate = this.datePipe.transform(this.couponExpDates[productId], 'MMM d EEE');
   //   return createDate && expDate ? `${createDate} ~ ${expDate}` : '';
   // }
+  onCategorySelect(categoryId: number): void {
+    this.selectedCategory = categoryId;
+    this.businessService.getAllBusinesses().subscribe({
+      next: (data) => {
+        // Filter businesses by categoryId
+        this.businesses = data.filter((business: Business) => business.categoryId === categoryId);
+        console.log("now", JSON.stringify(this.businesses));
 
+      },
+      error: (err) => {
+        console.error('Error fetching businesses:', err);
+      }
+    });
+  }
+  resetSelection() {
+    this.loadBusinesses();
+    this.selectedCategory = null;
+  }
 }
