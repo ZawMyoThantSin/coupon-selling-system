@@ -91,6 +91,26 @@ export class UserOrderComponent {
       return;
     }
 
+    if (!this.cartData.length) {
+      this.toastr.error('Your cart is empty. Add items to proceed.', 'Error!');
+      return;
+    }
+
+    if (!this.phoneNumber) {
+      this.toastr.error('Phone number is required.', 'Error!');
+      return;
+    }
+
+    if (!this.validatePhoneNumber()) {
+      this.toastr.error('Please enter a valid phone number.', 'Error!');
+      return;
+    }
+
+    if (!this.screenshot) {
+      this.toastr.error('Please upload a screenshot of your payment.', 'Error!');
+      return;
+    }
+
     if (!this.selectedMethod?.id) {
       this.toastr.error('Please select a payment method.', 'Error!');
       return;
@@ -141,19 +161,23 @@ export class UserOrderComponent {
 
     this.userOrderService.submitOrder(formData).subscribe(
       (response) => {
-        // console.log('Server Response:', response);
+       // Check the response status or message
+       if (response && response.status === 200) { // Adjust based on your API
         this.toastr.success('Order submitted successfully!', 'Success');
-        this.cartIds.map( c => {
+        this.cartIds.map(c => {
           this.cartService.clearCart(c).subscribe(res => {
-            // console.log("REs", res)
+            // Handle cart clearing logic if necessary
           });
-        })
-        // Optionally reset the form or UI state here
+          });
+          // Optionally reset the form or UI state here
+        } else {
+          this.toastr.error('Failed to submit order. Please try again.', 'Error!');
+        }
       },
       (error) => {
         console.error('Error submitting order:', error);
-        this.toastr.error('Failed to submit order. Please try again.', 'Error!');
-      }
+        const errorMessage = error.error?.message || 'Failed to submit order. Please try again.';
+        this.toastr.error(errorMessage, 'Error!');      }
     );
   }
 
@@ -180,14 +204,10 @@ export class UserOrderComponent {
   }
 
   validatePhoneNumber(): boolean {
-    return /^[0-9]{10}$/.test(this.phoneNumber);
+    return /^[0-9]{11}$/.test(this.phoneNumber);
   }
 
-  isValidOrder(): boolean {
-    return (
-      this.cartData.length > 0
-    );
-  }
+
 
 
   cancelOrder(): void {

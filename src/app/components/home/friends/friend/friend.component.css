@@ -21,6 +21,9 @@
 .table-light th {
   background-color: #f8f9fa;
 }
+.suggestion-item{
+  list-style-type: none;
+}
 
 .suggestion-item:hover {
   transform: scale(1.02);

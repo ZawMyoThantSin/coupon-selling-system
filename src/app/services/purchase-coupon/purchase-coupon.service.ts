@@ -15,5 +15,21 @@ export class PurchaseCouponService {
       return this.http.get<PurchaseCoupon[]>(`${this.BASE_URL}/user/${userId}`, {
           responseType: 'json'
       });
+    }
+
+    transferCoupon(saleCouponId:number, acceptorId: number):Observable<any> {
+      return this.http.post<any>(`${this.BASE_URL}/transfer/${saleCouponId}/${acceptorId}`, {
+        responseType: 'json'
+    });
+    }
+
+    getTransferCouponDataByAccepter(accepterId: number): Observable<any> {
+      return this.http.get<any>(`http://localhost:8080/transfer/couponAcepter/${accepterId}`, {
+        responseType: 'json'
+      });
+    }
+
+    getSaleCouponById(saleCouponId: number): Observable<any> {
+      return this.http.get<any>(`${this.BASE_URL}/${saleCouponId}`);
   }
 }

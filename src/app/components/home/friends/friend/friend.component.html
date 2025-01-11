@@ -1,5 +1,5 @@
 <div class="container mt-4">
-  <h3 class="text-center mb-4">Friends Management</h3>
+  <h3 class="text-center mb-4">Friends</h3>
 
   <!-- Search Box -->
   <div class="search-box mb-4 p-3 shadow-sm">
@@ -12,7 +12,7 @@
       autocomplete="off"
     />
     <ul *ngIf="emailSuggestions.length > 0" class="suggestions-list mt-3">
-      <li *ngFor="let user of emailSuggestions" class="suggestion-item">
+      <li *ngFor="let user of emailSuggestions" class="suggestion-item mb-3 p-3">
         <div class="d-flex justify-content-between align-items-center">
           <span>{{ user.email }}</span>
           <button
@@ -71,14 +71,27 @@
       <table class="table table-hover shadow-sm">
         <thead class="table-light">
           <tr>
-            <th>Requester</th>
+            <th style="width: 5%;"></th>
+            <th>Name</th>
             <th style="text-align: center;">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let request of pendingRequests">
-            <td>{{ request.senderName }}</td>
+           <!-- Icon to indicate request type -->
             <td class="text-center">
+              <i
+              [class]="'bi ' + (request.type === 'received' ? 'fas fa-user-plus text-success' : 'fas fa-paper-plane text-primary')"
+              [title]="request.type === 'received' ? 'Received Request' : 'Sent Request'"
+            ></i>
+          </td>
+          <!-- Display sender or accepter name based on type -->
+          <td>
+            {{ request.type === 'received' ? request.senderName : request.accepterName }}
+          </td>
+          <!-- Actions for each type -->
+          <td class="text-center">
+            <ng-container *ngIf="request.type === 'received'; else sentActions">
               <button
                 class="btn btn-sm btn-success me-3"
                 (click)="acceptRequest(request.id)"
@@ -91,6 +104,15 @@
               >
                 Deny
               </button>
+            </ng-container>
+            <ng-template #sentActions>
+              <button
+                class="btn btn-sm btn-danger"
+                (click)="confirmCancelRequest(request.id)"
+              >
+                Cancel
+              </button>
+            </ng-template>
             </td>
           </tr>
         </tbody>
@@ -118,5 +140,12 @@
   (confirmed)="denyRequest(friendRequestIdToDelete)"
   (canceled)="showConfirmDenyModal = false"
 ></app-confirmation-modal>
-
+<!-- Use Confirmation Modal for Deny Request Action -->
+<app-confirmation-modal
+  [show]="showConfirmCancelModal"
+  [title]="'Are you sure you want to cancel this friend request?'"
+  [message]="'This action will cancel the request to this user.'"
+  (confirmed)="cancelRequest(friendRequestIdToDelete)"
+  (canceled)="showConfirmCancelModal = false"
+></app-confirmation-modal>
 </div>

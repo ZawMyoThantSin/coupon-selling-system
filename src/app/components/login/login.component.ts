@@ -67,11 +67,12 @@ onLoginSubmit(form:any) {
         console.log(data)
         this.storageService.removeItem("formData");
         localStorage.setItem('token', data.token);
+
         if (data.message === 'RESET_PASSWORD_REQUIRED') {
           localStorage.setItem('token', data.token);
           localStorage.setItem('userId', data.userId);
           this.router.navigate(['/password-reset']);
-        } else if (data.message === 'LOGIN_SUCCESSFUL') {
+        }else{
           localStorage.setItem('token', data.token);
           this.user.email = '',
           this.user.password =  ''

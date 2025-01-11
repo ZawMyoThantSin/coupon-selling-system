@@ -57,6 +57,36 @@ export class BusinessService {
     });
   }
 
+  saleCouponReportForWeekly(type: 'pdf' | 'excel', businessId: number): Observable<Blob> {
+    return this.http.get(`${this.BASE_URL}api/coupon/weeklyRreport/${businessId}`, {
+      responseType: 'blob',
+      params: {
+        reportType: type, // Pass `reportType` as a query parameter
+      },
+    });
+
+  }
+
+
+  saleCouponReportForMonthly(type: 'pdf' | 'excel', businessId: number): Observable<Blob> {
+    return this.http.get(`${this.BASE_URL}api/coupon/monthlyReport/${businessId}`, {
+      responseType: 'blob',
+      params: {
+        reportType: type, // Pass `reportType` as a query parameter
+      },
+    });
+
+  }
+  productReport(type: 'pdf' | 'excel', businessId: number): Observable<Blob> {
+    return this.http.get(`${this.BASE_URL}api/products/preport/${businessId}`, {
+      responseType: 'blob',
+      params: {
+        reportType: type, // Pass `reportType` as a query parameter
+      },
+    });
+
+  }
+
   getCouponSalesData(businessId : number | null): Observable<{ businessId: number, soldCount: number, buyDate: string }[]> {
     return this.http.get<{ businessId: number, soldCount: number, buyDate: string }[]>(
       `${this.BASE_URL}api/sale-coupon/coupon-sales/${businessId}`,

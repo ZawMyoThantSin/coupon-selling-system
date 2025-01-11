@@ -41,6 +41,8 @@ import { QrScannerComponent } from './components/owner/qr-scanner/qr-scanner.com
 import { QrResultComponent } from './components/owner/qr-result/qr-result.component';
 import { dashboardGuard } from './guards/dashboard.guard';
 import { OwnerPasswordResetComponent } from './components/owner/owner-password-reset/owner-password-reset.component';
+import { OrderHistoryComponent } from './components/home/order-history/order-history.component';
+import { SaleCouponReportComponent } from './components/owner/owner-dashboard/sale-coupon-report/sale-coupon-report.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -68,6 +70,7 @@ const routes: Routes = [
     children:[
       {path:'',  component:CouponSaleBarChartComponent},
       {path:'qr-scanner', component:QrScannerComponent},
+      {path:'report', component:SaleCouponReportComponent, title:'Report'},
       {path:'qr-result', component:QrResultComponent},
       {path:'shop/:id', component:ShopComponent, title:'Shop' ,children:[
         {path:'', component:ProductComponent},
@@ -83,6 +86,7 @@ const routes: Routes = [
       {path: '', redirectTo: 'page', pathMatch: 'full' },
       {path:'cart', component:AddToCartComponent},
       {path:'order', component:UserOrderComponent, },
+      {path:'order-history', component:OrderHistoryComponent, title:'History'},
       {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
       {path:'friends', component:FriendComponent, title:'Friends'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},

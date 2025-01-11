@@ -1,15 +1,34 @@
-<!-- Welcome Heading -->
-<h2 class="text-center mb-4 text-gradient font-weight-bold">Welcome To Our Platform</h2>
-
 <div class="container mt-3">
 
   <!-- <h2 class="text-center mb-4 text-gradient font-weight-bold">Welcome To Our Platform</h2> -->
 
 <!-- Search Filter -->
-<div class="search-container mb-5">
-  <app-search-filter (searchTermChange)="filterItems($event)"></app-search-filter>
-</div>
+<div class="container my-3">
+  <!-- Wrapper for search bar and categories -->
+  <div class="search-category-wrapper">
 
+    <!-- Search Filter -->
+    <!-- <div class="search-container mb-5">
+      <app-search-filter (searchTermChange)="filterItems($event)"></app-search-filter>
+    </div> -->
+
+    <div class="category-boxes">
+      <!-- "All" Button -->
+      <div class="category-box">
+        <a (click)="resetSelection()" class="category-name" [ngClass]="{'bold': selectedCategory === null}">
+         All
+        </a>
+      </div>
+
+      <!-- Category Buttons -->
+      <div class="category-box" *ngFor="let category of categories">
+        <a (click)="onCategorySelect(category.id)">
+          <span class="category-name" [ngClass]="{'bold': selectedCategory === category.id}">{{ category.name }}</span>
+        </a>
+      </div>
+    </div>
+    </div>
+    </div>
 <!-- No Results Message -->
 <div class="text-center text-muted mt-5 no-results" *ngIf="filteredBusinesses.length === 0 && filteredProducts.length === 0">
   <h4>No matches found. Please adjust your search.</h4>
@@ -17,7 +36,7 @@
 
 <!-- Businesses Section -->
 <div class="section" *ngIf="filteredBusinesses.length > 0">
-  
+
   <div class="slider-container">
     <!-- Left Scroll Button -->
     <button class="slider-btn left-btn" (click)="scrollLeft(businessTrack, businessArray)">
@@ -25,26 +44,43 @@
     </button>
 
     <!-- Slider Track -->
+    <!-- Slider Track -->
     <div class="slider-track" #businessTrack>
-      <!-- Business Cards -->
-      <div class="slider-item" *ngFor="let business of filteredBusinesses">
+      <div class="slider-item" *ngFor="let business of businesses">
         <a class="card-link" [routerLink]="['/homepage/u/detail-business', business.id]">
           <div class="card">
-            <img
-              [src]="getImageUrl(business.photo)"
-              class="card-img-top"
-              alt="{{ business.name }}"
-            />
-            <div class="card-body">
-              <h5 class="card-title">{{ business.name }}</h5>
-              <p class="card-text">
-                <strong>Location:</strong> {{ business.location }}<br />
-                {{ business.description | slice: 0:60 }}...
-              </p>
+            <div class="card-image">
+              <img
+                [src]="getImageUrl(business.photo)"
+                alt="{{ business.name }}"
+              />
+            </div>
+            <div class="category">{{ business.category }}</div>
+            <div class="heading">
+              {{ business.name }}
+              <div class="author">
+                <i class="fas fa-map-marker-alt location-icon"></i>
+                <span class="review-location">{{ business.location }}</span>
+              </div>
+            </div>
+            <div class="rating">
+              <div class="stars">
+                <!-- <ng-container *ngFor="let star of [].constructor(5); let i = index">
+                  <i
+                    class="fas"
+                    [ngClass]="i < business.count ? 'fa-star text-warning' : 'fa-star text-muted'"
+                  ></i>
+                </ng-container> -->
+                <i class=" fas fa-star text-warning"></i>
+              </div>
+              <span class="review-count">
+                {{ business.count % 1 === 0 ? business.count : business.count.toFixed(1) }}/5
+              </span>
             </div>
           </div>
         </a>
       </div>
+    </div>
     </div>
 
     <!-- Right Scroll Button -->
@@ -52,7 +88,7 @@
       <i class="fas fa-chevron-right"></i>
     </button>
   </div>
-</div>
+
 
 <!-- Divider -->
 <hr class="section-divider my-5" *ngIf="filteredBusinesses.length > 0" />

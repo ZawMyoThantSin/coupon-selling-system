@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { BusinessService } from '../../../services/business/business.service';
 import { PurchaseCoupon } from '../../../models/purchase-coupon';
 import { ProductService } from '../../../services/product/product.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-qr-result',
@@ -27,7 +28,8 @@ export class QrResultComponent {
     private router: Router,
     private qrCodeService: QrValidateService,
     private businessService: BusinessService,
-    private proudctService: ProductService
+    private proudctService: ProductService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -92,6 +94,15 @@ export class QrResultComponent {
       this.router.navigate(['/o'])
     }
 
+  }
+  onSubmitValidate(): void{
+    const saleCouponId = this.qrCodeDetails.saleCouponId;
+    this.qrCodeService.validateTheCoupon(saleCouponId).subscribe((res)=>{
+      this.toastr.success("Coupon Validate Successfully!", "Success");
+      this.router.navigate(['/o'])
+    },error=> {
+      this.toastr.error("Coupon Validate Error!", "ERROR");
+    });
   }
 
   getProductImage(imagePath: string): string{

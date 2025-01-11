@@ -25,6 +25,7 @@ export class FriendComponent implements OnInit {
   searchResults: any[] = [];
   emailSuggestions: any[] = [];
   pendingRequests: any[] = [];
+  sentPendingRequests: any & { type: 'received' | 'sent' }[] = [];
   isLoading = false;
   loggedInUserEmail: string | null = '';
   loggedInUserId: number | null = null;
@@ -34,6 +35,7 @@ export class FriendComponent implements OnInit {
   selectedFriend: any | null = null;
   showConfirmUnfriendModal = false;
   showConfirmDenyModal = false;
+  showConfirmCancelModal = false;
   friendIdToDelete: number = 0;
   friendRequestIdToDelete: number = 0;
 
@@ -97,11 +99,31 @@ export class FriendComponent implements OnInit {
   loadPendingRequests(): void {
     if (!this.loggedInUserId) return;
     this.friendshipService.getPendingRequests(this.loggedInUserId).subscribe({
-      next: (data) => {
-        this.pendingRequests = data;
-        this.pendingRequestsCount = data.length;
+      next: (receivedRequests) => {
+        const receivedWithType = receivedRequests.map(request => ({
+          ...request,
+          type: 'received'
+        }));
+
+    if (!this.loggedInUserId) return;
+        // Load sent pending requests
+        this.friendshipService.getSentPendingRequests(this.loggedInUserId).subscribe({
+          next: (sentRequests) => {
+            const sentWithType = sentRequests.map(request => ({
+              ...request,
+              type: 'sent'
+            }));
+
+            // Combine both arrays
+            this.pendingRequests = [...receivedWithType, ...sentWithType];
+            this.pendingRequestsCount = this.pendingRequests.length; // Update count
+          },
+          error: () => this.toastr.error('Error loading sent pending requests.', 'Error'),
+        });
+
       },
-      error: () => this.toastr.error('Error loading pending requests.', 'Error'),
+      error: () => this.toastr.error('Error loading received pending requests.', 'Error'),
+
     });
   }
 
@@ -113,6 +135,8 @@ export class FriendComponent implements OnInit {
       next: () => {
         this.toastr.success('Friend request sent successfully!', 'Success');
         this.emailSuggestions = this.emailSuggestions.filter((user) => user.id !== userId);
+        this.loadPendingRequests();
+        this.loadFriends();
       },
       error: () => this.toastr.error('Error sending friend request.', 'Error'),
     });
@@ -149,6 +173,27 @@ export class FriendComponent implements OnInit {
   closeConfirmDenyModal() {
     this.showConfirmDenyModal = false;
  }
+
+ cancelRequest(requestId: number): void {
+  this.friendshipService.cancelFriendRequest(requestId).subscribe({
+    next: () => {
+      this.toastr.info('Friend request canceled.', 'Info');
+      this.loadPendingRequests();
+      console.log('Denied request:', requestId);
+      this.showConfirmCancelModal = false;
+    },
+    error: () => this.toastr.error('Error cancelling friend request.', 'Error'),
+  });
+}
+
+confirmCancelRequest(requestId: number) {
+  this.friendRequestIdToDelete = requestId;
+  this.showConfirmCancelModal = true;
+}
+
+closeConfirmCanelModal() {
+  this.showConfirmCancelModal = false;
+}
 
  unfriend(friendId: number): void {
   if (!this.loggedInUserId) return;
@@ -231,6 +276,9 @@ export class FriendComponent implements OnInit {
         this.toastr.info('Your friend request was denied.', 'Info');
         this.loadPendingRequests();
         break;
+      case 'FRIEND_REQUEST_CANCELLED':
+         this.loadPendingRequests();
+         break;
       case 'UNFRIENDED':
         console.log('Friend ID - ' , this.currentFriendId);
         if (this.currentFriendId !== null) {

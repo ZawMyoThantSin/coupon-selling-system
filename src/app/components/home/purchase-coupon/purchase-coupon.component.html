@@ -19,8 +19,14 @@
           <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
         </div>
         <div class="coupon-details">
-          <h3>{{ coupon.productName }}</h3>
-          <p>Discount: {{ coupon.discount }}%</p>
+          <h4>
+            {{ coupon.productName }}
+               <a
+               [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
+             ({{ coupon.businessName }})</a>
+           </h4>
+           <p><img src="/images/product/maps-and-flags.png" style="width: 20px; height: auto;"/>{{ coupon.businessLocation}}</p>
+       <!-- <p>Discount: {{ coupon.discount }}%</p> -->
         </div>
         <div class="coupon-actions">
           <button
@@ -35,6 +41,30 @@
         </div>
       </div>
     </div>
+     <!-- Part 2: Accepted Coupons from Friends -->
+     <div class="coupon-container px-5 mt-5">
+      <h2>Accepted Coupons</h2>
+      <div class="coupon-card px-4" *ngFor="let coupon of acceptedCoupons" (click)="openQrModal(coupon)">
+        <div class="coupon-image">
+          <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
+        </div>
+        <div class="coupon-details">
+          <h4>
+            {{ coupon.productName }}
+               <a
+               [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
+             ({{ coupon.businessName }})</a>
+           </h4>
+          <p><img src="/images/product/maps-and-flags.png" style="width: 20px; height: auto;"/>{{ coupon.businessLocation}}</p>
+
+          <!-- <p>Discount: {{ coupon.discount }}%</p> -->
+        </div>
+        <div class="coupon-actions">
+
+          <p class="expiry-date">Expiry Date: {{ coupon.expiryDate | date: 'shortDate' }}</p>
+        </div>
+      </div>
+    </div>
   </ng-container>
 
   <!-- Used Coupons -->
@@ -45,9 +75,19 @@
           <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
         </div>
         <div class="coupon-details">
-          <h3>{{ coupon.productName }}</h3>
-          <p>Discount: {{ coupon.discount }}%</p>
-          <p>Expiry Date: {{ coupon.expiryDate | date: 'shortDate' }}</p>
+          <h4>
+            {{ coupon.productName }}
+               <a
+               [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
+             ({{ coupon.businessName }})</a>
+           </h4>
+          <p><img src="/images/product/maps-and-flags.png" style="width: 20px; height: auto;"/>{{ coupon.businessLocation}}</p>
+
+          <!-- <p>Discount: {{ coupon.discount }}%</p> -->
+        </div>
+        <div class="coupon-actions">
+
+          <p class="expiry-date">Expiry Date: {{ coupon.expiryDate | date: 'shortDate' }}</p>
         </div>
       </div>
     </div>
@@ -60,9 +100,19 @@
           <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
         </div>
         <div class="coupon-details">
-          <h3>{{ coupon.productName }}</h3>
-          <p>Discount: {{ coupon.discount }}%</p>
-          <p>Expiry Date: {{ coupon.expiryDate | date: 'shortDate' }}</p>
+          <h4>
+            {{ coupon.productName }}
+               <a
+               [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
+             ({{ coupon.businessName }})</a>
+           </h4>
+          <p><img src="/images/product/maps-and-flags.png" style="width: 20px; height: auto;"/>{{ coupon.businessLocation}}</p>
+
+          <!-- <p>Discount: {{ coupon.discount }}%</p> -->
+        </div>
+        <div class="coupon-actions">
+
+          <p class="expiry-date">Expiry Date: {{ coupon.expiryDate | date: 'shortDate' }}</p>
         </div>
       </div>
     </div>
@@ -75,9 +125,19 @@
           <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
         </div>
         <div class="coupon-details">
-          <h3>{{ coupon.productName }}</h3>
-          <p>Discount: {{ coupon.discount }}%</p>
-          <p>Expiry Date: {{ coupon.expiryDate | date: 'shortDate' }}</p>
+          <h4>
+            {{ coupon.productName }}
+               <a
+               [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
+             ({{ coupon.businessName }})</a>
+           </h4>
+          <p><img src="/images/product/maps-and-flags.png" style="width: 20px; height: auto;"/>{{ coupon.businessLocation}}</p>
+
+          <!-- <p>Discount: {{ coupon.discount }}%</p> -->
+        </div>
+        <div class="coupon-actions">
+
+          <p class="expiry-date">Expiry Date: {{ coupon.expiryDate | date: 'shortDate' }}</p>
         </div>
       </div>
     </div>

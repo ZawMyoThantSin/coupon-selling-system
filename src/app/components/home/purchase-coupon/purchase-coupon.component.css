@@ -7,10 +7,9 @@
   margin-top: 24px;
   border-bottom: 1px solid #ddd;
   transition: justify-content 0.3s ease; /* Smooth transition */
+  flex-wrap: wrap; /* Allow for wrapping on small screens */
 }
-.inner-navbar.center {
-  justify-content: center; /* Center alignment when sidebar is closed */
-}
+
 .inner-nav-item {
   margin-right: 50px;
   padding: 8px 50px;
@@ -26,6 +25,26 @@
   color: #6200ea;
   border-bottom: 2px solid #6200ea;
 }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .inner-navbar {
+    justify-content: space-evenly; /* Space items evenly on small screens */
+  }
+
+  .inner-nav-item {
+    margin-right: 20px; /* Reduce margin for smaller screens */
+    padding: 8px 20px; /* Adjust padding for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .inner-nav-item {
+    font-size: 14px; /* Smaller font size on mobile */
+    padding: 8px 15px; /* Smaller padding for mobile */
+  }
+}
+
 
 
 /* Container for displaying coupons in a horizontal layout */
@@ -157,4 +176,8 @@ top: 10px;
 right: 10px;
 font-size: 24px;
 cursor: pointer;
+}
+.small-business-name {
+  font-size: 0.8em; /* Adjust the font size as desired */
+  color: blue; /* Optional: change text color for emphasis */
 }

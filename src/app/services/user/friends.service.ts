@@ -49,12 +49,20 @@ export class FriendsService {
     return this.http.put<FriendshipResponse>(`${this.BASE_URL}/${id}/deny`, {}, {});
   }
 
+  cancelFriendRequest(id: number): Observable<FriendshipResponse> {
+    return this.http.put<FriendshipResponse>(`${this.BASE_URL}/${id}/cancel`, {}, {});
+  }
+
   getFriends(userId: number): Observable<FriendshipResponse[]> {
     return this.http.get<FriendshipResponse[]>(`${this.BASE_URL}/${userId}/friends`, {});
   }
 
   getPendingRequests(userId: number): Observable<FriendshipResponse[]> {
     return this.http.get<FriendshipResponse[]>(`${this.BASE_URL}/${userId}/pending`, {});
+  }
+
+  getSentPendingRequests(userId: number): Observable<FriendshipResponse[]> {
+    return this.http.get<FriendshipResponse[]>(`${this.BASE_URL}/${userId}/sent-pending`, {});
   }
 
   searchUsersByEmail(email: string): Observable<any[]> {

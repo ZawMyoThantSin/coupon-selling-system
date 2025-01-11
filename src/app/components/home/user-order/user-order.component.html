@@ -67,14 +67,16 @@ class="modal"
 
 
     <div class="buttons">
-      <button class="btn btn-cancel" (click)="cancelOrder()">Cancel</button>
-      <button
-        class="btn btn-ok"
-        (click)="submitOrder()"
-        [disabled]="!isValidOrder()"
-      >
-        Submit Order
-      </button>
+      <button class="btn btn-cancel"
+      (click)="cancelOrder()">Cancel</button>
+      <div class="tooltip-container">
+        <button
+          class="btn btn-ok"
+          (click)="submitOrder()"
+        >
+          Submit Order
+        </button>
+      </div>
     </div>
   </div>
 </div>

@@ -15,11 +15,13 @@ import { Product } from '../../../../models/product';
 import { SearchFilterComponent } from '../search-filter/search-filter.component';
 import { CouponCardComponent } from '../coupon-card/coupon-card.component';
 import { Router, RouterModule } from '@angular/router';
+import { CategoryService } from '../../../../services/category/category.service';
+import { businessCategory } from '../../../../models/business-category';
 
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule, SearchFilterComponent, CouponCardComponent, RouterModule,],
+  imports: [CommonModule, CouponCardComponent, RouterModule,],
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css'],
   providers: [DatePipe],
@@ -35,10 +37,10 @@ export class HomepageComponent implements OnInit, AfterViewInit {
 
   businessArray: Business[] = [];
   productArray: Product[] = [];
-
+  categories: businessCategory[] = [];
   filteredBusinesses: Business[] = [];
   filteredProducts: Product[] = [];
-
+  selectedCategory: any = null;
 
   //Products
 
@@ -48,6 +50,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
 
   constructor(
     private businessService: BusinessService,
+    private categoryService:CategoryService,
     private productService: ProductService,
     private renderer: Renderer2,
     private datePipe: DatePipe,
@@ -57,6 +60,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.loadBusinesses();
     this.loadProducts();
+    this.loadCategories();
   }
 
   ngAfterViewInit(): void {
@@ -66,6 +70,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
   loadBusinesses(): void {
     this.businessService.getAllBusinesses().subscribe({
       next: (data) => {
+        console.log(data);  // Check if the 'categoryId' is present in each business object
         this.businesses = data;
         this.businessArray = [...this.businesses];
         this.filteredBusinesses = [...this.businesses];
@@ -73,6 +78,17 @@ export class HomepageComponent implements OnInit, AfterViewInit {
       error: (err) => {
         this.errorMessage = 'Failed to load businesses.';
         console.error(err);
+      },
+    });
+  }
+  loadCategories(): void {
+    this.categoryService.getAllCategories().subscribe({
+      next: (data) => {
+        this.categories = data;  // Assign the fetched categories to the categories array
+        console.log('Categories:', this.categories);  // Log to verify
+      },
+      error: (err) => {
+        console.error('Error fetching categories:', err);
       },
     });
   }
@@ -148,7 +164,6 @@ export class HomepageComponent implements OnInit, AfterViewInit {
   }
 
 
-
   //Products ***
   getImageUrl(imagePath: string): any {
     return this.businessService.getImageUrl(imagePath);
@@ -160,7 +175,25 @@ export class HomepageComponent implements OnInit, AfterViewInit {
   // getCouponValidity(productId: number): string {
   //   const createDate = this.datePipe.transform(this.couponCreateDates[productId], 'MMM d EEE');
   //   const expDate = this.datePipe.transform(this.couponExpDates[productId], 'MMM d EEE');
-  //   return createDate && expDate ? `${createDate} ~ ${expDate}` : '';
+  //   return createDate && expDate ? ${createDate} ~ ${expDate} : '';
   // }
+  onCategorySelect(categoryId: number): void {
+    this.selectedCategory = categoryId;
+    this.businessService.getAllBusinesses().subscribe({
+      next: (data) => {
+        // Filter businesses by categoryId
+        this.businesses = data.filter((business: Business) => business.categoryId === categoryId);
+        console.log("now", JSON.stringify(this.businesses));
+
+      },
+      error: (err) => {
+        console.error('Error fetching businesses:', err);
+      }
+    });
+  }
+  resetSelection() {
+    this.loadBusinesses();
+    this.selectedCategory = null;
+  }
 
 }

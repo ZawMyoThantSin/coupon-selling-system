@@ -56,6 +56,10 @@
                       <i class="fas fa-plus"></i>
                     </button>
                   </div>
+                  <span
+                  *ngIf="item.couponRemain<=5"
+                  class="text-danger ms-4 " style="font-size: 11px;">
+                      Only {{item.couponRemain }} items left!</span>
                 </td>
                 <!-- Price -->
                 <td>{{ item.price}} MMK </td>

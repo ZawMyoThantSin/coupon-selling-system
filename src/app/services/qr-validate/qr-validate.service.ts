@@ -22,4 +22,10 @@ export class QrValidateService {
          responseType: 'json'
        });
   }
+
+  validateTheCoupon(id:number): Observable<Boolean> {
+    return this.http.get<Boolean>(this.BASE_URL + 'validate/'+id, {
+         responseType: 'json'
+       });
+  }
 }

@@ -37,6 +37,7 @@ export class ProductdetailsComponent {
     couponPrices: { [key: number]: number } = {};
     couponDescriptions: { [key: number]: string } = {};
     couponIds: { [key: number]: number } = {};
+    couponRemain: { [key: number]: number } = {};
     ngOnInit(): void {
       const token = this.storageService.getItem("token");
       if(token){
@@ -53,7 +54,7 @@ this.couponService.getAllUserCoupons().subscribe(
     console.log('Coupons:', coupons); // Check the expDate field here
     coupons.forEach((coupon:any) => {
       console.log(coupon);
-
+      this.couponRemain[coupon.productId] = coupon.quantity;
       this.couponPrices[coupon.productId] = coupon.price;  // Map productId to discount price
       this.couponDescriptions[coupon.productId] = coupon.description;
       this.couponIds[coupon.productId] = coupon.id;
@@ -84,12 +85,26 @@ this.couponService.getAllUserCoupons().subscribe(
     goBack(){
       this.router.navigate(['/homepage']);
     }
-    updateQuantity(action: 'increment' | 'decrement'): void {
+    updateQuantity(action: 'increment' | 'decrement', productId: number): void {
+      const couponRemain = this.getCouponRemain(productId);
+
       if (action === 'increment') {
-        this.quantity += 1;
+        // Allow increment only if couponRemain > 0 and quantity <= couponRemain and <= 10
+        if (this.quantity < couponRemain && this.quantity < 10) {
+          this.quantity += 1;
+        } else if (this.quantity >= 10) {
+          console.warn('Maximum quantity limit reached (10).');
+        } else if (this.quantity >= couponRemain) {
+          console.warn('Quantity exceeds available coupons.');
+        }
       } else if (action === 'decrement' && this.quantity > 1) {
         this.quantity -= 1;
       }
+    }
+
+    canIncrement(productId: number): boolean {
+      const couponRemain = this.getCouponRemain(productId);
+      return this.quantity < couponRemain && this.quantity < 10;
     }
     getImageUrl(imagePath: string): string {
       return this.productService.getImageUrl(imagePath);
@@ -97,15 +112,22 @@ this.couponService.getAllUserCoupons().subscribe(
     getCouponPrice(productId: number): number {
       return this.couponPrices[productId] || 0; // Default to 0 if no coupon price is available
     }
+    getCouponRemain(productId: number): number {
+      return this.couponRemain[productId] || 0; // Default to 0 if no coupon price is available
+    }
     getCouponDescription(productId: number): string {
       return this.couponDescriptions[productId] || '';  // Ensure full description is returned
     }
+    showWarning(id:number):boolean {
+      return this.couponRemain[id] <= 5;
+    }
 
-    Buy(productName: string, quantity: number, totalPrice: number,price:number): void {
+    Buy(productName: string,imagePath:string, quantity: number, totalPrice: number,price:number): void {
       const couponId = this.couponIds[this.product.id] || null;
       const cartData = [
         {
           productName: productName,
+          productImage:imagePath,
           quantity: quantity,
           totalPrice: totalPrice,
           price:price

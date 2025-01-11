@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { PurchaseCouponService } from '../../../services/purchase-coupon/purchase-coupon.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { BusinessService } from '../../../services/business/business.service';
 import { StorageService } from '../../../services/storage.service';
 import { JwtService } from '../../../services/jwt.service';
@@ -11,17 +11,19 @@ import { PurchaseCoupon } from '../../../models/purchase-coupon';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { QrCodeModalComponent } from '../qr-code-modal/qr-code-modal.component';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
+import { ShareCouponModalComponent } from '../share-coupon-modal/share-coupon-modal.component';
 
 @Component({
   selector: 'app-purchase-coupon',
   standalone: true,
-  imports: [CommonModule, MatIconModule,MdbTooltipModule],
+  imports: [CommonModule, MatIconModule,MdbTooltipModule,RouterLink],
   templateUrl: './purchase-coupon.component.html',
-  styleUrl: './purchase-coupon.component.css',
+  styleUrls: ['./purchase-coupon.component.css'],
 })
 export class PurchaseCouponComponent implements OnInit {
 
   modalRef: MdbModalRef<QrCodeModalComponent> | null = null;//
+  modalRefShareCoupon: MdbModalRef<ShareCouponModalComponent> | null = null;
 
   activeTab: string = 'available'; // Default active tab
   isModalOpen: boolean = false; // Modal state
@@ -35,9 +37,11 @@ export class PurchaseCouponComponent implements OnInit {
 
   availableCoupons: PurchaseCoupon[] = [];
   filteredAvailableCoupons: PurchaseCoupon[] = [];
+  acceptedCoupons: PurchaseCoupon[] = [];
+  transferData: any[] = [];
   filteredUsedCoupons: PurchaseCoupon[] = [];
   filteredTransferredCoupons: PurchaseCoupon[] = [];
-  filteredExpiredCoupons: PurchaseCoupon[] = []; // Added filtering for expired coupons
+  filteredExpiredCoupons: PurchaseCoupon[] = [];
 
   userId!: number; // Holds user ID
   businessData: any; // Holds data fetched by userId
@@ -55,8 +59,34 @@ export class PurchaseCouponComponent implements OnInit {
     this.token = this.storageService.getItem('token');
     if (this.token != null) {
       this.userId = this.tokenService.getUserId(this.token);
+      const accepterId = this.userId;
       this.loadCoupons(this.userId);
     }
+     // Fetch accepted coupons
+     this.purchaseCouponService.getTransferCouponDataByAccepter(this.userId).subscribe(
+      (response) => {
+        console.log('Response:', response); // Log the whole response object
+        this.transferData = response;
+        this.transferData.forEach(arr => console.log("Array", arr.saleCouponId));
+        // Fetch SaleCoupon data for each transfer (based on saleCouponId)
+        console.log("transferdata", this.transferData);
+        this.transferData.forEach((c) => {
+          console.log('Sale Coupon Data:', c.saleCouponId);
+          this.purchaseCouponService.getSaleCouponById(c.saleCouponId).subscribe(
+            (couponData) => {
+              this.acceptedCoupons.push(couponData);  // Use push to add it to the array
+              console.log('Sale Coupon Data:', couponData);
+            },
+            (error) => {
+              console.error('Error fetching SaleCoupon data:', error);
+            }
+          );
+        });
+      },
+      (error) => {
+        console.error('Error fetching accepted coupons:', error);
+      }
+    );
   }
 
   // Fetch all coupons by user ID
@@ -75,10 +105,15 @@ export class PurchaseCouponComponent implements OnInit {
 
   // Filter coupons based on status
   filterCoupons(): void {
-    this.filteredAvailableCoupons = this.availableCoupons.filter((coupon) => coupon.status === 0);
+    const currentDate = new Date();
+    this.filteredAvailableCoupons = this.availableCoupons.filter(
+      (coupon) => coupon.status === 0 && new Date(coupon.expiryDate) > currentDate
+    );
     this.filteredUsedCoupons = this.availableCoupons.filter((coupon) => coupon.status === 1);
     this.filteredTransferredCoupons = this.availableCoupons.filter((coupon) => coupon.status === 2);
-    this.filteredExpiredCoupons = this.availableCoupons.filter((coupon) => coupon.status === 3); // Handling expired coupons
+    this.filteredExpiredCoupons = this.availableCoupons.filter(
+      (coupon) => coupon.status !== 1 && new Date(coupon.expiryDate) < currentDate
+    );
   }
 
   // Generate image URL for the product
@@ -93,13 +128,20 @@ export class PurchaseCouponComponent implements OnInit {
 
   // Share coupon logic
   shareCoupon(coupon: any): void {
-    const shareMessage = `Check out this coupon for ${coupon.productName} with a ${coupon.discount}% discount!`;
-    console.log('Shared:', shareMessage);
+    this.modalRefShareCoupon = this.modalService.open(ShareCouponModalComponent, {
+      modalClass: 'modal-md',
+      data: { coupon: coupon },
+    });
+
+    this.modalRefShareCoupon.onClose.subscribe((data) => {
+      if (data) {
+        this.loadCoupons(this.userId);
+      }
+    });
   }
 
   // Open modal with coupon details
   openQrModal(coupon: any) {
-    console.log("C", coupon)
       this.modalRef = this.modalService.open(QrCodeModalComponent, {
       modalClass: 'modal-md',
       data: {  coupon: coupon },

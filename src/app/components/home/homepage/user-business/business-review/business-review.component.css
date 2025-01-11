@@ -2,24 +2,25 @@
   max-width: 800px;
   margin: 0 auto;
   text-align: center;
+  padding: 1rem; /* Add padding for better spacing on smaller screens */
 }
 
 .stars {
   display: flex;
-  flex-direction: row; /* Ensure left-to-right alignment */
+  flex-direction: row;
   justify-content: center;
-  gap: 0.25rem; /* Add spacing between stars */
+  gap: 0.25rem;
   margin-bottom: 10px;
 }
 
 .star {
   font-size: 2rem;
   cursor: pointer;
-  color: #ccc; /* Default color for unselected stars */
+  color: #ccc;
 }
 
 .star.selected {
-  color: gold; /* Color for selected stars */
+  color: gold;
 }
 
 textarea {
@@ -27,6 +28,7 @@ textarea {
   height: 100px;
   margin: 10px 0;
   padding: 10px;
+  resize: vertical; /* Allow vertical resizing */
 }
 
 button {
@@ -35,7 +37,6 @@ button {
   color: white;
   border: none;
   cursor: pointer;
-
 }
 
 button:disabled {
@@ -52,9 +53,9 @@ button:disabled {
 .card {
   background-color: rgba(243, 244, 246, 1);
   padding: 1rem;
-  width: 100%; /* Ensure card takes full width of container */
-  max-width: 1000px; /* Adjust the max-width as needed */
-  height: auto; /* Auto height for dynamic content */
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
   border-radius: 10px;
   box-shadow: 0 20px 30px -20px rgba(5, 5, 5, 0.24);
   margin-bottom: 1rem;
@@ -64,12 +65,13 @@ button:disabled {
   display: flex;
   align-items: center;
   gap: 1rem;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
 }
 
 .header .image {
   height: 2rem;
-  width: 2rem; /* Ensure the image is square */
-  border-radius: 50%; /* Circular profile image */
+  width: 2rem;
+  border-radius: 50%;
   object-fit: cover;
   background-color: #e5e7eb;
   display: flex;
@@ -79,27 +81,27 @@ button:disabled {
 
 .stars {
   display: flex;
-  flex-direction: row; /* Left-to-right layout */
-  gap: 0.25rem; /* Add spacing between stars */
-  color: rgb(14, 14, 14); /* Default star color */
-  margin-left: 1rem; /* Adjust spacing to align with content */
+  flex-direction: row;
+  gap: 0.25rem;
+  color: rgb(14, 14, 14);
+  margin-left: 1rem;
 }
 
 .stars svg {
   height: 1.5rem;
-  width: 1.5rem; /* Adjust icon size */
+  width: 1.5rem;
 }
 
 .stars .filled {
-  color: rgb(235, 215, 63); /* Highlighted star color */
+  color: rgb(235, 215, 63);
 }
 
 .name-message {
   display: flex;
-  flex-direction: column; /* Stack name and message vertically */
+  flex-direction: column;
   align-items: center;
   margin-top: 0.5rem;
-  gap :10rem;
+  gap: 10rem;
 }
 
 .name {
@@ -116,4 +118,73 @@ button:disabled {
   overflow-wrap: break-word;
   white-space: pre-wrap;
   gap: 10rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .business-review-container {
+    padding: 0.5rem; /* Reduce padding on smaller screens */
+  }
+
+  .stars {
+    gap: 0.1rem; /* Reduce gap between stars */
+  }
+
+  .star {
+    font-size: 1.5rem; /* Reduce star size */
+  }
+
+  textarea {
+    width: 95%; /* Increase width for better use of space */
+  }
+
+  .header {
+    flex-direction: column; /* Stack header items vertically */
+    align-items: flex-start;
+    gap: 0.5rem; /* Reduce gap between items */
+  }
+
+  .header .image {
+    height: 1.5rem;
+    width: 1.5rem; /* Reduce image size */
+  }
+
+  .stars {
+    margin-left: 0; /* Remove left margin */
+  }
+
+  .name {
+    font-size: 1rem; /* Reduce font size */
+  }
+
+  .card .message {
+    font-size: 0.9rem; /* Reduce font size for better readability */
+  }
+}
+
+@media (max-width: 480px) {
+  .star {
+    font-size: 1.2rem; /* Further reduce star size */
+  }
+
+  textarea {
+    height: 80px; /* Reduce height of textarea */
+  }
+
+  button {
+    padding: 8px 16px; /* Reduce button padding */
+  }
+
+  .header .image {
+    height: 1.2rem;
+    width: 1.2rem; /* Further reduce image size */
+  }
+
+  .name {
+    font-size: 0.9rem; /* Further reduce font size */
+  }
+
+  .card .message {
+    font-size: 0.8rem; /* Further reduce font size */
+  }
 }
