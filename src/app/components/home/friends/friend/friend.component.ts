@@ -69,13 +69,8 @@ export class FriendComponent implements OnInit {
     if (this.searchQuery.trim().length > 1) {
       this.friendshipService.searchUsersByEmail(this.searchQuery).subscribe({
         next: (results) => {
-          this.emailSuggestions = results.filter(
-            (user) =>
-              user.email !== this.loggedInUserEmail &&
-              !this.friendIds.has(user.id) &&
-              !this.pendingRequests.some(
-                (req) => req.senderId === user.id || req.accepterId === user.id
-              )
+          this.emailSuggestions = results.filter((user) =>
+            this.isEligibleForSuggestion(user)
           );
         },
         error: () => this.toastr.error('Error fetching search suggestions.', 'Error'),
@@ -178,6 +173,10 @@ export class FriendComponent implements OnInit {
   this.friendshipService.cancelFriendRequest(requestId).subscribe({
     next: () => {
       this.toastr.info('Friend request canceled.', 'Info');
+      this.websocketService.send(JSON.stringify({
+        type: 'FRIEND_REQUEST_CANCELLED',
+        payload: { requestId }
+      }));
       this.loadPendingRequests();
       console.log('Denied request:', requestId);
       this.showConfirmCancelModal = false;
@@ -228,6 +227,21 @@ closeConfirmCanelModal() {
   isAlreadyFriend(userId: number): boolean {
     return this.friendIds.has(userId);
   }
+  // Check if a user has a pending friend request
+  isPendingRequest(userId: number): boolean {
+    return this.pendingRequests.some(
+      (req) => req.senderId === userId || req.accepterId === userId
+    );
+  }
+
+  private isEligibleForSuggestion(user: any): boolean {
+    if (!user.email || !user.id) return false; // Ensure the user has necessary fields
+    if (user.email === this.loggedInUserEmail) return false; // Exclude logged-in user
+    if (this.friendIds.has(user.id)) return false; // Exclude existing friends
+    if (this.isPendingRequest(user.id)) return false; // Exclude pending requests
+    return true;
+  }
+
   private setupWebSocket(): void {
     this.websocketService.connect();
 
@@ -271,14 +285,16 @@ closeConfirmCanelModal() {
       case 'FRIEND_REQUEST_ACCEPTED':
         this.toastr.success('Your friend request was accepted!', 'Success');
         this.loadFriends();
+        this.loadPendingRequests();
         break;
       case 'FRIEND_REQUEST_DENIED':
         this.toastr.info('Your friend request was denied.', 'Info');
         this.loadPendingRequests();
         break;
       case 'FRIEND_REQUEST_CANCELLED':
-         this.loadPendingRequests();
-         break;
+        this.toastr.warning('A friend request sent to you was canceled.', 'Info');
+        this.loadPendingRequests();
+        break;
       case 'UNFRIENDED':
         console.log('Friend ID - ' , this.currentFriendId);
         if (this.currentFriendId !== null) {

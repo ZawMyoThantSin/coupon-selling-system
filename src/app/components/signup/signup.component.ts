@@ -35,7 +35,7 @@ export class SignupComponent {
           response => {
             this.toastr.success('Register successfully!', 'Success');
             this.storageService.setItemArray("formData", response.data);
-            this.router.navigate(['login'])
+            // this.router.navigate(['login'])
             // console.log(response)
           },
           error => {

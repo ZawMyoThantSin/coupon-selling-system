@@ -43,6 +43,8 @@ import { dashboardGuard } from './guards/dashboard.guard';
 import { OwnerPasswordResetComponent } from './components/owner/owner-password-reset/owner-password-reset.component';
 import { OrderHistoryComponent } from './components/home/order-history/order-history.component';
 import { SaleCouponReportComponent } from './components/owner/owner-dashboard/sale-coupon-report/sale-coupon-report.component';
+import { TestDashComponent } from './components/test-dash/test-dash.component';
+import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -97,7 +99,9 @@ const routes: Routes = [
       {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}
     ]
   },
+  {path:'test-dash', component:TestDashComponent},
   {path:'password-reset', component:OwnerPasswordResetComponent, title:'Reset Password'},
+  {path:'forget-password', component:ForgetPasswordComponent, },
   {path:'login', component:LoginComponent, title:'Login'},
   {path:'signup', component:SignupComponent, title:'Signup'},
   {path: 'access-denied', component: AccessDeniedComponent,title:'403' },

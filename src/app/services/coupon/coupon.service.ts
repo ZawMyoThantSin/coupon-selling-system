@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { StorageService } from '../storage.service';
 import { Coupon } from '../../models/coupon.modal';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CouponService {
 
-  BASE_URL = "http://localhost:8080/";
+  BASE_URL = `${getDefaultAppConfig().backendHost}/`;
   public token: any;
 
   constructor(private http:HttpClient,

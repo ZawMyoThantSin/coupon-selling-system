@@ -4,13 +4,14 @@ import { FriendshipResponse } from '../../models/friendship-response.models';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { StorageService } from '../storage.service';
 import { WebsocketService } from '../websocket/websocket.service';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FriendsService {
 
-  BASE_URL = 'http://localhost:8080/friendship';
+  BASE_URL = `${getDefaultAppConfig().backendHost}/friendship`;
   public token: any;
 
   constructor(

@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PurchaseCoupon } from '../../models/purchase-coupon';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PurchaseCouponService {
-  BASE_URL = "http://localhost:8080/api/sale-coupon";
+  BASE_URL = `${getDefaultAppConfig().backendHost}/api/sale-coupon`;
 
   constructor(private http: HttpClient) {}
 
@@ -24,7 +25,7 @@ export class PurchaseCouponService {
     }
 
     getTransferCouponDataByAccepter(accepterId: number): Observable<any> {
-      return this.http.get<any>(`http://localhost:8080/transfer/couponAcepter/${accepterId}`, {
+      return this.http.get<any>(`${getDefaultAppConfig().backendHost}/transfer/couponAcepter/${accepterId}`, {
         responseType: 'json'
       });
     }

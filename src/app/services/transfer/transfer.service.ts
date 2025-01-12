@@ -3,6 +3,7 @@ import { StorageService } from '../storage.service';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { TransferResponse } from '../../models/transfer.models';
 import { Observable } from 'rxjs';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { Observable } from 'rxjs';
 export class TransferService {
 
 
-  BASE_URL = "http://localhost:8080/";
+  BASE_URL = `${getDefaultAppConfig().backendHost}/`;
   public token: any;
 
   constructor(private http: HttpClient, private storageService: StorageService) {
@@ -19,7 +20,7 @@ export class TransferService {
 
 
     private createAuthHeader(): any{
-    
+
         if(this.token){
           console.log('Token found in storage..', this.token);
           return new HttpHeaders().set(

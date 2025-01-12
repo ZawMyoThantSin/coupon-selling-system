@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class BusinessService {
   updateBusinessId(id: number): void {
     this.businessIdSource.next(id);
   }
-  BASE_URL = "http://localhost:8080/";
+  BASE_URL = getDefaultAppConfig().backendHost;
   public token: any;
 
   constructor(private http:HttpClient,private storageService:StorageService) {
@@ -22,43 +23,43 @@ export class BusinessService {
 
 
   getAllBusiness(id: number):Observable<any>{
-    return this.http.get(this.BASE_URL +'api/businesses/user/'+id,{
+    return this.http.get(this.BASE_URL +'/api/businesses/user/'+id,{
       responseType:'json'
     })
   }
 
   getByUserId(id: number):Observable<any>{
-    return this.http.get(this.BASE_URL +'api/businesses/user/'+id,{
+    return this.http.get(this.BASE_URL +'/api/businesses/user/'+id,{
       responseType:'json'
     })
   }
 
   getById(id:number):Observable<any>{
-    return this.http.get(`${this.BASE_URL}api/businesses/${id}`,{
+    return this.http.get(`${this.BASE_URL}/api/businesses/${id}`,{
       responseType:'json'
     })
   }
 
   addBusinessOwner(data:any): Observable<any>{
-    return this.http.post(this.BASE_URL+'api/businesses/add/owner',data,{
+    return this.http.post(this.BASE_URL+'/api/businesses/add/owner',data,{
       responseType:'json'
     });
   }
 
   createBusiness(data:any): Observable<any>{
-    return this.http.post(this.BASE_URL+'api/businesses',data,{
+    return this.http.post(this.BASE_URL+'/api/businesses',data,{
       // responseType:'json'
     });
   }
 
   getBusinessCount(): Observable<number> {
-    return this.http.get<number>(`${this.BASE_URL}api/businesses/count`, {
+    return this.http.get<number>(`${this.BASE_URL}/api/businesses/count`, {
       responseType: 'json'
     });
   }
 
   saleCouponReportForWeekly(type: 'pdf' | 'excel', businessId: number): Observable<Blob> {
-    return this.http.get(`${this.BASE_URL}api/coupon/weeklyRreport/${businessId}`, {
+    return this.http.get(`${this.BASE_URL}/api/coupon/weeklyRreport/${businessId}`, {
       responseType: 'blob',
       params: {
         reportType: type, // Pass `reportType` as a query parameter
@@ -69,7 +70,7 @@ export class BusinessService {
 
 
   saleCouponReportForMonthly(type: 'pdf' | 'excel', businessId: number): Observable<Blob> {
-    return this.http.get(`${this.BASE_URL}api/coupon/monthlyReport/${businessId}`, {
+    return this.http.get(`${this.BASE_URL}/api/coupon/monthlyReport/${businessId}`, {
       responseType: 'blob',
       params: {
         reportType: type, // Pass `reportType` as a query parameter
@@ -78,7 +79,7 @@ export class BusinessService {
 
   }
   productReport(type: 'pdf' | 'excel', businessId: number): Observable<Blob> {
-    return this.http.get(`${this.BASE_URL}api/products/preport/${businessId}`, {
+    return this.http.get(`${this.BASE_URL}/api/products/preport/${businessId}`, {
       responseType: 'blob',
       params: {
         reportType: type, // Pass `reportType` as a query parameter
@@ -89,7 +90,7 @@ export class BusinessService {
 
   getCouponSalesData(businessId : number | null): Observable<{ businessId: number, soldCount: number, buyDate: string }[]> {
     return this.http.get<{ businessId: number, soldCount: number, buyDate: string }[]>(
-      `${this.BASE_URL}api/sale-coupon/coupon-sales/${businessId}`,
+      `${this.BASE_URL}/api/sale-coupon/coupon-sales/${businessId}`,
       {
         responseType: 'json'
       }
@@ -98,11 +99,11 @@ export class BusinessService {
 // get business images
 getImageUrl(imagePath: string): string {
 
-  return `http://localhost:8080/public/businesses/images/${imagePath}`;
+  return `${this.BASE_URL}/public/businesses/images/${imagePath}`;
 }
 
 getAllBusinesses(): Observable<any> {
-  return this.http.get(`${this.BASE_URL}api/businesses`, {
+  return this.http.get(`${this.BASE_URL}/api/businesses`, {
     responseType: 'json',
   });
 }
@@ -110,7 +111,7 @@ getAllBusinesses(): Observable<any> {
 // Update an existing product by ID
 update(id: number, data: any): Observable<any> {
 
-  return this.http.put(`${this.BASE_URL}api/businesses/${id}`, data, {
+  return this.http.put(`${this.BASE_URL}/api/businesses/${id}`, data, {
     responseType: 'json'
   });
 }

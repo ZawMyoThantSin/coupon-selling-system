@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { UserResponse } from '../../models/user-response.models';
 import { StorageService } from '../storage.service';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 
 
@@ -11,7 +12,7 @@ import { StorageService } from '../storage.service';
 })
 export class UserService {
 
-  BASE_URL = "http://localhost:8080/api/user"; // Base URL for user-related endpoints
+  BASE_URL = `${getDefaultAppConfig().backendHost}/api/user`; // Base URL for user-related endpoints
   public token: any;
 
   constructor(private http:HttpClient,private storageService:StorageService) {
@@ -41,7 +42,6 @@ export class UserService {
   getUserById(id: number): Observable<UserResponse> {
     return this.http.get<UserResponse>(`${this.BASE_URL}/${id}`, {
       headers: this.createAuthHeader(),
-      // profile: 'https://mdbootstrap.com/img/new/avatars/1.webp',
       responseType: 'json'
     });
   }
@@ -52,7 +52,7 @@ export class UserService {
   }
 getImageUrl(imagePath: string): string {
 
-  return `http://localhost:8080/public/profile/images/${imagePath}`;
+  return `${getDefaultAppConfig().backendHost}/public/profile/images/${imagePath}`;
 }
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.BASE_URL}/${id}`, {

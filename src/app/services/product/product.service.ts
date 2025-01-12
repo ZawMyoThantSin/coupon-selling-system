@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { StorageService } from '../storage.service';
 import { Product } from '../../models/product';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  BASE_URL = "http://localhost:8080/";
+  BASE_URL = `${getDefaultAppConfig().backendHost}/`;
   public token: any;
 
   constructor(private http: HttpClient, private storageService: StorageService) {
@@ -87,7 +88,7 @@ export class ProductService {
 // get product images
   getImageUrl(imagePath: string): string {
 
-    return `http://localhost:8080/public/products/images/${imagePath}`;
+    return `${getDefaultAppConfig().backendHost}/public/products/images/${imagePath}`;
   }
 
   uploadExcel(file: File): Observable<any> {

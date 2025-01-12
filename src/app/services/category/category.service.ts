@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { StorageService } from '../storage.service';
 import { Observable } from 'rxjs';
 import { businessCategory } from '../../models/business-category';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
-  BASE_URL = "http://localhost:8080/api/business-categories";
+  BASE_URL = `${getDefaultAppConfig().backendHost}/api/business-categories`;
   public token: any;
 
   constructor(private http:HttpClient,private storageService:StorageService) {

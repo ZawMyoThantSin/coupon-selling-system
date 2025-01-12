@@ -1,6 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import { StorageService } from '../storage.service';
 import { Observable, Subject } from 'rxjs';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { Observable, Subject } from 'rxjs';
 export class WebsocketService {
   private socket!: WebSocket;
   private messageSubject = new Subject<any>();
-  private readonly serverUrl = 'ws://localhost:8080/ws';
+  private readonly serverUrl = `ws://${getDefaultAppConfig().backendHost}/ws`;
   private reconnectAttempts = 0;
   private readonly maxReconnectAttempts = 10;
   private readonly reconnectDelay = 5000;

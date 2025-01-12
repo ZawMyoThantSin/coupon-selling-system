@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PurchaseCoupon } from '../../models/purchase-coupon';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QrValidateService {
-  BASE_URL = "http://localhost:8080/api/qrcode/";
+  BASE_URL = `${getDefaultAppConfig().backendHost}/api/qrcode/`;
   constructor(private http: HttpClient) {
 
   }
@@ -18,7 +19,7 @@ export class QrValidateService {
   }
 
   getSaleCouponData(id:number): Observable<PurchaseCoupon> {
-    return this.http.get<PurchaseCoupon>('http://localhost:8080/api/sale-coupon/'+id, {
+    return this.http.get<PurchaseCoupon>(`${getDefaultAppConfig().backendHost}/api/sale-coupon/`+id, {
          responseType: 'json'
        });
   }
@@ -26,6 +27,6 @@ export class QrValidateService {
   validateTheCoupon(id:number): Observable<Boolean> {
     return this.http.get<Boolean>(this.BASE_URL + 'validate/'+id, {
          responseType: 'json'
-       });
+    });
   }
 }

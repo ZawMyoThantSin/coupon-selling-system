@@ -15,13 +15,21 @@
       <li *ngFor="let user of emailSuggestions" class="suggestion-item mb-3 p-3">
         <div class="d-flex justify-content-between align-items-center">
           <span>{{ user.email }}</span>
-          <button
-            class="btn btn-primary btn-sm"
-            *ngIf="!isAlreadyFriend(user.id)"
-            (click)="sendFriendRequest(user.id)"
-          >
-            Add Friend
-          </button>
+          <ng-container>
+            <span *ngIf="isAlreadyFriend(user.id)" class="text-success">
+              Already Friends
+            </span>
+            <span *ngIf="isPendingRequest(user.id)" class="text-warning">
+              Pending Request
+            </span>
+            <button
+              class="btn btn-primary btn-sm"
+              *ngIf="!isAlreadyFriend(user.id) && !isPendingRequest(user.id)"
+              (click)="sendFriendRequest(user.id)"
+            >
+              Add Friend
+            </button>
+          </ng-container>
         </div>
       </li>
     </ul>

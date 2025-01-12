@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class PaymentService {
   private paymentData: any;
 
 
-  BASE_URL = "http://localhost:8080/api";
+  BASE_URL = `${getDefaultAppConfig().backendHost}/api`;
   constructor(private http: HttpClient) { }
 
   addPaymentMethod(data:any):Observable<any>{
@@ -25,7 +26,7 @@ export class PaymentService {
   }
 
   getImageUrl(imagePath: string): string {
-    return `http://localhost:8080/public/payments/qr/${imagePath}`;
+    return `${getDefaultAppConfig().backendHost}/public/payments/qr/${imagePath}`;
   }
 
   setPaymentTempData(payment: any) {

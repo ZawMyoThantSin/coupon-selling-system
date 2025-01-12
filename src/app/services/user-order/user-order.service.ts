@@ -3,12 +3,13 @@ import { Injectable } from '@angular/core';
 import { StorageService } from '../storage.service';
 import { Observable } from 'rxjs';
 import { UserPayment } from '../../models/userpayment';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserOrderService {
-  BASE_URL = "http://localhost:8080/";
+  BASE_URL = `${getDefaultAppConfig().backendHost}/`;
   public token: any;
   constructor(private http: HttpClient, private storageService: StorageService) {
       this.token = this.storageService.getItem("token");
