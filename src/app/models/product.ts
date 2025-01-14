@@ -1,5 +1,6 @@
 export class Product {
   imageFile?: File | null;
+  discountEdited: boolean | undefined;
     constructor(
       public id: number ,
       public businessId: number,

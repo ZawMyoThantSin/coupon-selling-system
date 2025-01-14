@@ -1,14 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Token } from '@angular/compiler';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { getDefaultAppConfig } from '../models/appConfig';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  token!:Token;
+  private loggedInUserId = new BehaviorSubject<number | null>(null);
+  userId$ = this.loggedInUserId.asObservable();
 
+  updateBusinessId(id: number): void {
+    this.loggedInUserId.next(id);
+  }
   constructor(private http: HttpClient) { }
   private BASE_URL = getDefaultAppConfig().backendHost;
 
@@ -41,7 +45,7 @@ export class AuthService {
   }
 
   searchUsersByEmail(email: string): Observable<any> {
-    return this.http.get<any>(`${this.BASE_URL}/search-user`, {
+    return this.http.get<any>(`${this.BASE_URL}/public/search-user`, {
       params: { email },
       responseType: 'json',
     });
@@ -68,4 +72,15 @@ export class AuthService {
     });
   }
 
+  changePassword(userId: number, oldPassword: string, newPassword: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
+
+    const body = { userId, oldPassword, newPassword };
+
+    return this.http.post(`${this.BASE_URL}/public/change-password`, body, { headers });
+  }
 }

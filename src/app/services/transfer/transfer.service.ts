@@ -4,6 +4,7 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { TransferResponse } from '../../models/transfer.models';
 import { Observable } from 'rxjs';
 import { getDefaultAppConfig } from '../../models/appConfig';
+import { WebsocketService } from '../websocket/websocket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,17 @@ export class TransferService {
   BASE_URL = `${getDefaultAppConfig().backendHost}/`;
   public token: any;
 
-  constructor(private http: HttpClient, private storageService: StorageService) {
+  constructor(private http: HttpClient, private storageService: StorageService,
+    private websocketService: WebsocketService,
+  ) {
       this.token = this.storageService.getItem("token");
+    }
+    connectWebSocket(): void {
+      this.websocketService.connect();
+    }
+
+    disconnectWebSocket(): void {
+      this.websocketService.disconnect();
     }
 
 

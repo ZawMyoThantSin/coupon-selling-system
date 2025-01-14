@@ -7,6 +7,7 @@ import { UserService } from '../../../services/user/user.service';
 import { PurchaseCouponService } from '../../../services/purchase-coupon/purchase-coupon.service';
 import { PurchaseCoupon } from '../../../models/purchase-coupon';
 import { ToastrService } from 'ngx-toastr';
+import { WebsocketService } from '../../../services/websocket/websocket.service';
 @Component({
   selector: 'app-share-coupon-model',
   standalone: true,
@@ -29,11 +30,10 @@ export class ShareCouponModalComponent {
 
   constructor(public modalRef: MdbModalRef<ShareCouponModalComponent>,
     private friendshipService: FriendsService,
-   private userService: UserService,
-   private purchaseCouponService: PurchaseCouponService ,
-    private http: HttpClient,
-    private toastr: ToastrService
-
+    private userService: UserService,
+    private purchaseCouponService: PurchaseCouponService ,
+    private toastr: ToastrService,
+    private websocketService: WebsocketService
   ) {}
 
   close(): void {
@@ -47,23 +47,39 @@ export class ShareCouponModalComponent {
 
   }
 
-  loadFriends() {
+  loadFriends(): void {
 
     if (!this.loggedInUserId) {
       console.error('Logged-in user ID is missing. Cannot load friends.');
       return;
     }
 
+    // Fetch the list of friends
     this.friendshipService.getFriends(this.loggedInUserId).subscribe({
-    next: (data) => {
-      this.friends = data;
-      this.friendIds = new Set(data.map(friend => friend.id));
-      console.log('Friends loaded:', this.friends);
-    },
-    error: (err) => {
-      console.error('Error fetching friends:', err);
-    },
-  });
+      next: (data) => {
+        this.friends = data;
+        this.friendIds = new Set(data.map((friend) => friend.id));
+        console.log('Friends loaded:', this.friends);
+
+        // Fetch additional details for each friend (e.g., profile pictures)
+        this.friends.forEach((friend) => {
+          console.log('Fetching details for friend:', friend.friendId);
+          this.friendshipService.getFriendDetails(friend.friendId).subscribe({
+            next: (details) => {
+              friend.profile = details.profile; // Assuming API provides 'profilePictureUrl'
+            },
+            error: (err) => {
+              console.error(`Error fetching details for friend ${friend.id}:`, err);
+              // Set a default image in case of error
+              friend.profile = '/images/default-avatar.png';
+            },
+          });
+        });
+      },
+      error: (err) => {
+        console.error('Error fetching friends:', err);
+      },
+    });
   }
 
 
@@ -90,8 +106,10 @@ export class ShareCouponModalComponent {
       },
     });
   }
-  getImageUrl(imagePath: string): string {
-    return this.userService.getImageUrl(imagePath);
+  getFriendImageUrl(profile: string | null): string {
+    return profile
+      ? this.userService.getImageUrl(profile)
+      : '/images/default-avatar.png';
   }
   confirmSendCoupon(): void {
     if (this.saleCouponId && this.selectedUserId) {

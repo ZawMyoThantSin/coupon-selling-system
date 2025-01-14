@@ -154,16 +154,14 @@ selectedFile: File | null = null;
 
   isLoading: boolean = true;
   errorMessage: string = '';
-  modalRef: MdbModalRef<any> | null = null;
   isSaving: boolean = false;
   imageError: string | null = null; // Property for image validation errors
   @ViewChild('editUserProfileModal') editUserProfileModal: any; // Reference to modal template
 
   imagePreview: string | ArrayBuffer | null = null; // Declare for preview
   constructor(
+    public modalRef: MdbModalRef<EditUserprofileComponent>,
       private userService: UserService,
-      private modalService: MdbModalService,
-      private route: ActivatedRoute,
      private toastr:ToastrService
 
     ) {}
@@ -220,8 +218,7 @@ selectedFile: File | null = null;
             this.isSaving = false;
             this.user = updatedUser;
             this.toastr.success('User updated successfully!', 'Success'); // Toastr for success
-            // this.closeModal();
-            window.location.reload();
+            this.closeModal();
           },
           error: (error) => {
             this.isSaving = false;
@@ -234,8 +231,7 @@ selectedFile: File | null = null;
 
     // Close modal safely
     closeModal(): void {
-      this.modalRef?.close();
-
+      this.modalRef.close();
     }
 
     onFileChange(event: any): void {

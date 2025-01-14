@@ -34,9 +34,8 @@ export class BusinessReviewService {
     });
   }
 
-  getAllRating():Observable<any>{
-    return this.http.get(this.BASE_URL +'/api/business_review',{
-      responseType:'json'
-    })
+  getAllRating(business_id: number): Observable<any> {
+    const url = `${this.BASE_URL}api/business_review/${business_id}/reviews`;
+    return this.http.get(url, { responseType: 'json' });
   }
 }

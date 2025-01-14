@@ -10,10 +10,14 @@ import { SharedService } from '../../services/shared/shared.service';
 import { CommonModule } from '@angular/common';
 import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
 import { UserWalletComponent } from './user-wallet/user-wallet.component';
+import { WebsocketService } from '../../services/websocket/websocket.service';
+import { ToastrService } from 'ngx-toastr';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { ChangePasswordComponent } from '../change-password/change-password.component';
 
 @Component({
   standalone:true,
-  imports:[CommonModule,RouterLink,RouterOutlet,MdbDropdownModule,UserWalletComponent ],
+  imports:[CommonModule,RouterLink,RouterOutlet,MdbDropdownModule ],
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -30,28 +34,56 @@ export class HomeComponent implements OnInit{
 
   notifications: Array<{ id: number; message: string; link: string; read: boolean }> = [];
   unreadNotifications: number = 0;
+  changePasswordModalRef: MdbModalRef<ChangePasswordComponent> | null = null;
 
   constructor(private router: Router,
-              private route: ActivatedRoute,
+              private toastr: ToastrService,
               private storageService: StorageService,
-              private jwtService: JwtService,
               private userService: UserService,
               private sharedService: SharedService,
-              private friendService: FriendsService
+              private friendService: FriendsService,
+              private websocketService: WebsocketService,
+              private modalService: MdbModalService
               ) {
     this.router.events.subscribe(() => {
       this.activeRoute = this.router.url; // Get the active URL
     });
   }
 
+  private setupWebSocket(): void {
+    this.websocketService.connect();
+
+    this.websocketService.onMessage().subscribe((message) => {
+      this.handleWebSocketMessage(message);
+    });
+  }
+
+  private handleWebSocketMessage(message: string): void {
+    console.log('WebSocket update:', message);
+    switch (message) {
+        case 'COUPON_TRANSFER_TRANSFERRED':
+          this.toastr.info('You have a new coupon transfer request!', 'Coupon Transfer');
+          break;
+        case 'ORDER_ACCEPTED':
+          this.toastr.info("Your Order has finished! | Go to check ","Alert");
+          break;
+        case 'ORDER_REJECTED':
+          this.toastr.warning("Oops! Your Order has rejected | Go to check ","Alert");
+          break;
+      default:
+        console.warn('Unknown WebSocket message:', message);
+    }
+  }
+
+
 
   ngOnInit(): void {
+
     this.userService.getUserInfo().subscribe((response)=>{
       console.log("UserInfo: ",response)
       this.userInfo = response;
       this.loadPendingFriendRequestsCount();
     },error => console.log('Error in Fetching UserInfo', error));
-
     this.token = this.storageService.getItem('token');
     if (this.token == '' || this.token == null) {
       console.log('Token is not defined or is invalid.');
@@ -59,6 +91,8 @@ export class HomeComponent implements OnInit{
     } else {
       this.isLoggedIn = true;
     }
+
+    this.setupWebSocket();
   }
 
   toggleSidebar() {
@@ -116,6 +150,16 @@ export class HomeComponent implements OnInit{
   logoutButton(): void{
     this.storageService.removeItem("token");
     this.router.navigate(['login']);
+  }
+  openChangePasswordModal() {
+    this.changePasswordModalRef = this.modalService.open(ChangePasswordComponent, {
+      modalClass: 'modal-lg',
+    });
+
+    this.changePasswordModalRef.onClose.subscribe(() => {
+      console.log('Change password modal closed');
+
+    });
   }
 
 }

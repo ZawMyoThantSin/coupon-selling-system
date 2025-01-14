@@ -2,7 +2,7 @@
   <h3 class="text-center mb-4">Friends</h3>
 
   <!-- Search Box -->
-  <div class="search-box mb-4 p-3 shadow-sm">
+  <div class="search-box mb-4 p-3 shadow-sm rounded">
     <input
       type="text"
       class="form-control search-input"
@@ -12,16 +12,9 @@
       autocomplete="off"
     />
     <ul *ngIf="emailSuggestions.length > 0" class="suggestions-list mt-3">
-      <li *ngFor="let user of emailSuggestions" class="suggestion-item mb-3 p-3">
+      <li *ngFor="let user of emailSuggestions" class="suggestion-item mb-3 p-3 rounded shadow-sm">
         <div class="d-flex justify-content-between align-items-center">
           <span>{{ user.email }}</span>
-          <ng-container>
-            <span *ngIf="isAlreadyFriend(user.id)" class="text-success">
-              Already Friends
-            </span>
-            <span *ngIf="isPendingRequest(user.id)" class="text-warning">
-              Pending Request
-            </span>
             <button
               class="btn btn-primary btn-sm"
               *ngIf="!isAlreadyFriend(user.id) && !isPendingRequest(user.id)"
@@ -29,7 +22,7 @@
             >
               Add Friend
             </button>
-          </ng-container>
+
         </div>
       </li>
     </ul>
@@ -72,11 +65,10 @@
     </ng-template>
   </div>
 
-  <!-- Pending Friend Requests -->
   <div class="pending-requests">
     <h5 class="section-title">Pending Friend Requests</h5>
     <div *ngIf="pendingRequests.length > 0; else noRequests">
-      <table class="table table-hover shadow-sm">
+      <table class="table table-hover shadow-sm rounded">
         <thead class="table-light">
           <tr>
             <th style="width: 5%;"></th>
@@ -130,6 +122,7 @@
       <p class="text-center text-muted">No pending friend requests.</p>
     </ng-template>
   </div>
+
 
     <!-- Use Confirmation Modal for Unfriend Action -->
   <app-confirmation-modal

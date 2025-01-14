@@ -1,0 +1,182 @@
+<div class="modal-header px-5">
+  <h5 class="modal-title" id="createShopModalLabel">Edit Shop</h5>
+  <button
+    type="button"
+    class="btn-close"
+    aria-label="Close"
+    (click)="goBack()"
+  ></button>
+</div>
+
+<div class="modal-body px-5">
+  <div class="d-flex">
+    <!-- Image Preview Section -->
+    <div class="image-preview-container">
+      <div
+        class="image-preview"
+        *ngIf="imagePreview || business?.photo"
+        [style.backgroundImage]="'url(' + (imagePreview || getImageUrl(business.photo)) + ')'"
+      ></div>
+      <div class="image-placeholder" *ngIf="!imagePreview && !business?.photo">
+        <p>No image selected</p>
+      </div>
+    </div>
+
+    <!-- Form Section -->
+    <form
+      [formGroup]="editForm"
+      class="form-container flex-fill d-flex flex-column px-4"
+      (ngSubmit)="onSubmit()"
+    >
+
+
+        <!-- Owner Name and Email (in one row) -->
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input
+                mdbInput
+                type="text"
+                id="userName"
+                formControlName="userName"
+                class="form-control"
+                placeholder="Owner Name"
+                required
+              />
+              <label for="userName">Owner Name</label>
+              <div *ngIf="editForm.get('userName')?.invalid && editForm.get('userName')?.touched" class="text-danger">
+                Owner name is required.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input
+                mdbInput
+                type="email"
+                id="userEmail"
+                formControlName="userEmail"
+                class="form-control"
+                placeholder="Owner Email"
+                required
+              />
+              <label for="userEmail">Owner Email</label>
+              <div *ngIf="editForm.get('userEmail')?.invalid && editForm.get('userEmail')?.touched" class="text-danger">
+                Please enter a valid email address.
+              </div>
+            </div>
+          </div>
+        </div>
+      <!-- Name -->
+      <div class="form-floating mb-3">
+        <input
+          mdbInput
+          type="text"
+          id="name"
+          formControlName="name"
+          class="form-control"
+          placeholder="Shop Name"
+          required
+        />
+        <label for="name">Shop Name</label>
+        <div *ngIf="editForm.get('name')?.invalid && editForm.get('name')?.touched" class="text-danger">
+          Shop name is required.
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="form-floating mb-3">
+        <input
+          mdbInput
+          type="text"
+          id="location"
+          formControlName="location"
+          class="form-control"
+          placeholder="Location"
+          required
+        />
+        <label for="location">Location</label>
+        <div *ngIf="editForm.get('location')?.invalid && editForm.get('location')?.touched" class="text-danger">
+          Location is required.
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div class="form-floating mb-3">
+        <textarea
+          mdbInput
+          id="description"
+          formControlName="description"
+          class="form-control"
+          rows="3"
+          placeholder="Enter description"
+          required
+        ></textarea>
+        <label for="description">Description</label>
+        <div *ngIf="editForm.get('description')?.invalid && editForm.get('description')?.touched" class="text-danger">
+          Description must be less than 500 characters.
+        </div>
+      </div>
+
+      <!-- Contact Number -->
+      <div class="form-floating mb-3">
+        <input
+          mdbInput
+          type="text"
+          id="contactNumber"
+          formControlName="contactNumber"
+          class="form-control"
+          placeholder="Contact Number"
+          required
+        />
+        <label for="contactNumber">Contact Number</label>
+        <div *ngIf="editForm.get('contactNumber')?.invalid && editForm.get('contactNumber')?.touched" class="text-danger">
+          Please enter a valid 11-digit contact number.
+        </div>
+      </div>
+
+      <!-- Category -->
+      <div class="form-floating mb-3">
+        <select
+          class="form-select"
+          id="category"
+          formControlName="category"
+          required
+        >
+          <option value="" disabled>Select category</option>
+          <option *ngFor="let category of categories" [value]="category.id" >
+            {{ category.name }}
+          </option>
+        </select>
+        <label for="category">Category</label>
+        <div *ngIf="editForm.get('category')?.invalid && editForm.get('category')?.touched" class="text-danger">
+          Please select a category.
+        </div>
+      </div>
+
+      <!-- Image Upload -->
+      <div class="form-floating mb-3">
+        <input
+          mdbInput
+          type="file"
+          id="image"
+          (change)="onImageChange($event)"
+          class="form-control"
+        />
+        <label for="image">Upload Image</label>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-footer px-5">
+  <button type="button" class="btn btn-secondary" (click)="goBack()">Close</button>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="editForm.invalid"
+    (click)="onSubmit()"
+  >
+    Update
+  </button>
+</div>

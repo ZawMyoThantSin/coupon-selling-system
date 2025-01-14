@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PurchaseCoupon } from '../../models/purchase-coupon';
 import { getDefaultAppConfig } from '../../models/appConfig';
+import { WebsocketService } from '../websocket/websocket.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,19 @@ import { getDefaultAppConfig } from '../../models/appConfig';
 export class PurchaseCouponService {
   BASE_URL = `${getDefaultAppConfig().backendHost}/api/sale-coupon`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private websocketService: WebsocketService
+) {}
+
+
+
+connectWebSocket(): void {
+this.websocketService.connect();
+}
+
+disconnectWebSocket(): void {
+this.websocketService.disconnect();
+}
 
     getAllCouponsByUserId(userId: number): Observable<PurchaseCoupon[]> {
       return this.http.get<PurchaseCoupon[]>(`${this.BASE_URL}/user/${userId}`, {

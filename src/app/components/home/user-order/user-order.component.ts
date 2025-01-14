@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {  Router } from '@angular/router';
 import { UserOrderService } from '../../../services/user-order/user-order.service';
 import { UserPayment } from '../../../models/userpayment';
 import { CommonModule, Location } from '@angular/common';
@@ -47,7 +47,7 @@ export class UserOrderComponent {
     private paymentService: PaymentService,
     private productService: ProductService,
     private cartService: CartService,
-    private route: ActivatedRoute,
+    private router:Router,
     private toastr: ToastrService,
     private location: Location,
     private storageService : StorageService,
@@ -142,8 +142,8 @@ export class UserOrderComponent {
         .map((item: { couponId: number | null }) => item.couponId)
         .filter((id: number | null) => id !== null) as number[];
 
-      console.log("Quantities to be sent:", quantities);
-      console.log("Coupon IDs to be sent:", couponIds);
+      // console.log("Quantities to be sent:", quantities);
+      // console.log("Coupon IDs to be sent:", couponIds);
 
       // Append coupon IDs and quantities to the form data
       if (couponIds.length > 0) {
@@ -161,18 +161,15 @@ export class UserOrderComponent {
 
     this.userOrderService.submitOrder(formData).subscribe(
       (response) => {
-       // Check the response status or message
-       if (response && response.status === 200) { // Adjust based on your API
         this.toastr.success('Order submitted successfully!', 'Success');
-        this.cartIds.map(c => {
+        if(this.cartIds){
+           this.cartIds.map(c => {
           this.cartService.clearCart(c).subscribe(res => {
-            // Handle cart clearing logic if necessary
+            this.router.navigateByUrl('/homepage/order-history');
           });
-          });
-          // Optionally reset the form or UI state here
-        } else {
-          this.toastr.error('Failed to submit order. Please try again.', 'Error!');
+        });
         }
+        this.router.navigateByUrl('/homepage/order-history');
       },
       (error) => {
         console.error('Error submitting order:', error);

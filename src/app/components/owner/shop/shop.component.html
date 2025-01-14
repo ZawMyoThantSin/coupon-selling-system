@@ -76,9 +76,15 @@
 
       <!-- Call-to-Action Buttons -->
       <div class="actions">
-        <button class="btn btn-primary w-100 mb-2">
-          <i class="fas fa-phone-alt me-2"></i>Contact
-        </button>
+        <button
+    class="btn btn-warning w-100 mb-2"
+    (click)="editBusiness()"
+  >
+    <i class="fas fa-edit me-2"></i>Edit Business
+  </button>
+  <button class="btn btn-primary w-100 mb-2" >
+    <i class="fas fa-phone-alt me-2"></i>Contact
+  </button>
         <button class="btn btn-outline-secondary w-100">
           <i class="fas fa-map-marker-alt me-2"></i>Get Directions
         </button>

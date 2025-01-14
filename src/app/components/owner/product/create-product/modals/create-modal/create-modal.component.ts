@@ -80,7 +80,7 @@ export class CreateProductModalComponent implements OnInit {
       formData.append('businessId', this.newProduct.businessId!.toString());
       formData.append('name', this.newProduct.name);
       formData.append('price', this.newProduct.price!.toString());
-      formData.append('discount', this.newProduct.discount!.toString());
+      // formData.append('discount', this.newProduct.discount!.toString());
       formData.append('description', this.newProduct.description);
       formData.append('imageFile', this.newProduct.imageFile);
 
@@ -96,7 +96,6 @@ export class CreateProductModalComponent implements OnInit {
         complete: () => {
           this.isSaving = false;
           setTimeout(() => (this.message = ''), 3000);
-          window.location.reload(); // Reload the window after completion
         }
       });
     } else {

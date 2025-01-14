@@ -10,22 +10,26 @@
 </div>
 <div class="modal-body">
   <ng-container *ngIf="friendDetails; else loading">
+    <div class="image-container">
       <img
-    [src]="getFriendImageUrl(friendDetails?.profile)"
-    alt="{{ friendDetails?.name }}"
-    class="rounded-circle mb-3"
-    style="width: 100px; height: 100px;"
-  />
-    <p><strong>Name:</strong> {{ friendDetails?.name }}</p>
-    <p><strong>Email:</strong> {{ friendDetails?.email }}</p>
-    <p><strong>About:</strong> {{ friendDetails?.about }}</p>
+        [src]="getFriendImageUrl(friendDetails?.profile)"
+        alt="{{ friendDetails?.name }}"
+        class="rounded-circle friend-image"
+      />
+    </div>
+    <p class="detail"><strong>Name:</strong> {{ friendDetails?.name }}</p>
+    <p class="detail"><strong>Email:</strong> {{ friendDetails?.email }}</p>
+    <p class="detail">
+      <strong>Since:</strong>
+      {{ friendDetails?.acceptedDate ? (friendDetails.acceptedDate | date: 'longDate') : 'Unknown' }}
+    </p>
   </ng-container>
   <ng-template #loading>
-    <p>Loading friend details...</p>
+    <p class="loading-text">Loading friend details...</p>
   </ng-template>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary" (click)="closeModal()">
+  <button type="button" class="btn btn-secondary close-button" (click)="closeModal()">
     Close
   </button>
 </div>

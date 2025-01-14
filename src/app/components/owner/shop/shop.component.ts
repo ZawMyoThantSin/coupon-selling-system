@@ -5,8 +5,6 @@ import { Business } from '../../../models/business';
 import { Product } from '../../../models/product';
 import { Coupon } from '../../../models/coupon.modal';
 import { BusinessService } from '../../../services/business/business.service';
-import { ProductService } from '../../../services/product/product.service';
-import { CouponService } from '../../../services/coupon/coupon.service';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { CreateShopComponent } from './create-shop/create-shop.component';
 import { UserResponse } from '../../../models/user-response.models';
@@ -100,5 +98,8 @@ export class ShopComponent {
   Math = Math;
   getImageUrl(imagePath: string): string {
     return this.businessService.getImageUrl(imagePath);
+  }
+  editBusiness(): void {
+    this.router.navigate(['/o/edit-shop', this.businessId]); // Navigate to the route
   }
 }

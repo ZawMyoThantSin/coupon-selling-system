@@ -1,33 +1,65 @@
-<div class="order-history mt-5 mx-auto">
-  <div class="shop-header">
-    <div class="shop-name">AYAMG SHOP</div>
-    <div class="order-status">Completed</div>
-  </div>
+<div class="order-history mt-5 mx-auto" *ngIf="orderHistory.length > 0; else noOrders">
+  <h3>Order History</h3>
 
-  <div class="order-details">
-    <img
-      src="https://via.placeholder.com/120"
-      alt="Product Image"
-      class="product-image"
-    />
-    <div class="product-info">
-      <p class="product-title">
-        🚚48 hours delivery🚚 100% Original TWS Bluetooth 5.0 touch Bluetooth h...
-      </p>
-      <p class="product-variant">Color Family: Black</p>
-      <p class="product-price">Ks 12,000</p>
-      <p class="product-quantity">Qty: 1</p>
-    </div>
-  </div>
 
-  <div class="order-summary">
-    <div class="total">
-      <span>Total(1 Item):</span>
-      <span>Ks 13,195</span>
-    </div>
-    <div class="actions">
-      <button class="btn btn-secondary">Return/Refund</button>
-      <button class="btn btn-primary">Buy again</button>
+  <!-- Loop through each order and create a card -->
+  <div *ngFor="let order of orderHistory" class="card mb-4"
+  [ngClass]="{ 'faint-completed': order.status === 1 }">
+    <div class="card-body">
+      <!-- User and Order Details -->
+      <div class="order-header">
+
+       <div class="order-status">{{ order.status === 1 ? 'Completed' : 'Pending' }}</div>
+
+         <p>
+          Order ID: <strong>{{ order.order_id || 'N/A' }}</strong>
+         </p>
+         <p>
+          Order Date:
+          <strong>{{ order.order_date ? (order.order_date | date: 'medium') : 'N/A' }}</strong>
+         </p>
+
+      </div>
+
+
+      <!-- Loop through each item in the order -->
+      <div *ngFor="let item of order.orderItems" class="order-details mb-3">
+
+          <!-- Order Photo -->
+      <div class="order-screenshot text-center mb-3 w-25">
+          <img class="img-thumbnail small-img" [src]="getProductImage(item.imagePath) || 'https://via.placeholder.com/120'" alt="Order Photo" />
+          </div>
+            <div class="product-info">
+
+             <p>
+              Item Name: <strong>{{ item.name || 'N/A' }}</strong>
+             </p>
+             <p>
+             Quantity: <strong>{{ item.quantity || 'N/A' }}</strong> | Unit Price: <strong>Ks {{ item.unitPrice || 'N/A' }}</strong>
+             </p>
+          </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+         <p class="total-items">
+          Total Items: <strong>{{ order.orderItems.length }}</strong> | Total Price: <strong>Ks {{ order.totalPrice | number }}</strong>
+         </p>
+
+
+      </div>
+
+         <div *ngIf="order.status <= 0" class="loader-container">
+
+
+         <p class="loader-text">⏳ Your order is being processed...</p>
+          <div class="loader"></div>
+
+        </div>
     </div>
   </div>
 </div>
+
+<ng-template #noOrders>
+  <p class="text-center">No orders found!</p>
+</ng-template>

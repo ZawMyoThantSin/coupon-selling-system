@@ -36,7 +36,7 @@
 
 
       <div class="row mb-4">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <mdb-form-control>
             <input
               mdbInput
@@ -54,7 +54,7 @@
           </div>
         </div>
 
-        <div class="col-md-4">
+        <div class="col-md-6">
           <mdb-form-control>
             <input
               mdbInput
@@ -73,32 +73,6 @@
             Price is required and must be greater than or equal to 0.
           </div>
         </div>
-
-
-
-        <div class="col-md-4">
-          <mdb-form-control>
-            <input
-              mdbInput
-              type="number"
-              id="discount"
-              class="form-control"
-              [(ngModel)]="product.discount"
-              name="discount"
-              required
-              min="0"
-              max="100"
-              placeholder="0"
-            />
-            <label mdbLabel for="discount" class="form-label">Discount (%)</label>
-          </mdb-form-control>
-          <div
-            *ngIf="productForm.form.controls['discount']?.invalid && productForm.form.controls['discount']?.touched"
-            class="text-danger">
-            Discount must be between 0% and 100%.
-          </div>
-        </div>
-
 
       </div>
 

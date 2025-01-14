@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { PurchaseCouponService } from '../../../services/purchase-coupon/purchase-coupon.service';
@@ -12,6 +12,8 @@ import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { QrCodeModalComponent } from '../qr-code-modal/qr-code-modal.component';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { ShareCouponModalComponent } from '../share-coupon-modal/share-coupon-modal.component';
+import { WebsocketService } from '../../../services/websocket/websocket.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-purchase-coupon',
@@ -20,7 +22,7 @@ import { ShareCouponModalComponent } from '../share-coupon-modal/share-coupon-mo
   templateUrl: './purchase-coupon.component.html',
   styleUrls: ['./purchase-coupon.component.css'],
 })
-export class PurchaseCouponComponent implements OnInit {
+export class PurchaseCouponComponent implements OnInit,OnDestroy {
 
   modalRef: MdbModalRef<QrCodeModalComponent> | null = null;//
   modalRefShareCoupon: MdbModalRef<ShareCouponModalComponent> | null = null;
@@ -52,8 +54,10 @@ export class PurchaseCouponComponent implements OnInit {
     private productService: ProductService,
     private storageService: StorageService,
     private tokenService: JwtService,
-    private modalService: MdbModalService
-  ) {}
+    private modalService: MdbModalService,
+    private websocketService: WebsocketService,
+    private toastr: ToastrService
+    ) {}
 
   ngOnInit(): void {
     this.token = this.storageService.getItem('token');
@@ -61,21 +65,65 @@ export class PurchaseCouponComponent implements OnInit {
       this.userId = this.tokenService.getUserId(this.token);
       const accepterId = this.userId;
       this.loadCoupons(this.userId);
+      this.loadAcceptedCoupons();
     }
      // Fetch accepted coupons
-     this.purchaseCouponService.getTransferCouponDataByAccepter(this.userId).subscribe(
+    //  this.purchaseCouponService.getTransferCouponDataByAccepter(this.userId).subscribe(
+    //   (response) => {
+    //     console.log('Response:', response); // Log the whole response object
+    //     this.transferData = response;
+    //     this.transferData.forEach(arr => console.log("Array", arr.saleCouponId));
+    //     // Fetch SaleCoupon data for each transfer (based on saleCouponId)
+    //     console.log("transferdata", this.transferData);
+    //     this.transferData.forEach((c) => {
+    //       console.log('Sale Coupon Data:', c.saleCouponId);
+    //       this.purchaseCouponService.getSaleCouponById(c.saleCouponId).subscribe(
+    //         (couponData) => {
+    //           this.acceptedCoupons.push(couponData);  // Use push to add it to the array
+    //           console.log('Sale Coupon Data:', couponData);
+    //         },
+    //         (error) => {
+    //           console.error('Error fetching SaleCoupon data:', error);
+    //         }
+    //       );
+    //     });
+    //   },
+    //   (error) => {
+    //     console.error('Error fetching accepted coupons:', error);
+    //   }
+    // );
+    this.setupWebSocket();
+  }
+
+  ngOnDestroy(): void {
+    this.websocketService.disconnect();
+  }
+  // Fetch all coupons by user ID
+  loadCoupons(userId: number): void {
+    this.purchaseCouponService.getAllCouponsByUserId(userId).subscribe(
+      (coupons) => {
+        this.availableCoupons = coupons;
+        // console.log('Available Coupons:', this.availableCoupons);
+        this.filterCoupons(); // Filter coupons by status
+        setTimeout(() => {}, 0);
+      },
+      (error) => {
+        console.error('Error fetching coupons:', error);
+      }
+    );
+  }
+   // Fetch accepted coupons
+   loadAcceptedCoupons(): void {
+    this.acceptedCoupons = []; // Clear the array before reloading
+    this.purchaseCouponService.getTransferCouponDataByAccepter(this.userId).subscribe(
       (response) => {
-        console.log('Response:', response); // Log the whole response object
+        console.log('Accepted Coupons Response:', response);
         this.transferData = response;
-        this.transferData.forEach(arr => console.log("Array", arr.saleCouponId));
-        // Fetch SaleCoupon data for each transfer (based on saleCouponId)
-        console.log("transferdata", this.transferData);
-        this.transferData.forEach((c) => {
-          console.log('Sale Coupon Data:', c.saleCouponId);
-          this.purchaseCouponService.getSaleCouponById(c.saleCouponId).subscribe(
+        this.transferData.forEach((transfer) => {
+          this.purchaseCouponService.getSaleCouponById(transfer.saleCouponId).subscribe(
             (couponData) => {
-              this.acceptedCoupons.push(couponData);  // Use push to add it to the array
-              console.log('Sale Coupon Data:', couponData);
+              this.acceptedCoupons.push(couponData);
+              console.log('Fetched Sale Coupon:', couponData);
             },
             (error) => {
               console.error('Error fetching SaleCoupon data:', error);
@@ -88,19 +136,28 @@ export class PurchaseCouponComponent implements OnInit {
       }
     );
   }
+  private setupWebSocket(): void {
+    this.websocketService.connect();
 
-  // Fetch all coupons by user ID
-  loadCoupons(userId: number): void {
-    this.purchaseCouponService.getAllCouponsByUserId(userId).subscribe(
-      (coupons) => {
-        this.availableCoupons = coupons;
-        // console.log('Available Coupons:', this.availableCoupons);
-        this.filterCoupons(); // Filter coupons by status
-      },
-      (error) => {
-        console.error('Error fetching coupons:', error);
-      }
-    );
+    this.websocketService.onMessage().subscribe((message) => {
+      this.handleWebSocketMessage(message);
+    });
+  }
+
+  private handleWebSocketMessage(message: string): void {
+    console.log('WebSocket message:', message);
+
+    switch (message) {
+      case 'COUPON_TRANSFER_TRANSFERRED':
+        console.log('Coupon transfer message received.' , message);
+        console.log('User Id : ', this.userId);
+        this.loadCoupons(this.userId);
+        this.loadAcceptedCoupons();
+        break;
+
+      default:
+        console.warn('Unknown WebSocket message:', message);
+    }
   }
 
   // Filter coupons based on status

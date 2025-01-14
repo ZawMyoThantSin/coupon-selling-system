@@ -7,6 +7,7 @@ import { StorageService } from '../../../../../services/storage.service';
 import { JwtService } from '../../../../../services/jwt.service';
 import { BusinessReview } from '../../../../../models/business-review';
 import { BusinessReviewService } from '../../../../../services/business-review/business-review.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-business-review',
@@ -33,7 +34,8 @@ export class BusinessReviewComponent implements OnInit {
     private router: Router,
     private storageService:StorageService,
     private tokenService:JwtService,
-    private snackBar: MatSnackBar // Inject Snackbar
+    private snackBar: MatSnackBar, // Inject Snackbar
+    private toastr: ToastrService
   ) {}
   ngOnInit(): void {
     // Get businessId from route parameters
@@ -49,7 +51,7 @@ export class BusinessReviewComponent implements OnInit {
       }
 
       // Fetch all ratings and then sort
-      this.businessReviewService.getAllRating().subscribe(
+      this.businessReviewService.getAllRating(this.business_id).subscribe(
         (response) => {
           this.rating = response;
           this.sortReviews(); // Sort reviews after fetching
@@ -88,13 +90,13 @@ export class BusinessReviewComponent implements OnInit {
         this.businessReviewService.ratebusiness(reviewData).subscribe(
             (response) => {
 
-              this.openSnackBar('Thank you for your rating!', 'Close');
+              this.toastr.success('Thank you for your rating!');
                 this.hasRated=true;
             },
             (error) => {
                 console.error('Error submitting review:', error);
                 if (error.status === 400) {
-                  this.openSnackBar(error.error || 'You have already rated this business.', 'Close');
+                  this.toastr.clear(error.error || 'You have already rated this business.');
                 } else {
                     alert('An error occurred. Please try again later.');
                 }
@@ -106,18 +108,12 @@ export class BusinessReviewComponent implements OnInit {
 
     }
 }
-openSnackBar(message: string, action: string): void {
-  this.snackBar.open(message, action, {
-    duration: 3000, // Duration in milliseconds
-  });
+
 }
 
 
-  }
 
 
 
 
 
-
-;

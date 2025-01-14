@@ -11,11 +11,27 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { FriendDetailComponent } from './friend-detail/friend-detail.component';
 import { ConfirmationModalComponent } from './confirmation-modal/confirmation-modal.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormField } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-friend',
   standalone: true,
-  imports: [CommonModule, FormsModule, MdbRippleModule,ConfirmationModalComponent],
+  imports: [CommonModule, FormsModule, MdbRippleModule,ConfirmationModalComponent,
+    MatButtonModule,
+    MatCardModule,
+    MatInputModule,
+    MatTableModule,
+    MatIconModule,
+    MatDialogModule,
+    MatListModule
+  ],
   templateUrl: './friend.component.html',
   styleUrls: ['./friend.component.css']
 })
@@ -66,28 +82,53 @@ export class FriendComponent implements OnInit {
   }
 
   onInput(): void {
+    if (!this.loggedInUserId) {
+      console.error('Logged in user ID is missing.');
+      return;
+    }
     if (this.searchQuery.trim().length > 1) {
-      this.friendshipService.searchUsersByEmail(this.searchQuery).subscribe({
-        next: (results) => {
-          this.emailSuggestions = results.filter((user) =>
-            this.isEligibleForSuggestion(user)
-          );
-        },
-        error: () => this.toastr.error('Error fetching search suggestions.', 'Error'),
-      });
+      this.friendshipService
+        .searchUsersByEmail(this.searchQuery, this.loggedInUserId)
+        .subscribe({
+          next: (results) => {
+            this.emailSuggestions = results; // Backend already filters ineligible users
+          },
+          error: () => this.toastr.error('Error fetching search suggestions.', 'Error'),
+        });
     } else {
       this.emailSuggestions = [];
     }
   }
 
   loadFriends(): void {
-    if (!this.loggedInUserId) return;
+    if (!this.loggedInUserId) {
+      console.error('Logged-in user ID is missing. Cannot load friends.');
+      return;
+    }
     this.friendshipService.getFriends(this.loggedInUserId).subscribe({
       next: (data) => {
         this.friends = data;
         this.friendIds = new Set(data.map((friend) => friend.id));
+        console.log('Friends loaded:', this.friends);
+
+        // Fetch additional details for each friend (e.g., profile pictures)
+        this.friends.forEach((friend) => {
+          console.log('Fetching details for friend:', friend.friendId);
+          this.friendshipService.getFriendDetails(friend.friendId).subscribe({
+            next: (details) => {
+              friend.profile = details.profile; // Assuming API provides 'profilePictureUrl'
+            },
+            error: (err) => {
+              console.error(`Error fetching details for friend ${friend.id}:`, err);
+              // Set a default image in case of error
+              friend.profile = '/images/default-avatar.png';
+            },
+          });
+        });
       },
-      error: () => this.toastr.error('Error loading friends.', 'Error'),
+      error: (err) => {
+        console.error('Error fetching friends:', err);
+      },
     });
   }
 
@@ -177,6 +218,10 @@ export class FriendComponent implements OnInit {
         type: 'FRIEND_REQUEST_CANCELLED',
         payload: { requestId }
       }));
+      this.websocketService.send(JSON.stringify({
+        type: 'FRIEND_REQUEST_CANCELLED',
+        payload: { requestId }
+      }));
       this.loadPendingRequests();
       console.log('Denied request:', requestId);
       this.showConfirmCancelModal = false;
@@ -234,13 +279,7 @@ closeConfirmCanelModal() {
     );
   }
 
-  private isEligibleForSuggestion(user: any): boolean {
-    if (!user.email || !user.id) return false; // Ensure the user has necessary fields
-    if (user.email === this.loggedInUserEmail) return false; // Exclude logged-in user
-    if (this.friendIds.has(user.id)) return false; // Exclude existing friends
-    if (this.isPendingRequest(user.id)) return false; // Exclude pending requests
-    return true;
-  }
+
 
   private setupWebSocket(): void {
     this.websocketService.connect();
@@ -279,20 +318,21 @@ closeConfirmCanelModal() {
 
     switch (message) {
       case 'FRIEND_REQUEST_RECEIVED':
-        this.toastr.info('You have a new friend request!', 'Info');
+        // this.toastr.info('You have a new friend request!', 'Info');
         this.loadPendingRequests();
         break;
       case 'FRIEND_REQUEST_ACCEPTED':
-        this.toastr.success('Your friend request was accepted!', 'Success');
+        // this.toastr.success('Your friend request was accepted!', 'Success');
         this.loadFriends();
+        this.loadPendingRequests();
         this.loadPendingRequests();
         break;
       case 'FRIEND_REQUEST_DENIED':
-        this.toastr.info('Your friend request was denied.', 'Info');
+        // this.toastr.info('Your friend request was denied.', 'Info');
         this.loadPendingRequests();
         break;
       case 'FRIEND_REQUEST_CANCELLED':
-        this.toastr.warning('A friend request sent to you was canceled.', 'Info');
+        // this.toastr.warning('A friend request sent to you was canceled.', 'Info');
         this.loadPendingRequests();
         break;
       case 'UNFRIENDED':

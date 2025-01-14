@@ -71,6 +71,10 @@ this.couponService.getAllUserCoupons().subscribe(
     addToCart() {
       const couponId = this.couponIds[this.product.id];
       const quantity = this.quantity;
+      const remainingCouponQuantity = this.couponRemain[this.product.id];
+
+      // Check if quantity is less than or equal to the remaining coupon quantity
+      if (quantity <= remainingCouponQuantity) {
       const cartDataToSend = {
         "userId":this.userId,
         "couponId":couponId,
@@ -78,10 +82,17 @@ this.couponService.getAllUserCoupons().subscribe(
       }
     this.cartService.addToCart(cartDataToSend).subscribe((res)=> {
       this.toastr.success("Add To Cart Successfully", "Success");
+      // Update the remaining quantity after successful add
+      this.couponRemain[this.product.id] -= quantity;
+
     },err => console.log("Error in add to Cart")
     );
-
     }
+    else {
+      // Show error if quantity exceeds the available coupon quantity
+      this.toastr.error("Not enough stock available for the coupon", "Error");
+    }
+  }
     goBack(){
       this.router.navigate(['/homepage']);
     }

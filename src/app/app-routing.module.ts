@@ -45,6 +45,7 @@ import { OrderHistoryComponent } from './components/home/order-history/order-his
 import { SaleCouponReportComponent } from './components/owner/owner-dashboard/sale-coupon-report/sale-coupon-report.component';
 import { TestDashComponent } from './components/test-dash/test-dash.component';
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
+import { EditShopComponent } from './components/owner/shop/edit-shop/edit-shop.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -73,6 +74,7 @@ const routes: Routes = [
       {path:'',  component:CouponSaleBarChartComponent},
       {path:'qr-scanner', component:QrScannerComponent},
       {path:'report', component:SaleCouponReportComponent, title:'Report'},
+      { path: 'edit-shop/:id', component: EditShopComponent },
       {path:'qr-result', component:QrResultComponent},
       {path:'shop/:id', component:ShopComponent, title:'Shop' ,children:[
         {path:'', component:ProductComponent},

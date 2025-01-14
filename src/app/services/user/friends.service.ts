@@ -16,7 +16,11 @@ export class FriendsService {
 
   constructor(
     private http: HttpClient,
-    private websocketService: WebsocketService) {}
+    private websocketService: WebsocketService,
+    private storageService: StorageService // Inject the StorageService to manage the token
+  ) {
+    this.token = this.storageService.getItem('token'); // Retrieve token from storage
+  }
 
 
 
@@ -28,12 +32,7 @@ export class FriendsService {
     this.websocketService.disconnect();
   }
 
-  getFriendRequestUpdates(): Observable<any> {
-    return this.websocketService.onMessage().pipe(
-      filter((message) => message.type === 'FRIEND_REQUEST_UPDATE'),
-      map((message) => message.payload) // Extract payload
-    );
-  }
+
 
   sendFriendRequest(request: any): Observable<FriendshipResponse> {
     if (!request.senderId || !request.accepterId) {
@@ -55,7 +54,8 @@ export class FriendsService {
   }
 
   getFriends(userId: number): Observable<FriendshipResponse[]> {
-    return this.http.get<FriendshipResponse[]>(`${this.BASE_URL}/${userId}/friends`, {});
+    return this.http.get<FriendshipResponse[]>(`${this.BASE_URL}/${userId}/friends`, {
+    });
   }
 
   getPendingRequests(userId: number): Observable<FriendshipResponse[]> {
@@ -66,9 +66,9 @@ export class FriendsService {
     return this.http.get<FriendshipResponse[]>(`${this.BASE_URL}/${userId}/sent-pending`, {});
   }
 
-  searchUsersByEmail(email: string): Observable<any[]> {
+  searchUsersByEmail(email: string, loggedInUserId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.BASE_URL}/search`, {
-      params: { email },
+      params: { email, loggedInUserId: loggedInUserId.toString() },
       responseType: 'json',
     });
   }
@@ -78,6 +78,8 @@ export class FriendsService {
   }
 
   getFriendDetails(friendId: number): Observable<any> {
-    return this.http.get<any>(`${this.BASE_URL}/friend/${friendId}`, {});
+    return this.http.get<any>(`${this.BASE_URL}/friend/${friendId}`, {
+
+    });
   }
 }

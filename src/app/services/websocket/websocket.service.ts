@@ -9,7 +9,7 @@ import { getDefaultAppConfig } from '../../models/appConfig';
 export class WebsocketService {
   private socket!: WebSocket;
   private messageSubject = new Subject<any>();
-  private readonly serverUrl = `ws://${getDefaultAppConfig().backendHost}/ws`;
+  private readonly serverUrl = `ws://localhost:8080/ws`;
   private reconnectAttempts = 0;
   private readonly maxReconnectAttempts = 10;
   private readonly reconnectDelay = 5000;
@@ -61,6 +61,12 @@ export class WebsocketService {
     };
   }
 
+  reconnect(token: string): void {
+    this.token = token;
+    this.disconnect(); // Close existing connection if any
+    this.connect(); // Establish new connection
+  }
+
   disconnect(): void {
     if (this.socket) {
       this.socket.close();
@@ -68,11 +74,6 @@ export class WebsocketService {
     }
   }
 
-  /**
-   * Sends a message to the WebSocket server.
-   * @param message
-   *
-   */
   send(message: string): void {
     if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(message);
@@ -82,10 +83,6 @@ export class WebsocketService {
     }
   }
 
-  /**
-   * Subscribes to incoming WebSocket messages.
-   * @returns
-   */
   onMessage(): Observable<any> {
     return this.messageSubject.asObservable();
   }
@@ -103,10 +100,7 @@ export class WebsocketService {
     setTimeout(() => this.connect(), delay);
   }
 
-  /**
-   * Calculates an exponential backoff delay for reconnection attempts.
-   * @returns
-   */
+
   private calculateReconnectDelay(): number {
     return Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1), 30000);
   }
