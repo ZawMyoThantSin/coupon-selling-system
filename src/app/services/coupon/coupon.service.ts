@@ -38,6 +38,12 @@ export class CouponService {
     })
   }
 
+  increaseViewCount(id:any):Observable<boolean>{
+    return this.http.get<boolean>(this.BASE_URL +'api/coupon/view/'+id,{
+      responseType:'json'
+    })
+  }
+
   getAllUserCoupons():Observable<Coupon[]>{
     return this.http.get<Coupon[]>(this.BASE_URL +'api/coupon',{
       // headers:this.createAuthHeader(),

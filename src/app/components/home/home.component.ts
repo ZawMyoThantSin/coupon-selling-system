@@ -9,7 +9,6 @@ import { FriendsService } from '../../services/user/friends.service';
 import { SharedService } from '../../services/shared/shared.service';
 import { CommonModule } from '@angular/common';
 import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
-import { UserWalletComponent } from './user-wallet/user-wallet.component';
 import { WebsocketService } from '../../services/websocket/websocket.service';
 import { ToastrService } from 'ngx-toastr';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';

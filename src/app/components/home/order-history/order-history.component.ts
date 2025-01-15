@@ -49,7 +49,7 @@ export class OrderHistoryComponent {
 }
 
 loadOrders(userId: number){
-  this.orderHistoryService.getByUserId(userId).subscribe(
+  this.orderHistoryService.getByUserId(this.user_id).subscribe(
     (response: OrderDetail[]) => {
       this.orderHistory = response; // Save data to orderHistory array
       console.log('History', response);
@@ -70,7 +70,7 @@ loadOrders(userId: number){
   );
 }
 
-      getProductImage(imagePath: string): string {
-        return this.productService.getImageUrl(imagePath);
-      }
+    getProductImage(imagePath: string): string {
+      return this.productService.getImageUrl(imagePath);
+    }
 }

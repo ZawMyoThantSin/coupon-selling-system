@@ -42,8 +42,14 @@ this.websocketService.disconnect();
         responseType: 'json'
       });
     }
+    getTransferCouponDataBySender(senderId: number): Observable<any> {
+      return this.http.get<any>(`http://localhost:8080/transfer/couponSender/${senderId}`, {
+        responseType: 'json'
+      });
+    }
 
     getSaleCouponById(saleCouponId: number): Observable<any> {
       return this.http.get<any>(`${this.BASE_URL}/${saleCouponId}`);
   }
+
 }

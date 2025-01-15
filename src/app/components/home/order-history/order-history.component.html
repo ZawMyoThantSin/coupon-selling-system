@@ -9,7 +9,22 @@
       <!-- User and Order Details -->
       <div class="order-header">
 
-       <div class="order-status">{{ order.status === 1 ? 'Completed' : 'Pending' }}</div>
+        <div
+        class="order-status"
+        [ngClass]="{
+          'text-success': order.status === 1,
+          'text-danger': order.status === 2,
+          'text-warning': order.status !== 1 && order.status !== 2
+        }">
+        {{
+          order.status === 1
+            ? 'Completed'
+            : (order.status === 2
+                ? 'Rejected'
+                : 'Pending')
+        }}
+      </div>
+
 
          <p>
           Order ID: <strong>{{ order.order_id || 'N/A' }}</strong>
@@ -49,7 +64,7 @@
 
       </div>
 
-         <div *ngIf="order.status <= 0" class="loader-container">
+         <div *ngIf="order.status <=0" class="loader-container">
 
 
          <p class="loader-text">⏳ Your order is being processed...</p>

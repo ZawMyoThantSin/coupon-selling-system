@@ -14,6 +14,7 @@ import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { ShareCouponModalComponent } from '../share-coupon-modal/share-coupon-modal.component';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
 import { ToastrService } from 'ngx-toastr';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-purchase-coupon',
@@ -39,12 +40,12 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
 
   availableCoupons: PurchaseCoupon[] = [];
   filteredAvailableCoupons: PurchaseCoupon[] = [];
-  acceptedCoupons: PurchaseCoupon[] = [];
+  acceptedCoupons: any[] = [];
   transferData: any[] = [];
   filteredUsedCoupons: PurchaseCoupon[] = [];
-  filteredTransferredCoupons: PurchaseCoupon[] = [];
-  filteredExpiredCoupons: PurchaseCoupon[] = [];
-
+  filteredTransferredCoupons: any[] = [];
+  filteredExpiredCoupons: any[] = [];
+  expiredAcceptedCoupons: any[] = [];
   userId!: number; // Holds user ID
   businessData: any; // Holds data fetched by userId
   token!: string | null; // JWT token
@@ -65,33 +66,8 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
       this.userId = this.tokenService.getUserId(this.token);
       const accepterId = this.userId;
       this.loadCoupons(this.userId);
-      this.loadAcceptedCoupons();
+      this.loadAcceptCoupons();
     }
-     // Fetch accepted coupons
-    //  this.purchaseCouponService.getTransferCouponDataByAccepter(this.userId).subscribe(
-    //   (response) => {
-    //     console.log('Response:', response); // Log the whole response object
-    //     this.transferData = response;
-    //     this.transferData.forEach(arr => console.log("Array", arr.saleCouponId));
-    //     // Fetch SaleCoupon data for each transfer (based on saleCouponId)
-    //     console.log("transferdata", this.transferData);
-    //     this.transferData.forEach((c) => {
-    //       console.log('Sale Coupon Data:', c.saleCouponId);
-    //       this.purchaseCouponService.getSaleCouponById(c.saleCouponId).subscribe(
-    //         (couponData) => {
-    //           this.acceptedCoupons.push(couponData);  // Use push to add it to the array
-    //           console.log('Sale Coupon Data:', couponData);
-    //         },
-    //         (error) => {
-    //           console.error('Error fetching SaleCoupon data:', error);
-    //         }
-    //       );
-    //     });
-    //   },
-    //   (error) => {
-    //     console.error('Error fetching accepted coupons:', error);
-    //   }
-    // );
     this.setupWebSocket();
   }
 
@@ -103,9 +79,44 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
     this.purchaseCouponService.getAllCouponsByUserId(userId).subscribe(
       (coupons) => {
         this.availableCoupons = coupons;
-        // console.log('Available Coupons:', this.availableCoupons);
+        console.log("jjjj", this.availableCoupons);
         this.filterCoupons(); // Filter coupons by status
-        setTimeout(() => {}, 0);
+
+
+        // Fetch transferred coupons from the sender
+  this.purchaseCouponService.getTransferCouponDataBySender(userId).subscribe(
+    (transferredCoupons) => {
+      let transferarray: any[] = transferredCoupons;
+
+      // Create an array of observables for all SaleCoupon fetch calls
+      const saleCouponObservables = transferarray.map((coupon) =>
+        this.purchaseCouponService.getSaleCouponById(coupon.saleCouponId)
+      );
+
+      // Wait for all SaleCoupon fetch calls to complete
+      forkJoin(saleCouponObservables).subscribe(
+        (saleCoupons) => {
+          // Enrich transferred coupons with their corresponding SaleCoupon data
+          const enrichedCoupons = saleCoupons.map((saleCoupon, index) => ({
+            ...transferarray[index], // Retain the transferred coupon data
+            saleCouponData: saleCoupon, // Add SaleCoupon data
+          }));
+
+          // Assign the enriched data to filteredTransferredCoupons
+          this.filteredTransferredCoupons = enrichedCoupons;
+
+          console.log("Enriched Transferred Coupons:", this.filteredTransferredCoupons);
+        },
+        (error) => {
+          console.error("Error fetching SaleCoupon data:", error);
+        }
+      );
+    },
+    (error) => {
+      console.error("Error fetching transferred coupons:", error);
+    }
+  );
+
       },
       (error) => {
         console.error('Error fetching coupons:', error);
@@ -113,23 +124,52 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
     );
   }
    // Fetch accepted coupons
-   loadAcceptedCoupons(): void {
-    this.acceptedCoupons = []; // Clear the array before reloading
+   loadAcceptCoupons(): void {
+    // Fetch accepted coupons
     this.purchaseCouponService.getTransferCouponDataByAccepter(this.userId).subscribe(
       (response) => {
-        console.log('Accepted Coupons Response:', response);
+        console.log('Response:', response);
         this.transferData = response;
-        this.transferData.forEach((transfer) => {
-          this.purchaseCouponService.getSaleCouponById(transfer.saleCouponId).subscribe(
-            (couponData) => {
-              this.acceptedCoupons.push(couponData);
-              console.log('Fetched Sale Coupon:', couponData);
-            },
-            (error) => {
-              console.error('Error fetching SaleCoupon data:', error);
-            }
-          );
-        });
+
+        // Create an array of observables for all SaleCoupon fetch calls
+        const saleCouponObservables = this.transferData.map((c) =>
+          this.purchaseCouponService.getSaleCouponById(c.saleCouponId)
+        );
+
+        // Wait for all SaleCoupon fetch calls to complete
+        forkJoin(saleCouponObservables).subscribe(
+          (coupons) => {
+            const currentDate = new Date();
+
+            // Enrich coupons with senderName
+            const enrichedCoupons = coupons.map((coupon, index) => ({
+              ...coupon,
+              senderName: this.transferData[index]?.senderName || '', // Populate senderName
+
+            }));
+            console.log('TEE',enrichedCoupons)
+
+            // Separate accepted and expired coupons using enriched data
+            this.acceptedCoupons = enrichedCoupons.filter(
+              (coupon) => new Date(coupon.expiryDate) > currentDate
+            );
+
+            this.expiredAcceptedCoupons = enrichedCoupons.filter(
+              (coupon) => new Date(coupon.expiryDate) <= currentDate
+            );
+
+            console.log('Accepted Coupons:', this.acceptedCoupons);
+            console.log('Expired Accepted Coupons:', this.expiredAcceptedCoupons);
+
+            // Combine all coupons and filter
+            this.availableCoupons = [...this.availableCoupons, ...this.acceptedCoupons];
+            // this.filterCoupons();
+          },
+          (error) => {
+            console.error('Error fetching SaleCoupon data:', error);
+          }
+        );
+
       },
       (error) => {
         console.error('Error fetching accepted coupons:', error);
@@ -152,7 +192,7 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
         console.log('Coupon transfer message received.' , message);
         console.log('User Id : ', this.userId);
         this.loadCoupons(this.userId);
-        this.loadAcceptedCoupons();
+        this.loadAcceptCoupons();
         break;
 
       default:
@@ -160,6 +200,40 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
     }
   }
 
+  isNearExpiry(expiryDate: string): boolean {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const expiry = new Date(
+      new Date(expiryDate).getFullYear(),
+      new Date(expiryDate).getMonth(),
+      new Date(expiryDate).getDate()
+    );
+
+    const timeDiff = expiry.getTime() - today.getTime();
+    const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return daysRemaining <= 3 && daysRemaining >= 0;
+  }
+
+  getExpiryMessage(expiryDate: string): string {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const expiry = new Date(
+      new Date(expiryDate).getFullYear(),
+      new Date(expiryDate).getMonth(),
+      new Date(expiryDate).getDate()
+    );
+
+    const timeDiff = expiry.getTime() - today.getTime();
+    const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    if (daysRemaining > 0) {
+      return `${daysRemaining} day${daysRemaining > 1 ? 's' : ''} remaining`;
+    } else if (daysRemaining === 0) {
+      return 'Expires today';
+    } else {
+      return 'Expired';
+    }
+  }
   // Filter coupons based on status
   filterCoupons(): void {
     const currentDate = new Date();
@@ -167,10 +241,15 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
       (coupon) => coupon.status === 0 && new Date(coupon.expiryDate) > currentDate
     );
     this.filteredUsedCoupons = this.availableCoupons.filter((coupon) => coupon.status === 1);
-    this.filteredTransferredCoupons = this.availableCoupons.filter((coupon) => coupon.status === 2);
-    this.filteredExpiredCoupons = this.availableCoupons.filter(
-      (coupon) => coupon.status !== 1 && new Date(coupon.expiryDate) < currentDate
-    );
+    // this.filteredTransferredCoupons = this.availableCoupons.filter((coupon) => coupon.status === 2);
+    // console.log("TTTT",this.filteredTransferredCoupons)
+    this.filteredExpiredCoupons = [
+      ...this.availableCoupons.filter(
+        (coupon) => coupon.status !== 1 && coupon.status !== 2 && new Date(coupon.expiryDate) <= currentDate
+      ),
+      ...this.expiredAcceptedCoupons,
+    ];
+
   }
 
   // Generate image URL for the product

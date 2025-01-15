@@ -21,41 +21,47 @@ export class CouponCardComponent implements OnInit{
   products:Product[]=[];
   filteredProducts: Product[] = [];
   searchQuery: string = '';
+  couponIds: { [key: number]: number } = {};
   couponPrices: { [key: number]: number } = {};
-  couponCreateDates: { [key: number]: Date } = {}; 
-  couponExpDates: { [key: number]: Date } = {};  
-  
+  couponCreateDates: { [key: number]: Date } = {};
+  couponExpDates: { [key: number]: Date } = {};
+
   alphabet: string[] = 'abcdefghijklmnopqrstuvwxyz'.split('');
   constructor(private productService:ProductService,
     private couponService:CouponService,
     private datePipe: DatePipe,
     private router: Router){}
-  
-  
+
+
     ngOnInit() {
       // Fetch all products
       this.productService.getEveryProducts().subscribe(
         (data) => {
           console.log('Products:', data);  // Log the fetched products to check the data
           this.products = data;
-    
+
           // Fetch coupons after fetching products
           this.couponService.getAllUserCoupons().subscribe(
             (coupons: any) => {
               console.log('Coupons:', coupons);  // Log the fetched coupons to check the data
-              
+
               // Populate coupon prices map
               coupons.forEach((coupon: any) => {
-                this.couponPrices[coupon.productId] = coupon.price;  // Map productId to discount price
-                this.couponCreateDates[coupon.productId] = new Date(coupon.createdDate);
-                this.couponExpDates[coupon.productId] = new Date(coupon.expiredDate);
+                const expDate = new Date(coupon.expiredDate);
+                if (expDate > new Date() && coupon.quantity > 0) {
+                  const productId = coupon.productId;
+                  this.couponIds[productId] = coupon.id;
+                  this.couponPrices[coupon.productId] = coupon.price;  // Map productId to discount price
+                  this.couponCreateDates[coupon.productId] = new Date(coupon.createdDate);
+                  this.couponExpDates[coupon.productId] = new Date(coupon.expiredDate);
+                }
               });
-    
+
               // Filter products to only include those that have a coupon price
               this.filteredProducts = this.products.filter(
                 (product) => this.couponPrices[product.id] !== undefined
               );
-    
+
               console.log('Filtered Products:', this.filteredProducts);  // Log the filtered products
             },
             (error) => {
@@ -68,8 +74,16 @@ export class CouponCardComponent implements OnInit{
         }
       );
     }
-    
+  getCouponId(productId: number): number | null {
+      return this.couponIds[productId] || null; // Return null if no couponId is available
+  }
+
+
+  increaseView(productId: number){
+    this.couponService.increaseViewCount(this.getCouponId(productId)).subscribe();
+  }
   viewProductDetails(id: number) {
+    this.increaseView(id);
     this.router.navigate(['/homepage/p', id]);
   }
   // filterProducts(query: string): void {
@@ -92,7 +106,7 @@ export class CouponCardComponent implements OnInit{
       product.name.toLowerCase().startsWith(char.toLowerCase())
     );
   }
-  
+
   getImageUrl(imagePath: string): any {
     return this.productService.getImageUrl(imagePath);
   }
@@ -120,6 +134,6 @@ export class CouponCardComponent implements OnInit{
   //     }
   //   });
   // }
-  
-  
+
+
   }

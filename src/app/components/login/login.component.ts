@@ -66,17 +66,18 @@ onLoginSubmit(form:any) {
       data => {
         console.log(data)
         this.storageService.removeItem("formData");
-        localStorage.setItem('token', data.token);
 
         if (data.message === 'RESET_PASSWORD_REQUIRED') {
           localStorage.setItem('token', data.token);
           localStorage.setItem('userId', data.userId);
           this.router.navigate(['/password-reset']);
-        }else{
+        }else if(data.token !== 'NOT_VERIFY'){
           localStorage.setItem('token', data.token);
           this.user.email = '',
           this.user.password =  ''
           this.router.navigate(['/']);
+        }else{
+          this.toastr.info("You haven't verify your account yet!", 'Login Failed');
         }
       },
       error => {

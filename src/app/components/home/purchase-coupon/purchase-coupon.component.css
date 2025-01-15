@@ -181,3 +181,11 @@ cursor: pointer;
   font-size: 0.8em; /* Adjust the font size as desired */
   color: blue; /* Optional: change text color for emphasis */
 }
+.expired-coupon {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.red-text {
+  color: red;
+  font-weight: bold; /* Optional: Make it bold for better visibility */
+}
