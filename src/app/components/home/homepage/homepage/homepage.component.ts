@@ -15,6 +15,8 @@ import { Product } from '../../../../models/product';
 import { SearchFilterComponent } from '../search-filter/search-filter.component';
 import { CouponCardComponent } from '../coupon-card/coupon-card.component';
 import { Router, RouterModule } from '@angular/router';
+import { CategoryService } from '../../../../services/category/category.service';
+import { businessCategory } from '../../../../models/business-category';
 
 @Component({
   selector: 'app-homepage',
@@ -35,7 +37,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
 
   businessArray: Business[] = [];
   productArray: Product[] = [];
-
+  categories: businessCategory[] = []; 
   filteredBusinesses: Business[] = [];
   filteredProducts: Product[] = [];
   selectedCategory: any = null;
@@ -48,23 +50,17 @@ export class HomepageComponent implements OnInit, AfterViewInit {
 
   constructor(
     private businessService: BusinessService,
+    private cateoryService:CategoryService,
     private productService: ProductService,
     private renderer: Renderer2,
     private datePipe: DatePipe,
     private router: Router,
   ) {}
-  categories = [
-    { id: 1, name:'Restaurant' },
-    { id: 2, name:'Hotel' },
-    { id: 3, name:'Spa' },
-    { id: 4, name:'Fitness' },
-    { id: 5, name:'Bar' },
-    { id: 6, name:'Bakery' },
-  ];
-  
+ 
   ngOnInit(): void {
     this.loadBusinesses();
     this.loadProducts();
+    this.loadCategories();
   }
 
   ngAfterViewInit(): void {
@@ -85,7 +81,17 @@ export class HomepageComponent implements OnInit, AfterViewInit {
       },
     });
   }
-  
+  loadCategories(): void {
+    this.cateoryService.getAllCategories().subscribe({
+      next: (data) => {
+        this.categories = data;  // Assign the fetched categories to the categories array
+        console.log('Categories:', this.categories);  // Log to verify
+      },
+      error: (err) => {
+        console.error('Error fetching categories:', err);
+      },
+    });
+  }
 
   loadProducts(): void {
     this.productService.getEveryProducts().subscribe({
