@@ -68,8 +68,6 @@ ngOnInit(): void {
     this.loadAcceptCoupons();
     
   }
-
- 
 }
 
 loadAcceptCoupons(): void {
@@ -144,7 +142,7 @@ loadAcceptCoupons(): void {
       console.log("jjjj", this.availableCoupons);
       this.filterCoupons(); // Filter coupons by status
 
-      // Fetch transferred coupons from the sender
+     
       // Fetch transferred coupons from the sender
 this.purchaseCouponService.getTransferCouponDataBySender(userId).subscribe(
   (transferredCoupons) => {
