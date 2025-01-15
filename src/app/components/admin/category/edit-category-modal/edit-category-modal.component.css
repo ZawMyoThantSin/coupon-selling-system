@@ -1,0 +1,47 @@
+.modal-header {
+  border-bottom: 1px solid #dee2e6;
+  background-color: #f8f9fa;
+  padding: 1rem;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 1rem;
+}
+
+.small-form .form-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.small-form .form-control-sm {
+  font-size: 0.875rem;
+  padding: 0.5rem;
+}
+
+.small-form textarea {
+  resize: none;
+}
+
+/* Buttons */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+  border-top: 1px solid #dee2e6;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* File Upload */
+.form-control[type="file"] {
+  font-size: 0.875rem;
+}

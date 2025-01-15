@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let product of filteredProducts">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-5" *ngFor="let product of filteredProducts">
       <div class="card m-2 card-clickable" (click)="viewProductDetails(product.id)">
         <!-- Discount Badge -->
         <div class="discount-badge" *ngIf="product.discount">
@@ -21,10 +21,10 @@
               <span class="text-decoration-line-through" style="margin-right: 15px;">{{ product.price }}</span>
               <span>{{ getCouponPrice(product.id) }} Ks</span>
             </div>
-            
+
             <!-- Horizontal Line -->
             <hr style="border: 0; border-top: 1px solid black; margin: 10px 0;" />
-            
+
             <!-- Coupon Validity -->
             <p>{{ getCouponValidity(product.id) }}</p>
           </div>

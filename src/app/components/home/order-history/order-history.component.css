@@ -1,0 +1,238 @@
+/* General container for order history */
+.order-history {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+  max-width: 1000px; /* Max width for desktop */
+  width: 100%; /* Full width for mobile */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  margin: auto; /* Center align */
+}
+
+/* Card for each order */
+.card {
+  border: 1px solid #0982a7;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+}
+
+/* Order status at the top of each card */
+.order-status-top {
+  background-color: #fddede; /* Light red background */
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px; /* Space between status and order content */
+  font-weight: bold;
+  color: red;
+  text-align: center;
+}
+
+/* Body of each card */
+.card-body {
+  padding: 20px;
+  border-color: #115c92;
+
+}
+
+/* Screenshot/image inside order details */
+.screenshot-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Header for shop info */
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap; /* Wrap content for smaller screens */
+}
+
+/* Shop name styles */
+.shop-name {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* Order status in the card */
+.order-status {
+  color: green;
+  font-weight: bold;
+  font-size: 14px;
+  text-align: right;
+}
+
+/* Order details section */
+.order-details {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap; /* Wrap content for smaller screens */
+}
+
+/* Product image style */
+.product-image {
+  width: 50px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Information about the product */
+.product-info {
+  flex-grow: 1;
+  min-width: 200px; /* Prevent shrinking for smaller screens */
+}
+
+/* Title of the product */
+.product-title {
+  font-weight: bold;
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Variant, price, and quantity of the product */
+.product-variant,
+.product-price,
+.product-quantity {
+  margin: 4px 0;
+  color: #555;
+  font-size: 14px;
+}
+
+/* Summary section with total items and total price */
+.order-summary {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Wrap on smaller screens */
+}
+
+/* Total items and total price text */
+.total-items,
+.total-price {
+  margin: 0 !important; /* To ensure no extra margin */
+}
+
+/* Different order with red border */
+.different-order {
+  border: 2px solid #ff0000;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+/* Actions (like return/refund, buy again) */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  width: 100%;
+  margin-top: 16px;
+}
+
+/* Button styling */
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Secondary button (e.g., Return/Refund) */
+.btn-secondary {
+  background-color: #ddd;
+}
+
+/* Primary button (e.g., Buy Again) */
+.btn-primary {
+  background-color: #ff6f00;
+  color: white;
+}
+
+/* Small image class for product thumbnails */
+.small-img {
+  width: 80px; /* desired width */
+  height: auto; /* maintains aspect ratio */
+}
+
+/* Loader container inside the order-summary */
+.loader-container {
+  width: 100%;
+  margin-top: 10px; /* Space between the total items and the loader */
+  display: flex;
+  flex-direction: column; /* Align text and loader vertically */
+  align-items: center;
+  justify-content: center;
+}
+
+/* Loader Text */
+.loader-text {
+  margin-bottom: 5px; /* Space between the text and the loader */
+  font-size: 14px;
+  color: #555; /* Gray text color */
+  text-align: center;
+}
+
+/* Loader Animation */
+.loader {
+  width: 100%; /* Adjust the width to fit within the order summary */
+  height: 6px; /* Thinner loader */
+  background: repeating-linear-gradient(-45deg, #0766ca 0 30px, #0000 0 40px) left/200% 100%;
+  animation: i3 25s infinite linear;
+  border-radius: 4px;
+}
+.faint-completed {
+  background-color: #e4e6e4;
+  border: 1px solid #ccd0cc9d;
+  opacity: 0.9;             }
+
+
+@keyframes i3 {
+  100% {
+    background-position: right;
+  }
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  /* Stack elements vertically for small screens */
+  .order-details {
+    flex-direction: column; /* Stack product image and info vertically */
+    align-items: center; /* Center align items */
+  }
+
+  .shop-header {
+    flex-direction: column; /* Stack shop name and order status vertically */
+    align-items: center; /* Center align the header */
+  }
+
+  .order-summary {
+    flex-direction: column; /* Stack total and actions vertically */
+    align-items: center; /* Center align the summary */
+  }
+
+  .actions {
+    justify-content: center; /* Center align the action buttons */
+    gap: 8px; /* Reduce gap between buttons */
+  }
+
+  /* Loader animation adjustments */
+  .loader-container {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .small-img {
+    width: 60px; /* Reduce image size on mobile */
+  }
+
+  .faint-completed {
+    background-color: #e4e6e4; /* Light green background for completed orders */
+    border: 1px solid #ccd0cc9d; /* Slightly darker green border for emphasis */
+    opacity: 0.9;              /* Slight transparency for the faint effect */
+  }
+}

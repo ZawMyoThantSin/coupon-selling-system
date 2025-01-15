@@ -1,0 +1,89 @@
+<div class="business-review-container">
+  <!-- If the user has already rated -->
+  <div *ngIf="hasRated">
+    <h5 class="text-success">You have already rated this business.Thank You !</h5>
+    <!-- <p>Your rating has been recorded. Thank you!</p> -->
+  </div>
+
+
+<div class="business-review-container" *ngIf="!hasRated">
+  <h2>Rate this business!</h2>
+
+
+
+  <div class="stars">
+    <span
+      *ngFor="let star of stars"
+      class="star"
+      [ngClass]="{ 'selected': star <= ratingValue }"
+      (click)="rate(star)"
+    >
+      &#9733;
+    </span>
+  </div>
+  <!-- <p>Your rating: {{ ratingValue }}</p> -->
+
+  <form #reviewForm="ngForm" (ngSubmit)="onSubmit(reviewForm)">
+    <textarea
+      name="message "
+      [(ngModel)]="message"
+      required
+      placeholder="Write your review here..."
+    ></textarea>
+    <br />
+    <button type="submit" [disabled]="!reviewForm.valid">Submit Review</button>
+  </form>
+</div>
+
+<div class="rating-list">
+  <ul>
+    <div *ngFor="let review of rating">
+      <div class="card px-5 py-4">
+        <div class="header">
+          <div class="image ms-2">
+            <!-- Replace photo with icon -->
+            <img
+            class="rounded rounded-circle"
+            *ngIf="user_id == review.user_id"
+            [src]="review.profile"  alt="">
+            <svg
+             *ngIf="user_id != review.user_id"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              style="height: 100%; width: 100%;"
+            >
+              <path
+                d="M12 2a7 7 0 100 14 7 7 0 000-14zm0 12a5 5 0 110-10 5 5 0 010 10zm-7 8a1 1 0 01-1-1c0-2.5 2.5-4 8-4s8 1.5 8 4a1 1 0 01-1 1H5z"
+              />
+            </svg>
+          </div>
+          <div class="name-stars">
+            <div class="stars ms-5">
+              <span *ngFor="let star of [1, 2, 3, 4, 5]">
+                <svg
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  [ngClass]="{ 'filled': star <= review.count }"
+                >
+                  <path
+                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                  ></path>
+                </svg>
+              </span>
+            </div>
+            <!-- <p class="name"  *ngIf="user_id == review.user_id">{{review.profile}}</p> -->
+            <p class="name" *ngIf="user_id == review.user_id;"> {{review.userName}}</p>
+            <p class="name"*ngIf="user_id != review.user_id;" >Anonymous</p>
+          </div>
+          <div class="message ms-5">
+            <p>
+              {{ review.message || 'No review message provided.' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ul>
+</div>

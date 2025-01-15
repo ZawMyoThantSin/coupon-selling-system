@@ -5,7 +5,7 @@
     margin-bottom: 20px;
     width: 10px;
   }
-  
+
   .search-input {
     padding: 8px;
     font-size: 16px;
@@ -13,11 +13,10 @@
     border: 1px solid #ccc;
     width: 200px;
   }
-  
+
   .category-select {
     padding: 8px;
     font-size: 16px;
     border-radius: 4px;
     border: 1px solid #ccc;
   }
-  

@@ -48,7 +48,6 @@
   font-weight: bold;  /* Apply bold styling */
 }
 
-
 .no-results {
   animation: fadeIn 0.5s;
   color: #6c757d;
@@ -234,4 +233,131 @@
   100% {
     opacity: 1;
   }
+}
+
+.rating i {
+  margin-right: 2px;
+  font-size: 1.2rem;
+  color: yellow;
+}
+
+/* Card Container */
+.card {
+  width: 300px;
+  background: rgb(245, 245, 242);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Image */
+.card-image {
+  background-color: rgb(236, 236, 236);
+  width: 100%;
+  height: 200px;
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-image:hover {
+  transform: scale(0.98);
+}
+
+/* Category */
+.category {
+  text-transform: uppercase;
+  font-size: 0.7em;
+  font-weight: 600;
+  color: rgb(63, 121, 230);
+  padding: 10px 7px 0;
+}
+
+.category:hover {
+  cursor: pointer;
+}
+
+/* Heading (Business Name) */
+.heading {
+  font-weight: 600;
+  color: rgb(14, 1, 1);
+  padding: 7px;
+  font-size: 1.3em;
+  margin-top: 8px;
+}
+
+.heading:hover {
+  cursor: pointer;
+}
+
+/* Author (Location) */
+.author {
+  color: gray;
+  font-weight: 400;
+  font-size: 11px;
+  padding-top: 10px;
+}
+
+.author strong {
+  color: #333;
+}
+
+/* Rating Section */
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between stars and review count */
+  margin-top: 8px; /* Adjust spacing as needed */
+}
+
+.stars {
+  padding: 7px;
+  display: flex;
+  gap: 2px; /* Space between stars */
+}
+
+.stars .fas {
+  font-size: 1.0em; /* Adjust star size */
+}
+
+.text-warning {
+  color: #ffc107; /* Color for filled stars */
+}
+
+.text-muted {
+  color: #ddd; /* Color for empty stars */
+}
+
+.review-count {
+  font-size: 1.0em; /* Adjust font size for review count */
+  color: #0a0101; /* Color for review count */
+}
+
+/* Location Icon */
+.location-icon {
+  margin-right: 6px; /* Space between icon and text */
+  color: #040b0f; /* Icon color */
+  font-size: 2.0em; /* Adjust icon size */
+}
+
+.author {
+  display: flex;
+  align-items: center; /* Align icon and text vertically */
+}
+
+.review-location {
+  font-size: 1.5em; /* Adjust font size for review count */
+  color: #0a0101; /* Color for review count */
 }

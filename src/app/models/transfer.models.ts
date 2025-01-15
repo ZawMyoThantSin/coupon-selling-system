@@ -4,6 +4,8 @@ export interface TransferResponse {
     senderName:string;
     accepterName:string;
     accepterId: number;
+    senderName:string;
+    accepterName:string;
     saleCouponId: number;
     status: number;
     transferAt: string;

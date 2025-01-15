@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
-  isBrowser: boolean;
+  private isBrowser: boolean;
 
-  constructor() {
-    this.isBrowser = typeof window !== 'undefined';
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   getItem(key: string): string | null {
@@ -18,7 +19,7 @@ export class StorageService {
     if (this.isBrowser) {
       try {
         const jsonData = localStorage.getItem(key);
-        return jsonData ? JSON.parse(jsonData) as T : null; // Parse back to the original type
+        return jsonData ? (JSON.parse(jsonData) as T) : null; // Parse back to the original type
       } catch (error) {
         console.error('Error retrieving data:', error);
         return null;
@@ -45,12 +46,9 @@ export class StorageService {
     }
   }
 
-
-
   removeItem(key: string): void {
     if (this.isBrowser) {
       localStorage.removeItem(key);
     }
   }
-
 }

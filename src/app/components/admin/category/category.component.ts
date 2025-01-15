@@ -9,6 +9,8 @@ import { StorageService } from '../../../services/storage.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { DeleteCategoryModalComponent } from './delete-category-modal/delete-category-modal.component';
+import { EditCategoryModalComponent } from './edit-category-modal/edit-category-modal.component';
 
 @Component({
   selector: 'app-category',
@@ -20,7 +22,9 @@ import { CommonModule } from '@angular/common';
 export class CategoryComponent implements OnInit {
 
   modalRef: MdbModalRef<CreateCategoryModalComponent> | null = null;
+  editmodalRef: MdbModalRef<EditCategoryModalComponent> | null = null;
   categories: businessCategory[] = [];
+  searchTerm: string = '';
 
 
   constructor(private modalService: MdbModalService,
@@ -63,7 +67,7 @@ export class CategoryComponent implements OnInit {
         this.categoryService.createCategory(formData).subscribe(
           (response) => {
             this.toastr.success('Category created successfully!', 'Success');
-            this.loadCategories(); 
+            this.loadCategories();
           },
           (error) => {
             console.error('Error creating category:', error);
@@ -74,18 +78,48 @@ export class CategoryComponent implements OnInit {
     });
   }
 
+
+
+  openEditCategoryModal(categoryId: number): void {
+    this.editmodalRef = this.modalService.open(EditCategoryModalComponent, {
+      modalClass: 'modal-md',
+      data: {
+        categoryId: categoryId, // Pass the categoryId to the modal
+      },
+    });
+
+    this.editmodalRef.onClose.subscribe((updatedData) => {
+      if (updatedData) {
+        this.loadCategories(); // Refresh the categories list after update
+      }
+    });
+  }
+
   deleteCategory(categoryId: number): void {
-    if (confirm('Are you sure you want to delete this category?')) {
-      this.categoryService.deleteCategory(categoryId).subscribe(
-        () => {
-          this.toastr.success('Category deleted successfully!', 'Success');
-          this.loadCategories(); // Refresh the list after deletion
-        },
-        (error) => {
-          console.error('Error deleting category:', error);
-        }
-      );
-    }
+    const modalRef = this.modalService.open(DeleteCategoryModalComponent, {
+      modalClass: 'modal-sm',
+    });
+
+    modalRef.onClose.subscribe((confirm) => {
+      if (confirm) {
+        this.categoryService.deleteCategory(categoryId).subscribe(
+          () => {
+            this.toastr.success('Category deleted successfully!', 'Success');
+            this.loadCategories(); // Refresh the list after deletion
+          },
+          (error) => {
+            console.error('Error deleting category:', error);
+            this.toastr.error('Failed to delete the category!', 'Error');
+          }
+        );
+      }
+    });
+  }
+
+  get filteredCategories(): businessCategory[] {
+    return this.categories.filter((category) =>
+      category.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
   }
 
 }

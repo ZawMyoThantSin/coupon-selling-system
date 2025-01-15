@@ -4,6 +4,7 @@ export interface CartData{
   userId: number,
   couponId: number,
   quantity: number |any,
+  couponRemain: number;
   price: number | any,
   productImage: string,
   productName: string,

@@ -1,18 +1,32 @@
 <div class="row">
-  <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngFor="let product of products">
-    <div class="card m-2 card-clickable" (click)="viewProductDetails(product.id)">
+  <ng-container *ngFor="let product of products">
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngIf="isCouponValid(product.id)">
+
+    <div
+      class="card m-2 card-clickable"
+      [ngClass]="{ 'sold-out-card': isSoldOut(product.id) }"
+      (click)="!isSoldOut(product.id) && viewProductDetails(product.id)"
+    >
       <!-- Discount Badge -->
       <div class="discount-badge" *ngIf="product.discount">
-        
+
         {{ product.discount }}% OFF
       </div>
 
-      <!-- Product Image -->
+
+     <!-- Product Image with Sold Out Text -->
+     <div class="image-container">
       <img
-        [src]=" getProductImageUrl(product.imagePath) "
+        [src]="getProductImageUrl(product.imagePath)"
         class="card-img-top card-img-custom"
         alt="{{ product.name }}"
       />
+      <!-- Sold Out Text Overlay -->
+      <div class="sold-out-overlay" *ngIf="isSoldOut(product.id)">
+        Sold Out
+      </div>
+    </div>
+
 
       <div class="card-body">
         <h5 class="card-title">{{ product.name }}</h5>
@@ -30,24 +44,21 @@
               {{ product.price }}
             </span>
             <span>{{ getCouponPrice(product.id) || product.price }} Ks</span>
-         
+
           </div>
-          
+
           <!-- Horizontal Line -->
           <hr style="border: 0; border-top: 1px solid black; margin: 10px 0;" />
-          
+
           <!-- Coupon Validity -->
           <p>{{ getCouponValidity(product.id) }}</p>
         </div>
+
       </div>
     </div>
-  </div>
+
 
   <div class="text-center text-muted no-results" *ngIf="products.length === 0">
     <h4>This business hasn't launched any product.</h4>
     <h5>Please try different one...</h5>
   </div>
-</div>
-
-
-

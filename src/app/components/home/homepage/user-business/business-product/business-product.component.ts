@@ -24,7 +24,7 @@ export class BusinessProductComponent implements OnInit{
   couponPrices: { [key: number]: number } = {};
   couponCreateDates: { [key: number]: Date } = {};
   couponExpDates: { [key: number]: Date } = {};
-
+  couponRemainingQuantities: { [key: number]: number } = {};
 
   constructor(private bService: BusinessService,
               private pService: ProductService,
@@ -53,8 +53,9 @@ export class BusinessProductComponent implements OnInit{
 
         this.couponPrices[coupon.productId] = coupon.price;  // Map productId to discount price
         // console.log("DATE",coupon.expiredDate )
-        this.couponCreateDates[coupon.productId]= new Date(coupon.createdDate)
+        this.couponCreateDates[coupon.productId]= new Date(coupon.createdDate);
         this.couponExpDates[coupon.productId] = new Date(coupon.expiredDate);
+        this.couponRemainingQuantities[coupon.productId] = coupon.quantity;
       });
 
     },
@@ -92,4 +93,12 @@ export class BusinessProductComponent implements OnInit{
     this.router.navigate(['/homepage/p', id]);
   }
 
+  isCouponValid(productId: number): boolean {
+    const expDate = this.couponExpDates[productId];
+    const currentDate = new Date();
+    return expDate ? expDate > currentDate : true; // Show if no expiry date is available
+  }
+  isSoldOut(productId: number): boolean {
+    return this.couponRemainingQuantities[productId] === 0;
+  }
 }

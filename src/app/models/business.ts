@@ -10,6 +10,7 @@ export interface Business {
   status:boolean;
   userId:number;
   userName:string;
-  userEmail:string
+  userEmail:string;
+  count:number;
   imageFile?:File | null;
 }

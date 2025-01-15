@@ -1,0 +1,73 @@
+<div class="container-fluid">
+  <div class="loading-container" *ngIf="isLoading">
+  <div class="d-flex flex-column justify-content-center align-items-center vh-100 text-center">
+     <section class="dots-container">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </section>
+  </div>
+    <p>Fetching data, please wait...</p>
+  </div>
+  <div *ngIf="!isLoading && !isError" class="container mt-5">
+   <div>
+    <div  class="card shadow-sm p-3 mb-5 bg-white rounded">
+      <div class="row g-0">
+        <div class="col-md-4">
+          <img
+            [src]="getProductImage(qrCodeDetails.imageUrl)"
+            class="img-fluid rounded"
+            alt="Product Image"
+          />
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">{{ qrCodeDetails.productName }}</h5>
+            <p class="card-text text-muted">
+              <small class="text-uppercase">Discount:</small>
+              <span class="text-success fw-bold">{{ qrCodeDetails.discount }}%</span>
+            </p>
+            <p class="card-text">
+              <small class="text-uppercase">Expiry Date:</small>
+              <span class="text-danger">{{ qrCodeDetails.expiryDate | date: 'medium' }}</span>
+            </p>
+            <p
+              class="card-text"
+              [ngClass]="{
+                'text-success fw-bold': qrCodeDetails.status === 0 || qrCodeDetails.status === 2,
+                'text-danger fw-bold': qrCodeDetails.status !== 0 && qrCodeDetails.status !== 2
+              }"
+            >
+              Status: {{ qrCodeDetails.status === 0 || qrCodeDetails.status ===  2 ? 'Active' : 'Expired' }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <button
+        class="btn btn-outline-secondary btn-lg me-3 px-4 py-2"
+        (click)="onCancelEvent()"
+      >
+        Cancel
+      </button>
+      <button
+      class="btn btn-success btn-lg me-3 px-4 py-2"
+      (click)="onSubmitValidate()"
+      >
+        Validate Coupon
+      </button>
+  </div>
+   </div>
+</div>
+
+    <div *ngIf="!isLoading && isError">
+      <div class="d-flex flex-column justify-content-center align-items-center vh-100 text-center text-danger">
+        {{ qrResultMessage }}
+        </div>
+    </div>
+
+</div>

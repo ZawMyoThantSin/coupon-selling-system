@@ -55,6 +55,10 @@ export class UserprofileComponent implements OnInit {
 
   openModal(): void {
     this.modalRef = this.modalService.open(EditUserprofileComponent);
+
+    this.modalRef.onClose.subscribe(() => {
+      this.fetchUserDetails();
+    });
   }
 
   closeModal(): void {

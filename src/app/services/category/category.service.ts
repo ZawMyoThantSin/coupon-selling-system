@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core';
 import { StorageService } from '../storage.service';
 import { Observable } from 'rxjs';
 import { businessCategory } from '../../models/business-category';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryService {
 
-  BASE_URL = "http://localhost:8080/api/business-categories";
+  BASE_URL = `${getDefaultAppConfig().backendHost}/api/business-categories`;
   public token: any;
 
   constructor(private http:HttpClient,private storageService:StorageService) {
@@ -24,7 +25,7 @@ export class CategoryService {
       console.log("No token found");
       return null;
     }
-  
+
   getAllCategories(): Observable<businessCategory[]> {
     const headers = this.createAuthHeader()
     console.log('Request Headers: ', headers)
@@ -40,14 +41,14 @@ export class CategoryService {
   }
 
   createCategory(data: any): Observable<any> {
-    return this.http.post(this.BASE_URL, data, { 
+    return this.http.post(this.BASE_URL, data, {
       responseType: 'json',
      });
-    
+
 }
 
-  updateCategory(id: number, category: businessCategory): Observable<businessCategory> {
-    return this.http.put<businessCategory>(`${this.BASE_URL}/${id}`, category, {
+updateCategory(id: number, data: any): Observable<businessCategory> {
+  return this.http.put<businessCategory>(`${this.BASE_URL}/${id}`, data, {
       headers: this.createAuthHeader()
     });
   }
@@ -57,5 +58,5 @@ export class CategoryService {
       headers: this.createAuthHeader()
     });
   }
-  
+
 }

@@ -1,4 +1,5 @@
 export interface FriendshipResponse {
+    senderId: number | null;
     id: number;
     senderName: string;
     accepterName: string;

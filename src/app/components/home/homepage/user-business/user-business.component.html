@@ -1,8 +1,8 @@
-  
+
   <div class="content container">
 
     <figure class="figure">
-      
+
       <!-- Back Button (Circular) -->
         <div class="back-button">
           <button class="btn btn-back-icon" (click)="goBack()">
@@ -34,7 +34,7 @@
 
           </div>
       </mdb-tab>
-      
+
       <mdb-tab>
         <ng-template mdbTabTitle>
           <span>
@@ -67,7 +67,7 @@
              <!-- Business Status -->
             <div class="about-item">
               <i class="fas fa-check-circle about-icon"></i>
-                <p><strong>Open:</strong> 
+                <p><strong>Open:</strong>
               <span [ngClass]="{'text-success': business.status, 'text-danger': !business.status}">
                 {{ business.status ? 'Open' : 'Closed' }}
               </span>
@@ -76,18 +76,19 @@
           </div>
         </div>
       </mdb-tab>
-      
+
       <mdb-tab>
         <ng-template mdbTabTitle>
           <span>
             <i class="fas fa-history fa-fw me-2"></i>
-            History
+            Rating
           </span>
         </ng-template>
           <div class="tab-content">
+            <app-business-review></app-business-review>
           </div>
       </mdb-tab>
-      
+
     </mdb-tabs>
   </div>
 </div>

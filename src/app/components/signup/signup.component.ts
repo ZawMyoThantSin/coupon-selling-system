@@ -36,20 +36,18 @@ export class SignupComponent {
             this.toastr.success('Register successfully!', 'Success');
             this.storageService.setItemArray("formData", response.data);
             this.router.navigate(['login'])
-            console.log(response)
+            // console.log(response)
           },
           error => {
             this.toastr.error(error, "Error");
             console.error("Error in SignUP: ",error)
           }
         );
-
       }
+    }
 
-      // Handle error: Passwords don't match
-
-      // Handle successful submission logic
-      console.log("Form Submitted", this.user);
+    loginWithGoogle() {
+      window.location.href = 'http://localhost:8080/oauth2/authorization/google';
     }
 
 }

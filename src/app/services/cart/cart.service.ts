@@ -3,64 +3,16 @@ import { Coupon } from '../../models/coupon.modal';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CartData } from '../../models/cartData';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
-  private BASE_URL = "http://localhost:8080/api/cart";
+  private BASE_URL = `${getDefaultAppConfig().backendHost}/api/cart`;
 
   constructor(private http: HttpClient){}
-  private coupons: Coupon[] = [
-    {
-      id: 1,
-      code: 'DISCOUNT10',
-      discount: 10,
-      price: 20.00,
-      quantity: '1',
-      expDate: '2024-12-31'
-    },
-    {
-      id: 2,
-      code: 'SALE20',
-      discount: 20,
-      price: 50.00,
-      quantity: '1',
-      expDate:'2024-11-30',
-    },
-    {
-      id: 3,
-      code: 'BLACKFRIDAY',
-      discount: 30,
-      price: 100.00,
-      quantity: '1',
-      expDate: '2024-11-25',
-    },
-    {
-      id: 4,
-      code: 'BLACKFRIDAY',
-      discount: 30,
-      price: 100.00,
-      quantity: '1',
-      expDate: '2024-11-25',
-    },
-    {
-      id: 5,
-      code: 'BLACKFRIDAY',
-      discount: 30,
-      price: 100.00,
-      quantity: '1',
-      expDate: '2024-11-25',
-    },
-    {
-      id: 6,
-      code: 'BLACKFRIDAY',
-      discount: 30,
-      price: 100.00,
-      quantity: '1',
-      expDate: '2024-11-25',
-    },
-  ];
+
 
   addToCart(data:any):Observable<any> {
     return this.http.post(`${this.BASE_URL}/add`, data);
@@ -79,4 +31,5 @@ export class CartService {
       {"qty": quantity}
     );
   }
+
 }

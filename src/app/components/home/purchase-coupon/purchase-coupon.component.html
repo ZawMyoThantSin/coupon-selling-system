@@ -21,7 +21,7 @@
         <div class="coupon-details">
           <h4>
            {{ coupon.productName }}
-              <a 
+              <a
               [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
             ({{ coupon.businessName }})</a>
           </h4>
@@ -56,12 +56,12 @@
         <div class="coupon-details">
           <h4>
             {{ coupon.productName }}
-               <a 
+               <a
                [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
              ({{ coupon.businessName }})</a>
            </h4>
           <p><img src="/images/product/maps-and-flags.png" style="width: 20px; height: auto;"/>{{ coupon.businessLocation}}</p>
-          
+
         </div>
         <div class="coupon-actions">
           <p class="sender-name">
@@ -87,14 +87,14 @@
         <div class="coupon-details">
           <h4>
             {{ coupon.productName }}
-               <a 
+               <a
                [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
              ({{ coupon.businessName }})</a>
            </h4>
           <p><img src="/images/product/maps-and-flags.png" style="width: 20px; height: auto;"/>{{ coupon.businessLocation}}</p>
         </div>
         <div class="coupon-actions">
-          
+
           <p class="expiry-date">Expiry Date: {{ coupon.expiryDate | date: 'mediumDate' }}</p>
         </div>
       </div>
@@ -110,15 +110,15 @@
         <div class="coupon-details">
           <h4>
             {{ coupon.productName }}
-               <a 
+               <a
                [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
              ({{ coupon.businessName }})</a>
            </h4>
           <p><img src="/images/product/maps-and-flags.png" style="width: 20px; height: auto;"/>{{ coupon.businessLocation}}</p>
-         
+
         </div>
         <div class="coupon-actions">
-          <p class="sender-name" *ngIf="coupon.senderName">  
+          <p class="sender-name" *ngIf="coupon.senderName">
             Sent By: <strong>{{ coupon.senderName }}</strong>
           </p>
           <p class="expiry-date">Expiry Date: {{ coupon.expiryDate | date: 'mediumDate' }}</p>
@@ -126,7 +126,7 @@
       </div>
     </div>
   </ng-container>
-  
+
  <!-- Transferred Coupons -->
 <ng-container *ngIf="activeTab === 'transferred'">
   <div class="coupon-container px-5">
@@ -137,8 +137,8 @@
       <div class="coupon-details">
         <h4>
           {{ coupon.saleCouponData?.productName }}
-          <a 
-            [routerLink]="'/homepage/u/detail-business/' + coupon.saleCouponData?.businessId" 
+          <a
+            [routerLink]="'/homepage/u/detail-business/' + coupon.saleCouponData?.businessId"
             class="small-business-name">
             ({{ coupon.saleCouponData?.businessName }})
           </a>

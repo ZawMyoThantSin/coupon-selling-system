@@ -1,0 +1,190 @@
+.business-review-container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 1rem; /* Add padding for better spacing on smaller screens */
+}
+
+.stars {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-bottom: 10px;
+}
+
+.star {
+  font-size: 2rem;
+  cursor: pointer;
+  color: #ccc;
+}
+
+.star.selected {
+  color: gold;
+}
+
+textarea {
+  width: 90%;
+  height: 100px;
+  margin: 10px 0;
+  padding: 10px;
+  resize: vertical; /* Allow vertical resizing */
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #1786c2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.card {
+  background-color: rgba(243, 244, 246, 1);
+  padding: 1rem;
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 20px 30px -20px rgba(5, 5, 5, 0.24);
+  margin-bottom: 1rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap; /* Allow wrapping on smaller screens */
+}
+
+.header .image {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stars {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+  color: rgb(14, 14, 14);
+  margin-left: 1rem;
+}
+
+.stars svg {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.stars .filled {
+  color: rgb(235, 215, 63);
+}
+
+.name-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.5rem;
+  gap: 10rem;
+}
+
+.name {
+  margin-top: 0.25rem;
+  font-size: 1.1rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  color: rgba(55, 65, 81, 1);
+}
+
+.card .message {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  gap: 10rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .business-review-container {
+    padding: 0.5rem; /* Reduce padding on smaller screens */
+  }
+
+  .stars {
+    gap: 0.1rem; /* Reduce gap between stars */
+  }
+
+  .star {
+    font-size: 1.5rem; /* Reduce star size */
+  }
+
+  textarea {
+    width: 95%; /* Increase width for better use of space */
+  }
+
+  .header {
+    flex-direction: column; /* Stack header items vertically */
+    align-items: flex-start;
+    gap: 0.5rem; /* Reduce gap between items */
+  }
+
+  .header .image {
+    height: 1.5rem;
+    width: 1.5rem; /* Reduce image size */
+  }
+
+  .stars {
+    margin-left: 0; /* Remove left margin */
+  }
+
+  .name {
+    font-size: 1rem; /* Reduce font size */
+  }
+
+  .card .message {
+    font-size: 0.9rem; /* Reduce font size for better readability */
+  }
+}
+
+@media (max-width: 480px) {
+  .star {
+    font-size: 1.2rem; /* Further reduce star size */
+  }
+
+  textarea {
+    height: 80px; /* Reduce height of textarea */
+  }
+
+  button {
+    padding: 8px 16px; /* Reduce button padding */
+  }
+
+  .header .image {
+    height: 1.2rem;
+    width: 1.2rem; /* Further reduce image size */
+  }
+
+  .name {
+    font-size: 0.9rem; /* Further reduce font size */
+  }
+
+  .card .message {
+    font-size: 0.8rem; /* Further reduce font size */
+  }
+}

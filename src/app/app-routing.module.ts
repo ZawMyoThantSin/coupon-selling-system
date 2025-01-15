@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { BusinessComponent } from './components/admin/business/business.component';
-import { BusinessDetailComponent } from './components/admin/business/business-detail/business-detail.component';
 import { BusinessEditComponent } from './components/admin/business/business-edit/business-edit.component';
 import { HomeComponent } from './components/home/home.component';
 import { UserprofileComponent } from './components/home/user/userprofile/userprofile.component';
@@ -36,6 +35,16 @@ import { ExcelImportComponent } from './components/owner/product/excel-import/ex
 import { DetailProductComponent } from './components/owner/product/detail/detail-product/detail-product.component';
 import { AccessDeniedComponent } from './components/access-denied/access-denied.component';
 import { PurchaseCouponComponent } from './components/home/purchase-coupon/purchase-coupon.component';
+import { CouponSaleBarChartComponent } from './components/owner/owner-dashboard/chart/coupon-sale-bar-chart/coupon-sale-bar-chart.component';
+import { QrScannerComponent } from './components/owner/qr-scanner/qr-scanner.component';
+import { QrResultComponent } from './components/owner/qr-result/qr-result.component';
+import { dashboardGuard } from './guards/dashboard.guard';
+import { OwnerPasswordResetComponent } from './components/owner/owner-password-reset/owner-password-reset.component';
+import { OrderHistoryComponent } from './components/home/order-history/order-history.component';
+import { SaleCouponReportComponent } from './components/owner/owner-dashboard/sale-coupon-report/sale-coupon-report.component';
+import { TestDashComponent } from './components/test-dash/test-dash.component';
+import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
+import { EditShopComponent } from './components/owner/shop/edit-shop/edit-shop.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -52,17 +61,7 @@ const routes: Routes = [
         {path:'edit', component:PaymentEditComponent}
       ]},
       {path:'customers', component:CustomersComponent, title:'Customers'},
-      // {path:'b/detail/:id', component:BusinessDetailComponent,
-      //   children: [
-      //   {path: '',component: ProductComponent},
-      //   {path:'coupon',component:CouponComponent}
-      // ]},
-      // {path:'order', component:UserOrderComponent, title:'order'},
       {path:'b/edit/:id', component:BusinessEditComponent, title:'Edit'},
-      // {path:'b/c', component:CouponComponent, title:''},
-      // {path:'product',component:ProductComponent},
-      // {path:'p/create-product',component:CreateProductModalComponent},
-      // {path:'p/detail-product/:id',component:DetailProductComponent},
       {path:'category', component:CategoryComponent, title:'Business Category'},
       {path:'payment', component:PaymentComponent, title:'Payment'},
       {path: 'excel-import', component: ExcelImportComponent },
@@ -71,6 +70,11 @@ const routes: Routes = [
   },
   {path:'o', component:OwnerDashboardComponent,
     children:[
+      {path:'',  component:CouponSaleBarChartComponent},
+      {path:'qr-scanner', component:QrScannerComponent},
+      {path:'report', component:SaleCouponReportComponent, title:'Report'},
+      { path: 'edit-shop/:id', component: EditShopComponent },
+      {path:'qr-result', component:QrResultComponent},
       {path:'shop/:id', component:ShopComponent, title:'Shop' ,children:[
         {path:'', component:ProductComponent},
         {path:'coupon',component:CouponComponent}
@@ -85,6 +89,7 @@ const routes: Routes = [
       {path: '', redirectTo: 'page', pathMatch: 'full' },
       {path:'cart', component:AddToCartComponent},
       {path:'order', component:UserOrderComponent, },
+      {path:'order-history', component:OrderHistoryComponent, title:'History'},
       {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
       {path:'friends', component:FriendComponent, title:'Friends'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
@@ -96,7 +101,9 @@ const routes: Routes = [
       {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}
     ]
   },
-  {path:'order', component:UserOrderComponent, title:'order'},
+  {path:'test-dash', component:TestDashComponent},
+  {path:'password-reset', component:OwnerPasswordResetComponent, title:'Reset Password'},
+  {path:'forget-password', component:ForgetPasswordComponent, },
   {path:'login', component:LoginComponent, title:'Login'},
   {path:'signup', component:SignupComponent, title:'Signup'},
   {path: 'access-denied', component: AccessDeniedComponent,title:'403' },

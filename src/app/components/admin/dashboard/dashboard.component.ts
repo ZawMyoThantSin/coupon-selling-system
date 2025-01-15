@@ -8,6 +8,8 @@ import { UserResponse } from '../../../models/user-response.models';
 import { UserService } from '../../../services/user/user.service';
 import { response } from 'express';
 import { error } from 'console';
+import { WebsocketService } from '../../../services/websocket/websocket.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-dashboard',
@@ -27,15 +29,25 @@ export class DashboardComponent implements OnInit{
   userId:any;
 
   constructor(
-    private route: ActivatedRoute,
+    private toastr: ToastrService,
     private router: Router,
     private storageService: StorageService,
     private businessService: BusinessService,
     private userService: UserService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private websocketService: WebsocketService
   ) {
     this.router.events.subscribe(() => {
       this.activeRoute = this.router.url; // Get the active URL
+    });
+  }
+
+  handleWebSocketMessages():void{
+    this.websocketService.onMessage().subscribe((message) => {
+      console.log("MSG", message)
+      if(message =="ORDER_CREATED"){
+        this.toastr.info("New order is arrived! | Go to check ","Alert");
+      }
     });
   }
 
@@ -49,8 +61,7 @@ export class DashboardComponent implements OnInit{
       this.userInfo = response;
     },error => console.log('Error in Fetching UserInfo', error));
 
-
-    console.log();
+    this.handleWebSocketMessages();
     if (this.token == '' || this.token == null) {
       console.log('Token is not defined or is invalid.');
       this.isLoggedIn = false;

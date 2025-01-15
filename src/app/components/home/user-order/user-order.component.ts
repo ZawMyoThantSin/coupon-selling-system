@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {  Router } from '@angular/router';
 import { UserOrderService } from '../../../services/user-order/user-order.service';
 import { UserPayment } from '../../../models/userpayment';
 import { CommonModule, Location } from '@angular/common';
@@ -47,7 +47,7 @@ export class UserOrderComponent {
     private paymentService: PaymentService,
     private productService: ProductService,
     private cartService: CartService,
-    private route: ActivatedRoute,
+    private router:Router,
     private toastr: ToastrService,
     private location: Location,
     private storageService : StorageService,
@@ -92,6 +92,26 @@ export class UserOrderComponent {
       return;
     }
 
+    if (!this.cartData.length) {
+      this.toastr.error('Your cart is empty. Add items to proceed.', 'Error!');
+      return;
+    }
+
+    if (!this.phoneNumber) {
+      this.toastr.error('Phone number is required.', 'Error!');
+      return;
+    }
+
+    if (!this.validatePhoneNumber()) {
+      this.toastr.error('Please enter a valid phone number.', 'Error!');
+      return;
+    }
+
+    if (!this.screenshot) {
+      this.toastr.error('Please upload a screenshot of your payment.', 'Error!');
+      return;
+    }
+
     if (!this.selectedMethod?.id) {
       this.toastr.error('Please select a payment method.', 'Error!');
       return;
@@ -123,8 +143,8 @@ export class UserOrderComponent {
         .map((item: { couponId: number | null }) => item.couponId)
         .filter((id: number | null) => id !== null) as number[];
 
-      console.log("Quantities to be sent:", quantities);
-      console.log("Coupon IDs to be sent:", couponIds);
+      // console.log("Quantities to be sent:", quantities);
+      // console.log("Coupon IDs to be sent:", couponIds);
 
       // Append coupon IDs and quantities to the form data
       if (couponIds.length > 0) {
@@ -142,19 +162,20 @@ export class UserOrderComponent {
 
     this.userOrderService.submitOrder(formData).subscribe(
       (response) => {
-        // console.log('Server Response:', response);
         this.toastr.success('Order submitted successfully!', 'Success');
-        this.cartIds.map( c => {
+        if(this.cartIds){
+           this.cartIds.map(c => {
           this.cartService.clearCart(c).subscribe(res => {
-            // console.log("REs", res)
+            this.router.navigateByUrl('/homepage/order-history');
           });
-        })
-        // Optionally reset the form or UI state here
+        });
+        }
+        this.router.navigateByUrl('/homepage/order-history');
       },
       (error) => {
         console.error('Error submitting order:', error);
-        this.toastr.error('Failed to submit order. Please try again.', 'Error!');
-      }
+        const errorMessage = error.error?.message || 'Failed to submit order. Please try again.';
+        this.toastr.error(errorMessage, 'Error!');      }
     );
   }
 
@@ -181,14 +202,10 @@ export class UserOrderComponent {
   }
 
   validatePhoneNumber(): boolean {
-    return /^[0-9]{10}$/.test(this.phoneNumber);
+    return /^[0-9]{11}$/.test(this.phoneNumber);
   }
 
-  isValidOrder(): boolean {
-    return (
-      this.cartData.length > 0
-    );
-  }
+
 
 
   cancelOrder(): void {

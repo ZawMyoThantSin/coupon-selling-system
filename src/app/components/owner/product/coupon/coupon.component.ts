@@ -40,14 +40,13 @@ export class CouponComponent implements OnInit {
       valueFormatter: (params) => `${params.value} kyat`,
       filter: 'agNumberColumnFilter'
     },
-    { field: 'couponCode', headerName: 'Coupon Code', filter: 'agTextColumnFilter' },
+    { field: 'couponCode', headerName: 'Product Name', filter: 'agTextColumnFilter' },
     {
       field: 'expiredDate',
       headerName: 'Expired Date',
       filter: 'agDateColumnFilter',
       valueFormatter: (params) => new Date(params.value).toLocaleString()
     },
-    { field: 'expiredDate', headerName: 'Expired Date', filter: 'agDateColumnFilter', valueFormatter: (params) => new Date(params.value).toLocaleString() },
     { field: 'quantity', headerName: 'Quantity', filter: 'agNumberColumnFilter' },
     { field: 'description', headerName: 'Description', filter: 'agTextColumnFilter' },
   ];

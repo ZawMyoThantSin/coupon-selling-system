@@ -21,7 +21,7 @@ import { businessCategory } from '../../../../models/business-category';
 @Component({
   selector: 'app-homepage',
   standalone: true,
-  imports: [CommonModule, SearchFilterComponent, CouponCardComponent, RouterModule,],
+  imports: [CommonModule, CouponCardComponent, RouterModule,],
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css'],
   providers: [DatePipe],
@@ -37,7 +37,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
 
   businessArray: Business[] = [];
   productArray: Product[] = [];
-  categories: businessCategory[] = []; 
+  categories: businessCategory[] = [];
   filteredBusinesses: Business[] = [];
   filteredProducts: Product[] = [];
   selectedCategory: any = null;
@@ -50,7 +50,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
 
   constructor(
     private businessService: BusinessService,
-    private cateoryService:CategoryService,
+    private categoryService:CategoryService,
     private productService: ProductService,
     private renderer: Renderer2,
     private datePipe: DatePipe,
@@ -82,7 +82,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
     });
   }
   loadCategories(): void {
-    this.cateoryService.getAllCategories().subscribe({
+    this.categoryService.getAllCategories().subscribe({
       next: (data) => {
         this.categories = data;  // Assign the fetched categories to the categories array
         console.log('Categories:', this.categories);  // Log to verify
@@ -163,7 +163,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
     );
   }
 
-  
+
   //Products ***
   getImageUrl(imagePath: string): any {
     return this.businessService.getImageUrl(imagePath);
@@ -175,7 +175,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
   // getCouponValidity(productId: number): string {
   //   const createDate = this.datePipe.transform(this.couponCreateDates[productId], 'MMM d EEE');
   //   const expDate = this.datePipe.transform(this.couponExpDates[productId], 'MMM d EEE');
-  //   return createDate && expDate ? `${createDate} ~ ${expDate}` : '';
+  //   return createDate && expDate ? ${createDate} ~ ${expDate} : '';
   // }
   onCategorySelect(categoryId: number): void {
     this.selectedCategory = categoryId;
@@ -195,4 +195,5 @@ export class HomepageComponent implements OnInit, AfterViewInit {
     this.loadBusinesses();
     this.selectedCategory = null;
   }
+
 }

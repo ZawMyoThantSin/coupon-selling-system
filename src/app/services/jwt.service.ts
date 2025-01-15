@@ -24,8 +24,19 @@ export class JwtService {
       return decodedToken.id;
 
     } catch (error) {
-      console.error('Invalid token', error);
+      console.error('Invalid token In jwt SErvice: ', error);
       return null;
+    }
+  }
+
+  getUserRole(token: string): string {
+    try {
+      const decodedToken:any = jwtDecode(token);
+      return decodedToken.role;
+
+    } catch (error) {
+      console.error('Invalid token In jwt Service: ', error);
+      return '';
     }
   }
   // <--- without jwt-decode library we will write like this(just knowledge) --->

@@ -3,13 +3,13 @@ import { Injectable } from '@angular/core';
 import { StorageService } from '../storage.service';
 import { Observable } from 'rxjs';
 import { UserPayment } from '../../models/userpayment';
-import { userOrder } from '../../models/user-order';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserOrderService {
-  BASE_URL = "http://localhost:8080/";
+  BASE_URL = `${getDefaultAppConfig().backendHost}/`;
   public token: any;
   constructor(private http: HttpClient, private storageService: StorageService) {
       this.token = this.storageService.getItem("token");
@@ -19,13 +19,7 @@ export class UserOrderService {
         responseType: 'json'
       });
   }
-  
-  // submitOrder(orderData: any): Observable<any> {
-  //   console.log('Order data received in service:', orderData);
-  //   return this.http.post<any>(this.BASE_URL + 'api/orders', orderData, {
-  //     responseType: 'json'
-  //   });
-  // }
+
 
   submitOrder(orderData: FormData): Observable<any> {
     return this.http.post<any>(this.BASE_URL + 'api/orders', orderData, {

@@ -9,7 +9,7 @@
           placeholder="Search categories..."
           aria-label="Search"
           aria-describedby="search-addon"
-        />
+          [(ngModel)]="searchTerm" />
         <button class="btn btn-outline-secondary" type="button" id="search-addon">
           <i class="fas fa-search"></i>
         </button>
@@ -27,7 +27,7 @@
         </button>
       </div>
     </div>
-  
+
     <!-- Card Body (Table) -->
     <div class="card-body p-0">
       <div class="table-responsive table-responsive-lg">
@@ -39,7 +39,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let category of categories">
+            <tr *ngFor="let category of filteredCategories">
               <td class="ps-3">
                 <p class="fw-bold mb-1">{{ category.name }}</p>
               </td>
@@ -47,7 +47,7 @@
                 <button
                   type="button"
                   class="btn btn-link btn-sm btn-rounded"
-                  (click)="openCreateCategoryModal()">
+                  (click)="openEditCategoryModal(category.id)">
                   <i class="fs-5 fa-solid fas fa-edit text-warning"></i>
                 </button>
                 <button
@@ -63,4 +63,3 @@
       </div>
     </div>
   </div>
-  

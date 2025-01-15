@@ -107,96 +107,95 @@ export class ProductComponent implements OnInit{
       valueFormatter: (params) => params.value ? 'Active' : 'Inactive'
     },
     {
+      field: 'discount',
+headerName: 'Discount',
+width: 150,
+cellRenderer: (params: any) => {
+  const container = document.createElement('div');
 
-        field: 'discount',
-        headerName: 'Discount',
-        width: 150,
-        cellRenderer: (params: any) => {
-          const container = document.createElement('div');
+  // Check if the current product is being edited
+  const isEditing = this.isEditing(params.data.id, 'discount');
+  const discountEdited = params.data.discountEdited;
 
-          // Check if the current product is being edited
-          const isEditing = this.isEditing(params.data.id, 'discount');
+  if (isEditing && !discountEdited) {
+    container.innerHTML = `
+      <div class="d-flex align-items-center">
+        <input
+          type="number"
+          value="${this.editableProduct.discount || params.value}"
+          class="form-control discount-input"
+          style="width: 70px; margin-right: 8px;"
+        />
+        <button class="btn btn-success btn-sm save-discount-btn d-flex align-items-center"
+          style="margin-right: 4px;" ${this.isSaving ? 'disabled' : ''}>
+          <i class="fas fa-check me-1"></i>
+        </button>
+        <button class="btn btn-danger  btn-sm cancel-discount-btn d-flex align-items-center">
+          <i class="fas fa-times me-1"></i>
+        </button>
+      </div>
+    `;
 
-          if (isEditing) {
-            container.innerHTML = `
-              <div class="d-flex align-items-center">
-                <input
-                  type="number"
-                   value="${this.editableProduct.discount || params.value}"
-                  class="form-control discount-input"
-                  style="width: 70px; margin-right: 8px;"
-                />
-                <button class="btn btn-primary btn-sm save-discount-btn" ${this.isSaving ? 'disabled' : ''}>
-                  Save
-                </button>
-              </div>
-            `;
+    // Add event listeners for input, save, and cancel buttons
+    const input = container.querySelector('.discount-input') as HTMLInputElement;
+    const saveBtn = container.querySelector('.save-discount-btn') as HTMLButtonElement;
+    const cancelBtn = container.querySelector('.cancel-discount-btn') as HTMLButtonElement;
 
-            // Add event listeners for input and save button
-            const input = container.querySelector('.discount-input') as HTMLInputElement;
-            const saveBtn = container.querySelector('.save-discount-btn') as HTMLButtonElement;
-
-            if (input) {
-              input.addEventListener('input', (event: any) => {
-                const value = parseFloat(event.target.value || '0');
-                if (value < 0) {
-                  input.value = '0'; // Reset input to 0 if a negative value is entered
-                } else {
-                  this.editableProduct.discount = value;
-                }
-              });
-            }
-
-            if (saveBtn) {
-              saveBtn.addEventListener('click', () => {
-                this.saveDiscountChanges(params.data.id);
-              });
-            }
-          } else {
-            container.innerHTML = `
-              <div class="d-flex align-items-center">
-                <span style="margin-right: 8px;">${params.value}%</span>
-                <button class="btn btn-link edit-discount-btn p-0" ${this.isSaving ? 'disabled' : ''}>
-                  <i class="fas fa-edit text-warning"></i>
-                </button>
-              </div>
-            `;
-
-            // Add event listener for the edit button
-            const editBtn = container.querySelector('.edit-discount-btn') as HTMLButtonElement;
-            if (editBtn) {
-              editBtn.addEventListener('click', () => {
-                this.toggleEditDiscount(params.data.id);
-              });
-            }
-          }
-
-          return container;
+    if (input) {
+      input.addEventListener('input', (event: any) => {
+        const value = parseFloat(event.target.value || '0');
+        if (value < 0) {
+          input.value = '0'; // Reset input to 0 if a negative value is entered
+        } else {
+          this.editableProduct.discount = value;
         }
-      },
+      });
+    }
 
+    if (saveBtn) {
+      saveBtn.addEventListener('click', () => {
+        this.saveDiscountChanges(params.data.id);
+      });
+    }
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', () => {
+        this.cancelDiscountEdit(params.data.id);
+      });
+    }
+  } else {
+    container.innerHTML = `
+      <div class="d-flex align-items-center">
+        <span style="margin-right: 8px;">${params.value}%</span>
+        <button class="btn btn-link edit-discount-btn p-0" ${this.isSaving ? 'disabled' : ''}>
+          <i class="fas fa-edit text-warning"></i>
+        </button>
+      </div>
+    `;
+
+    // Add event listener for the edit button
+    const editBtn = container.querySelector('.edit-discount-btn') as HTMLButtonElement;
+    if (editBtn) {
+      editBtn.addEventListener('click', () => {
+        this.toggleEditDiscount(params.data.id);
+      });
+    }
+  }
+
+  return container;
+}
+
+      },
       {
         headerName: 'Actions',
         width: 200,
         cellRenderer: (params: any) => {
-          const productId = params.data.id;
-          const product = this.products.find(p => p.id === productId);
-          const hasValidDiscount = product && product.discount > 0;
-          const hasCoupon = this.hasCoupon(productId);
 
-          // Conditionally render the buttons
           return `
             <button class="btn btn-info btn-sm product-detail-btn">
               <i class="fas fa-info-circle"></i>
             </button>
-            ${hasValidDiscount && !hasCoupon ? `
-              <button class="btn btn-success btn-sm create-coupon-btn">
-                <i class="fas fa-tag"></i> Create Coupon
-              </button>` : `
-              <button class="btn btn-secondary btn-sm coupon-disabled-btn" >
-                <i class="fa-solid fa-ban"></i>
-              </button>`
-            }
+
           `;
         },
 
@@ -233,11 +232,7 @@ export class ProductComponent implements OnInit{
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.businessId = Number(params.get('id'));
-      this.productService.getAllProducts(this.businessId).subscribe((data: Product[]) => {
-
-        this.allProducts = data.filter(product => product.status );
-        this.updatePagination();
-      });
+      this.loadProducts();
 
        // Fetch all coupons
        this.couponService.getAllCoupons(this.businessId).subscribe((data: Coupon[]) => {
@@ -246,6 +241,13 @@ export class ProductComponent implements OnInit{
     });
   }
 
+  loadProducts(): void {
+    this.productService.getAllProducts(this.businessId).subscribe((data: Product[]) => {
+
+      this.allProducts = data.filter(product => product.status );
+      this.updatePagination();
+    });
+  }
 
   onGridReady(params: GridReadyEvent) {
     this.gridApi = params.api;
@@ -257,22 +259,7 @@ export class ProductComponent implements OnInit{
     params.api.sizeColumnsToFit();
   }
 
-  hasCoupon(productId: number): boolean {
-    // Check if a coupon exists for the product and if the discount is greater than 0
-    const product = this.products.find(product => product.id === productId);
-    return !!product && product.discount > 0 && this.coupons.some(coupon => coupon.productId === productId);
-  }
 
-  loadProducts(): void {
-    if (this.businessId) {
-      this.productService.getAllProducts(this.businessId).subscribe((data: Product[]) => {
-        this.products = data.filter(product => product.status);
-        if (this.gridApi) {
-          this.gridApi.setGridOption('rowData', this.products);
-        }
-      });
-    }
-  }
 
 updatePagination(): void {
     const totalItems = this.allProducts.length;
@@ -316,22 +303,37 @@ updatePagination(): void {
       data: { businessId: this.businessId },
     });
 
-    this.modalRef.onClose.subscribe((result: any) => {
-      if (result) {
+    this.modalRef.onClose.subscribe(() => {
+
         this.loadProducts(); // Reload the product list after closing modal
-      }
     });
   }
 
 
   toggleEditDiscount(productId: number): void {
-    if (this.editingProduct?.id === productId && this.editingProduct?.field === 'discount') {
-      this.closeEdit(); // Close edit mode if already editing the same product
-    } else {
-      this.editingProduct = { id: productId, field: 'discount' };
-      const product = this.products.find((p) => p.id === productId);
-      this.editableProduct = { ...product }; // Deep clone to avoid mutating the original data
-      this.gridApi.refreshCells({ force: true });
+    const product = this.products.find((p) => p.id === productId);
+
+    if (product) {
+      // Prevent editing if discount is not 0
+      if (product.discount !== 0) {
+        this.toastr.warning('You can only edit the discount if its value is 0', 'Warning');
+        return;
+      }
+
+      if (product.discountEdited) {
+        // If the discount has already been edited, do not allow further editing
+        return;
+      }
+
+      if (this.editingProduct?.id === productId && this.editingProduct?.field === 'discount') {
+        // Close edit mode if already editing the same product
+        this.closeEdit();
+      } else {
+        // Start editing the discount for this product
+        this.editingProduct = { id: productId, field: 'discount' };
+        this.editableProduct = { ...product }; // Clone product data
+        this.gridApi.refreshCells({ force: true });
+      }
     }
   }
 
@@ -351,12 +353,13 @@ this.productService.updateDiscount(productId, this.editableProduct.discount).sub
     const index = this.products.findIndex(p => p.id === productId);
     if (index !== -1) {
       this.products[index] = updatedProduct; // Update the product in the array
+      this.products[index].discountEdited = true;
       this.gridApi.setGridOption('rowData', this.products);
     }
     this.closeEdit();
     this.isSaving = false;
     this.toastr.success('Discount updated successfully', 'Success');
-    window.location.reload();
+    this.openModal(productId);
   },
   error: (error) => {
     console.error('Error updating discount:', error);
@@ -378,9 +381,11 @@ openModal(id: any): void {
     return;
   }
 
+
   this.modalRef1 = this.modalService.open(CreateModalComponent, {
     modalClass: 'modal-lg',
     data: { productId: id },
+    ignoreBackdropClick: true,
   });
 
   this.modalRef1.onClose.subscribe((data) => {
@@ -398,8 +403,7 @@ openModal(id: any): void {
 
       this.couponService.createCoupon(requestData).subscribe(
         (response) => {
-          console.log('Server Response: ', response);
-          window.location.reload();
+          this.toastr.success('Coupon create successfully!', 'Success');
         },
         (error) => {
           console.error('Error In Coupon Create: ', error);
@@ -408,7 +412,6 @@ openModal(id: any): void {
     }
   });
 }
-
 
   isEditing(productId: number, field: string): boolean {
     return this.editingProduct?.id === productId && this.editingProduct?.field === field;
@@ -444,6 +447,13 @@ openModal(id: any): void {
         this.loadProducts();
       }
     });
+  }
+  cancelDiscountEdit(productId: number): void {
+    if (this.editingProduct?.id === productId && this.editingProduct?.field === 'discount') {
+      this.editingProduct = null; // Reset the editing state
+      this.editableProduct = {}; // Clear the editable product data
+      this.gridApi.refreshCells({ force: true }); // Refresh the grid to revert changes
+    }
   }
 
 }

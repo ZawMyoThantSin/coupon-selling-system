@@ -12,11 +12,12 @@ import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
 import { CreateShopComponent } from '../shop/create-shop/create-shop.component';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ToastrService } from 'ngx-toastr';
+import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 
 @Component({
   selector: 'app-owner-dashboard',
   standalone: true,
-  imports: [CommonModule,RouterLink,RouterLinkActive,RouterOutlet,MdbCollapseModule,MdbDropdownModule],
+  imports: [CommonModule,RouterLink,RouterLinkActive,RouterOutlet,MdbCollapseModule,MdbDropdownModule,MdbTooltipModule],
   templateUrl: './owner-dashboard.component.html',
   styleUrl: './owner-dashboard.component.css'
 })
@@ -26,10 +27,10 @@ export class OwnerDashboardComponent {
 
   businessId!:number;
   shopExist: boolean =false;
-  sidebarOpen: boolean = false; // Flag to control the sidebar visibility
+  sidebarOpen: boolean = false;
   activeRoute: any = '';
   isLoggedIn: boolean = false;
-  businessData!: Business; // Array to store fetched businesses
+  businessData!: Business;
   isBusinessCollapsed: boolean = true; // Tracks if the business section is collapsed
   token!: any;
   loading: boolean = false; // Flag to track if data is being fetched
@@ -54,7 +55,6 @@ export class OwnerDashboardComponent {
 
   ngOnInit(): void {
     this.token = this.storageService.getItem('token');
-    // this.userId = this.jwtService.getUserId(this.token);
     this.userService.getUserInfo().subscribe((response)=>{
       this.userInfo = response;
       this.userId = this.userInfo.id;
@@ -76,6 +76,9 @@ export class OwnerDashboardComponent {
         this.businessData = response;
         this.businessId = this.businessData.id;
         this.shopExist = this.businessData.id != null ? true : false;
+        if(this.shopExist){
+          this.businessService.updateBusinessId(this.businessId);
+        }
 
         this.loading = false; // Stop loading spinner
       },
@@ -93,6 +96,9 @@ export class OwnerDashboardComponent {
     }, 1500);
   }
 
+  openQrScanner(): void{
+    this.router.navigate(['/o/qr-scanner']);
+  }
 
   openModal() {
     this.loading = false
@@ -150,11 +156,6 @@ export class OwnerDashboardComponent {
 
 
 
-
-  toggleSidebar(): void {
-    this.sidebarOpen = !this.sidebarOpen; // Toggle the sidebar visibility
-  }
-
   logoutButton(): void{
     this.storageService.removeItem("token");
     this.router.navigate(['login']);
@@ -164,5 +165,39 @@ export class OwnerDashboardComponent {
   }
   getImageUrl(imagePath: string): string {
     return this.businessService.getImageUrl(imagePath);
+  }
+isSidebarCollapsed = false;
+
+  metrics = [
+    {
+      title: 'EARNINGS (MONTHLY)',
+      value: '$40,000',
+      color: '#4e73df',
+      icon: 'fas fa-dollar-sign'
+    },
+    {
+      title: 'EARNINGS (ANNUAL)',
+      value: '$215,000',
+      color: '#1cc88a',
+      icon: 'fas fa-dollar-sign'
+    },
+    {
+      title: 'TASKS',
+      value: '50%',
+      color: '#36b9cc',
+      icon: 'fas fa-list',
+      showProgress: true,
+      progress: 50
+    },
+    {
+      title: 'PENDING REQUESTS',
+      value: '18',
+      color: '#f6c23e',
+      icon: 'fas fa-comments'
+    }
+  ];
+
+  toggleSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 }
