@@ -37,6 +37,7 @@ import { OwnerOrderComponent } from './components/owner/owner-order/owner-order.
     SignupComponent,
     DashboardComponent,
     
+
   ],
   imports: [
     AgGridModule,
@@ -60,6 +61,7 @@ import { OwnerOrderComponent } from './components/owner/owner-order/owner-order.
     FormsModule,
     MatIconModule,
     CommonModule,
+    MatIconModule,
     HomeCarouselComponent,
     RouterOutlet
 ],

@@ -43,6 +43,8 @@ export class DashboardComponent implements OnInit{
   }
 
   handleWebSocketMessages():void{
+    this.websocketService.connect();
+
     this.websocketService.onMessage().subscribe((message) => {
       console.log("MSG", message)
       if(message =="ORDER_CREATED"){

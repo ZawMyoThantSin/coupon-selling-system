@@ -15,6 +15,7 @@ import {
   ApexResponsive,
   ApexAnnotations
 } from "ng-apexcharts";
+import { PurchaseCouponService } from '../../../../../services/purchase-coupon/purchase-coupon.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -42,7 +43,51 @@ export type ChartOptions = {
         <button class="btn btn-primary">
           Generate Report
         </button>
+</div>
+<div class="row">
+      <!-- Monthly Earnings Card -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-left-primary">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col">
+                <div class="text-primary text-uppercase font-weight-bold small">
+                  Earnings (Monthly)
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{currentMonthEarning | number:'1.0-0'}} MMK
+                </div>
+              </div>
+              <div class="col-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#DDDFEB"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
+
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <!-- Annual Earnings Card -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-left-success">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col">
+                <div class="text-success text-uppercase font-weight-bold small">
+                  Earnings (Annual)
+                </div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  {{currentYearEarning | number:'1.0-0'}} MMK
+                </div>
+              </div>
+              <div class="col-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#DDDFEB"><path d="M444-200h70v-50q50-9 86-39t36-89q0-42-24-77t-96-61q-60-20-83-35t-23-41q0-26 18.5-41t53.5-15q32 0 50 15.5t26 38.5l64-26q-11-35-40.5-61T516-710v-50h-70v50q-50 11-78 44t-28 74q0 47 27.5 76t86.5 50q63 23 87.5 41t24.5 47q0 33-23.5 48.5T486-314q-33 0-58.5-20.5T390-396l-66 26q14 48 43.5 77.5T444-252v52Zm36 120q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="chart-container">
   <div class="toggle-buttons">
     <button (click)="loadDailyCouponSalesData()" [class.active]="view === 'daily'">Daily</button>
@@ -68,6 +113,37 @@ export type ChartOptions = {
 
   `,
   styles: [`
+
+.card {
+  border-radius: 8px;
+  border-width: 2px;
+
+  &.border-left-primary {
+    border-left: 4px solid #4e73df;
+  }
+
+  &.border-left-success {
+    border-left: 4px solid #1cc88a;
+  }
+}
+
+.text-primary {
+  color: #4e73df !important;
+}
+
+.text-success {
+  color: #1cc88a !important;
+}
+
+.text-gray-400 {
+  color: #d1d3e2 !important;
+}
+
+.text-gray-800 {
+  color: #5a5c69 !important;
+}
+
+
     .chart-container {
       max-width: 50%;
   margin: 20px auto;
@@ -112,11 +188,15 @@ export type ChartOptions = {
 })
 export class CouponSaleBarChartComponent {
   @ViewChild("chart") chart: ChartComponent | undefined;
+  currentMonthEarning:number = 0;
+  currentYearEarning:number = 0;
   businessId: number | null = null;
   public chartOptions: ChartOptions;
   public view: 'daily' | 'monthly' = 'daily'; // Default to daily view
 
-  constructor(private businessService: BusinessService) {
+  constructor(private businessService: BusinessService,
+    private saleCouponService: PurchaseCouponService
+  ) {
     this.chartOptions = this.getInitialChartOptions();
   }
 
@@ -126,9 +206,22 @@ export class CouponSaleBarChartComponent {
     });
     if(this.businessId){
       this.loadDailyCouponSalesData();
+      this.getMonthlyAndYearlyEarning(this.businessId);
     }
 
   }
+
+  getMonthlyAndYearlyEarning(businessId:number){
+    this.saleCouponService.getCurrentMonthEarnings(businessId).subscribe((res)=>{
+      this.currentMonthEarning= res;
+    })
+
+    this.saleCouponService.getCurrentYearEarnings(businessId).subscribe((res)=>{
+      this.currentYearEarning = res;
+    })
+  }
+
+
   private getInitialChartOptions(): ChartOptions {
     return {
       series: [{ name: "Orders Count", data: [] }],

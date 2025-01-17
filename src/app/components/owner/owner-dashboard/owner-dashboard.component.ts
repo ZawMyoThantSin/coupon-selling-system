@@ -13,6 +13,7 @@ import { CreateShopComponent } from '../shop/create-shop/create-shop.component';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ToastrService } from 'ngx-toastr';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
+import { PurchaseCouponService } from '../../../services/purchase-coupon/purchase-coupon.service';
 
 @Component({
   selector: 'app-owner-dashboard',
@@ -24,7 +25,6 @@ import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 export class OwnerDashboardComponent {
 
   modalRef: MdbModalRef<CreateShopComponent> | null = null;//
-
   businessId!:number;
   shopExist: boolean =false;
   sidebarOpen: boolean = false;
@@ -39,12 +39,12 @@ export class OwnerDashboardComponent {
   userId:any;
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private storageService: StorageService,
     private tokenService: JwtService,
     private toastr: ToastrService,
     private businessService: BusinessService,
+    private saleCouponService: PurchaseCouponService,
     private userService: UserService,
     private modalService: MdbModalService
   ) {
@@ -167,35 +167,6 @@ export class OwnerDashboardComponent {
     return this.businessService.getImageUrl(imagePath);
   }
 isSidebarCollapsed = false;
-
-  metrics = [
-    {
-      title: 'EARNINGS (MONTHLY)',
-      value: '$40,000',
-      color: '#4e73df',
-      icon: 'fas fa-dollar-sign'
-    },
-    {
-      title: 'EARNINGS (ANNUAL)',
-      value: '$215,000',
-      color: '#1cc88a',
-      icon: 'fas fa-dollar-sign'
-    },
-    {
-      title: 'TASKS',
-      value: '50%',
-      color: '#36b9cc',
-      icon: 'fas fa-list',
-      showProgress: true,
-      progress: 50
-    },
-    {
-      title: 'PENDING REQUESTS',
-      value: '18',
-      color: '#f6c23e',
-      icon: 'fas fa-comments'
-    }
-  ];
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;

@@ -94,8 +94,11 @@ export class HomeComponent implements OnInit{
     this.setupWebSocket();
   }
 
-  toggleSidebar() {
-    this.sidebarOpen = !this.sidebarOpen; // Toggle the sidebar visibility
+  // toggleSidebar() {
+  //   this.sidebarOpen = !this.sidebarOpen; // Toggle the sidebar visibility
+  // }
+  toggleSidebar(): void {
+    this.sidebarOpen = !this.sidebarOpen;
   }
 
   loadNotifications() {

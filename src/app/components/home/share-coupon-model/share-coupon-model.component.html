@@ -1,0 +1,40 @@
+<div class="modal-header px-5">
+  <h5 class="modal-title" id="qrCodeModalLabel">Friend List</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+</div>
+
+<div class="modal-body text-center">
+  <ul class="list-group">
+    <li *ngFor="let friend of friends" class="list-group-item">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <img [src]="" alt="Profile Picture" class="rounded-circle me-3" width="40" height="40" />
+          <span>{{ friend.friendName }}</span>
+        </div>
+        <button (click)="sendCoupon(friend.id)" class="btn btn-success">
+          Send Coupon
+        </button>
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- Confirmation Modal -->
+<div *ngIf="showModal" class="modal fade show" tabindex="-1" style="display: block;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Coupon Send</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="cancelSendCoupon()"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to send the coupon to <strong> {{ selectedFriendName }}</strong>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelSendCoupon()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="confirmSendCoupon()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
