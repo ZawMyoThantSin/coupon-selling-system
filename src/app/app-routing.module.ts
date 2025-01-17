@@ -45,6 +45,7 @@ import { SaleCouponReportComponent } from './components/owner/owner-dashboard/sa
 import { TestDashComponent } from './components/test-dash/test-dash.component';
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 import { EditShopComponent } from './components/owner/shop/edit-shop/edit-shop.component';
+import { OwnerOrderComponent } from './components/owner/owner-order/owner-order.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -60,7 +61,7 @@ const routes: Routes = [
         {path:'create', component:PaymentCreateComponent},
         {path:'edit', component:PaymentEditComponent}
       ]},
-      {path:'customers', component:CustomersComponent, title:'Customers'},
+      {path:'customooers', component:CustomersComponent, title:'Customers'},
       {path:'b/edit/:id', component:BusinessEditComponent, title:'Edit'},
       {path:'category', component:CategoryComponent, title:'Business Category'},
       {path:'payment', component:PaymentComponent, title:'Payment'},
@@ -71,6 +72,7 @@ const routes: Routes = [
   {path:'o', component:OwnerDashboardComponent,
     children:[
       {path:'',  component:CouponSaleBarChartComponent},
+      {path:'order', component:OwnerOrderComponent, title:'order'},
       {path:'qr-scanner', component:QrScannerComponent},
       {path:'report', component:SaleCouponReportComponent, title:'Report'},
       { path: 'edit-shop/:id', component: EditShopComponent },
