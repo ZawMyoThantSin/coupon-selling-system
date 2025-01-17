@@ -43,6 +43,15 @@ export class AdminOrderService {
     return `${this.BASE_URL}/public/orders/${imagePath}`;
   }
 
+  
+
+  getOrderByBusinessId(id: number): Observable<any[]> {
+    return this.http.get<any[]>(this.BASE_URL + '/api/orders/business/'+id, {
+      responseType: 'json'
+    });
+  }
+
+
 }
 
 

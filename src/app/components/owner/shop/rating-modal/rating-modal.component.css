@@ -1,0 +1,103 @@
+.modal-body {
+    padding: 15px;
+  }
+  
+  .review-item {
+    display: flex;
+    align-items: flex-start; /* Align items to the top */
+    margin-bottom: 15px;
+  }
+  
+  .profile {
+    margin-right: 15px;
+  }
+  
+  .profile-picture img {
+   
+    border: 2px solid #ddd;
+    object-fit: cover;
+    height: 50px;
+    width: 50px;
+    flex: 3;
+  }
+  
+  .review-content {
+    flex: 3; /* Take up remaining space */
+  }
+  
+  .review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .user-name {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .star-rating {
+    display: flex;
+  }
+  
+  .star {
+    font-size: 18px;
+    color: #ddd;
+  }
+  
+  .star.filled {
+    color: #ffc107; /* Star color when filled */
+  }
+  
+  .review-message {
+    font-size: 14px;
+    color: #555;
+    margin-top: 5px; /* Add some space between header and message */
+  }
+  
+  .scrollable-content {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+  
+  /* Scroll Bar Customization */
+  .scrollable-content::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scrollable-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  .scrollable-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  
+  .scrollable-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .profile-picture img {
+      height: 40px;
+      width: 40px;
+    }
+  
+    .user-name {
+      font-size: 14px;
+    }
+  
+    .star {
+      font-size: 16px;
+    }
+  
+    .review-message {
+      font-size: 12px;
+    }
+  }

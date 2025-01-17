@@ -28,6 +28,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { AgGridModule } from 'ag-grid-angular';
 import { QRCodeComponent, QRCodeModule } from 'angularx-qrcode';
 import { MatIconModule } from '@angular/material/icon';
+import { OwnerOrderComponent } from './components/owner/owner-order/owner-order.component';
 
 @NgModule({
   declarations: [
