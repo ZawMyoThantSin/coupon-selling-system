@@ -151,5 +151,6 @@ this.couponService.getAllUserCoupons().subscribe(
         state: { action: 'buy-now', cartData: cartData, total: totalPrice, couponId: couponId },
       });
     }
+  
 
-}
+  }

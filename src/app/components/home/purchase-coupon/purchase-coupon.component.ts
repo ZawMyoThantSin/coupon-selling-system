@@ -251,7 +251,8 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
     ];
 
   }
-
+  
+  
   // Generate image URL for the product
   getImageUrl(imagePath: string): any {
     return this.productService.getImageUrl(imagePath);
@@ -275,15 +276,15 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
       }
     });
   }
-
+  
   // Open modal with coupon details
   openQrModal(coupon: any) {
       this.modalRef = this.modalService.open(QrCodeModalComponent, {
       modalClass: 'modal-md',
-      data: {  coupon: coupon },
+      data: { coupon: coupon },
     });
   }
-
+  
   // Close modal
   closeModal(): void {
     this.modalRef?.close();

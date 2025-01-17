@@ -56,7 +56,7 @@ export class HomepageComponent implements OnInit, AfterViewInit {
     private datePipe: DatePipe,
     private router: Router,
   ) {}
-
+ 
   ngOnInit(): void {
     this.loadBusinesses();
     this.loadProducts();

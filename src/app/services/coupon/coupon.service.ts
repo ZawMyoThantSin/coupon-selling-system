@@ -73,4 +73,10 @@ export class CouponService {
       responseType:'json'
     });
   }
+  getUsedCoupon(shopId:number | null):Observable<any>{
+    return this.http.get(`${this.BASE_URL}api/coupon/usages/${shopId}`,{
+      headers:this.createAuthHeader(),
+      responseType:'json'
+    })
+  }
 }

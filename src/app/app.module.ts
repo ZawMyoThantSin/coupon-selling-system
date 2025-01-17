@@ -34,7 +34,8 @@ import { MatIconModule } from '@angular/material/icon';
     AppComponent,
     LoginComponent,
     SignupComponent,
-    DashboardComponent
+    DashboardComponent,
+    
 
   ],
   imports: [
@@ -59,6 +60,7 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     MatIconModule,
     CommonModule,
+    MatIconModule,
     HomeCarouselComponent,
     RouterOutlet
 ],

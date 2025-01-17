@@ -45,6 +45,7 @@ import { SaleCouponReportComponent } from './components/owner/owner-dashboard/sa
 import { TestDashComponent } from './components/test-dash/test-dash.component';
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 import { EditShopComponent } from './components/owner/shop/edit-shop/edit-shop.component';
+import { UsedCouponComponent } from './components/owner/owner-dashboard/used-coupon/used-coupon.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -74,6 +75,7 @@ const routes: Routes = [
       {path:'qr-scanner', component:QrScannerComponent},
       {path:'report', component:SaleCouponReportComponent, title:'Report'},
       { path: 'edit-shop/:id', component: EditShopComponent },
+      {path:'used-coupon/:shopId',component:UsedCouponComponent},
       {path:'qr-result', component:QrResultComponent},
       {path:'shop/:id', component:ShopComponent, title:'Shop' ,children:[
         {path:'', component:ProductComponent},
@@ -94,6 +96,7 @@ const routes: Routes = [
       {path:'friends', component:FriendComponent, title:'Friends'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},
+      {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
       {path:'page', component:HomepageComponent, title:'Home'},
       {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
       {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},
