@@ -19,61 +19,70 @@
           <input
             type="date"
             class="form-control border-0 p-0"
-            style="width: 20px; cursor: pointer;"
+            style="width: 20px; cursor: pointer; border-radius: 4px;"
             [(ngModel)]="specificDate"
             (change)="filterUsedCouponBySpecificDate()"
           />
         </span>
       </div>
-    </div>
-
-    <!-- Date Range Filters and Clear Search Button -->
-    <div class="d-flex gap-2">
-      <!-- Date Range Filters -->
-      <div class="d-flex flex-column">
-        <label for="startDate">Start Date:</label>
-        <input
-          type="date"
-          class="form-control"
-          [(ngModel)]="startDate"
-          (change)="filterUsedCoupon()"
-          id="startDate"
-        />
-      </div>
-
-      <div class="d-flex flex-column">
-        <label for="endDate">End Date:</label>
-        <input
-          type="date"
-          class="form-control"
-          [(ngModel)]="endDate"
-          (change)="filterUsedCoupon()"
-          id="endDate"
-        />
-      </div>
-
-      <!-- Clear Search Button -->
-      <button
-        *ngIf="searchTerm || startDate || endDate"  
-        type="button"
-        class="btn btn-outline-secondary ms-2"
-        (click)="clearSearch()"
-        style="cursor: pointer; font-size: 18px; color: gray;"
-      >
-        Clear Search
-      </button>
-
-      <!-- Clear button for date filter -->
+      
+      <!-- Clear Date Filter Button beside the Search Bar -->
       <button
         *ngIf="specificDate"
         type="button"
-        class="btn btn-outline-secondary ms-2"
+        class="btn btn-sm bg-danger ms-2"
         (click)="clearDateFilter()"
+        style="height: 38px; width: 38px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 4px;"
       >
-        <span class="text-muted" style="font-size: 18px;">&times;</span>
+        <span class="text-white">&times;</span>
       </button>
     </div>
-  </div>
+
+    <!-- Date Filter Section -->
+    <div class="d-flex gap-2 align-items-start">
+      <div class="d-flex flex-column">
+        <div class="d-flex gap-2 align-items-center">
+          <!-- Start Date -->
+          <div class="d-flex flex-column">
+            <label for="startDate">Start Date:</label>
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="startDate"
+              (change)="filterUsedCoupon()"
+              id="startDate"
+            />
+          </div>
+    
+          <!-- End Date -->
+          <div class="d-flex flex-column">
+            <label for="endDate">End Date:</label>
+            <input
+              type="date"
+              class="form-control"
+              [(ngModel)]="endDate"
+              (change)="filterUsedCoupon()"
+              id="endDate"
+            />
+          </div>
+    
+          <!-- Clear Search Button beside date input -->
+          <div class="d-flex flex-column justify-content-end mt-3">
+            <button
+            *ngIf="searchTerm || startDate || endDate"
+            type="button"
+            class="btn btn-sm bg-danger ms-2"
+            (click)="clearSearch()"
+            style="height: 30px; width: 30px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 4px;"
+          >
+            <span class="text-white">&times;</span>
+          </button>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>    
 
   <!-- Used-Coupon Table -->
   <div class="table-responsive">
