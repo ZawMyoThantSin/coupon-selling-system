@@ -1,0 +1,113 @@
+<h3>Used Coupon</h3>
+<div class="container my-4">
+  <!-- Search and Filter Section -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    
+    <!-- Search Box with Calendar -->
+    <div class="d-flex align-items-center gap-2 w-100" style="max-width: 500px;">
+      <div class="input-group w-100">
+        <!-- Search Bar -->
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Search by Customer Name or Product"
+          [(ngModel)]="searchTerm"
+          (input)="filterUsedCoupon()"
+        />
+        <!-- Calendar Icon with Date Picker -->
+        <span class="input-group-text">
+          <input
+            type="date"
+            class="form-control border-0 p-0"
+            style="width: 20px; cursor: pointer;"
+            [(ngModel)]="specificDate"
+            (change)="filterUsedCouponBySpecificDate()"
+          />
+        </span>
+      </div>
+    </div>
+
+    <!-- Date Range Filters and Clear Search Button -->
+    <div class="d-flex gap-2">
+      <!-- Date Range Filters -->
+      <div class="d-flex flex-column">
+        <label for="startDate">Start Date:</label>
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="startDate"
+          (change)="filterUsedCoupon()"
+          id="startDate"
+        />
+      </div>
+
+      <div class="d-flex flex-column">
+        <label for="endDate">End Date:</label>
+        <input
+          type="date"
+          class="form-control"
+          [(ngModel)]="endDate"
+          (change)="filterUsedCoupon()"
+          id="endDate"
+        />
+      </div>
+
+      <!-- Clear Search Button -->
+      <button
+        *ngIf="searchTerm || startDate || endDate"  
+        type="button"
+        class="btn btn-outline-secondary ms-2"
+        (click)="clearSearch()"
+        style="cursor: pointer; font-size: 18px; color: gray;"
+      >
+        Clear Search
+      </button>
+
+      <!-- Clear button for date filter -->
+      <button
+        *ngIf="specificDate"
+        type="button"
+        class="btn btn-outline-secondary ms-2"
+        (click)="clearDateFilter()"
+      >
+        <span class="text-muted" style="font-size: 18px;">&times;</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Used-Coupon Table -->
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Customer Name</th>
+          <th>Customer Email</th>
+          <th>Date</th>
+          <th>Product</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let coupon of filteredUsedCoupon | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage };">
+          <td>
+            <span class="fw-normal">{{ coupon.userName }}</span>
+          </td>
+          <td>
+            <span class="text-muted">{{ coupon.email }}</span>
+          </td>
+          <td>{{ coupon.usedAt | date: 'short' }}</td>
+          <td>{{ coupon.productName }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-end">
+      <pagination-controls
+        (pageChange)="currentPage = $event"
+        [responsive]="true"
+        previousLabel="Previous"
+        nextLabel="Next"
+      ></pagination-controls>
+    </div>
+  </div>
+</div>
