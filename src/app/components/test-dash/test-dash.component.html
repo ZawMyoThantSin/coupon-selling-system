@@ -1,124 +1,36 @@
-<!-- <div class="dashboard-container">
-  <aside class="sidebar" [class.sidebar-open]="isSidebarOpen">
-    <div class="logo">
-      <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%202025-01-10%20093902-1vF07txapzdpVSF4wWA1DQNka92kJg.png" alt="Logo" class="logo-img">
-    </div>
-    <nav>
-      <div class="nav-section">
-        <h2 class="nav-title">Main</h2>
-        <ul class="nav-list">
-          <li *ngFor="let item of navigation.main">
-            <a [href]="item.href" class="nav-link">
-              <i class="material-icons">{{item.icon}}</i>
-              <span>{{item.name}}</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="nav-section">
-        <h2 class="nav-title">Theme</h2>
-        <ul class="nav-list">
-          <li *ngFor="let item of navigation.theme">
-            <a [href]="item.href" class="nav-link">
-              <i class="material-icons">{{item.icon}}</i>
-              <span>{{item.name}}</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-      <div class="nav-section">
-        <h2 class="nav-title">Components</h2>
-        <ul class="nav-list">
-          <li *ngFor="let item of navigation.components">
-            <a [href]="item.href" class="nav-link">
-              <i class="material-icons">{{item.icon}}</i>
-              <span>{{item.name}}</span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </aside>
-
-  <main class="main-content">
-    <header class="header">
-      <button class="menu-toggle" (click)="toggleSidebar()">
-        <i class="material-icons">menu</i>
-      </button>
-      <nav class="header-nav">
-        <a href="#" class="header-nav-item">Dashboard</a>
-        <a href="#" class="header-nav-item">Users</a>
-        <a href="#" class="header-nav-item">Settings</a>
-      </nav>
-      <div class="header-actions">
-        <button class="header-action-btn">
-          <i class="material-icons">notifications</i>
-          <span class="notification-badge"></span>
-        </button>
-        <button class="header-action-btn">
-          <i class="material-icons">mail</i>
-          <span class="notification-badge"></span>
-        </button>
-        <button class="header-action-btn">
-          <i class="material-icons">settings</i>
-        </button>
-        <div class="user-avatar">CN</div>
-      </div>
-    </header>
-
-    <div class="dashboard-content">
-      <div class="metrics-grid">
-        <div *ngFor="let metric of metrics" class="metric-card">
-          <h3 class="metric-title">{{metric.title}}</h3>
-          <div class="metric-value">{{metric.value}}</div>
-          <div class="metric-change" [ngClass]="{'up': metric.trend === 'up', 'down': metric.trend === 'down'}">
-            <i class="material-icons">{{metric.trend === 'up' ? 'arrow_upward' : 'arrow_downward'}}</i>
-            {{metric.change}}
-          </div>
-        </div>
-      </div>
-    </div>
-  </main>
-</div> -->
-
- <!-- <div class="otp-container">
-  <div class="otp-title">Reset Your Password</div>
-  <div class="otp-instructions">Enter your 6-digit OTP code to reset your password.</div>
-  <div class="otp-inputs">
-    <input
-      #firstInput
-      *ngFor="let digit of otp; let i = index"
-      type="text"
-      class="otp-input"
-      maxlength="1"
-      [(ngModel)]="otp[i]"
-      (input)="onInputChange($event, i)"
-      (keydown)="moveToPrevious($event, i)"
-    />
-  </div>
-  <div class="timer">Resend OTP Code in {{ timer }}s</div>
-  <button class="reset-button" (click)="submitOtp()">Reset Password</button>
-  <div>
-    <a class="resend-link" (click)="resendOtp()">Resend OTP</a>
-  </div>
-</div> -->
-
-<div class="otp-container" [formGroup]="otpForm">
-  <div class="otp-title">Reset Your Password</div>
-  <div class="otp-instructions mb-3">Enter your 6-digit OTP code to reset your password.</div>
-  <div class="otp-inputs" formArrayName="otp">
-    <input
-      *ngFor="let control of otpControls.controls; let i = index"
-      type="text"
-      class="otp-input"
-      maxlength="1"
-      [formControlName]="i"
-      (input)="onInputChange($event, i)"
-      (keydown)="onKeydown($event, i)"
-    />
-  </div>
-  <div class="timer my-3">Didn't get OTP? <span *ngIf="timer>0">Resend OTP Code in {{ timer>0 ? timer :''  }}s</span><a *ngIf="timer<=0" class="resend-link" (click)="resendOtp()">Resend OTP</a>
-  </div>
-  <button class="reset-button" (click)="submitOtp()">Reset Password</button>
+<div class="container mt-4">
+  <h2>Remaining Payment Analysis</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Business Owner</th>
+        <th>Total Earnings ($)</th>
+        <th>Remaining Balance ($)</th>
+        <th>Last Payment Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let record of payments; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ record.businessOwner }}</td>
+        <td>{{ record.totalEarnings | currency }}</td>
+        <td [class.text-danger]="record.remainingBalance > 0">
+          {{ record.remainingBalance | currency }}
+        </td>
+        <td>{{ record.lastPaymentDate }}</td>
+        <td>
+          <button
+            *ngIf="record.remainingBalance > 0"
+            class="btn btn-success btn-sm"
+            (click)="makePayment(record)"
+          >
+            Pay Now
+          </button>
+          <button class="btn btn-primary btn-sm" (click)="viewDetails(record)">View</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
-

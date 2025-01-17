@@ -123,3 +123,33 @@
   background-color: #3464f3; /* Darker soft yellow when active */
   transform: translateY(1px);
 }
+
+
+.card {
+  border-radius: 8px;
+  border-width: 2px;
+
+  &.border-left-primary {
+    border-left: 4px solid #4e73df;
+  }
+
+  &.border-left-success {
+    border-left: 4px solid #1cc88a;
+  }
+}
+
+.text-primary {
+  color: #4e73df !important;
+}
+
+.text-success {
+  color: #1cc88a !important;
+}
+
+.text-gray-400 {
+  color: #d1d3e2 !important;
+}
+
+.text-gray-800 {
+  color: #5a5c69 !important;
+}

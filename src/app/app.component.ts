@@ -6,10 +6,6 @@ import { WebsocketService } from './services/websocket/websocket.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit{
-  constructor(private websocketService: WebsocketService) {}
-  ngOnInit(): void {
-    this.websocketService.connect();
-  }
+export class AppComponent{
   title = 'coupon-selling-system';
 }
