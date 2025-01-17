@@ -25,8 +25,6 @@ import { PurchaseCouponService } from '../../../services/purchase-coupon/purchas
 export class OwnerDashboardComponent {
 
   modalRef: MdbModalRef<CreateShopComponent> | null = null;//
-  currentMonthEarning:number = 0;
-  currentYearEarning:number = 0;
   businessId!:number;
   shopExist: boolean =false;
   sidebarOpen: boolean = false;
@@ -78,7 +76,6 @@ export class OwnerDashboardComponent {
         this.businessData = response;
         this.businessId = this.businessData.id;
         this.shopExist = this.businessData.id != null ? true : false;
-        this.getMonthlyAndYearlyEarning(this.businessId);
         if(this.shopExist){
           this.businessService.updateBusinessId(this.businessId);
         }
@@ -158,15 +155,6 @@ export class OwnerDashboardComponent {
   }
 
 
-  getMonthlyAndYearlyEarning(businessId:number){
-    this.saleCouponService.getCurrentMonthEarnings(businessId).subscribe((res)=>{
-      this.currentMonthEarning= res;
-    })
-
-    this.saleCouponService.getCurrentYearEarnings(businessId).subscribe((res)=>{
-      this.currentYearEarning = res;
-    })
-  }
 
   logoutButton(): void{
     this.storageService.removeItem("token");

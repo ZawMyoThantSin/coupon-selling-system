@@ -71,15 +71,20 @@ export class UsedCouponComponent implements OnInit {
   // Method to filter coupons based on search term and date range
   filterUsedCoupon() {
     const search = this.searchTerm.toLowerCase();
-    const start = this.startDate ? this.resetTime(new Date(this.startDate)) : null;
-    const end = this.endDate ? this.resetTime(new Date(this.endDate)) : null;
+    let start = this.startDate ? this.resetTime(new Date(this.startDate)) : null;
+    let end = this.endDate ? this.resetTime(new Date(this.endDate)) : null;
+
+    // Swap start and end if startDate is later than endDate
+    if (start && end && start > end) {
+      const temp = start;
+      start = end;
+      end = temp;
+    }
 
     this.filteredUsedCoupon = this.usedCoupons.filter((coupon) => {
-      // Convert `usedAt` to a Date object if it's not already one
       const usedAt = new Date(coupon.usedAt);
       const normalizedUsedAt = this.resetTime(usedAt);
 
-      // Ensure the date conversion is valid
       if (isNaN(normalizedUsedAt.getTime())) {
         console.error('Invalid date format for coupon.usedAt:', coupon.usedAt);
         return false;
