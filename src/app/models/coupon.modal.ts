@@ -8,4 +8,5 @@
     price?: number | any;
     visible?:boolean;
     expDate?: string;
+    originalQuantity?:string | any,
   }

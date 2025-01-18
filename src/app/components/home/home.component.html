@@ -1,148 +1,107 @@
-<!-- app.component.html -->
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light border-bottom bg-light py-md-2 fixed-top">
-
-    <div class="container-fluid ">
-      <div class="mx-3 d-flex align-items-center ">
-        <a
-        class="text-dark me-3"
-        type="button"
-        (click)="toggleSidebar()"
-        aria-label="Toggle sidebar"
-      >
-      <i class="fa-solid fa-bars fs-5"></i>
-        </a>
-        <a class="navbar-brand" routerLink="/homepage">Coupon Sell Home Page</a><i class="fa-solid fa-ticket"></i>
-      </div>
-      <div class="me-5">
-        <ul class="navbar-nav flex-row d-flex align-items-center me-4">
-          <li class="nav-item me-3">
-            <a routerLink="/homepage/cart">
-              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/></svg>
-            </a>
-          </li>
-          <li *ngIf="isLoggedIn" mdbDropdown class="nav-item ">
-            <a
-              class="nav-link d-flex align-items-center"
-              id="userMenuButton"
-              role="button"
-              mdbDropdownToggle
-              aria-expanded="false"
-            >
-              <img *ngIf="userInfo.authProvider == 'LOCAL'; else elseNoProfile"
-                [src]="userInfo.profile == null ? '/images/default-avatar.png' : getImageUrl(userInfo.profile)  " alt="User Avatar"
-                class="rounded-circle"
-                height="40"
-                width="40"
-                alt="User Avatar"
-              />
-              <ng-template #elseNoProfile>
-                <img
-                [src]="userInfo.profile"
-                class="rounded-circle"
-                height="40"
-                width="40"
-                alt="User Avatar"
-              />
-              </ng-template>
-            </a>
-
-            <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end " aria-labelledby="userMenuButton">
-              <div class="px-3 py-2">
-                <span class="d-block fw-bold">{{ userInfo.name || 'John Doe' }}</span>
-                <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
-              </div>
-
-              <div class="dropdown-divider mt-2 mb-2"></div>
-
-              <li>
-                <a class="dropdown-item" routerLink="/homepage/userprofile">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                  <span class="ms-2">Profile</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" (click)="openChangePasswordModal()">
-                  <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                <span class="ms-2">Change Password</span>
-                </a>
-              </li>
-              <div class="dropdown-divider"></div>
-              <li>
-                <a class="dropdown-item" (click)="logoutButton()" >
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                <span class="ms-2">Logout</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-
-        </ul>
-      </div>
-</div>
-</nav>
-
-  <!-- Sidebar -->
-  <div [class.open]="sidebarOpen" class="sidebar border-end fixed-left">
-    <a routerLink="/homepage/page"
-    routerLinkActive="active"
-      class="mt-5">
-      <i class="fas fa-home me-3"></i> Home
+<mat-toolbar class="navbar">
+  <div class="navbar-container">
+    <!-- Logo -->
+    <a class="navbar-brand" routerLink="/homepage/page">
+      <!-- Add logo here -->
+       CS
+      <!-- <img src="assets/logo.svg" alt="Logo" width="24" height="24"> -->
     </a>
 
-    <!-- Business Link -->
-    <a
-      routerLink="/hp/business"
-      routerLinkActive="active"
-      class="">
-      <i class="fas fa-store"></i> Business
-    </a>
+    <!-- Hamburger for mobile -->
+    <button mat-icon-button class="hamburger" (click)="toggleMenu()" *ngIf="!isDesktop">
+      <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+    </button>
 
-    <a
-      routerLink="/homepage/c"
-      routerLinkActive="active"
-      class="">
-      <i class="fas fa-shopping-bag"></i> Products
-    </a>
+    <!-- Desktop Navigation -->
+    <div class="nav-items" [class.show]="isMenuOpen || isDesktop">
+      <a routerLink="/homepage/page" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a routerLink="/homepage/products" routerLinkActive="active">Promotions</a>
+      <a routerLink="/homepage/purchase-coupon" routerLinkActive="active">Coupons</a>
+      <a routerLink="/homepage/aboutus" routerLinkActive="active">About us</a>
+    </div>
 
-    <a
-    routerLink="/homepage/friends"
-    routerLinkActive="active"
-    class="">
-      <div>
-        <i class="fas fa-user-friends me-2"></i> Friends
-      </div>
-      <span *ngIf="pendingFriendRequestsCount > 0" class="badge bg-danger rounded-circle ms-2">
-          {{ pendingFriendRequestsCount }}
-      </span>
-      </a>
+   <div class="avatar ">
+    <div class="">
+      <ul class="navbar-nav flex-row d-flex align-items-center me-4">
+        <li class="nav-item me-3">
+          <a routerLink="/homepage/cart">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/></svg>
+          </a>
+        </li>
+        <li *ngIf="isLoggedIn" mdbDropdown class="nav-item ">
+          <a
+            class="nav-link d-flex align-items-center"
+            id="userMenuButton"
+            role="button"
+            mdbDropdownToggle
+            aria-expanded="false"
+          >
+            <img *ngIf="userInfo.authProvider == 'LOCAL'; else elseNoProfile"
+              [src]="userInfo.profile == null ? '/images/default-avatar.png' : getImageUrl(userInfo.profile)  " alt="User Avatar"
+              class="rounded-circle"
+              height="40"
+              width="40"
+              alt="User Avatar"
+            />
+            <ng-template #elseNoProfile>
+              <img
+              [src]="userInfo.profile"
+              class="rounded-circle"
+              height="40"
+              width="40"
+              alt="User Avatar"
+            />
+            </ng-template>
+          </a>
 
+          <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end px-3" aria-labelledby="userMenuButton" >
+            <div class="px-3 py-2">
+              <span class="d-block fw-bold">{{ userInfo.name || 'John Doe' }}</span>
+              <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
+            </div>
 
-    <a
-        routerLink="/homepage/purchase-coupon"
-        routerLinkActive="active"
-        class="">
-        <i class="fa-solid fa-clock-rotate-left"></i> History
-    </a>
+            <div class="dropdown-divider mt-2 mb-2"></div>
 
-    <a
-        routerLink="/homepage/aboutus"
-        routerLinkActive="active"
-        class="">
-        <i class="fa-regular fa-address-card"></i> About Us
-    </a>
+            <li>
+              <a class="dropdown-item" routerLink="/homepage/userprofile">
+                <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                <span class="ms-2">Profile</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" (click)="openChangePasswordModal()">
+                <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+              <span class="ms-2">Change Password</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/homepage/friends">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#434343"><path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z"/></svg>
+                <span class="ms-2">Friends</span>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" routerLink="/homepage/order-history">
+                <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#434343"><path d="M480-120q-138 0-240.5-91.5T122-440h82q14 104 92.5 172T480-200q117 0 198.5-81.5T760-480q0-117-81.5-198.5T480-760q-69 0-129 32t-101 88h110v80H120v-240h80v94q51-64 124.5-99T480-840q75 0 140.5 28.5t114 77q48.5 48.5 77 114T840-480q0 75-28.5 140.5t-77 114q-48.5 48.5-114 77T480-120Zm112-192L440-464v-216h80v184l128 128-56 56Z"/></svg>
+                <span class="ms-2">Order History</span>
+              </a>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li>
+              <a class="dropdown-item" (click)="logoutButton()" >
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+              <span class="ms-2">Logout</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+      </ul>
+    </div>
+   </div>
   </div>
+</mat-toolbar>
 
-  <!-- Content Area -->
-  <div class="content-area">
-
-   <router-outlet></router-outlet>
-
-    <!-- <div *ngIf="decodedToken">
-
-      <h3>Decoded JWT:</h3>
-      <pre>{{ decodedToken | json }}</pre>
-    </div> -->
-
-  </div>
+<main class="vw-100">
+  <router-outlet></router-outlet>
+</main>

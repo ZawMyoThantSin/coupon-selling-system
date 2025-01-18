@@ -37,7 +37,7 @@ export class CouponComponent implements OnInit {
     {
       field: 'price',
       headerName: 'Price',
-      valueFormatter: (params) => `${params.value} kyat`,
+      valueFormatter: (params) => `${params.value} MMK`,
       filter: 'agNumberColumnFilter'
     },
     { field: 'couponCode', headerName: 'Product Name', filter: 'agTextColumnFilter' },
@@ -47,7 +47,17 @@ export class CouponComponent implements OnInit {
       filter: 'agDateColumnFilter',
       valueFormatter: (params) => new Date(params.value).toLocaleString()
     },
-    { field: 'quantity', headerName: 'Quantity', filter: 'agNumberColumnFilter' },
+    {
+      field: 'quantity',
+      headerName: 'Quantity',
+      filter: 'agNumberColumnFilter',
+      valueGetter: (params) => {
+        const quantity = params.data.quantity || 0;
+        const originalQuantity = params.data.originalQuantity || 0;
+        return `${quantity} | ${originalQuantity} (Remaining)`;
+      }
+    },
+
     { field: 'description', headerName: 'Description', filter: 'agTextColumnFilter' },
   ];
 

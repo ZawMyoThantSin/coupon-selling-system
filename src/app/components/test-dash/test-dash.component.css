@@ -5,7 +5,7 @@
   right: 0;
   height: 60px;
   padding: 0;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   z-index: 1000;
@@ -91,10 +91,6 @@ main {
 
   }
 
-  .avatar{
-    margin-right: 0px;
-  }
-
   .nav-items.show {
     display: flex;
     transform: translateY(0);
@@ -126,6 +122,6 @@ main {
     opacity: 0;
   }
   to {
-    opacity: 0.8;
+    opacity: 1;
   }
 }

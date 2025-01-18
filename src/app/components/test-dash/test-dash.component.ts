@@ -1,58 +1,37 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ElementRef, Inject, NgZone, OnInit, PLATFORM_ID, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Subscription, interval } from 'rxjs';
-
-interface Metric {
-  title: string;
-  value: string;
-  change: string;
-  trend: 'up' | 'down';
-}
-
-interface NavItem {
-  name: string;
-  icon: string;
-  href: string;
-}
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { RouterLinkActive, RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-test-dash',
   standalone: true,
-  imports: [CommonModule,FormsModule,ReactiveFormsModule],
+  imports: [CommonModule,RouterOutlet,RouterLinkActive,  MatIconModule, MatButtonModule, MatListModule, FormsModule, ReactiveFormsModule],
   templateUrl: './test-dash.component.html',
-  styleUrl: './test-dash.component.scss'
+  styleUrl: './test-dash.component.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class TestDashComponent{
-  payments = [
-    {
-      id: 1,
-      businessOwner: 'John Doe',
-      totalEarnings: 1000,
-      remainingBalance: 400,
-      lastPaymentDate: '2025-01-10',
-    },
-    {
-      id: 2,
-      businessOwner: 'Jane Smith',
-      totalEarnings: 1500,
-      remainingBalance: 600,
-      lastPaymentDate: '2025-01-12',
-    },
-    {
-      id: 3,
-      businessOwner: 'Robert Brown',
-      totalEarnings: 1200,
-      remainingBalance: 0,
-      lastPaymentDate: '2025-01-08',
-    },
-  ];
+  isMenuOpen = false;
+  isDesktop = false;
 
-  viewDetails(record: any): void {
-    alert(`Details for ${record.businessOwner}`);
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isDesktop = window.innerWidth >= 992;
+      window.addEventListener('resize', () => {
+        if (isPlatformBrowser(this.platformId)) {
+          this.isDesktop = window.innerWidth >= 992;
+          if (this.isDesktop) {
+            this.isMenuOpen = false;
+          }
+        }
+      });
+    }
   }
 
-  makePayment(record: any): void {
-    alert(`Processing payment for ${record.businessOwner}`);
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }

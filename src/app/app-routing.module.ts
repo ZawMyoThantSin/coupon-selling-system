@@ -48,6 +48,7 @@ import { EditShopComponent } from './components/owner/shop/edit-shop/edit-shop.c
 
 import { OwnerOrderComponent } from './components/owner/owner-order/owner-order.component';
 import { UsedCouponComponent } from './components/owner/owner-dashboard/used-coupon/used-coupon.component';
+import { CouponCardComponent } from './components/home/homepage/coupon-card/coupon-card.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -97,6 +98,7 @@ const routes: Routes = [
       {path:'order-history', component:OrderHistoryComponent, title:'History'},
       {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
       {path:'friends', component:FriendComponent, title:'Friends'},
+      {path:'products', component:CouponCardComponent, title:'Products'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},
       {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},

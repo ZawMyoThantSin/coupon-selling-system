@@ -1,36 +1,29 @@
-<div class="container mt-4">
-  <h2>Remaining Payment Analysis</h2>
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Business Owner</th>
-        <th>Total Earnings ($)</th>
-        <th>Remaining Balance ($)</th>
-        <th>Last Payment Date</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let record of payments; let i = index">
-        <td>{{ i + 1 }}</td>
-        <td>{{ record.businessOwner }}</td>
-        <td>{{ record.totalEarnings | currency }}</td>
-        <td [class.text-danger]="record.remainingBalance > 0">
-          {{ record.remainingBalance | currency }}
-        </td>
-        <td>{{ record.lastPaymentDate }}</td>
-        <td>
-          <button
-            *ngIf="record.remainingBalance > 0"
-            class="btn btn-success btn-sm"
-            (click)="makePayment(record)"
-          >
-            Pay Now
-          </button>
-          <button class="btn btn-primary btn-sm" (click)="viewDetails(record)">View</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<mat-toolbar class="navbar">
+  <div class="navbar-container">
+    <!-- Logo -->
+    <a class="navbar-brand" routerLink="/">
+      <img src="assets/logo.svg" alt="Logo" width="24" height="24">
+    </a>
+
+    <!-- Hamburger for mobile -->
+    <button mat-icon-button class="hamburger" (click)="toggleMenu()" *ngIf="!isDesktop">
+      <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
+    </button>
+
+    <!-- Desktop Navigation -->
+    <div class="nav-items" [class.show]="isMenuOpen || isDesktop">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a routerLink="/products" routerLinkActive="active">Promotions</a>
+      <a routerLink="/about" routerLinkActive="active">Coupons</a>
+      <a routerLink="/articles" routerLinkActive="active">Contact us</a>
+    </div>
+
+   <div>Avatar</div>
+  </div>
+</mat-toolbar>
+
+<!-- Main Content Area -->
+<main>
+  <div class="vh-100 bg-danger">1</div>
+  <router-outlet></router-outlet>
+</main>

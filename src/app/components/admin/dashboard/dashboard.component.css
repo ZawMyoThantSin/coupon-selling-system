@@ -2,6 +2,12 @@
   min-height: 100vh;
   background-color: #4e73df;
   transition: width 0.3s;
+  position: fixed;
+  top: 0px; /* Adjust based on the height of your navbar */
+  left: 0;
+  height: 100%;
+  width: 250px; /* Adjust based on your sidebar width */
+  z-index: 999; /* Ensure it stays on top */
 
   &.expanded {
     width: 256px;
@@ -44,5 +50,12 @@
 .disabled {
   pointer-events: none;
   opacity: 0.5;
+}
+
+
+/* Adjust the main content to account for the fixed navbar and sidebar */
+.main-content {
+  margin-top: 60px; /* Adjust based on the height of your navbar */
+  margin-left: 250px; /* Adjust based on your sidebar width */
 }
 
