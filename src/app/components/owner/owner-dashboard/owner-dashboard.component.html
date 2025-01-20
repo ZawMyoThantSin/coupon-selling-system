@@ -1,5 +1,5 @@
 <div class="d-flex min-vh-100">
-  <!-- Sidebar -->
+  <!-- This is the Sidebar -->
   <nav [class]="'sidebar ' + (isSidebarCollapsed ? 'collapsed' : 'expanded')">
     <div class="d-flex flex-column h-100">
       <!-- Logo -->
@@ -110,17 +110,12 @@
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <div class="flex-grow-1 bg-light">
+  <!-- I want to make this navbar  -->
+  <div class="flex-grow-1 bg-light vw-100" >
     <!-- Header -->
-    <header class="bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
+    <header class="bg-white shadow-sm px-3 py-2 d-flex justify-content-between align-items-center">
       <div class="flex-grow-1 me-4">
-        <div class="input-group w-50">
-          <input type="search" class="form-control" placeholder="Search for...">
-          <button class="btn btn-primary" type="button">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
+        <!-- write search box -->
       </div>
 
       <div class="d-flex align-items-center">
@@ -252,23 +247,26 @@
     </header>
 
     <!-- Main Content Area -->
-  <main class="p-4">
-      <div *ngIf="loading" class="d-flex justify-content-center mt-3">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <p class="text-muted d-block ms-2">Please Wait...</p>
-      </div>
 
-      <div *ngIf="!loading && !shopExist " class="shop-setup-placeholder">
-        <h2>Oops! You Haven't Set Up Your Shop Yet!</h2>
-        <p>Start showcasing your amazing products and reach your customers by creating your shop.</p>
-        <div class="action-buttons">
-            <button (click)="setupShop()">Create Your Shop</button>
-        </div>
-      </div>
-      <router-outlet></router-outlet>
-
-    </main>
   </div>
+
+  <!-- This is the main content scrollable area -->
+  <main class=" main-content ">
+    <div *ngIf="loading" class="d-flex justify-content-center mt-3">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="text-muted d-block ms-2">Please Wait...</p>
+    </div>
+
+    <div *ngIf="!loading && !shopExist " class="shop-setup-placeholder">
+      <h2>Oops! You Haven't Set Up Your Shop Yet!</h2>
+      <p>Start showcasing your amazing products and reach your customers by creating your shop.</p>
+      <div class="action-buttons">
+          <button (click)="setupShop()">Create Your Shop</button>
+      </div>
+    </div>
+    <router-outlet></router-outlet>
+
+  </main>
 </div>

@@ -23,21 +23,13 @@ import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 </div>
 
 <div class="modal-body text-center">
-
   <div>
-  <img
-    [src]="getProductImageUrl(coupon.imageUrl)"
-    alt="Promotion"
-    class="img-fluid rounded mb-3 border"
-    style="width: 50%; max-width: 150px; height: auto;"
-  />
-
-
-  <h6 class="text-primary">{{coupon.productName}}</h6>
-  <p class="text-danger mb-0 fw-bold">Big Savings {{coupon.discount}}% OFF</p>
-  <p class="mb-0">Valid until {{ coupon.expiryDate | date}}.</p>
-
+    <!-- Promotion Details -->
+    <h6 class="text-primary">{{ coupon.productName }}</h6>
+    <p class="text-danger mb-0 fw-bold">Big Savings {{ coupon.discount }}% OFF</p>
+    <p class="mb-0">Valid until {{ coupon.expiryDate | date }}.</p>
   </div>
+
   <!-- QR Code -->
   <div class="w-100">
     <div *ngIf="!isLoading && !error">
@@ -50,16 +42,31 @@ import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
         [errorCorrectionLevel]="'M'">
       </qrcode>
     </div>
+
+    <!-- Business Details -->
+    <h4>
+      <i class="fas fa-store me-2"></i> <!-- Icon for business -->
+      {{ coupon.businessName }}
+    </h4>
+    <h4>
+      <i class="fas fa-map-marker-alt me-2"></i> <!-- Icon for location -->
+      {{ coupon.businessLocation }}
+    </h4>
+
+    <!-- Save QR Code -->
     <div>
-    <span
-      (click)="saveQrCode()"
-      mdbTooltip="Save To Device"
-      class="btn btn-outline-secondary rounded rounded-pill"
-      >
-      <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#666666"><path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z"/></svg>
-    </span>
+      <span
+        (click)="saveQrCode()"
+        mdbTooltip="Save To Device"
+        class="btn btn-outline-secondary rounded rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#666666">
+          <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
+        </svg>
+      </span>
+    </div>
   </div>
-  </div>
+</div>
+
 
 
   <!-- Error State -->
@@ -73,7 +80,7 @@ import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
       <span class="visually-hidden">Loading...</span>
     </div>
   </div>
-</div>
+
 
 
   `,
@@ -117,25 +124,155 @@ export class QrCodeModalComponent {
         }
       );
   }
-
+  // saveQrCode(): void {
+  //   const canvas = document.querySelector('qrcode canvas') as HTMLCanvasElement;
+  //   if (canvas) {
+  //     const dataUrl = canvas.toDataURL('image/png');
+  //     const link = document.createElement('a');
+  //     link.href = dataUrl;
+  //     link.download = 'qr-code.png';
+  //     link.click();
+  //   } else {
+  //     console.error('QR Code canvas not found!');
+  //   }
+  // }
   saveQrCode(): void {
-    const canvas = document.querySelector('qrcode canvas') as HTMLCanvasElement;
-    if (canvas) {
-      const dataUrl = canvas.toDataURL('image/png');
-      const link = document.createElement('a');
-      link.href = dataUrl;
-      link.download = 'qr-code.png';
-      link.click();
-    } else {
-      console.error('QR Code canvas not found!');
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+
+    if (!context) {
+        console.error('Failed to get canvas context');
+        return;
     }
-  }
 
-  getProductImageUrl(imagePath: string): any {
-    return this.productService.getImageUrl(imagePath);
-  }
+    // Set canvas dimensions
+    const canvasWidth = 400; // Customize as needed
+    const canvasHeight = 600; // Customize as needed
+    canvas.width = canvasWidth;
+    canvas.height = canvasHeight;
 
-  close(): void {
-    this.modalRef?.close();
-  }
+    // Fill background color
+    context.fillStyle = '#ffffff'; // White background
+    context.fillRect(0, 0, canvasWidth, canvasHeight);
+
+    // Set the left margin for all texts and images
+    const leftMargin = 50; // Left margin for alignment
+    const textSpacing = 30; // Vertical spacing between elements
+    const extraSpaceBetweenSections = 50; // Extra space between center-aligned and left-aligned sections
+
+    // Draw QR code onto the canvas
+    const qrCanvas = document.querySelector('qrcode canvas') as HTMLCanvasElement;
+    if (qrCanvas) {
+        // Center the QR code horizontally and place it at the top
+        context.drawImage(qrCanvas, (canvasWidth - qrCanvas.width) / 2, 50);
+    } else {
+        console.error('QR Code canvas not found!');
+        return;
+    }
+
+    // Add text below the QR code
+    let currentYPosition = qrCanvas.height + 60; // 60px below QR code
+
+    // Product name - Centered horizontally under QR code
+    context.textAlign = 'center';
+    context.fillStyle = '#0000ff'; // Blue for product name
+    context.font = '20px Arial';
+    context.fillText(this.coupon.productName, canvasWidth / 2, currentYPosition);
+    currentYPosition += textSpacing; // Update position for next element
+
+    // Discount - Centered horizontally under QR code
+    context.fillStyle = '#ff0000'; // Red for discount
+    context.font = '18px Arial';
+    context.fillText(`Big Savings ${this.coupon.discount}% OFF`, canvasWidth / 2, currentYPosition);
+    currentYPosition += textSpacing; // Update position for next element
+
+    // Expiry date - Centered horizontally under QR code
+    context.fillStyle = '#000000'; // Black for expiry date
+    context.font = '16px Arial';
+    context.fillText(`Valid until ${new Date(this.coupon.expiryDate).toLocaleDateString()}`, canvasWidth / 2, currentYPosition);
+    currentYPosition += textSpacing; // Update position for next element
+
+    // Add extra space before the left-aligned section
+    currentYPosition += extraSpaceBetweenSections;
+
+    // Add shop name and location with shop image
+    const shopImage = new Image();
+    shopImage.src = '/images/product/shop image.jpg'; // Provide the path to your shop image
+
+    shopImage.onload = () => {
+        const shopIconSize = 30; // Size of the shop icon
+        const shopTextY = currentYPosition; // Y position for shop name and location
+
+        // Left-align business name and location with shop image
+        context.textAlign = 'left';
+
+        // Draw shop image to the left of the business name
+        context.drawImage(shopImage, leftMargin, shopTextY - shopIconSize / 2, shopIconSize, shopIconSize);
+
+        // Draw business name next to the shop image
+        context.fillStyle = '#000000'; // Black for shop name text
+        context.font = '18px Arial';
+        context.fillText(this.coupon.businessName, leftMargin + shopIconSize + 10, shopTextY);
+        currentYPosition = shopTextY + textSpacing; // Update position for next element
+
+        // Add location icon and text
+        const locationIcon = new Image();
+        locationIcon.src = '/images/product/map2.png'; // Provide the path to your location icon image
+        locationIcon.onload = () => {
+          const iconSize = 20; // Size of the location icon
+          const locationY = currentYPosition; // Y position for location text
+
+          // Draw location icon below the business name
+          context.drawImage(locationIcon, leftMargin, locationY - iconSize / 2, iconSize, iconSize);
+
+          // Wrap and draw location text
+          const maxTextWidth = canvasWidth - leftMargin - 20; // Allow padding on the right
+          const lineHeight = 20; // Height between lines
+          let lines = [];
+          let words = this.coupon.businessLocation.split(' ');
+          let currentLine = '';
+
+          for (let word of words) {
+              let testLine = currentLine + word + ' ';
+              if (context.measureText(testLine).width > maxTextWidth) {
+                  lines.push(currentLine);
+                  currentLine = word + ' ';
+              } else {
+                  currentLine = testLine;
+              }
+          }
+          lines.push(currentLine); // Push the remaining line
+
+          context.fillStyle = '#666666'; // Gray for location text
+          context.textAlign = 'left';
+          for (let i = 0; i < lines.length; i++) {
+              context.fillText(lines[i], leftMargin + iconSize + 10, locationY + lineHeight * i);
+          }
+
+          // Save the canvas as an image
+          const dataUrl = canvas.toDataURL('image/png');
+          const link = document.createElement('a');
+          link.href = dataUrl;
+          link.download = 'coupon.png';
+          link.click();
+      };
+
+      locationIcon.onerror = () => {
+          console.error('Failed to load location icon image');
+      };
+  };
+
+  shopImage.onerror = () => {
+      console.error('Failed to load shop image');
+  };
+}
+
+
+getProductImageUrl(imagePath: string): any {
+  return this.productService.getImageUrl(imagePath);
+}
+
+close(): void {
+  this.modalRef?.close();
+}
 }

@@ -59,7 +59,6 @@ export class SignupComponent {
           email: this.user.email,
           password: this.user.password
         }
-        console.log(this.user)
         this.authService.signup(signupData).subscribe(
           response => {
             this.toastr.success('Register successfully!', 'Success');
@@ -68,7 +67,7 @@ export class SignupComponent {
             // console.log(response)
           },
           error => {
-            this.toastr.error(error, "Error");
+            this.toastr.error("Something went wrong!", "Error");
             console.error("Error in SignUP: ",error)
           }
         );

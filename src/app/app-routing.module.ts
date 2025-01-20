@@ -64,7 +64,7 @@ const routes: Routes = [
         {path:'create', component:PaymentCreateComponent},
         {path:'edit', component:PaymentEditComponent}
       ]},
-      {path:'customooers', component:CustomersComponent, title:'Customers'},
+      {path:'customers', component:CustomersComponent, title:'Customers'},
       {path:'b/edit/:id', component:BusinessEditComponent, title:'Edit'},
       {path:'category', component:CategoryComponent, title:'Business Category'},
       {path:'payment', component:PaymentComponent, title:'Payment'},

@@ -21,20 +21,6 @@
     background-color: rgba(255, 255, 255, 0.1);
   }
 }
-/*
-.metric-card {
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-  }
-} */
 
 .notification-badge {
   position: absolute;
@@ -46,16 +32,36 @@
   height: 8px;
 }
 
-.active{
+.active {
   color: white;
   background-color: rgba(255, 255, 255, 0.1);
 }
-.inActive{
+
+.inActive {
   background-color: #4e73df;
 }
+
 .disabled {
-  pointer-events: none; /* Prevent interaction */
-  opacity: 0.5; /* Visually disable the link */
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+
+/* Adjust the main content to account for the fixed navbar and sidebar */
+.main-content {
+  margin-top: 60px; /* Adjust based on the height of your navbar */
+  margin-left: 250px; /* Adjust based on your sidebar width */
+}
+
+
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+}
+
+.progress-bar-custom {
+  height: 8px;
 }
 
 /*  If not created Shop  */
