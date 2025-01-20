@@ -188,3 +188,10 @@ button:disabled {
     font-size: 0.8rem; /* Further reduce font size */
   }
 }
+.review-date {
+  position: absolute;
+  bottom: 10px; /* Adjust distance from the bottom */
+  right: 15px; /* Adjust distance from the right */
+  font-size: 0.9rem; /* Make the font size slightly smaller */
+  color: #6c757d; /* Muted text color */
+}

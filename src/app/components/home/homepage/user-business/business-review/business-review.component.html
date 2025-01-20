@@ -82,6 +82,10 @@
               {{ review.message || 'No review message provided.' }}
             </p>
           </div>
+
+        <div class="review-date">
+          {{ getRelativeTime(review.createdAt) }}
+        </div>
         </div>
       </div>
     </div>

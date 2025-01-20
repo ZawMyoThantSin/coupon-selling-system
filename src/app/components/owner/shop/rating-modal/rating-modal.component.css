@@ -1,103 +1,161 @@
+/* General Styles */
 .modal-body {
+  padding: 20px;
+}
+
+.review-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 15px;
+  width: 100%;
+  height: 100%;
+}
+
+.profile {
+  margin-right: 50px; /* Further increased margin to separate image from content */
+  justify-content: space-between;
+}
+
+.review-photo {
+  width: 60px; /* Slightly larger image */
+  height: 60px;
+  overflow: hidden;
+  border-radius: 50%;
+  justify-content: space-between;
+}
+
+.review-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  justify-content: space-between;
+}
+
+.review-content {
+  flex-grow: 1;
+}
+
+.review-header {
+  display: flex;
+
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.star-rating {
+  display: flex;
+  margin-left: 10px; /* add margin to space the stars from the user name */
+}
+
+.star {
+  font-size: 18px;
+  color: #474340;
+}
+
+.star.filled {
+  color: #f39c12;
+}
+
+.review-message {
+  font-size: 14px;
+  color: #333;
+  margin-top: 10px; /* Added margin to separate message from header */
+}
+
+.text-muted {
+  font-size: 12px;
+  color: #888;
+}
+
+/* Modal Styles for Larger Size */
+.modal-dialog {
+  max-width: 100%; /* Increased max-width for a larger modal box */
+  width: 100%;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .modal-body {
     padding: 15px;
   }
-  
+
   .review-item {
-    display: flex;
-    align-items: flex-start; /* Align items to the top */
-    margin-bottom: 15px;
-  }
-  
-  .profile {
-    margin-right: 15px;
-  }
-  
-  .profile-picture img {
-   
-    border: 2px solid #ddd;
-    object-fit: cover;
-    height: 50px;
-    width: 50px;
-    flex: 3;
-  }
-  
-  .review-content {
-    flex: 3; /* Take up remaining space */
-  }
-  
-  .review-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-  }
-  
-  .user-name {
-    font-weight: bold;
-    margin-right: 10px;
-  }
-  
-  .star-rating {
-    display: flex;
-  }
-  
-  .star {
-    font-size: 18px;
-    color: #ddd;
-  }
-  
-  .star.filled {
-    color: #ffc107; /* Star color when filled */
-  }
-  
-  .review-message {
-    font-size: 14px;
-    color: #555;
-    margin-top: 5px; /* Add some space between header and message */
-  }
-  
-  .scrollable-content {
-    max-height: 300px;
-    overflow-y: auto;
-    padding-right: 10px;
-  }
-  
-  /* Scroll Bar Customization */
-  .scrollable-content::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  .scrollable-content::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 4px;
-  }
-  
-  .scrollable-content::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 4px;
-  }
-  
-  .scrollable-content::-webkit-scrollbar-thumb:hover {
-    background: #555;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
-  
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .profile-picture img {
-      height: 40px;
-      width: 40px;
-    }
-  
-    .user-name {
-      font-size: 14px;
-    }
-  
-    .star {
-      font-size: 16px;
-    }
-  
-    .review-message {
-      font-size: 12px;
-    }
+  .review-content {
+    margin-top: 15px; /* Increased margin for better separation */
   }
+
+  .profile {
+    margin-left: 0;
+    margin-bottom: 15px; /* Increased margin for better separation */
+  }
+
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .user-name {
+    font-size: 18px; /* Larger font size for mobile */
+  }
+
+  .star-rating {
+    margin-top: 10px; /* Increased margin for better separation */
+  }
+
+  .review-message {
+    font-size: 14px;
+  }
+
+  .text-muted {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-header h5 {
+    font-size: 20px; /* Larger font size for smaller screens */
+  }
+
+  .review-photo {
+    width: 50px; /* Adjusted size for smaller screens */
+    height: 50px;
+  }
+
+  .review-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .star-rating {
+    font-size: 20px; /* Adjusted size for smaller screens */
+  }
+
+  .review-item {
+    margin-bottom: 15px; /* Increased margin for better separation */
+  }
+
+  .review-header {
+    font-size: 16px; /* Adjusted size for smaller screens */
+  }
+
+  .review-message {
+    font-size: 13px;
+  }
+
+  .text-muted {
+    font-size: 11px;
+  }
+}
