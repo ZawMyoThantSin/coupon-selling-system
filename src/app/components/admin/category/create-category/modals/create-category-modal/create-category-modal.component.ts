@@ -13,6 +13,8 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class CreateCategoryModalComponent {
 
+  showConfirmationModal: boolean = false;
+
   formData = {
     name: '',
   };
@@ -32,10 +34,16 @@ export class CreateCategoryModalComponent {
       alert('Name is required.');
       return;
     }
-    if (this.modalRef) {
-      const formData = new FormData();
-      formData.append('name', this.formData.name);
-      this.modalRef.close(formData); // Pass FormData to the parent
-    }
+    this.showConfirmationModal = true;
+  }
+  confirmSubmission(): void {
+    const formData = new FormData();
+    formData.append('name', this.formData.name);
+    this.modalRef.close(formData); // Pass FormData to the parent
+  }
+  
+  cancelSubmission(): void {
+    this.showConfirmationModal = false;
+    this.toastr.info('Submission canceled.');
   }
 }

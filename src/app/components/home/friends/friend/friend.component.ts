@@ -55,6 +55,10 @@ export class FriendComponent implements OnInit {
   friendIdToDelete: number = 0;
   friendRequestIdToDelete: number = 0;
 
+  messages: { [friendId: number]: { sender: string; content: string }[] } = {};
+  activeChat: { friendId: number; friendName: string } | null = null;
+  newMessage: string = '';
+
   constructor(
     private friendshipService: FriendsService,
     private storageService: StorageService,
@@ -311,6 +315,49 @@ closeConfirmCanelModal() {
     return profile
       ? this.userService.getImageUrl(profile)
       : '/images/default-avatar.png';
+  }
+
+  // Open Chat Window
+  openChatWindow(friendId: number, friendName: string): void {
+    this.activeChat = { friendId, friendName };
+    this.loadChatMessages(friendId);
+  }
+
+  // Close Chat Window
+  closeChatWindow(): void {
+    this.activeChat = null;
+  }
+
+  // Load Messages from Backend
+  loadChatMessages(friendId: number): void {
+    // this.friendshipService.getChatMessages(friendId).subscribe({
+    //   next: (messages) => {
+    //     this.messages[friendId] = messages;
+    //   },
+    //   error: () => this.toastr.error('Error loading messages.', 'Error'),
+    // });
+  }
+
+  // Send Message
+  sendMessage(): void {
+    if (this.activeChat && this.newMessage.trim()) {
+      const message = {
+        senderId: this.loggedInUserId,
+        recipientId: this.activeChat.friendId,
+        content: this.newMessage.trim(),
+      };
+
+      // this.friendshipService.sendChatMessage(message).subscribe({
+      //   next: () => {
+      //     this.messages[this.activeChat!.friendId].push({
+      //       sender: 'You',
+      //       content: this.newMessage.trim(),
+      //     });
+      //     this.newMessage = '';
+      //   },
+      //   error: () => this.toastr.error('Error sending message.', 'Error'),
+      // });
+    }
   }
 
   private handleWebSocketMessage(message: string): void {

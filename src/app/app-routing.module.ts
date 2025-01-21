@@ -45,6 +45,7 @@ import { SaleCouponReportComponent } from './components/owner/owner-dashboard/sa
 import { TestDashComponent } from './components/test-dash/test-dash.component';
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 import { EditShopComponent } from './components/owner/shop/edit-shop/edit-shop.component';
+import { BusinessIncomeComponent } from './components/admin/business/business-income/business-income.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d',pathMatch:'full'},
@@ -65,6 +66,7 @@ const routes: Routes = [
       {path:'category', component:CategoryComponent, title:'Business Category'},
       {path:'payment', component:PaymentComponent, title:'Payment'},
       {path: 'excel-import', component: ExcelImportComponent },
+      {path: 'business-income', component: BusinessIncomeComponent}
 
     ]
   },

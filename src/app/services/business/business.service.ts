@@ -1,7 +1,7 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Injectable({
@@ -114,6 +114,28 @@ update(id: number, data: any): Observable<any> {
   return this.http.put(`${this.BASE_URL}/api/businesses/${id}`, data, {
     responseType: 'json'
   });
+}
+
+getBusinessIncome(id: number): Observable<any[]> {
+
+  return this.http.get<any[]>(`${this.BASE_URL}/api/businesses/${id}/income`, {
+    responseType: 'json'
+  });
+}
+
+payOwner(request: { businessId: number; desiredPercentage: number }): Observable<any> {
+  if (request.desiredPercentage <= 0 || request.desiredPercentage > 100) {
+    return throwError(() => new Error("Invalid profit percentage. It must be between 1 and 100."));
+  }
+
+  return this.http.post(
+    `${this.BASE_URL}/api/businesses/pay-owner`,request,
+    { }
+  );
+}
+
+getPaidHistory(businessId: number): Observable<any> {
+  return this.http.get(`${this.BASE_URL}/api/businesses/${businessId}/paid-history`);
 }
 
 }

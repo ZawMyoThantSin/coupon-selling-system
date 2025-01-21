@@ -35,4 +35,22 @@
       Save
     </button>
   </div>
+
+  <div *ngIf="showConfirmationModal" class="modal-backdrop">
+    <div class="confirmation-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Submission</h5>
+          <button type="button" class="btn-close" (click)="cancelSubmission()"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to save the category with the name: <strong>{{ formData.name }}</strong>?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" (click)="cancelSubmission()">Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" (click)="confirmSubmission()">Confirm</button>
+        </div>
+      </div>
+    </div>
+  </div>
   

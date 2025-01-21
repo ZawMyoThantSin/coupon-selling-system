@@ -11,11 +11,12 @@ import { Router, RouterLink } from '@angular/router';
 import { AddBusinessOwnerComponent } from './add-business-owner/add-business-owner.component';
 import { ToastrService } from 'ngx-toastr';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-business',
   standalone: true,
-  imports: [MdbTooltipModule, MdbRippleModule, CommonModule,RouterLink,NgxPaginationModule],
+  imports: [MdbTooltipModule, MdbRippleModule, CommonModule,RouterLink,NgxPaginationModule, FormsModule],
   templateUrl: './business.component.html',
   styleUrl: './business.component.css'
 })
@@ -28,6 +29,7 @@ export class BusinessComponent implements OnInit {
     currentPage = 1;
     itemsPerPage = 4;
 
+    searchTerm: string = '';
 
     constructor(private modalService: MdbModalService,
                 private toastr:ToastrService,
@@ -80,9 +82,14 @@ export class BusinessComponent implements OnInit {
 
       }
 
-
       getImageUrl(imagePath: string): string {
         return this.businessService.getImageUrl(imagePath);
       }
 
+      get filteredBusinesses(): Business[] {
+          return this.businesses.filter((business) =>
+            business.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+          );
+        }
+      
 }

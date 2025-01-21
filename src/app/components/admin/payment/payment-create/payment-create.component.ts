@@ -22,6 +22,9 @@ export class PaymentCreateComponent {
   selectedFile: File | null = null;
   imagePreview: string | ArrayBuffer | null = null;
 
+  showConfirmationModal: boolean = false;
+  formDataPreview: any = {};
+
   constructor(private fb: FormBuilder,
               private paymentService: PaymentService,
               private toastr: ToastrService,
@@ -60,11 +63,23 @@ export class PaymentCreateComponent {
     }
   }
 
-  onSubmit(): void {
+  showConfirmation(): void {
     if (this.paymentForm.invalid) {
       return;
     }
 
+    // Populate formDataPreview for modal
+    this.formDataPreview = {
+      payment_type: this.paymentForm.value.payment_type,
+      accountName: this.paymentForm.value.accountName,
+      accountNumber: this.paymentForm.value.accountNumber,
+      imagePreview: this.imagePreview,
+    };
+
+    this.showConfirmationModal = true; // Show confirmation modal
+  }
+
+  confirmSubmission(): void {
     const formData = new FormData();
     formData.append('payment_type', this.paymentForm.value.payment_type);
     formData.append('accountName', this.paymentForm.value.accountName);
@@ -72,14 +87,24 @@ export class PaymentCreateComponent {
     if (this.selectedFile) {
       formData.append('qr_image', this.selectedFile, this.selectedFile.name);
     }
-    this.paymentService.addPaymentMethod(formData).subscribe((res) => {
-      this.toastr.success("Payment Added Successfully!", "Success");
-      this.router.navigate(['d/payments'])
-      this.paymentForm.reset();
-      this.selectedFile = null;
-      this.imagePreview = null;
-    }, err => {
-      this.toastr.error("Error In Creating Payment", "Error");
-    });
+    this.paymentService.addPaymentMethod(formData).subscribe(
+      (res) => {
+        this.toastr.success('Payment Added Successfully!', 'Success');
+        this.router.navigate(['d/payments']);
+        this.paymentForm.reset();
+        this.selectedFile = null;
+        this.imagePreview = null;
+      },
+      (err) => {
+        this.toastr.error('Error In Creating Payment', 'Error');
+      }
+    );
+
+    this.showConfirmationModal = false; // Hide modal
+  }
+
+  cancelSubmission(): void {
+    this.toastr.info('Submission canceled.');
+    this.showConfirmationModal = false;
   }
 }

@@ -6,7 +6,7 @@
     <input
       type="text"
       class="form-control search-input"
-      placeholder="Search Friends by Email..."
+      placeholder="Add Friends by Email..."
       [(ngModel)]="searchQuery"
       (input)="onInput()"
       autocomplete="off"
@@ -48,6 +48,12 @@
             >
               See More
             </button>
+            <button
+        class="btn btn-outline-success btn-sm mt-2"
+        (click)="openChatWindow(friend.friendId, friend.friendName)"
+      >
+        <i class="fas fa-comment-alt"></i> Chat
+      </button>
             <button
               class="btn btn-outline-danger btn-sm mt-2"
               (click)="confirmUnfriend(friend.friendId)"

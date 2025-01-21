@@ -17,9 +17,7 @@ export class CustomersComponent {
   fund:any;
   customers:Customer[]= [];
   editMode: number | null = null; // Track the ID of the row being edited
-
-
-
+  searchTerm: string = '';      
 
   constructor(private customerService: CustomerService,
               private toastr: ToastrService
@@ -67,6 +65,11 @@ export class CustomersComponent {
   }
 
   getImageUrl(path:any){
-
+  }
+  
+  get filteredCustomers(): Customer[] {
+    return this.customers.filter((customer) =>
+      customer.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
   }
 }
