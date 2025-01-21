@@ -1,4 +1,4 @@
-<div class="d-flex min-vh-100">
+<div class="d-flex flex-column">
   <!-- This is the Sidebar -->
   <nav [class]="'sidebar ' + (isSidebarCollapsed ? 'collapsed' : 'expanded')">
     <div class="d-flex flex-column h-100">
@@ -108,150 +108,142 @@
 
 
     </div>
+
   </nav>
+  <header class="bg-white navbar bg-white shadow-sm px-3 py-2 d-flex justify-content-between align-items-center">
+    <div class="flex-grow-1 me-4">
+      <!-- write search box -->
+    </div>
 
-  <!-- I want to make this navbar  -->
-  <div class="flex-grow-1 bg-light vw-100" >
-    <!-- Header -->
-    <header class="bg-white shadow-sm px-3 py-2 d-flex justify-content-between align-items-center">
-      <div class="flex-grow-1 me-4">
-        <!-- write search box -->
+    <div class="d-flex align-items-center">
+      <!-- QR Scanner -->
+      <div class="me-1" *ngIf="shopExist" >
+        <button
+         class="btn btn-link"
+         (click)="openQrScanner()"
+         >
+          <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#4e73df"><path d="M80-680v-200h200v80H160v120H80Zm0 600v-200h80v120h120v80H80Zm600 0v-80h120v-120h80v200H680Zm120-600v-120H680v-80h200v200h-80ZM700-260h60v60h-60v-60Zm0-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm120-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm240-320v240H520v-240h240ZM440-440v240H200v-240h240Zm0-320v240H200v-240h240Zm-60 500v-120H260v120h120Zm0-320v-120H260v120h120Zm320 0v-120H580v120h120Z"/></svg>
+        </button>
       </div>
 
-      <div class="d-flex align-items-center">
-        <!-- QR Scanner -->
-        <div class="me-1" *ngIf="shopExist" >
-          <button
-           class="btn btn-link"
-           (click)="openQrScanner()"
-           >
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#4e73df"><path d="M80-680v-200h200v80H160v120H80Zm0 600v-200h80v120h120v80H80Zm600 0v-80h120v-120h80v200H680Zm120-600v-120H680v-80h200v200h-80ZM700-260h60v60h-60v-60Zm0-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm120-120h60v60h-60v-60Zm-60 60h60v60h-60v-60Zm-60-60h60v60h-60v-60Zm240-320v240H520v-240h240ZM440-440v240H200v-240h240Zm0-320v240H200v-240h240Zm-60 500v-120H260v120h120Zm0-320v-120H260v120h120Zm320 0v-120H580v120h120Z"/></svg>
-          </button>
-        </div>
+      <!-- Notification button triggering the dropdown -->
+      <div mdbDropdown class="d-flex me-3" *ngIf="shopExist" >
+        <button
+          class="btn btn-link position-relative me-2"
+          id="notificationDropdown"
+          mdbDropdownToggle
+          aria-expanded="false"
+        >
+          <i class="fas fa-bell fs-6"></i>
+          <span class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger">
+            3+
+          </span>
+        </button>
 
-        <!-- Notification button triggering the dropdown -->
-        <div mdbDropdown class="d-flex me-3" *ngIf="shopExist" >
-          <button
-            class="btn btn-link position-relative me-2"
-            id="notificationDropdown"
-            mdbDropdownToggle
-            aria-expanded="false"
-          >
-            <i class="fas fa-bell fs-6"></i>
-            <span class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger">
-              3+
-            </span>
-          </button>
-
-          <!-- Notification dropdown menu -->
-          <ul
-            mdbDropdownMenu
-            class="dropdown-menu dropdown-menu-end"
-            aria-labelledby="notificationDropdown"
-          >
-            <li>
-              <a class="dropdown-item" href="#">
-                <i class="fas fa-envelope me-2"></i>
-                New message received
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="#">
-                <i class="fas fa-user-plus me-2"></i>
-                New follower
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="#">
-                <i class="fas fa-exclamation-circle me-2"></i>
-                Alert: Action required
-              </a>
-            </li>
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li>
-              <a class="dropdown-item text-center" href="#">
-                View all notifications
-              </a>
-            </li>
-          </ul>
-        </div>
-
-
-        <!-- User Info -->
-        <div class="me-5">
-          <ul class="navbar-nav flex-row d-flex align-items-center me-4">
-            <li *ngIf="!isLoggedIn" class="nav-item me-3"><a routerLink="/login" class="text-decoration-underline text-dark">Login</a></li>
-              <li *ngIf="isLoggedIn" mdbDropdown class="nav-item ">
-                <a
-                  class="nav-link d-flex align-items-center"
-                  id="userMenuButton"
-                  role="button"
-                  mdbDropdownToggle
-                  aria-expanded="false"
-                >
-                  <img *ngIf="userInfo.authProvider == 'LOCAL'; else elseNoProfile"
-                    [src]="userInfo.profile == null ? '/images/default-avatar.png' : getUserProfile(userInfo.profile)  " alt="User Avatar"
-                    class="rounded-circle"
-                    height="40"
-                    width="40"
-                    alt="User Avatar"
-                  />
-                  <ng-template #elseNoProfile>
-                    <img
-                    [src]="userInfo.profile "
-                    class="rounded-circle"
-                    height="40"
-                    width="40"
-                    alt="User Avatar"
-                  />
-                  </ng-template>
-                </a>
-
-      <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
-        <div class="px-3 py-2">
-          <span class="d-block fw-bold">{{ userInfo.name || 'John Doe' }}</span>
-          <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
-        </div>
-
-        <div class="dropdown-divider mt-2 mb-2"></div>
-
-        <li>
-          <a class="dropdown-item" routerLink="/profile">
-            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-            <span class="ms-2">Profile</span>
-          </a>
-        </li>
-        <li>
-          <a class="dropdown-item" routerLink="/change-password">
-            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-           <span class="ms-2">Change Password</span>
-          </a>
-        </li>
-        <div class="dropdown-divider"></div>
-        <li>
-          <a class="dropdown-item" (click)="logoutButton()" >
-            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-           <span class="ms-2">Logout</span>
-          </a>
-        </li>
-      </ul>
-    </li>
-
-          </ul>
-        </div>
+        <!-- Notification dropdown menu -->
+        <ul
+          mdbDropdownMenu
+          class="dropdown-menu dropdown-menu-end"
+          aria-labelledby="notificationDropdown"
+        >
+          <li>
+            <a class="dropdown-item" href="#">
+              <i class="fas fa-envelope me-2"></i>
+              New message received
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#">
+              <i class="fas fa-user-plus me-2"></i>
+              New follower
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="#">
+              <i class="fas fa-exclamation-circle me-2"></i>
+              Alert: Action required
+            </a>
+          </li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+          <li>
+            <a class="dropdown-item text-center" href="#">
+              View all notifications
+            </a>
+          </li>
+        </ul>
       </div>
 
 
-    </header>
+      <!-- User Info -->
+      <div class="me-5">
+        <ul class="navbar-nav flex-row d-flex align-items-center me-4">
+          <li *ngIf="!isLoggedIn" class="nav-item me-3"><a routerLink="/login" class="text-decoration-underline text-dark">Login</a></li>
+            <li *ngIf="isLoggedIn" mdbDropdown class="nav-item ">
+              <a
+                class="nav-link d-flex align-items-center"
+                id="userMenuButton"
+                role="button"
+                mdbDropdownToggle
+                aria-expanded="false"
+              >
+                <img *ngIf="userInfo.authProvider == 'LOCAL'; else elseNoProfile"
+                  [src]="userInfo.profile == null ? '/images/default-avatar.png' : getUserProfile(userInfo.profile)  " alt="User Avatar"
+                  class="rounded-circle"
+                  height="40"
+                  width="40"
+                  alt="User Avatar"
+                />
+                <ng-template #elseNoProfile>
+                  <img
+                  [src]="userInfo.profile "
+                  class="rounded-circle"
+                  height="40"
+                  width="40"
+                  alt="User Avatar"
+                />
+                </ng-template>
+              </a>
 
-    <!-- Main Content Area -->
+    <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+      <div class="px-3 py-2">
+        <span class="d-block fw-bold">{{ userInfo.name || 'John Doe' }}</span>
+        <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
+      </div>
 
-  </div>
+      <div class="dropdown-divider mt-2 mb-2"></div>
 
-  <!-- This is the main content scrollable area -->
-  <main class=" main-content ">
+      <li>
+        <a class="dropdown-item" routerLink="/profile">
+          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+          <span class="ms-2">Profile</span>
+        </a>
+      </li>
+      <li>
+        <a class="dropdown-item" routerLink="/change-password">
+          <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+         <span class="ms-2">Change Password</span>
+        </a>
+      </li>
+      <div class="dropdown-divider"></div>
+      <li>
+        <a class="dropdown-item" (click)="logoutButton()" >
+          <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+         <span class="ms-2">Logout</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+
+        </ul>
+      </div>
+    </div>
+
+
+  </header>
+
+  <div class="main-content">
     <div *ngIf="loading" class="d-flex justify-content-center mt-3">
       <div class="spinner-border text-primary" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -268,5 +260,5 @@
     </div>
     <router-outlet></router-outlet>
 
-  </main>
+  </div>
 </div>

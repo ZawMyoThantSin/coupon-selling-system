@@ -60,3 +60,52 @@ button:disabled {
 .fa-times {
   color: #dc3545; /* Red color for the disabled icon */
 }
+ /* Default layout for large screens (left-right) */
+ .section-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* Two equal-width columns */
+  gap: 20px;
+  max-width: 1200px; /* Control the maximum width for large screens */
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+.what-you-get, .how-to-use {
+  grid-column: 1;  /* Place on the left column */
+}
+
+.when-you-get, .fine-print {
+  grid-column: 2;  /* Place on the right column */
+}
+.product-actions, .coupon-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Align to the start by default for larger screens */
+  gap: 15px;
+}
+
+.product-actions {
+  margin-bottom: 15px;
+}
+
+.coupon-info img {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.quantity-input {
+  text-align: center;
+  width: 50px; /* Set a fixed width for the quantity input */
+}
+/* Mobile layout (stack sections) */
+@media (max-width: 768px) {
+  .section-container {
+    display: block;  /* Stack the sections vertically */
+    margin: 0 20px;  /* Add some margin on the sides for smaller screens */
+  }
+
+  .what-you-get, .how-to-use, .when-you-get, .fine-print {
+    margin-bottom: 20px;  /* Space between sections */
+  }
+}

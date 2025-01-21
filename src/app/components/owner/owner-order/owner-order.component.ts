@@ -10,6 +10,7 @@ import { MdbRippleModule } from 'mdb-angular-ui-kit/ripple';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ProductService } from '../../../services/product/product.service';
 import { FormsModule } from '@angular/forms';
+import { BusinessService } from '../../../services/business/business.service';
 
 
 interface ownerOrder{
@@ -36,7 +37,7 @@ interface ownerOrder{
 
 export class OwnerOrderComponent {
   ownerOrder:ownerOrder[]=[];
-  business_id!: number;
+  business_id: number | null = null;
   user_id!: number;
   // token:any;
 
@@ -47,31 +48,30 @@ export class OwnerOrderComponent {
   currentPage = 1;
   itemsPerPage = 4;
 
-    
+
 
 
     constructor(
       private ownerOrderService:AdminOrderService,
+      private businessService: BusinessService,
        private productService:ProductService
     ) {}
-  
-    ngOnInit(): void {
-      // Get businessId from route parameters
-      // this.route.paramMap.subscribe((params) => {
-      //   this.business_id = Number(params.get('id'));
-      //   this.token = this.storageService.getItem('token');
-        
-      this.ownerOrderService.getOrderByBusinessId(1).subscribe(
 
-        (response) => {
-          this.ownerOrder = response;
-          this.filteredOrders = [...this.ownerOrder]; // Initialize filtered orders
-           console.log('Owner Order',this.ownerOrder)
-        },
-        (error) => {
-          console.error('ERROR IN FETCHING: ', error);
-        }
-      );
+    ngOnInit(): void {
+      this.businessService.businessId$.subscribe((id)=>{
+        this.business_id = id;
+        this.ownerOrderService.getOrderByBusinessId(this.business_id).subscribe(
+
+          (response) => {
+            this.ownerOrder = response;
+            this.filteredOrders = [...this.ownerOrder]; // Initialize filtered orders
+             console.log('Owner Order',this.ownerOrder)
+          },
+          (error) => {
+            console.error('ERROR IN FETCHING: ', error);
+          }
+        );
+      })
     };
 
     getProductImage(imagePath: string): string {
@@ -82,12 +82,12 @@ export class OwnerOrderComponent {
       if (this.dateFilterStart || this.dateFilterEnd) {
         const startDate = this.dateFilterStart ? new Date(this.dateFilterStart + 'T00:00:00Z') : null;
         const endDate = this.dateFilterEnd ? new Date(this.dateFilterEnd + 'T23:59:59Z') : null;
-    
+
         if (startDate && endDate && startDate > endDate) {
           alert('Start Date cannot be after End Date.');
           return;
         }
-    
+
         this.filteredOrders = this.ownerOrder.filter((order) => {
           const orderDate = new Date(order.orderDate);
           if (startDate && endDate) {
@@ -103,11 +103,11 @@ export class OwnerOrderComponent {
         this.filteredOrders = [...this.ownerOrder];
       }
     }
-    
+
     getTotalPriceForBusiness(): number {
       return this.filteredOrders.reduce((total, order) => total + order.totalPrice, 0);
     }
-    
+
   /// Filter orders based on date range
   // filterOrdersByDate(): void {
   //   const startDate = this.dateFilterStart ? new Date(this.dateFilterStart) : null;

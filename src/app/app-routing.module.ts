@@ -51,8 +51,8 @@ import { UsedCouponComponent } from './components/owner/owner-dashboard/used-cou
 import { CouponCardComponent } from './components/home/homepage/coupon-card/coupon-card.component';
 
 const routes: Routes = [
-  {path:'', redirectTo:'d',pathMatch:'full'},
-  {path:'d', component:DashboardComponent, title:'Dashboard',
+  {path:'', redirectTo:'d', pathMatch:'full'},
+  {path:'d', component:DashboardComponent, title:'Dashboard', canActivate: [dashboardGuard],
     children:[
       {path:'carousel', component:HomeCarouselComponent},
       {path:'business', component:BusinessComponent, title:'Business'},
@@ -72,7 +72,7 @@ const routes: Routes = [
 
     ]
   },
-  {path:'o', component:OwnerDashboardComponent,
+  {path:'o', component:OwnerDashboardComponent, canActivate: [dashboardGuard],
     children:[
       {path:'',  component:CouponSaleBarChartComponent},
       {path:'order', component:OwnerOrderComponent, title:'order'},
@@ -90,9 +90,9 @@ const routes: Routes = [
 
     ]
   },
-  {path:'homepage', component:HomeComponent, title:'Home Page',
+  {path:'homepage', component:HomeComponent, title:'Home Page', canActivate: [dashboardGuard],
     children:[
-      {path: '', redirectTo: 'page', pathMatch: 'full' },
+      {path: '', component:HomepageComponent, title:'Home'},
       {path:'cart', component:AddToCartComponent},
       {path:'order', component:UserOrderComponent, },
       {path:'order-history', component:OrderHistoryComponent, title:'History'},
@@ -102,7 +102,6 @@ const routes: Routes = [
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},
       {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
-      {path:'page', component:HomepageComponent, title:'Home'},
       {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
       {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},
       {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}

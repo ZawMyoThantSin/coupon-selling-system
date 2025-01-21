@@ -8,55 +8,50 @@ export const dashboardGuard: CanActivateFn = (route, state) => {
   const storageService: StorageService = inject(StorageService);
   const tokenService: JwtService = inject(JwtService);
 
-  // Check if running in the browser (to handle SSR issues)
   if (typeof window === 'undefined') {
     console.warn("SSR detected: Skipping token validation.");
-    return true; // Allow navigation during SSR
+    return true;
   }
 
-  // Fetch the token from local storage (browser-only)
   const token = storageService.getItem("token");
   if (!token) {
     console.warn("No token found. Redirecting to login.");
     router.navigate(['/login']);
-    return false; // Prevent navigation
+    return false;
   }
 
-  // Decode the token and get the user role
   const userRole = tokenService.getUserRole(token);
   console.log("Role detected:", userRole);
 
-  // Role-based navigation enforcement
   if (userRole === 'ROLE_ADMIN') {
     if (state.url === '/d') {
-      return true; // Allow admin to access the dashboard
+      return true;
     } else {
-      router.navigate(['/d']); // Redirect to admin dashboard
-      return false; // Block other routes
+      router.navigate(['/d']);
+      return false;
     }
   }
 
-  if (userRole === 'ROLE_OWNER') {
+  if (userRole === 'OWNER') {
     if (state.url === '/o') {
-      return true; // Allow owner to access the owner dashboard
+      return true;
     } else {
-      router.navigate(['/o']); // Redirect to owner dashboard
-      return false; // Block other routes
+      router.navigate(['/o']);
+      return false;
     }
   }
 
-  if (userRole === 'USER') {
+  if (userRole === 'ROLE_USER') {
     if (state.url === '/homepage') {
-      return true; // Allow user to access the homepage
+      return true;
     } else {
-      router.navigate(['/homepage']); // Redirect to user homepage
-      return false; // Block other routes
+      router.navigate(['/homepage']);
+      return false;
     }
   }
 
-  // Handle cases where role is invalid or missing
   console.warn("Invalid or missing role. Redirecting to login.");
   router.navigate(['/login']);
-  return false; // Prevent navigation
+  return false;
 };
 

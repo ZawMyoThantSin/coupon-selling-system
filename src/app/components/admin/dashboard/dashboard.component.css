@@ -1,6 +1,6 @@
 .sidebar {
   min-height: 100vh;
-  background-color: #4e73df;
+  background-color: #818375;
   transition: width 0.3s;
   position: fixed;
   top: 0px; /* Adjust based on the height of your navbar */

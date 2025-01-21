@@ -1,87 +1,83 @@
+/* General styles */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f9;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  position: relative;
-}
-* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-.payment-container {
-  position: absolute;
-  top: 80%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
 
 .payment-container {
-  width: 700px;
-  background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
-  padding: 20px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 20px;
+  padding: 20px;
+  width: 100%;
+  max-width: 100%;
+  margin: auto;
 }
 
 .owner-info {
-  flex: 1;
   text-align: center;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.owner-info img {
-  width: 180px;
-  height: 180px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  object-fit: cover;
+.owner-photo {
+  width: 100%;
+  max-width: 200px; /* Default size for small screens */
+  height: auto;
+  border-radius: 8px;
   margin-bottom: 10px;
+  border: 3px solid #ddd;
+  object-fit: cover;
 }
 
 .owner-info p {
   margin: 5px 0;
-  font-size: 0.9em;
-  font-weight: bold;
+  font-size: 14px;
+  color: #555;
 }
 
 .form-section {
-  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.form-group label {
-  display: block;
+label {
+  font-size: 14px;
   font-weight: bold;
-  margin-bottom: 5px;
+  color: #333;
 }
 
-.form-group select,
-.form-group input,
-.form-group textarea {
+input, select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
   width: 100%;
-  padding: 10px;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 5px;
 }
-
-textarea {
-  resize: none;
-  height: 80px;
+/* Style for the scrollable div */
+.scroll-div {
+  max-height: 200px;  /* Set the height to allow scroll after 3 items */
+  overflow-y: auto;   /* Enable vertical scrolling */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  background-color: #f9f9f9;
 }
 
 .scroll-div {
@@ -103,123 +99,110 @@ textarea {
   margin: 5px 0;
 }
 
+.scroll-div a:hover {
+  text-decoration: underline;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 10px; /* Reduced padding to make the modal smaller */
+  border-radius: 8px;
+  text-align: center;
+  position: relative;
+  width: 200px; /* Set smaller width for the modal */
+  max-width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+}
+
+.modal-image {
+  max-width: 70%; /* Reduce the size of the image */
+  height: auto;
+  margin-bottom: 10px; /* Adjust margin for spacing */
+}
+
+.close {
+  display: none;
+}
 .buttons {
   display: flex;
-  justify-content: space-between;
   gap: 10px;
+  justify-content: space-between;
 }
 
 .btn {
-  padding: 10px 20px;
-  font-size: 1em;
-  border: none;
-  border-radius: 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 4px;
   cursor: pointer;
+  border: none;
 }
 
 .btn-cancel {
   background-color: #f44336;
-  color: white;
+  color: #fff;
 }
 
 .btn-ok {
   background-color: #4caf50;
-  color: white;
-}
-.preview-image {
-  max-width: 200px; /* Set the maximum width */
-  max-height: 200px; /* Set the maximum height */
-  object-fit: contain; /* Preserve aspect ratio */
-  border: 1px solid #ccc; /* Optional: Add a border */
-  margin-top: 10px; /* Optional: Add spacing */
-}
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  max-width: 80%;
-}
-
-.modal-image {
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 15px;
-}
-
-.close {
-  display: none;
-}
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-  position: relative;
-  width: 300px;
-  max-width: 80%;
-}
-
-.modal-image {
-  max-width: 100%;
-  height: auto;
-  margin-bottom: 15px;
-}
-
-.close {
-  display: none;
-}
-
-.tooltip-container {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip-container .tooltip-message {
-  visibility: hidden;
-  background-color: #555;
   color: #fff;
-  text-align: center;
-  border-radius: 5px;
-  padding: 5px;
-  position: absolute;
-  bottom: 125%; /* Position above the button */
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
-  opacity: 0;
-  transition: opacity 0.3s;
 }
 
-.tooltip-container:hover .tooltip-message {
-  visibility: visible;
-  opacity: 1;
+.preview-container {
+  margin-top: 10px;
+}
+
+.preview-image {
+  width: 100%;
+  max-width: 150px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Responsive styles */
+@media (min-width: 768px) {
+  .payment-container {
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+  }
+
+  .buttons {
+    justify-content: flex-end;
+  }
+
+  .owner-photo {
+    width: 100%;
+    max-width: 250px; /* Larger size for laptops */
+    height: auto;
+  }
+
+  .modal-content {
+    width: 30%;
+  }
+
+  .form-section {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .owner-photo {
+    width: 100%;
+    max-width: 300px; /* Even larger size for bigger screens like desktops */
+    height: auto;
+  }
 }

@@ -1,26 +1,69 @@
+table {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
+th, td {
+  text-align: center;
+  font-size: 14px;
+  padding: 0.5rem;
+  word-wrap: break-word;
+}
+
+/* Responsive Table Container */
+.table-container {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Smaller Screens */
+@media (max-width: 576px) {
+  table th,
+  table td {
+    font-size: 12px;
+    padding: 0.25rem;
+  }
+
+  .btn {
+    font-size: 12px;
+    padding: 0.3rem 0.6rem;
+  }
+
+  /* Show all columns */
+  th:nth-child(4), td:nth-child(4), /* Price column */
+  th:nth-child(5), td:nth-child(5)  /* Exp Date column */
+  {
+    display: table-cell; /* Ensure visibility */
+  }
+
+  /* Align Checkout Button */
+  td:last-child {
+    text-align: center;
+  }
+}
+
+/* Button Styling */
+button.btn-primary.btn-lg {
+  width: 100%; /* Ensure full width on smaller screens */
+}
+
+/* Empty Cart Text */
 .nothing-added-to-cart {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 80vh;
   text-align: center;
-  color: #6c757d;
-}
-
-.nothing-added-to-cart .cart-icon {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  color: #007bff;
 }
 
 .nothing-added-to-cart p {
-  font-size: 1.5rem;
+  font-size: 1rem;
   margin-bottom: 1rem;
-  font-weight: bold;
 }
 
 .nothing-added-to-cart button {
-  padding: 0.5rem 1.5rem;
-  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
 }

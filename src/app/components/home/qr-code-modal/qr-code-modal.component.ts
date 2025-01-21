@@ -6,6 +6,7 @@ import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { PurchaseCoupon } from '../../../models/purchase-coupon';
 import { ProductService } from '../../../services/product/product.service';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
+import { getDefaultAppConfig } from '../../../models/appConfig';
 
 @Component({
   selector: 'app-qr-code-modal',
@@ -110,7 +111,7 @@ export class QrCodeModalComponent {
     this.isLoading = true;
     this.error = null;
 
-    this.http.get<any>(`http://localhost:8080/api/sale-coupon/qr/${id}`, { responseType: 'json' })
+    this.http.get<any>(`${getDefaultAppConfig().backendHost}/api/sale-coupon/qr/${id}`, { responseType: 'json' })
       .subscribe(
         (res) => {
           this.qrData = res.qrcode;

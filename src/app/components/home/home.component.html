@@ -1,7 +1,7 @@
 <mat-toolbar class="navbar">
   <div class="navbar-container">
     <!-- Logo -->
-    <a class="navbar-brand" routerLink="/homepage/page">
+    <a class="navbar-brand" routerLink="/homepage">
       <!-- Add logo here -->
        CS
       <!-- <img src="assets/logo.svg" alt="Logo" width="24" height="24"> -->
@@ -14,7 +14,7 @@
 
     <!-- Desktop Navigation -->
     <div class="nav-items" [class.show]="isMenuOpen || isDesktop">
-      <a class="mx-2" routerLink="/homepage/page" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <a class="mx-2" routerLink="/homepage" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
       <a class="mx-2" routerLink="/homepage/products" routerLinkActive="active">Promotions</a>
       <a class="mx-2" routerLink="/homepage/purchase-coupon" routerLinkActive="active">Coupons</a>
       <a class="mx-2" routerLink="/homepage/aboutus" routerLinkActive="active">About us</a>
@@ -54,7 +54,7 @@
             </ng-template>
           </a>
 
-          <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end px-3" aria-labelledby="userMenuButton" >
+          <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end px-3 py-2" aria-labelledby="userMenuButton" >
             <div class="px-3 py-2">
               <span class="d-block fw-bold">{{ userInfo.name || 'John Doe' }}</span>
               <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
