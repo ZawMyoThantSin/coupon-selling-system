@@ -1,5 +1,5 @@
 
-<div class="business-detail-page container py-4" *ngIf="shopExist">
+<div class="business-detail-page container py-2" *ngIf="shopExist">
   <!-- Business Header Section with Photo Banner -->
   <div class="business-header rounded mb-4 position-relative overflow-hidden">
     <img
@@ -23,43 +23,144 @@
         <h5 class="mb-3">About the Business</h5>
         <p>{{ business.description }}</p>
 
-        <!-- Rating Below the Description -->
-        <!-- <div class="rating mt-2">
-          <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
-            <i
-              class="fas"
-              [class.fa-star]="i < Math.floor(business.rating)"
-              [class.fa-star-half-alt]="
-                i === Math.floor(business.rating) &&
-                business.rating % 1 !== 0
-              "
-              [class.fa-star-o]="i >= business.rating"
-            ></i>
-          </ng-container>
-          <span class="ms-2">({{ business.rating }} / 5)</span>
-        </div> -->
-      </div>
 
-      <!-- Stream Section -->
-      <!-- <div class="business-stream bg-white rounded p-3">
-        <h5 class="mb-3">
-          <i class="fas fa-stream me-2"></i>Recent Updates
-        </h5>
-        <ul class="list-unstyled">
-          <li *ngFor="let post of business.posts" class="mb-3">
-            <div class="post-header d-flex align-items-center mb-2">
-              <i class="fas fa-user-circle fa-2x me-3 text-primary"></i>
+      </div>
+<!-- Ratings and Reviews Section -->
+<div class="ratings-reviews bg-white rounded shadow-sm p-4 mt-4">
+  <h5 class="mb-4">Ratings and Reviews</h5>
+  <div class="d-flex align-items-center mb-3">
+    <div class="me-3">
+      <span class="text-warning fs-4">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star"></i><i class="fas fa-star"></i>
+        <i class="fas fa-star-half-alt"></i>
+      </span>
+      <span class="ms-2 text-muted fs-5">
+        {{ (ratingCount[5] * 5 + ratingCount[4] * 4 + ratingCount[3] * 3 + ratingCount[2] * 2 + ratingCount[1] * 1) / totalRatings | number:'1.1-1' }}
+        out of 5
+      </span>
+    </div>
+  </div>
+  <p class="text-muted mb-4">{{ totalRatings }} Customer ratings</p>
+<div class="rating-bars">
+  <div class="rating-bar d-flex align-items-center mb-2">
+    <span class="text-muted me-2">5 star</span>
+    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+      <div
+        class="progress-bar bg-warning"
+        role="progressbar"
+        [style.width]="(ratingCount[5] / totalRatings) * 100 + '%'"
+        aria-valuenow="70"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      ></div>
+    </div>
+    <span class="text-muted">{{ ratingCount[5] }} reviews</span>
+  </div>
+
+  <div class="rating-bar d-flex align-items-center mb-2">
+    <span class="text-muted me-2">4 star</span>
+    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+      <div
+        class="progress-bar bg-warning"
+        role="progressbar"
+        [style.width]="(ratingCount[4] / totalRatings) * 100 + '%'"
+        aria-valuenow="20"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      ></div>
+    </div>
+    <span class="text-muted">{{ ratingCount[4] }} reviews</span>
+  </div>
+
+  <div class="rating-bar d-flex align-items-center mb-2">
+    <span class="text-muted me-2">3 star</span>
+    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+      <div
+        class="progress-bar bg-warning"
+        role="progressbar"
+        [style.width]="(ratingCount[3] / totalRatings) * 100 + '%'"
+        aria-valuenow="5"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      ></div>
+    </div>
+    <span class="text-muted">{{ ratingCount[3] }} reviews</span>
+  </div>
+
+  <div class="rating-bar d-flex align-items-center mb-2">
+    <span class="text-muted me-2">2 star</span>
+    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+      <div
+        class="progress-bar bg-warning"
+        role="progressbar"
+        [style.width]="(ratingCount[2] / totalRatings) * 100 + '%'"
+        aria-valuenow="3"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      ></div>
+    </div>
+    <span class="text-muted">{{ ratingCount[2] }} reviews</span>
+  </div>
+
+  <div class="rating-bar d-flex align-items-center">
+    <span class="text-muted me-2">1 star</span>
+    <div class="progress flex-grow-1 me-2" style="height: 8px;">
+      <div
+        class="progress-bar bg-warning"
+        role="progressbar"
+        [style.width]="(ratingCount[1] / totalRatings) * 100 + '%'"
+        aria-valuenow="2"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      ></div>
+    </div>
+    <span class="text-muted">{{ ratingCount[1] }} reviews</span>
+  </div>
+</div>
+
+  <!-- Show More Button -->
+  <p class="text-center mt-4">
+    <a href="#" class="text-primary text-decoration-underline" (click)="openRatingModal($event)">See More?</a>
+  </p>
+
+</div>
+
+<!-- Rating List Modal -->
+<div *ngIf="showModal" class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="ratingModalLabel" aria-hidden="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ratingModalLabel">Rating List</h5>
+        <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngFor="let review of rating">
+          <div class="d-flex mb-3">
+            <img *ngIf="review.profile" [src]="review.profile" alt="User Profile" class="rounded-circle me-2" width="40" height="40">
+            <div>
+              <h6>{{ review.userName }}</h6>
               <div>
-                <p class="mb-0 fw-bold">{{ post.author }}</p>
-                <small class="text-muted">{{
-                  post.date | date: "short"
-                }}</small>
+                <span class="text-warning">
+                  <i *ngFor="let star of [].constructor(review.count); let i = index" class="fas fa-star"></i>
+                </span>
               </div>
+              <p>{{ review.message }}</p>
             </div>
-            <p class="post-content">{{ post.content }}</p>
-          </li>
-        </ul>
-      </div> -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
     </div>
 
     <div class="col-md-4">
@@ -82,12 +183,12 @@
   >
     <i class="fas fa-edit me-2"></i>Edit Business
   </button>
-  <button class="btn btn-primary w-100 mb-2" >
+  <!-- <button class="btn btn-primary w-100 mb-2" >
     <i class="fas fa-phone-alt me-2"></i>Contact
   </button>
         <button class="btn btn-outline-secondary w-100">
           <i class="fas fa-map-marker-alt me-2"></i>Get Directions
-        </button>
+        </button> -->
       </div>
     </div>
     <hr>

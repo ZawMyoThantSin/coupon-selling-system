@@ -3,6 +3,7 @@ import { MdbModalRef } from 'mdb-angular-ui-kit/modal';
 import { QRCodeComponent, QRCodeModule  } from 'angularx-qrcode';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { getDefaultAppConfig } from '../../../models/appConfig';
 
 
 @Component({
@@ -31,7 +32,7 @@ export class QrTEstModalComponent {
     this.isLoading = true;
     this.error = null;
 
-    this.http.get<any>(`http://localhost:8080/api/orders/sale/${id}`, { responseType: 'json' })
+    this.http.get<any>(`${getDefaultAppConfig().backendHost}/api/orders/sale/${id}`, { responseType: 'json' })
       .subscribe(
         (res) => {
           this.qrData = res.qrcode;

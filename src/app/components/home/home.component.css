@@ -1,97 +1,131 @@
-/* Sidebar Styling */
-.sidebar {
-    position: fixed;
-    top: 0;
-    left: -250px; /* Initially hidden */
-    bottom: 0;
-    width: 250px;
-    color: white;
-    padding-top: 20px;
-    transition: left 0.3s ease, background-color 0.3s ease;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-    z-index: 1040;
-  }
-
-  .active{
-    background-color: #fcf9ddec;
-    border-radius: 20px;
-
-  }
-
-  .sidebar.open {
-    left: 0; /* Show sidebar when open */
-  }
-
-  .sidebar a {
-    text-decoration: none;
-    color: black;
-    padding: 10px 20px;
-    display: flex;
-    font-size: 16px;
-    align-items: center;
-    font-weight: 500;
-    transition: background-color 0.3s, color 0.3s;
-  }
-
-  .sidebar a i {
-    margin-right: 12px; /* Space between icon and text */
-    font-size: 18px; /* Consistent icon size */
-  }
-
-  .sidebar a:hover {
-    background-color: #e6d6d6;
-  }
-
-  /* Content area for scrollable content */
-  .content-area {
-    margin-left: 0; /* By default, the content takes full width */
-    margin-top: 50px; /* Space for navbar */
-    /* padding: 20px; */
-    height: 100vh;
-    overflow-y: auto;
-    transition: margin-left 0.3s ease;
-  }
-
-  /* Adjust content area when sidebar is open */
-  .sidebar.open + .content-area {
-    margin-left: 250px; /* Shift content to the right when sidebar is open */
-  }
-
-  /* Optional: Customizing navbar for better visibility */
-  .navbar {
-    z-index: 1050; /* Ensure navbar is on top */
-  }
-
-  /* Notifications Badge */
-.nav-link .badge {
-  font-size: 0.8rem;
-  padding: 0.4em 0.6em;
-}
-
-/* Dropdown Styling */
-
-
-.dropdown-item {
-  font-size: 0.9rem;
-  white-space: normal; /* Allow wrapping for longer messages */
-}
-
-.dropdown-item:hover {
-  background-color: #f8f9fa; /* Subtle hover effect */
-}
-
-/* Alignments for Dropdown Menu */
-.dropdown-menu-end {
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
   right: 0;
-  left: auto;
+  height: 60px;
+  padding: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  z-index: 1000;
+  transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
 }
 
-  /* Hamburger icon styles */
-  /* .navbar-toggler {
-    border: none;
-    background: transparent;
-  } */
+.navbar:hover {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-bottom-color: rgba(0, 0, 0, 0.1);
+}
 
-  /* .navbar-toggler .fas {
-    font-size: 28px;
-  } */
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 1rem;
+  height: 100%;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.nav-items {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.nav-items a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: color 0.2s ease;
+}
+
+.nav-items a:hover {
+  color: #000;
+}
+
+.nav-items a.active {
+  color: #000;
+  font-weight: 600;
+}
+
+main {
+  margin-top: 60px;
+  padding: 1rem;
+}
+
+.hamburger {
+  display: none;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+
+@media (max-width: 991.98px) {
+  .hamburger {
+    display: block;
+    margin-left: auto;
+  }
+
+  .nav-items {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: white;
+    padding: 1rem;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transform: translateY(-20px);
+    opacity: 0;
+    pointer-events: none;
+
+  }
+
+  .avatar{
+    margin-right: 0px;
+  }
+
+  .nav-items.show {
+    display: flex;
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease;
+  }
+
+  .nav-items a {
+    width: 100%;
+    padding: 0.5rem 0;
+  }
+
+  .pro-button {
+    display: none;
+  }
+
+  .nav-items.show + .pro-button {
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.8;
+  }
+}

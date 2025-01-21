@@ -35,12 +35,12 @@ export class UserOrderComponent {
   selectedProduct: any = null;
   previewUrl: string | null = null;
 
-  //Buy
+
+//Buy
 
   productName = '';
   quantity = 1;
   totalPrice = 0;
-
   userId:any;
   token:any;
   constructor(private userOrderService: UserOrderService,
@@ -53,6 +53,7 @@ export class UserOrderComponent {
     private storageService : StorageService,
     private jwtService : JwtService
   ) {}
+
 
   ngOnInit(): void {
     // Fetch payment methods from the service
@@ -164,8 +165,8 @@ export class UserOrderComponent {
         this.toastr.success('Order submitted successfully!', 'Success');
         if(this.cartIds){
            this.cartIds.map(c => {
-          this.cartService.clearCart(c).subscribe(res => {
-            this.router.navigateByUrl('/homepage/order-history');
+           this.cartService.clearCart(c).subscribe(res => {
+            this.router.navigate(['/homepage/order-history']);
           });
         });
         }
@@ -233,5 +234,4 @@ export class UserOrderComponent {
     }
     return this.productService.getImageUrl(imagePath);
   }
-
 }

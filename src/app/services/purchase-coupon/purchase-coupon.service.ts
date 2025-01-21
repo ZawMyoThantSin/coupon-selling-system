@@ -50,6 +50,18 @@ this.websocketService.disconnect();
 
     getSaleCouponById(saleCouponId: number): Observable<any> {
       return this.http.get<any>(`${this.BASE_URL}/${saleCouponId}`);
-  }
+    }
+
+    getCurrentMonthEarnings(id: number): Observable<number> {
+      return this.http.get<number>(this.BASE_URL + '/business-earnings/monthly/'+id, {
+        responseType: 'json'
+      });
+    }
+
+    getCurrentYearEarnings(id: number): Observable<number> {
+      return this.http.get<number>(this.BASE_URL + '/business-earnings/yearly/'+id, {
+        responseType: 'json'
+      });
+    }
 
 }

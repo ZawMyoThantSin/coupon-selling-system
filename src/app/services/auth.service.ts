@@ -83,4 +83,13 @@ export class AuthService {
 
     return this.http.post(`${this.BASE_URL}/public/change-password`, body, { headers });
   }
+
+  validateEmail(email: string): Observable<any> {
+    return this.http.get(`${this.BASE_URL}/public/validate-email`, {
+      params: {
+        email,
+        ipAddress: '156.124.12.145', // Replace with actual IP if needed
+      },
+    });
+  }
 }

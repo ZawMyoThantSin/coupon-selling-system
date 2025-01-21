@@ -1,4 +1,5 @@
 export interface CartData{
+ 
   cartId: number,
   userId: number,
   couponId: number,

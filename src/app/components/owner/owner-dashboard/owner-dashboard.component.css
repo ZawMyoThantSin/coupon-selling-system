@@ -1,62 +1,85 @@
+  /* Sidebar */
 .sidebar {
-  min-height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
   background-color: #4e73df;
   transition: width 0.3s;
-
-  &.expanded {
-    width: 256px;
-  }
-
-  &.collapsed {
-    width: 80px;
-  }
+  overflow: hidden;
+  z-index: 999;
 }
 
-.sidebar-link {
+.sidebar.expanded {
+  width: 256px;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.sidebar .nav-link {
   color: rgba(255, 255, 255, 0.8);
   transition: all 0.3s;
-
-  &:hover {
-    color: white;
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-}
-/*
-.metric-card {
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-  }
-} */
-
-.notification-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
 }
 
-.progress-bar-custom {
-  height: 8px;
-}
-
-.active{
+.sidebar .nav-link:hover {
   color: white;
   background-color: rgba(255, 255, 255, 0.1);
 }
-.inActive{
-  background-color: #4e73df;
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  z-index: 888;
 }
-.disabled {
-  pointer-events: none; /* Prevent interaction */
-  opacity: 0.5; /* Visually disable the link */
+
+/* Main Content */
+.main-content {
+  margin-top: 70px; /* Height of the navbar */
+  margin-left: 256px; /* Default expanded sidebar width */
+  padding: 16px;
+  overflow-y: auto;
+  min-height: calc(100vh - 70px); /* Full height minus navbar height */
+  transition: margin-left 0.3s;
 }
+
+/* Adjust margin-left when the sidebar is collapsed */
+.sidebar.collapsed ~ .main-content {
+  margin-left: 80px;
+}
+
+
+  /* Utility Classes */
+  .notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+  }
+
+  .progress-bar-custom {
+    height: 8px;
+  }
+
+  .active {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .inActive {
+    background-color: #4e73df;
+  }
+
+  .disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+
 
 /*  If not created Shop  */
 .shop-setup-placeholder {

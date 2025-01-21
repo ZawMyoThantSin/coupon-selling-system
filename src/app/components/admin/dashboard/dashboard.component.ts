@@ -17,7 +17,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit{
-  sidebarOpen: boolean = false; // Flag to control the sidebar visibility
+  sidebarOpen: boolean = true; // Flag to control the sidebar visibility
   activeRoute: any = '';
   isLoggedIn: boolean = false;
   businesses: Business[] = []; // Array to store fetched businesses
@@ -43,6 +43,8 @@ export class DashboardComponent implements OnInit{
   }
 
   handleWebSocketMessages():void{
+    this.websocketService.connect();
+
     this.websocketService.onMessage().subscribe((message) => {
       console.log("MSG", message)
       if(message =="ORDER_CREATED"){

@@ -9,7 +9,7 @@ import { getDefaultAppConfig } from '../../models/appConfig';
 export class WebsocketService {
   private socket!: WebSocket;
   private messageSubject = new Subject<any>();
-  private readonly serverUrl = `ws://localhost:8080/ws`;
+  private readonly serverUrl = `ws://${getDefaultAppConfig().websocketHost}/ws`;
   private reconnectAttempts = 0;
   private readonly maxReconnectAttempts = 10;
   private readonly reconnectDelay = 5000;

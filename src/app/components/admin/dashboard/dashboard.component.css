@@ -1,115 +1,61 @@
-/* Sidebar Styling */
 .sidebar {
+  min-height: 100vh;
+  background-color: #818375;
+  transition: width 0.3s;
   position: fixed;
-  top: 0;
-  left: -250px; /* Initially hidden */
-  bottom: 0;
-  width: 250px;
-  color: black; /* Updated text color to black */
-  padding-top: 20px;
-  background-color: #f8f9fa; /* Lighter background color */
-  transition: left 0.3s ease;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Lighter shadow for depth */
+  top: 0px; /* Adjust based on the height of your navbar */
+  left: 0;
+  height: 100%;
+  width: 250px; /* Adjust based on your sidebar width */
+  z-index: 999; /* Ensure it stays on top */
+
+  &.expanded {
+    width: 256px;
+  }
+
+  &.collapsed {
+    width: 80px;
+  }
 }
 
-.sidebar.open {
-  left: 0; /* Show sidebar when open */
+.sidebar-link {
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s;
+
+  &:hover {
+    color: white;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 }
 
-/* Active link styling */
+.notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+}
+
+.progress-bar-custom {
+  height: 8px;
+}
+
 .active {
-  background-color: #e2e6ea; /* Soft active background color */
-  border-radius: 20px;
-  color: #495057; /* Slightly darker text for active item */
-  font-weight: bold; /* Make active links more prominent */
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Sidebar links */
-.sidebar a {
-  text-decoration: none;
-  color: #495057; /* Updated default link color to dark gray */
-  padding: 10px 20px;
-  display: block;
-  font-size: 16px;
-  transition: background-color 0.3s, color 0.3s;
+.inActive {
+  background-color: #4e73df;
 }
 
-/* Hover effect for links */
-.sidebar a:hover {
-  background-color: #e2e6ea; /* Soft hover background */
-  color: #10171f; /* Blue color for links on hover */
-  border-radius: 30px;
-  cursor: pointer;
-}
-
-/* Business list styling */
-.business-list .business-item {
-  /* Keeping your original styles intact */
-  padding: 8px 20px;
-  color: #495057;
-  font-size: 15px;
-  transition: background-color 0.3s, color 0.3s;
-  display: flex;
-  flex-direction: row; /* Ensures avatar is above the name */
-  align-items: center;
-  justify-content: start; /* Centers avatar and text */
-}
-
-.business-list .business-item:hover {
-  /* Keeping your original hover effect */
-  background-color: #e2e6ea;
-  color: #4a5058;
-  border-radius: 15px;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.business-avatar {
-  margin-bottom: 8px; /* Adds spacing between avatar and name */
-}
-
-.avatar {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 20px;
-}
-
-/* Content area for scrollable content */
-.content-area {
-  margin-left: 0; /* By default, the content takes full width */
-  margin-top: 50px; /* Space for navbar */
-  padding: 20px;
-  height: 100vh;
-  overflow-y: auto;
-  transition: margin-left 0.3s ease;
-}
-
-/* Adjust content area when sidebar is open */
-.sidebar.open + .content-area {
-  margin-left: 250px; /* Shift content to the right when sidebar is open */
-}
-
-/* Optional: Customizing navbar for better visibility */
-.navbar {
-  z-index: 1050; /* Ensure navbar is on top */
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 
-.loading-spinner {
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-  color: #6c757d;
+/* Adjust the main content to account for the fixed navbar and sidebar */
+.main-content {
+  margin-top: 60px; /* Adjust based on the height of your navbar */
+  margin-left: 250px; /* Adjust based on your sidebar width */
 }
 
-.loading-spinner .fa-spinner {
-  margin-right: 0.5rem;
-}
-
-.no-data {
-  color: #6c757d;
-  font-size: 0.9rem;
-  padding: 0.5rem 0;
-}

@@ -361,3 +361,25 @@
   font-size: 1.5em; /* Adjust font size for review count */
   color: #0a0101; /* Color for review count */
 }
+@media (max-width: 767px) {
+  .slider-track {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory; /* Enforces scrolling one card at a time */
+  }
+
+  .slider-item {
+    flex: 0 0 auto; /* Makes each card take up space but not grow */
+    margin-right: 10px; /* Adds margin between cards */
+    scroll-snap-align: start; /* Aligns each card to the start of the container */
+  }
+
+  .card {
+    margin: 0; /* Remove any default margin on the card */
+    width: 100%; /* Ensures the card takes full width of its container */
+  }
+
+  .slider-btn {
+    display: block;
+  }
+}

@@ -12,7 +12,9 @@ import { StorageService } from '../../../services/storage.service';
 import { JwtService } from '../../../services/jwt.service';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../services/user/user.service';
-
+import { BusinessReviewService } from '../../../services/business-review/business-review.service';
+import { BusinessReview } from '../../../models/business-review';
+import { RatingModalComponent } from './rating-modal/rating-modal.component';
 @Component({
   selector: 'app-shop',
   standalone: true,
@@ -21,7 +23,7 @@ import { UserService } from '../../../services/user/user.service';
   styleUrl: './shop.component.scss'
 })
 export class ShopComponent {
-  modalRef: MdbModalRef<CreateShopComponent> | null = null;//
+  
 
   businessId!: number;
 
@@ -39,7 +41,11 @@ export class ShopComponent {
   seeAll = false;
   userInfo!:UserResponse;
   userId!:number;
-
+  rating:BusinessReview[]=[];
+  ratingCount: { [key: number]: number } = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+  totalRatings: number = 0;
+  showModal = false; // To control the modal visibility
+  visibleReviews: number = 3; // Number of reviews to show initially
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -48,7 +54,8 @@ export class ShopComponent {
     private toastr: ToastrService,
     private businessService: BusinessService,
     private userService: UserService,
-    private modalService: MdbModalService
+    private modalService: MdbModalService,
+    private businessReviewService: BusinessReviewService,
   ) {
 
   }
@@ -63,6 +70,19 @@ export class ShopComponent {
       });
     }
 
+
+     // Fetch all ratings and then sort
+     
+     this.businessReviewService.getAllRating(this.businessId).subscribe(
+      (response) => {
+        this.rating = response;
+        this.calculateRatingCounts(); // Calculate rating counts after fetching
+        this.sortReviews(); // Sort reviews after fetching
+      },
+      (error) => {
+        console.error("ERROR IN FETCHING: ", error);
+      }
+    );
   }
 
   private fetchBusinessInfo(businessId: number, userId: number){
@@ -101,5 +121,44 @@ export class ShopComponent {
   }
   editBusiness(): void {
     this.router.navigate(['/o/edit-shop', this.businessId]); // Navigate to the route
+  }
+  
+
+  sortReviews() {
+    this.rating = this.rating.sort((a, b) => {
+      if (a.user_id === this.userId) return -1;
+      if (b.user_id === this.userId) return 1;
+      return 0;
+    });
+  }
+
+  calculateRatingCounts(): void {
+    this.ratingCount = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+    this.totalRatings = this.rating.length;
+    this.rating.forEach((review) => {
+      if (review.count >= 1 && review.count <= 5) {
+        this.ratingCount[review.count]++;
+      }
+    });
+  }
+  openRatingModal(event: MouseEvent): void {
+    event.preventDefault(); // Prevent default navigation behavior
+  
+    // Open the modal and pass data using the `data` property
+    const modalRef = this.modalService.open(RatingModalComponent, {
+      data: { ratingList: this.rating } // Pass the rating data
+    });
+  
+    // Optional: handle the result when the modal is closed
+    modalRef.onClose.subscribe((result: any) => {
+      console.log('Modal closed with result:', result);
+    });
+  }
+  
+  
+  
+
+  closeModal() {
+    this.showModal = false; // Close the modal
   }
 }

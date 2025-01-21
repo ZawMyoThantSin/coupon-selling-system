@@ -41,7 +41,6 @@
             <th>Category</th>
             <th>Status</th>
             <th>Location</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -69,13 +68,6 @@
               <span *ngIf="!item.status" class="badge badge-warning rounded-pill d-inline">Pending</span>
             </td>
             <td>{{ item.location}}</td>
-            <td>
-
-              <button type="button" [routerLink]="['/d/b/edit',item.id]" class="btn btn-link btn-sm btn-rounded">
-                <i class="fs-5 fa-solid fas fa-edit text-warning"></i>
-              </button>
-
-            </td>
           </tr>
 
 

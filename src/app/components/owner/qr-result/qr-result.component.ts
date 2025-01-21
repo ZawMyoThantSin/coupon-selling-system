@@ -95,15 +95,36 @@ export class QrResultComponent {
     }
 
   }
-  onSubmitValidate(): void{
+  // onSubmitValidate(): void{
+  //   const saleCouponId = this.qrCodeDetails.saleCouponId;
+  //   this.qrCodeService.validateTheCoupon(saleCouponId).subscribe((res)=>{
+  //     this.toastr.success("Coupon Validate Successfully!", "Success");
+  //     this.router.navigate(['/o/used-coupon/shopId'])
+  //   },error=> {
+  //     this.toastr.error("Coupon Validate Error!", "ERROR");
+  //   });
+  // }
+  onSubmitValidate(): void {
     const saleCouponId = this.qrCodeDetails.saleCouponId;
-    this.qrCodeService.validateTheCoupon(saleCouponId).subscribe((res)=>{
-      this.toastr.success("Coupon Validate Successfully!", "Success");
-      this.router.navigate(['/o'])
-    },error=> {
-      this.toastr.error("Coupon Validate Error!", "ERROR");
-    });
+  
+    this.qrCodeService.validateTheCoupon(saleCouponId).subscribe(
+      (res) => {
+        this.toastr.success("Coupon Validate Successfully!", "Success");
+  
+        // Dynamically navigate using the actual shopId
+        const shopId = this.qrCodeDetails.businessId; // Replace with the actual property holding shopId
+        if (shopId) {
+          this.router.navigate([`/o/used-coupon/${shopId}`]);
+        } else {
+          console.error("shopId is missing. Cannot navigate to used-coupon page.");
+        }
+      },
+      (error) => {
+        this.toastr.error("Coupon Validate Error!", "ERROR");
+      }
+    );
   }
+  
 
   getProductImage(imagePath: string): string{
     return this.proudctService.getImageUrl(imagePath);

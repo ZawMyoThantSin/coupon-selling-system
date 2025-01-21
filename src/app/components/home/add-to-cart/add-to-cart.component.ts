@@ -92,6 +92,10 @@ export class AddToCartComponent {
     );
   }
 
+  calculateTotalQuantity(): number {
+    return this.cartData.reduce((total, item) => total + item.quantity, 0);
+  }
+
   calculateSubtotal(): number {
     return this.cartData.reduce((subtotal, item) => {
       return subtotal + item.price * item.quantity; // Add item's total price to the subtotal

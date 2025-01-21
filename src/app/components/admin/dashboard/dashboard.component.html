@@ -1,150 +1,231 @@
+<div class="d-flex min-vh-100">
+  <!-- Sidebar -->
+  <nav [class]="'sidebar ' + (sidebarOpen ? 'expanded' : 'collapsed')">
+    <div class="d-flex flex-column h-100">
+      <!-- Logo -->
+      <div class="p-3 d-flex align-items-center" [class.justify-content-center]="!sidebarOpen">
+        <span class="fs-3"></span>
+        <span *ngIf="sidebarOpen" class="ms-2 fs-4 fw-bold text-white">
+          CS Admin
+        </span>
+      </div>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light border-bottom bg-light py-md-2 fixed-top">
+      <!-- Navigation -->
+      <div class="flex-grow-1 p-3">
+        <!-- Interface Section -->
+        <div class="mb-4">
+          <div [class]="'text-white-50 small ' + (!sidebarOpen ? 'text-center' : 'ps-3')">
+            <span *ngIf="sidebarOpen">INTERFACE</span>
+          </div>
 
-  <div class="container-fluid ">
-    <div class="mx-3 d-flex align-items-center ">
-      <a
-      class="text-dark me-3"
-      type="button"
-      (click)="toggleSidebar()"
-      aria-label="Toggle sidebar"
-    >
-    <i class="fa-solid fa-bars fs-5"></i>
-      </a>
-      <a class="navbar-brand" href="">Coupon Sell</a>
-    </div>
-
-    <div class="me-5">
-      <ul class="navbar-nav flex-row d-flex align-items-center me-4">
-        <li *ngIf="!isLoggedIn" class="nav-item me-3"><a routerLink="/login" class="text-decoration-underline text-dark">Login</a></li>
-          <li *ngIf="isLoggedIn" mdbDropdown class="nav-item ">
-            <a
-              class="nav-link d-flex align-items-center"
-              id="userMenuButton"
-              role="button"
-              mdbDropdownToggle
-              aria-expanded="false"
-            >
-              <img *ngIf="userInfo.authProvider == 'LOCAL'; else elseNoProfile"
-                [src]="userInfo.profile == null ? '/images/default-avatar.png' : getUserProfile(userInfo.profile)  " alt="User Avatar"
-                class="rounded-circle"
-                height="40"
-                width="40"
-                alt="User Avatar"
-              />
-              <ng-template #elseNoProfile>
-                <img
-                [src]="userInfo.profile "
-                class="rounded-circle"
-                height="40"
-                width="40"
-                alt="User Avatar"
-              />
-              </ng-template>
+          <div class="nav flex-column">
+            <a routerLink="/d"
+               class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+               [class.justify-content-center]="!sidebarOpen">
+              <i class="fas fa-tachometer-alt"></i>
+              <span *ngIf="sidebarOpen" class="ms-3">Dashboard</span>
             </a>
 
-  <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
-    <div class="px-3 py-2">
-      <span class="d-block fw-bold">{{ userInfo.name || 'John Doe' }}</span>
-      <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
+            <a routerLink="/d/business"
+               class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+               [class.justify-content-center]="!sidebarOpen">
+               <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M841-518v318q0 33-23.5 56.5T761-120H201q-33 0-56.5-23.5T121-200v-318q-23-21-35.5-54t-.5-72l42-136q8-26 28.5-43t47.5-17h556q27 0 47 16.5t29 43.5l42 136q12 39-.5 71T841-518Zm-272-42q27 0 41-18.5t11-41.5l-22-140h-78v148q0 21 14 36.5t34 15.5Zm-180 0q23 0 37.5-15.5T441-612v-148h-78l-22 140q-4 24 10.5 42t37.5 18Zm-178 0q18 0 31.5-13t16.5-33l22-154h-78l-40 134q-6 20 6.5 43t41.5 23Zm540 0q29 0 42-23t6-43l-42-134h-76l22 154q3 20 16.5 33t31.5 13ZM201-200h560v-282q-5 2-6.5 2H751q-27 0-47.5-9T663-518q-18 18-41 28t-49 10q-27 0-50.5-10T481-518q-17 18-39.5 28T393-480q-29 0-52.5-10T299-518q-21 21-41.5 29.5T211-480h-4.5q-2.5 0-5.5-2v282Zm560 0H201h560Z"/></svg>
+               <span *ngIf="sidebarOpen" class="ms-3">Business</span>
+            </a>
+
+            <a routerLink="/d/customers"
+               class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+               [class.justify-content-center]="!sidebarOpen">
+               <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z"/></svg>
+              <span *ngIf="sidebarOpen" class="ms-2">Customers</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Addons Section -->
+        <div>
+          <div [class]="'text-white-50 small ' + (!sidebarOpen ? 'text-center' : 'ps-3')">
+            <span *ngIf="sidebarOpen">ADDONS</span>
+          </div>
+
+          <div class="nav flex-column">
+            <a routerLink="/d/payments"
+               class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+               [class.justify-content-center]="!sidebarOpen">
+               <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M880-720v480q0 33-23.5 56.5T800-160H160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720Zm-720 80h640v-80H160v80Zm0 160v240h640v-240H160Zm0 240v-480 480Z"/></svg>
+              <span *ngIf="sidebarOpen" class="ms-3">Payments</span>
+            </a>
+
+            <a routerLink="/d/category"
+               class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+               [class.justify-content-center]="!sidebarOpen">
+              <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 0 24 24" width="20px" fill="#FFFFFF">
+                <path d="M12 2L2 7l10 5 10-5-10-5zm0 7.77L4.61 7 12 11l7.39-4-7.39 3.77zM2 17l10 5 10-5-2-1.2-8 4-8-4-2 1.2z"/>
+              </svg>
+              <span *ngIf="sidebarOpen" class="ms-2">Categories</span>
+            </a>
+
+            <a routerLink="/d/order"
+               class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+               [class.justify-content-center]="!sidebarOpen">
+              <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M160-160v-516L82-846l72-34 94 202h464l94-202 72 34-78 170v516H160Zm240-280h160q17 0 28.5-11.5T600-480q0-17-11.5-28.5T560-520H400q-17 0-28.5 11.5T360-480q0 17 11.5 28.5T400-440ZM240-240h480v-358H240v358Zm0 0v-358 358Z"/></svg>
+              <span *ngIf="sidebarOpen" class="ms-2">Orders</span>
+            </a>
+
+            <a routerLink="/d/business-income"
+            class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+            [class.justify-content-center]="!sidebarOpen">
+            <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
+              <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+          </svg>
+                     <span *ngIf="sidebarOpen" class="ms-2">Income</span>
+        </a>      
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Toggle Button -->
+      <span
+        class="btn btn-circle text-white p-4 my-5 mx-auto"
+        (click)="toggleSidebar()"
+        style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%;"
+      >
+        <i
+          class="fas"
+          [class.fa-chevron-right]="!sidebarOpen"
+          [class.fa-chevron-left]="sidebarOpen">
+        </i>
+      </span>
     </div>
+  </nav>
 
-    <div class="dropdown-divider mt-2 mb-2"></div>
+  <!-- NavBar -->
+  <div class="flex-grow-1 bg-light vw-100" style="margin-left: 30px; position: fixed; top: 0; z-index: 888;">
+    <!-- Header -->
+    <header class="bg-white shadow-sm py-2 px-3 d-flex justify-content-between align-items-center">
+      <div class="flex-grow-1 me-4">
+      </div>
 
-    <li>
-      <a class="dropdown-item" routerLink="/profile">
-        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-        <span class="ms-2">Profile</span>
-      </a>
-    </li>
-    <li>
-      <a class="dropdown-item" routerLink="/change-password">
-        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-       <span class="ms-2">Change Password</span>
-      </a>
-    </li>
-    <div class="dropdown-divider"></div>
-    <li>
-      <a class="dropdown-item" (click)="logoutButton()" >
-        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-       <span class="ms-2">Logout</span>
-      </a>
-    </li>
-  </ul>
-</li>
+      <div class="d-flex align-items-center">
+        <!-- Notification button triggering the dropdown -->
+        <div mdbDropdown class="d-flex me-3">
+          <button
+            class="btn btn-link position-relative me-2"
+            id="notificationDropdown"
+            mdbDropdownToggle
+            aria-expanded="false"
+          >
+            <i class="fas fa-bell fs-6"></i>
+            <span class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger">
+              3+
+            </span>
+          </button>
 
-      </ul>
-    </div>
+          <!-- Notification dropdown menu -->
+          <ul
+            mdbDropdownMenu
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="notificationDropdown"
+          >
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="fas fa-envelope me-2"></i>
+                New message received
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="fas fa-user-plus me-2"></i>
+                New follower
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                Alert: Action required
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li>
+              <a class="dropdown-item text-center" href="#">
+                View all notifications
+              </a>
+            </li>
+          </ul>
+        </div>
 
-    </div>
+        <!-- User Info -->
+        <div class="me-5">
+          <ul class="navbar-nav flex-row d-flex align-items-center me-4">
+            <li *ngIf="!isLoggedIn" class="nav-item me-3"><a routerLink="/login" class="text-decoration-underline text-dark">Login</a></li>
+              <li *ngIf="isLoggedIn" mdbDropdown class="nav-item ">
+                <a
+                  class="nav-link d-flex align-items-center"
+                  id="userMenuButton"
+                  role="button"
+                  mdbDropdownToggle
+                  aria-expanded="false"
+                >
+                  <img *ngIf="userInfo.authProvider == 'LOCAL'; else elseNoProfile"
+                    [src]="userInfo.profile == null ? '/images/default-avatar.png' : getUserProfile(userInfo.profile)  " alt="User Avatar"
+                    class="rounded-circle"
+                    height="40"
+                    width="40"
+                    alt="User Avatar"
+                  />
+                  <ng-template #elseNoProfile>
+                    <img
+                    [src]="userInfo.profile "
+                    class="rounded-circle"
+                    height="40"
+                    width="40"
+                    alt="User Avatar"
+                  />
+                  </ng-template>
+                </a>
 
-</nav>
+                <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+                  <div class="px-3 py-2">
+                    <span class="d-block fw-bold">{{ userInfo.name || 'John Doe' }}</span>
+                    <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
+                  </div>
 
-<!-- Sidebar -->
-<div [class.open]="sidebarOpen" class="sidebar border-end fixed-left mt-3">
-  <!-- Sidebar Home Link -->
-  <a
+                  <div class="dropdown-divider mt-2 mb-2"></div>
 
-  routerLink="/d"
-   class="mt-5">
-   <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M226.67-186.67h140v-246.66h226.66v246.66h140v-380L480-756.67l-253.33 190v380ZM160-120v-480l320-240 320 240v480H526.67v-246.67h-93.34V-120H160Zm320-352Z"/></svg>
-    <span>Home</span>
-  </a>
+                  <li>
+                    <a class="dropdown-item" routerLink="/profile">
+                      <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                      <span class="ms-2">Profile</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item" routerLink="/change-password">
+                      <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                     <span class="ms-2">Change Password</span>
+                    </a>
+                  </li>
+                  <div class="dropdown-divider"></div>
+                  <li>
+                    <a class="dropdown-item" (click)="logoutButton()" >
+                      <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                     <span class="ms-2">Logout</span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+          </ul>
+        </div>
+      </div>
+    </header>
 
-  <a
-
-  routerLink="/d/business"
-   class="">
-   <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-120q-33 0-56.5-23.5T80-200v-440q0-33 23.5-56.5T160-720h160v-80q0-33 23.5-56.5T400-880h160q33 0 56.5 23.5T640-800v80h160q33 0 56.5 23.5T880-640v440q0 33-23.5 56.5T800-120H160Zm240-600h160v-80H400v80Zm400 360H600v80H360v-80H160v160h640v-160Zm-360 0h80v-80h-80v80Zm-280-80h200v-80h240v80h200v-200H160v200Zm320 40Z"/></svg>
-   <span>Business</span>
-  </a>
-
-  <!-- Additional Sidebar Links -->
-  <a
-  routerLink="/d/payments"
-  routerLinkActive="active"
-  class="d-block mt-2"
-  >
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M880-720v480q0 33-23.5 56.5T800-160H160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720Zm-720 80h640v-80H160v80Zm0 160v240h640v-240H160Zm0 240v-480 480Z"/></svg>
-  <span class="ms-2">Payment</span>
-  </a>
-  <a
-  routerLink="/d/customers"
-  routerLinkActive="active"
-  class="d-block mt-2"
-  >
-  <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z"/></svg>
-  <span>Customers</span>
-  </a>
-
-  <a routerLink="/d/category" routerLinkActive="active" class="d-block mt-2">
-    <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="24px" viewBox="0 0 24 24" width="24px" fill="#434343">
-      <path d="M12 2L2 7l10 5 10-5-10-5zm0 7.77L4.61 7 12 11l7.39-4-7.39 3.77zM2 17l10 5 10-5-2-1.2-8 4-8-4-2 1.2z"/>
-    </svg>
-
-
-  <span>Categories</span>
-  </a>
-  <a routerLink="/d/order" routerLinkActive="active" class="d-block mt-2">
-    <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M160-160v-516L82-846l72-34 94 202h464l94-202 72 34-78 170v516H160Zm240-280h160q17 0 28.5-11.5T600-480q0-17-11.5-28.5T560-520H400q-17 0-28.5 11.5T360-480q0 17 11.5 28.5T400-440ZM240-240h480v-358H240v358Zm0 0v-358 358Z"/></svg>
-  <span>Orders</span>
-  </a>
-
-  <a routerLink="/d/business-income" routerLinkActive="active" class="d-block mt-2">
-    <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="24px" viewBox="0 0 24 24" width="24px" fill="#434343">
-        <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
-        <path d="M0 0h24v24H0z" fill="none"/>
-    </svg>
-    <span>Income</span>
-</a>
-
-
+    <!-- Main Content Area -->
+  </div>
+  <main class=" main-content vw-100 px-5 ">
+    <router-outlet></router-outlet>
+  </main>
 </div>
 
-<!-- Content Area -->
-<div class="content-area">
-
-  <router-outlet></router-outlet>
-
-</div>

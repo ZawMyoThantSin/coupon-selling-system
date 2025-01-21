@@ -47,9 +47,13 @@ import { ForgetPasswordComponent } from './components/forget-password/forget-pas
 import { EditShopComponent } from './components/owner/shop/edit-shop/edit-shop.component';
 import { BusinessIncomeComponent } from './components/admin/business/business-income/business-income.component';
 
+import { OwnerOrderComponent } from './components/owner/owner-order/owner-order.component';
+import { UsedCouponComponent } from './components/owner/owner-dashboard/used-coupon/used-coupon.component';
+import { CouponCardComponent } from './components/home/homepage/coupon-card/coupon-card.component';
+
 const routes: Routes = [
-  {path:'', redirectTo:'d',pathMatch:'full'},
-  {path:'d', component:DashboardComponent, title:'Dashboard',
+  {path:'', redirectTo:'d', pathMatch:'full'},
+  {path:'d', component:DashboardComponent, title:'Dashboard', canActivate: [dashboardGuard],
     children:[
       {path:'carousel', component:HomeCarouselComponent},
       {path:'business', component:BusinessComponent, title:'Business'},
@@ -70,12 +74,14 @@ const routes: Routes = [
 
     ]
   },
-  {path:'o', component:OwnerDashboardComponent,
+  {path:'o', component:OwnerDashboardComponent, canActivate: [dashboardGuard],
     children:[
       {path:'',  component:CouponSaleBarChartComponent},
+      {path:'order', component:OwnerOrderComponent, title:'order'},
       {path:'qr-scanner', component:QrScannerComponent},
       {path:'report', component:SaleCouponReportComponent, title:'Report'},
       { path: 'edit-shop/:id', component: EditShopComponent },
+      {path:'used-coupon/:shopId',component:UsedCouponComponent},
       {path:'qr-result', component:QrResultComponent},
       {path:'shop/:id', component:ShopComponent, title:'Shop' ,children:[
         {path:'', component:ProductComponent},
@@ -86,17 +92,18 @@ const routes: Routes = [
 
     ]
   },
-  {path:'homepage', component:HomeComponent, title:'Home Page',
+  {path:'homepage', component:HomeComponent, title:'Home Page', canActivate: [dashboardGuard],
     children:[
-      {path: '', redirectTo: 'page', pathMatch: 'full' },
+      {path: '', component:HomepageComponent, title:'Home'},
       {path:'cart', component:AddToCartComponent},
       {path:'order', component:UserOrderComponent, },
       {path:'order-history', component:OrderHistoryComponent, title:'History'},
       {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
       {path:'friends', component:FriendComponent, title:'Friends'},
+      {path:'products', component:CouponCardComponent, title:'Products'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},
-      {path:'page', component:HomepageComponent, title:'Home'},
+      {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
       {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
       {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},
       {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}

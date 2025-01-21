@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { StorageService } from '../../services/storage.service';
 import { JwtService } from '../../services/jwt.service';
@@ -7,22 +7,27 @@ import { UserService } from '../../services/user/user.service';
 import { UserResponse } from '../../models/user-response.models';
 import { FriendsService } from '../../services/user/friends.service';
 import { SharedService } from '../../services/shared/shared.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
 import { WebsocketService } from '../../services/websocket/websocket.service';
 import { ToastrService } from 'ngx-toastr';
 import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ChangePasswordComponent } from '../change-password/change-password.component';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   standalone:true,
-  imports:[CommonModule,RouterLink,RouterOutlet,MdbDropdownModule ],
+  imports:[CommonModule,RouterLink,RouterLinkActive,RouterOutlet,MdbDropdownModule,MatIconModule,MatIconModule, MatButtonModule, MatListModule, ],
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class HomeComponent implements OnInit{
-  sidebarOpen: boolean = false; // Flag to control the sidebar visibility
+  isMenuOpen: boolean = false; // Flag to control the sidebar visibility
+  isDesktop = false;
   activeRoute:any = '';
   isLoggedIn: boolean = false;
   decodedToken!:string;
@@ -35,7 +40,9 @@ export class HomeComponent implements OnInit{
   unreadNotifications: number = 0;
   changePasswordModalRef: MdbModalRef<ChangePasswordComponent> | null = null;
 
-  constructor(private router: Router,
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+              private router: Router,
               private toastr: ToastrService,
               private storageService: StorageService,
               private userService: UserService,
@@ -47,6 +54,17 @@ export class HomeComponent implements OnInit{
     this.router.events.subscribe(() => {
       this.activeRoute = this.router.url; // Get the active URL
     });
+    if (isPlatformBrowser(this.platformId)) {
+      this.isDesktop = window.innerWidth >= 992;
+      window.addEventListener('resize', () => {
+        if (isPlatformBrowser(this.platformId)) {
+          this.isDesktop = window.innerWidth >= 992;
+          if (this.isDesktop) {
+            this.isMenuOpen = false;
+          }
+        }
+      });
+    }
   }
 
   private setupWebSocket(): void {
@@ -109,9 +127,8 @@ export class HomeComponent implements OnInit{
     this.setupWebSocket();
   }
 
-  toggleSidebar() {
-    this.sidebarOpen = !this.sidebarOpen; // Toggle the sidebar visibility
-  }
+
+
 
   loadNotifications() {
     // Example data; replace with a service call to fetch notifications
@@ -176,4 +193,7 @@ export class HomeComponent implements OnInit{
     });
   }
 
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 }

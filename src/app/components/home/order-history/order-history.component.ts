@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { OrderDetail } from '../../../models/orderDetail';
 import { ProductService } from '../../../services/product/product.service';
 import { StorageService } from '../../../services/storage.service';
@@ -14,7 +14,7 @@ import { WebsocketService } from '../../../services/websocket/websocket.service'
   templateUrl: './order-history.component.html',
   styleUrl: './order-history.component.css'
 })
-export class OrderHistoryComponent {
+export class OrderHistoryComponent implements OnInit{
   order_id!: number;
   user_id!: number;
   orderHistory:OrderDetail[]=[];
@@ -35,6 +35,7 @@ export class OrderHistoryComponent {
       this.user_id = this.tokenService.getUserId(this.token);
     }
     if(this.user_id != 0){
+      console.log("REACh", this.user_id)
       this.loadOrders(this.user_id);
     }
     this.handleWebSocketMessages();
@@ -49,9 +50,9 @@ export class OrderHistoryComponent {
 }
 
 loadOrders(userId: number){
-  this.orderHistoryService.getByUserId(this.user_id).subscribe(
+  this.orderHistoryService.getByUserId(userId).subscribe(
     (response: OrderDetail[]) => {
-      this.orderHistory = response; // Save data to orderHistory array
+      this.orderHistory = response;
       console.log('History', response);
 
       // Sort by status (Pending first) and then by order_date (descending)

@@ -1,0 +1,42 @@
+<div class="modal-header">
+  <h5 class="modal-title">Rating List</h5>
+  <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
+</div>
+<div class="modal-body scrollable-content">
+  <div *ngFor="let review of ratingList" class="review-item">
+    <!-- Profile Image -->
+    <div class="profile">
+      <div class="review-photo">
+        <img [src]="getImageUrl(review.profile)" alt="Review Photo" class="review-photo-img me">
+      </div>
+    </div>
+
+    <!-- Review Content -->
+    <div class="review-content">
+     <!-- User Name and Star Rating Combined -->
+     <div class="review-header">
+      <span class="user-name">{{ review.userName }}</span>
+      <div class="star-rating">
+        <ng-container *ngFor="let star of [1, 2, 3, 4, 5]; let i = index">
+          <i class="star" [class.filled]="i < review.count" aria-hidden="true">&#9733;</i>
+        </ng-container>
+      </div>
+    </div>
+
+
+      <!-- Review Message and Date -->
+      <div class="d-flex justify-content-between me-3">
+        <div class="review-message">
+          {{ review.message }}
+        </div>
+        <div class="text-muted">
+          {{ getRelativeTime(review.createdAt) }}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="close()">Close</button>
+</div>

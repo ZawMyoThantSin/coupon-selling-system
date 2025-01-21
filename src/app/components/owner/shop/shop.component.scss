@@ -234,3 +234,57 @@
   transform: translateY(1px);
 }
 
+.ratings-reviews {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.rating-bars .progress {
+  background-color: #e9ecef;
+}
+
+.rating-bars .progress-bar {
+  background-color: #ffc107;
+}
+
+.rating-bar span {
+  font-size: 0.9rem;
+}
+/* Modal CSS */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Transparent black background */
+  z-index: 1050;
+}
+
+.modal.show {
+  display: block; /* Display the modal when showModal is true */
+}
+
+.modal-dialog {
+  position: relative;
+  margin: 10% auto;
+  max-width: 800px;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 8px;
+}
+
+.modal-header,
+.modal-footer {
+  padding: 1rem;
+}
+
+.modal-body {
+  padding: 4rem;
+}
+
+
