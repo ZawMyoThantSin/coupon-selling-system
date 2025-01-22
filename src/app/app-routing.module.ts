@@ -49,11 +49,14 @@ import { EditShopComponent } from './components/owner/shop/edit-shop/edit-shop.c
 import { OwnerOrderComponent } from './components/owner/owner-order/owner-order.component';
 import { UsedCouponComponent } from './components/owner/owner-dashboard/used-coupon/used-coupon.component';
 import { CouponCardComponent } from './components/home/homepage/coupon-card/coupon-card.component';
+import { AllBusinessImcome } from './components/admin/charts/all-business-income/all-business-income.component';
+import { BusinessIncomeComponent } from './components/admin/business/business-income/business-income.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d', pathMatch:'full'},
   {path:'d', component:DashboardComponent, title:'Dashboard', canActivate: [dashboardGuard],
     children:[
+      {path:'', component:AllBusinessImcome},
       {path:'carousel', component:HomeCarouselComponent},
       {path:'business', component:BusinessComponent, title:'Business'},
       {path:'orders', component:OrdersComponent, title:'Orders'},
@@ -64,10 +67,11 @@ const routes: Routes = [
         {path:'create', component:PaymentCreateComponent},
         {path:'edit', component:PaymentEditComponent}
       ]},
-      {path:'customers', component:CustomersComponent, title:'Customers'},
+      {path:'users', component:CustomersComponent, title:'Customers'},
       {path:'b/edit/:id', component:BusinessEditComponent, title:'Edit'},
       {path:'category', component:CategoryComponent, title:'Business Category'},
       {path:'payment', component:PaymentComponent, title:'Payment'},
+      {path: 'business-income', component: BusinessIncomeComponent},
       {path: 'excel-import', component: ExcelImportComponent },
 
     ]
@@ -77,7 +81,7 @@ const routes: Routes = [
       {path:'',  component:CouponSaleBarChartComponent},
       {path:'order', component:OwnerOrderComponent, title:'order'},
       {path:'qr-scanner', component:QrScannerComponent},
-      {path:'report', component:SaleCouponReportComponent, title:'Report'},
+      {path:'report/:id', component:SaleCouponReportComponent, title:'Report'},
       { path: 'edit-shop/:id', component: EditShopComponent },
       {path:'used-coupon/:shopId',component:UsedCouponComponent},
       {path:'qr-result', component:QrResultComponent},

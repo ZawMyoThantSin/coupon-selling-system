@@ -64,4 +64,9 @@ this.websocketService.disconnect();
       });
     }
 
+
+    getEarnings(): Observable<any> {
+      return this.http.get<any>(`${this.BASE_URL}/business-earnings`, { responseType: 'json' });
+    }
+
 }

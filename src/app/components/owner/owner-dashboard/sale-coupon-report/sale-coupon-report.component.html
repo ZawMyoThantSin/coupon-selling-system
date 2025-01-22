@@ -1,7 +1,7 @@
 <div class="container py-5">
   <div class="card shadow-lg">
     <div class="card-header text-center bg-primary text-white">
-      <h2 class="mb-0">Report Generator</h2>
+      <h2 class="mb-0">Select Report Type</h2>
     </div>
     <div class="card-body">
       <!-- Loading Indicator -->
@@ -18,71 +18,111 @@
         <span>{{ error }}</span>
       </div>
 
-      <!-- PDF Viewer -->
-      <div *ngIf="pdfSrc" class="pdf-viewer mt-4">
-        <iframe [src]="pdfSrc" width="100%" height="500px" [title]="pdfTitle" class="border rounded"></iframe>
+
+      <div class="d-flex justify-content-start mb-4">
+        <div class="form-check me-4">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="saleCoupon"
+            name="reportType"
+            value="sale_coupon"
+            [(ngModel)]="currentParentReportType"
+          />
+          <label class="form-check-label small" for="saleCoupon">Sale Coupon</label>
+        </div>
+        <div class="form-check me-4">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="usedCoupon"
+            name="reportType"
+            value="used_coupon"
+            [(ngModel)]="currentParentReportType"
+          />
+          <label class="form-check-label small" for="usedCoupon">Used Coupon</label>
+        </div>
+        <div class="form-check me-4">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="productReport"
+            name="reportType"
+            value="product"
+            [(ngModel)]="currentReportType"
+          />
+          <label class="form-check-label small" for="couponReport">Product Report</label>
+        </div>
       </div>
 
-      <!-- Excel Download Message -->
-      <div *ngIf="excelSrc" class="alert alert-success d-flex align-items-center mt-3">
-        <i class="fas fa-check-circle me-2"></i>
-        <span>Excel report generated successfully! Click the download button to save it.</span>
-      </div>
+     <!-- Conditionally Render Select Box for Sale Coupon -->
+<div *ngIf="currentParentReportType === 'sale_coupon'" class="mt-3 col-md-3">
+  <label for="saleCouponSelect" class="form-label">Select Sale Coupon Report</label>
+  <select
+    id="saleCouponSelect"
+    class="form-select form-select-sm"
+    [(ngModel)]="currentReportType"
+    aria-label="Sale Coupon Report Selection"
+  >
+    <option value="" disabled selected>Select an option</option>
+    <option value="sale_coupon_weekly">Sale Coupon Weekly Report</option>
+    <option value="sale_coupon_monthly">Sale Coupon Monthly Report</option>
+  </select>
+</div>
 
-      <!-- Report Generation Buttons -->
-      <div class="d-flex flex-wrap justify-content-center gap-3 mt-4">
-        <!-- PDF Dropdown -->
-        <div mdbDropdown class="dropdown">
-          <button
-            class="btn btn-primary dropdown-toggle"
-            type="button"
-            id="pdfDropdownMenu"
-            aria-expanded="false"
-            mdbDropdownToggle
-          >
-          <i class="fas fa-file-pdf me-2"></i> Generate PDF Report
-          </button>
-          <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="pdfDropdownMenu">
-            <li><a class="dropdown-item" (click)="generateReport('pdf', 'sale_coupon_weekly')">Sale Coupon Weekly</a></li>
-            <li><a class="dropdown-item" (click)="generateReport('pdf', 'sale_coupon_monthly')">Sale Coupon Monthly</a></li>
-            <li><a class="dropdown-item" (click)="generateReport('pdf', 'product')">Product Report</a></li>
-          </ul>
-        </div>
+<!-- Conditionally Render Select Box for Used Coupon -->
+<div *ngIf="currentParentReportType === 'used_coupon'" class="mt-3 col-md-3">
+  <label for="usedCouponSelect" class="form-label">Select Used Coupon Report</label>
+  <select
+    id="usedCouponSelect"
+    class="form-select form-select-sm"
+    [(ngModel)]="currentReportType"
+    aria-label="Used Coupon Report Selection"
+  >
+    <option value="" disabled selected>Select an option</option>
+    <option value="used_coupon_weekly">Used Coupon Weekly Report</option>
+    <option value="used_coupon_monthly">Used Coupon Monthly Report</option>
+  </select>
+</div>
 
 
-        <!-- Excel Dropdown -->
-        <div mdbDropdown class="dropdown">
-          <button
-            class="btn btn-primary dropdown-toggle"
-            type="button"
-            id="excelDropdownMenu"
-            aria-expanded="false"
-            mdbDropdownToggle
-          >
-          <i class="fas fa-file-excel me-2"></i> Generate PDF Report
-          </button>
-          <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="excelDropdownMenu">
-            <li><a class="dropdown-item" (click)="generateReport('excel', 'sale_coupon_weekly')">Sale Coupon Weekly</a></li>
-            <li><a class="dropdown-item" (click)="generateReport('excel', 'sale_coupon_monthly')">Sale Coupon Monthly</a></li>
-            <li><a class="dropdown-item" (click)="generateReport('excel', 'product')">Product Report</a></li>
-          </ul>
-        </div>
-
-        <!-- Download Buttons -->
+      <!-- Generate Report Button -->
+      <div class="d-flex justify-content-center mt-4">
         <button
-          class="btn btn-primary d-flex align-items-center gap-2"
-          (click)="downloadReport('pdf')"
-          [disabled]="!pdfSrc">
-          <i class="fas fa-download"></i>
-          <span>Download PDF</span>
+          class="btn btn-primary btn-sm"
+          [disabled]="loading"
+          (click)="generateReport('pdf', currentReportType, businessId)"
+        >
+          <span *ngIf="!loading">Generate Report</span>
+          <div *ngIf="loading" class="spinner-border spinner-border-sm" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
         </button>
+      </div>
 
+      <!-- Display Generated Report (PDF/Excel) -->
+      <div *ngIf="pdfSrc" class="mt-4">
+        <h4>Generated PDF Report</h4>
+        <iframe [src]="pdfSrc" width="100%" height="600px"></iframe>
+      </div>
+
+      <!-- Download Report Buttons -->
+      <div *ngIf="!loading && (pdfSrc || excelSrc)" class="mt-4 d-flex justify-content-between">
         <button
-          class="btn btn-success d-flex align-items-center gap-2"
-          (click)="downloadReport('excel')"
-          [disabled]="!excelSrc">
+          class="btn btn-warning"
+          [disabled]="loading"
+          (click)="downloadReport('pdf', businessId)"
+        >
           <i class="fas fa-download"></i>
-          <span>Download Excel</span>
+          Download PDF
+        </button>
+        <button
+          class="btn btn-warning"
+          [disabled]="loading"
+          (click)="downloadReport('excel', businessId)"
+        >
+          <i class="fas fa-download"></i>
+          Download Excel
         </button>
       </div>
     </div>

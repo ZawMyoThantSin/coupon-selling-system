@@ -12,5 +12,15 @@ export interface Business {
   userName:string;
   userEmail:string;
   count:number;
+  income:any;
+  paid:any;
+  profitPercentage:any;
+  lastProfitPercentage: any;
+  ownerProfit:any;
+  adminProfit:any;
+  saleCouponId:number;
+  remainingAmount:any;
+  lastPaidAmount:any;
+  paymentStatus:any;
   imageFile?:File | null;
 }

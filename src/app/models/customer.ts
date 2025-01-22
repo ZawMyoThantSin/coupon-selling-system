@@ -5,8 +5,9 @@ export interface Customer{
     role: string;
     phone: string | null;
     funds: number;
+    authProvider:string;
     profile: string | null;
     status: number;
-    createdAt: string;
+    created_at: string;
     tempFund?: number; // Optional temporary property
 }

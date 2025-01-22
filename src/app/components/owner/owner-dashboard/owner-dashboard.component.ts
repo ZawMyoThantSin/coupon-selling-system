@@ -148,6 +148,7 @@ export class OwnerDashboardComponent {
           },
           (error) => {
             console.error('Error In Business Create: ', error);
+            this.toastr.error("Error in business creation.","Error")
           }
         );
       }

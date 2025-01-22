@@ -78,6 +78,21 @@ export class HomeComponent implements OnInit{
   private handleWebSocketMessage(message: string): void {
     console.log('WebSocket update:', message);
     switch (message) {
+      case 'FRIEND_REQUEST_RECEIVED':
+        this.toastr.info('You have a new friend request!', 'Info');
+        break;
+      case 'FRIEND_REQUEST_ACCEPTED':
+        this.toastr.success('Your friend request was accepted!', 'Success');
+        break;
+      case 'FRIEND_REQUEST_DENIED':
+        this.toastr.info('Your friend request was denied.', 'Info');
+        break;
+      case 'FRIEND_REQUEST_CANCELLED':
+        this.toastr.warning('A friend request sent to you was canceled.', 'Info');
+        break;
+      case 'UNFRIENDED':
+          this.toastr.warning('You have been unfriended by someone.', 'Info');
+        break;
         case 'COUPON_TRANSFER_TRANSFERRED':
           this.toastr.info('You have a new coupon transfer request!', 'Coupon Transfer');
           break;

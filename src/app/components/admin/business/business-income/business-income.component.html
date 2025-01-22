@@ -1,0 +1,118 @@
+<div class="card mx-auto mt-4 shadow-sm" style="max-width: 1000px; border-radius: 8px;">
+  <!-- Card Header -->
+  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center rounded-top">
+    <!-- Search Box -->
+    <div class="input-group" style="max-width: 350px;">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search businesses..."
+        aria-label="Search"
+        [(ngModel)]="searchTerm"
+        style="border-radius: 20px 0 0 20px;"
+      />
+      <button class="btn btn-light" type="button" style="border-radius: 0 20px 20px 0;">
+        <i class="fas fa-search text-primary"></i>
+      </button>
+    </div>
+    <h5 class="m-0">Businesses' Incomes</h5>
+  </div>
+
+  <!-- Card Body -->
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="bg-light">
+          <tr>
+            <th scope="col">Business Info</th>
+            <th scope="col">Total</th>
+            <th scope="col">(%)</th>
+            <th scope="col">Admin Profit</th>
+            <th scope="col">Owner Profit</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let business of filteredBusinesses | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage };"
+            class="align-items-center"
+          >
+            <td>
+              <div class="d-flex align-items-center">
+                <img
+                  [src]="getImageUrl(business.photo)"
+                  alt=""
+                  class="rounded-circle border shadow-sm me-3"
+                  style="width: 50px; height: 50px;"
+                />
+                <div>
+                  <p class="fw-bold mb-0">{{ business.name }}</p>
+                  <small class="text-muted">{{ business.userEmail }} (Owner)</small>
+                </div>
+              </div>
+            </td>
+            <td>{{ business.income | currency }}</td>
+            <td>
+              <input
+                type="number"
+                [(ngModel)]="business.profitPercentage"
+                (ngModelChange)="updateProfits(business)"
+                class="form-control form-control-sm text-center"
+                placeholder="Enter %"
+                [disabled]="business.paid || business.income === 0.0 || business.paymentStatus === 'PAID'"
+                [value]="business.profitPercentage"
+                style="width: 80px; margin: auto;"
+              />
+            </td>
+            <td>{{ business.adminProfit | currency }}</td>
+            <td>{{ business.ownerProfit | currency }}</td>
+            <td>
+              <div class="d-flex gap-2 justify-content-center">
+                <!-- Pay Button -->
+                <button
+                  *ngIf="canModify(business) || business.paymentStatus === 'PENDING'"
+                  type="button"
+                  class="btn btn-sm btn-success"
+                  (click)="payOwner(business)"
+                  [disabled]="business.paid || business.profitPercentage <= 0 || business.profitPercentage > 100 || business.income === 0 || business.paymentStatus === 'PAID'"
+                  matTooltip="Cannot pay because the business is already paid or has no valid income"
+                >
+                  <i class="fas fa-money-bill-wave"></i>
+                </button>
+
+                <!-- Paid Status -->
+                <span *ngIf="business.paymentStatus === 'PAID'" class="text-success d-flex align-items-center">
+                  <i class="fas fa-check-circle me-1"></i> Paid
+                </span>
+
+                <!-- History Button -->
+                <button
+                  type="button"
+                  class="btn btn-sm btn-info"
+                  (click)="openPaymentHistoryModal(business)"
+                  matTooltip="View payment history"
+                >
+                  <i class="fas fa-history"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-between align-items-center px-4 py-3">
+      <small class="text-muted">
+      </small>
+      <pagination-controls
+        (pageChange)="currentPage = $event"
+        [responsive]="true"
+        previousLabel="Prev"
+        nextLabel="Next"
+
+        class="pagination-sm"
+      ></pagination-controls>
+    </div>
+  </div>
+</div>

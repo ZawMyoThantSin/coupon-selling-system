@@ -1,6 +1,6 @@
 <div class="container ">
   <div class="card p-4" style="min-width: 700px; ">
-    <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="paymentForm" (ngSubmit)="showConfirmation()">
 
       <!-- QR Image (File Upload) -->
       <div class="form-outline mb-4">
@@ -68,5 +68,35 @@
         Submit
       </button>
     </form>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div *ngIf="showConfirmationModal" class="modal-backdrop">
+  <div class="confirmation-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Submission</h5>
+        <button type="button" class="btn-close" (click)="cancelSubmission()"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Payment Type:</strong> {{ formDataPreview.payment_type }}</p>
+        <p><strong>Account Name:</strong> {{ formDataPreview.accountName }}</p>
+        <p><strong>Account Number:</strong> {{ formDataPreview.accountNumber }}</p>
+        <div *ngIf="formDataPreview.imagePreview">
+          <strong>QR Image:</strong>
+          <img
+            [src]="formDataPreview.imagePreview"
+            alt="QR Image Preview"
+            class="img-fluid rounded"
+            style="max-height: 100px;"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="cancelSubmission()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" (click)="confirmSubmission()">Confirm</button>
+      </div>
+    </div>
   </div>
 </div>
