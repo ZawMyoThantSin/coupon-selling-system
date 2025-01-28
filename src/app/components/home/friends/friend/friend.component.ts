@@ -19,6 +19,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MessageService } from '../../../../services/user/message.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-friend',
@@ -30,7 +32,8 @@ import { MatListModule } from '@angular/material/list';
     MatTableModule,
     MatIconModule,
     MatDialogModule,
-    MatListModule
+    MatListModule,
+    RouterModule
   ],
   templateUrl: './friend.component.html',
   styleUrls: ['./friend.component.css']
@@ -55,8 +58,13 @@ export class FriendComponent implements OnInit {
   friendIdToDelete: number = 0;
   friendRequestIdToDelete: number = 0;
 
+  messages: { [key: number]: { sender: string; content: string; sendAt: any }[] } = {};
+  activeChat: { friendId: number; friendName: string } | null = null;
+  newMessage: string = '';
+
   constructor(
     private friendshipService: FriendsService,
+    private messageService: MessageService,
     private storageService: StorageService,
     private userService: UserService,
     private toastr: ToastrService,

@@ -155,6 +155,7 @@
                 [class.fa-chevron-left]="!isSidebarCollapsed">
               </i>
             </span>
+
           </div>
         </div>
       </div>
@@ -223,6 +224,105 @@
         </ul>
       </div>
 
+      <div class="d-flex align-items-center">
+        <!-- Notification button triggering the dropdown -->
+        <div mdbDropdown class="d-flex me-3">
+          <button
+            class="btn btn-link position-relative me-2"
+            id="notificationDropdown"
+            mdbDropdownToggle
+            aria-expanded="false"
+          >
+            <i class="fas fa-sharp fa-light fa-bell fs-4"></i>
+            <span
+            *ngIf="unreadCount > 0" 
+            class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger">
+              {{ unreadCount }}
+            </span>
+          </button>
+
+          <!-- Notification dropdown menu -->
+          <ul
+            mdbDropdownMenu
+            class="dropdown-menu dropdown-menu-end"
+            aria-labelledby="notificationDropdown"
+          >
+          <li *ngFor="let notification of getSortedNotifications().slice(0, 3)">
+            <a *ngIf="notification.isRead === 0"
+          class="dropdown-item"
+          href="javascript:void(0);"
+          (click)="markNotificationAsRead(notification.id); navigateTo(notification.route)"
+        >
+          <!-- Icon for NEW_ORDER notifications -->
+          <i
+            *ngIf="notification.type === 'NEW_ORDER'"
+            class="fas fa-shopping-cart me-2 text-primary"
+            [ngClass]="{ 'text-primary': notification.isRead === 0, 'text-muted': notification.isRead === 1 }"
+          ></i>
+          <!-- Icon for other notifications -->
+          <i
+            *ngIf="notification.type !== 'NEW_ORDER'"
+            class="fas fa-info-circle me-2 text-secondary"
+            [ngClass]="{ 'text-secondary': notification.isRead === 0, 'text-muted': notification.isRead === 1 }"
+          ></i>
+          <span class="notification-message">
+            {{ notification.message }}
+          </span>
+      
+          <!-- Unread mark (dot) -->
+          <span *ngIf="notification.isRead === 0" class="unread-mark"></span>
+        </a>
+
+        <a *ngIf="notification.isRead === 1"
+          class="dropdown-item"
+          href="javascript:void(0);"
+          (click)="markNotificationAsRead(notification.id); navigateTo('d/notification')"
+        >
+          <!-- Icon for NEW_ORDER notifications -->
+          <i
+            *ngIf="notification.type === 'NEW_ORDER'"
+            class="fas fa-shopping-cart me-2 text-primary"
+          ></i>
+          <!-- Icon for other notifications -->
+          <i
+            *ngIf="notification.type !== 'NEW_ORDER'"
+            class="fas fa-info-circle me-2 text-secondary"
+          ></i>
+          <span class="notification-message">
+            {{ notification.message }}
+          </span>
+        </a>
+          </li>         
+
+          <li *ngIf="notifications.length > 3">
+            <a
+              class="dropdown-item text-center"
+              href="javascript:void(0);"
+              (click)="navigateTo('d/notification')"
+            >
+              {{notifications.length - 3}} more
+            </a>
+          </li>
+          <li *ngIf="notifications.length > 0 && notifications.length <= 3">
+            <a
+              class="dropdown-item text-center"
+              href="javascript:void(0);"
+              (click)="navigateTo('d/notification')"
+            >
+              See all notifications
+            </a>
+          </li>
+
+            <li *ngIf="notifications.length === 0">
+              <span class="dropdown-item text-muted">No notifications</span>
+            </li>  
+            <li>
+              <hr class="dropdown-divider" />
+            </li>
+            <li *ngIf="notifications.length > 0">
+              <a class="dropdown-item text-center" href="javascript:void(0);" (click)="markAllAsRead()">
+                Mark all as read
+
 
       <!-- User Info -->
       <div class="me-5">
@@ -252,6 +352,7 @@
                   alt="User Avatar"
                 />
                 </ng-template>
+
               </a>
 
     <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end px-2 py-2" aria-labelledby="userMenuButton">

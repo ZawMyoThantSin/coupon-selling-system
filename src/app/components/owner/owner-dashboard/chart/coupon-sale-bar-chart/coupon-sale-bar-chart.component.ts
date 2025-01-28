@@ -16,6 +16,9 @@ import {
   ApexAnnotations
 } from "ng-apexcharts";
 import { PurchaseCouponService } from '../../../../../services/purchase-coupon/purchase-coupon.service';
+import { WebsocketService } from '../../../../../services/websocket/websocket.service';
+import { MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { PaymentHistoryModalComponent } from '../../../../admin/business/business-income/payment-history-modal/payment-history-modal.component';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -87,6 +90,56 @@ export type ChartOptions = {
           </div>
         </div>
       </div>
+
+      <!-- New Amount to Receive Card -->
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-left-warning">
+          <div class="card-body">
+            <div class="row align-items-center">
+          <div class="col">
+            <div class="text-warning text-uppercase font-weight-bold small">
+              Upcoming Amount
+            </div>
+          <div class="h5 mb-0 font-weight-bold text-gray-800 d-flex align-items-center">
+          
+          <div class="h5 mb-0 font-weight-bold text-gray-800" *ngIf="amountToPay && amountToPay > 0">
+            <span>{{ amountToPay - (amountToPay * desiredPercentage) / 100 | number: '1.0-0' }} MMK
+            </span>
+            <strong class="text-decoration-line-through text-gray-400 extra-small">
+              {{ amountToPay | number: '1.0-0' }}
+            </strong>
+            <span class="badge bg-warning text-dark">
+              {{ desiredPercentage }}%
+            </span>
+          </div>
+        
+          <div class="h5 mb-0 font-weight-bold text-gray-800" *ngIf="!amountToPay && amountToPay == 0">
+            <span>{{ amountToPay - (amountToPay * desiredPercentage) / 100 | number: '1.0-0' }} MMK
+            </span>
+          </div>
+          
+        </div>
+         
+          
+        </div>
+        <div class="col-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+          height="40px" 
+          viewBox="0 -960 960 960" 
+          width="40px" 
+          fill="#FFC107"
+          (click)="openPaymentHistoryModal(business)"
+          style="cursor: pointer;"
+          >
+            <path d="M480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm-40-200h80v-40h-80v40Zm0-80h80v-240h-80v240Z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
     </div>
     <div class="chart-container">
   <div class="toggle-buttons">
@@ -117,6 +170,13 @@ export type ChartOptions = {
 .card {
   border-radius: 8px;
   border-width: 2px;
+  background: #ffffff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
 
   &.border-left-primary {
     border-left: 4px solid #4e73df;
@@ -124,6 +184,10 @@ export type ChartOptions = {
 
   &.border-left-success {
     border-left: 4px solid #1cc88a;
+  }
+
+  &.border-left-warning {
+    border-left: 4px solid #FFC107;
   }
 }
 
@@ -135,12 +199,42 @@ export type ChartOptions = {
   color: #1cc88a !important;
 }
 
+.text-warning {
+  color: #FFC107 !important;
+}
+
 .text-gray-400 {
   color: #d1d3e2 !important;
+  text-decoration: line-through;
 }
 
 .text-gray-800 {
   color: #5a5c69 !important;
+}
+
+.small {
+  font-size: 0.95rem; /* Smaller font size for crossed-out amount */
+}
+
+.extra-small {
+  font-size: 0.95rem;
+}
+
+.medium {
+  font-size: 1.145rem; /* Smaller font size for crossed-out amount */
+}
+
+.badge {
+  font-size: 0.75rem; /* Smaller font size for percentage badge */
+  padding: 0.25rem 0.5rem; /* Compact padding */
+  border-radius: 12px; /* Rounded corners */
+  background-color: #FFC107; /* Warning color */
+  color: #000; /* Dark text for contrast */
+  font-weight: 600; /* Bold text */
+}
+
+.d-flex.align-items-baseline {
+  align-items: baseline; /* Align text and badge properly */
 }
 
 
@@ -193,9 +287,15 @@ export class CouponSaleBarChartComponent {
   businessId: number | null = null;
   public chartOptions: ChartOptions;
   public view: 'daily' | 'monthly' = 'daily'; // Default to daily view
+  amountToPay: number = 0;
+  lastPaidAmount: number = 0;
+  desiredPercentage: number = 0;
+  business: any;
 
   constructor(private businessService: BusinessService,
-    private saleCouponService: PurchaseCouponService
+    private saleCouponService: PurchaseCouponService,
+    private websocketService: WebsocketService,
+    private modalService: MdbModalService
   ) {
     this.chartOptions = this.getInitialChartOptions();
   }
@@ -203,13 +303,24 @@ export class CouponSaleBarChartComponent {
   ngOnInit() {
     this.businessService.businessId$.subscribe((id) => {
       this.businessId = id;
-    });
-    if(this.businessId){
-      this.loadDailyCouponSalesData();
-      this.getMonthlyAndYearlyEarning(this.businessId);
-    }
+      if (this.businessId) {
+        // Fetch business details using getById
+        this.businessService.getById(this.businessId).subscribe((business) => {
+          this.business = business; // Assign the fetched business details
+        });
 
+        this.loadDailyCouponSalesData();
+        this.getMonthlyAndYearlyEarning(this.businessId);
+        this.getAmountToPay(this.businessId);
+      }
+    });
+
+    this.websocketService.onMessage().subscribe((message) => {
+      console.log("MSG", message);
+      this.desiredPercentage = message;
+    });
   }
+
 
   getMonthlyAndYearlyEarning(businessId:number){
     this.saleCouponService.getCurrentMonthEarnings(businessId).subscribe((res)=>{
@@ -219,6 +330,18 @@ export class CouponSaleBarChartComponent {
     this.saleCouponService.getCurrentYearEarnings(businessId).subscribe((res)=>{
       this.currentYearEarning = res;
     })
+  }
+
+  getAmountToPay(businessId: number) {
+    this.businessService.getPaidHistory(businessId).subscribe((history) => {
+      if (history && history.length > 0) {
+        this.desiredPercentage = history[0].desiredPercentage || 15;
+      }
+    });
+
+    this.businessService.calculateAmountToPay(businessId).subscribe((res) => {
+      this.amountToPay = res;
+    });
   }
 
 
@@ -370,4 +493,14 @@ export class CouponSaleBarChartComponent {
     this.chartOptions.annotations = { points: [] };
     this.updateChart();
   }
+
+  openPaymentHistoryModal(business: any): void {
+    console.log("Business ID ", business.id);
+    console.log("Business Name ", business.name);
+    this.modalService.open(PaymentHistoryModalComponent, {
+      modalClass: 'modal-lg',
+      data: { businessId: business.id, businessName: business.name },
+    });
+  }
+
 }

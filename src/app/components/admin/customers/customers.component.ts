@@ -24,11 +24,13 @@ export class CustomersComponent implements OnInit {
   fund: any;
   editMode: number | null = null; // Track the ID of the row being edited
 
+
   constructor(
     private customerService: CustomerService,
     private userService: UserService,
     private toastr: ToastrService
   ) {}
+
 
   ngOnInit(): void {
     this.customerService.getCustomers().subscribe((data: any) => {
@@ -98,8 +100,10 @@ export class CustomersComponent implements OnInit {
     this.fund = null; // Reset the fund value
   }
 
+
   getImageUrl(image: any): string {
     return this.userService.getImageUrl(image);
+
   }
 
 }

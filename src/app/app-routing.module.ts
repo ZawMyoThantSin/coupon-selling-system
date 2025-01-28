@@ -45,13 +45,19 @@ import { SaleCouponReportComponent } from './components/owner/owner-dashboard/sa
 import { TestDashComponent } from './components/test-dash/test-dash.component';
 import { ForgetPasswordComponent } from './components/forget-password/forget-password.component';
 import { EditShopComponent } from './components/owner/shop/edit-shop/edit-shop.component';
+import { BusinessIncomeComponent } from './components/admin/business/business-income/business-income.component';
 
 import { OwnerOrderComponent } from './components/owner/owner-order/owner-order.component';
 import { UsedCouponComponent } from './components/owner/owner-dashboard/used-coupon/used-coupon.component';
 import { CouponCardComponent } from './components/home/homepage/coupon-card/coupon-card.component';
+
+import { MessageComponent } from './components/home/friends/friend/message/message.component';
+import { NotificationComponent } from './components/admin/notification/notification.component';
+import { ReportPreviewComponent } from './components/admin/business/business-income/report-preview/report-preview.component';
 import { AllBusinessImcome } from './components/admin/charts/all-business-income/all-business-income.component';
 import { BusinessIncomeComponent } from './components/admin/business/business-income/business-income.component';
 import { AdminReportsComponent } from './components/admin/report/admin-reports/admin-reports.component';
+
 
 const routes: Routes = [
   {path:'', redirectTo:'d', pathMatch:'full'},
@@ -75,6 +81,9 @@ const routes: Routes = [
       {path:'payment', component:PaymentComponent, title:'Payment'},
       {path: 'business-income', component: BusinessIncomeComponent},
       {path: 'excel-import', component: ExcelImportComponent },
+      {path: 'business-income', component: BusinessIncomeComponent},
+      {path: 'notification', component: NotificationComponent},
+      {path: 'report-preview', component: ReportPreviewComponent},
 
     ]
   },
@@ -103,14 +112,16 @@ const routes: Routes = [
       {path:'order', component:UserOrderComponent, },
       {path:'order-history', component:OrderHistoryComponent, title:'History'},
       {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
-      {path:'friends', component:FriendComponent, title:'Friends'},
+      {path:'friends', component:FriendComponent, title:'Friends', children:[
+        { path: 'message/:friendId', component: MessageComponent },
+      ] },
       {path:'products', component:CouponCardComponent, title:'Products'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},
       {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
       {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
       {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},
-      {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'}
+      {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'},
     ]
   },
   {path:'test-dash', component:TestDashComponent},

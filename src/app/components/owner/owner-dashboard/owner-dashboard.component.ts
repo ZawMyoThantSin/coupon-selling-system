@@ -14,6 +14,7 @@ import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { ToastrService } from 'ngx-toastr';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { PurchaseCouponService } from '../../../services/purchase-coupon/purchase-coupon.service';
+import { WebsocketService } from '../../../services/websocket/websocket.service';
 
 @Component({
   selector: 'app-owner-dashboard',
@@ -46,7 +47,8 @@ export class OwnerDashboardComponent {
     private businessService: BusinessService,
     private saleCouponService: PurchaseCouponService,
     private userService: UserService,
-    private modalService: MdbModalService
+    private modalService: MdbModalService,
+    private websocketService: WebsocketService
   ) {
     this.router.events.subscribe(() => {
       this.activeRoute = this.router.url; // Get the active URL
@@ -54,6 +56,9 @@ export class OwnerDashboardComponent {
   }
 
   ngOnInit(): void {
+
+    this.handleWebSocketMessages();
+
     this.token = this.storageService.getItem('token');
     this.userService.getUserInfo().subscribe((response)=>{
       this.userInfo = response;
@@ -171,5 +176,9 @@ isSidebarCollapsed = false;
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
+
+  handleWebSocketMessages():void{
+    this.websocketService.connect();
   }
 }

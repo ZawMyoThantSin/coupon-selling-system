@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-business',
   standalone: true,
-  imports: [MdbTooltipModule, MdbRippleModule, CommonModule,RouterLink,NgxPaginationModule,FormsModule],
+  imports: [MdbTooltipModule, MdbRippleModule, CommonModule,RouterLink,NgxPaginationModule, FormsModule],
   templateUrl: './business.component.html',
   styleUrl: './business.component.css'
 })
@@ -30,7 +30,6 @@ export class BusinessComponent implements OnInit {
     itemsPerPage = 4;
 
     searchTerm: string = '';
-
 
     constructor(private modalService: MdbModalService,
                 private toastr:ToastrService,
@@ -82,7 +81,6 @@ export class BusinessComponent implements OnInit {
         });
       }
 
-
       getImageUrl(imagePath: string): string {
         return this.businessService.getImageUrl(imagePath);
       }
@@ -92,4 +90,10 @@ export class BusinessComponent implements OnInit {
         );
       }
 
+      get filteredBusinesses(): Business[] {
+          return this.businesses.filter((business) =>
+            business.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+          );
+        }
+      
 }

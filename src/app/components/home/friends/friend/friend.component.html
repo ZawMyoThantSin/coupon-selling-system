@@ -6,7 +6,7 @@
     <input
       type="text"
       class="form-control search-input"
-      placeholder="Search Friends by Email..."
+      placeholder="Add Friends by Email..."
       [(ngModel)]="searchQuery"
       (input)="onInput()"
       autocomplete="off"
@@ -47,6 +47,12 @@
               (click)="openFriendModal(friend.friendId)"
             >
               See More
+            </button>
+            <button
+              class="btn btn-outline-success btn-sm mt-2"
+              [routerLink]="['message', friend.friendId]"
+            >
+            <i class="fas fa-comment-alt"></i> Chat
             </button>
             <button
               class="btn btn-outline-danger btn-sm mt-2"

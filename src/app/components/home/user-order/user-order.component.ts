@@ -10,6 +10,7 @@ import { StorageService } from '../../../services/storage.service';
 import { JwtService } from '../../../services/jwt.service';
 import { CartService } from '../../../services/cart/cart.service';
 import { ProductService } from '../../../services/product/product.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-user-order',
@@ -51,7 +52,8 @@ export class UserOrderComponent {
     private toastr: ToastrService,
     private location: Location,
     private storageService : StorageService,
-    private jwtService : JwtService
+    private jwtService : JwtService,
+    private notificationService: NotificationService
   ) {}
 
 
@@ -163,6 +165,16 @@ export class UserOrderComponent {
     this.userOrderService.submitOrder(formData).subscribe(
       (response) => {
         this.toastr.success('Order submitted successfully!', 'Success');
+
+      //   // Notify Admin
+      // const notification = {
+      //   receiverId: null, // Null for global (admin) notifications
+      //   message: 'A new order has been placed.',
+      //   type: 'ORDER_CREATED',
+      //   route: '/d/order', // Admin dashboard route
+      // };
+      // this.notificationService.createNotification(notification).subscribe();
+
         if(this.cartIds){
            this.cartIds.map(c => {
            this.cartService.clearCart(c).subscribe(res => {

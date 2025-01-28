@@ -1,6 +1,5 @@
 /* Modal Header */
 
-
   .modal-title {
     font-size: 1.25rem;
     font-weight: 500;
@@ -42,7 +41,6 @@
   .form-control[type="file"] {
     font-size: 0.875rem;
   }
-
   .modal-backdrop {
     position: fixed;
     top: 0;
@@ -75,3 +73,4 @@
     justify-content: flex-end;
     gap: 10px;
   }
+

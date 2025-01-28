@@ -93,6 +93,15 @@ export class BusinessReviewComponent implements OnInit {
 
               this.toastr.success('Thank you for your rating!');
                 this.hasRated=true;
+                this.businessReviewService.getAllRating(this.business_id).subscribe(
+                  (response) => {
+                this.rating = response;
+                this.sortReviews(); 
+                },
+                  (error) => {
+                console.error('Error fetching ratings after submission:', error);
+                }
+              );
             },
             (error) => {
                 console.error('Error submitting review:', error);

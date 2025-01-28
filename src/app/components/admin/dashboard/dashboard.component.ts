@@ -10,6 +10,7 @@ import { response } from 'express';
 import { error } from 'console';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
 import { ToastrService } from 'ngx-toastr';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -28,6 +29,8 @@ export class DashboardComponent implements OnInit{
   seeAll = false;
   userInfo!:UserResponse;
   userId:any;
+  notifications: { id:number; message: string; route: string; isRead: number; type:string }[] = [];
+  unreadCount: number = 0;
 
   constructor(
     private toastr: ToastrService,
@@ -36,7 +39,8 @@ export class DashboardComponent implements OnInit{
     private businessService: BusinessService,
     private userService: UserService,
     private jwtService: JwtService,
-    private websocketService: WebsocketService
+    private websocketService: WebsocketService,
+    private notificationService: NotificationService
   ) {
     this.router.events.subscribe(() => {
       this.activeRoute = this.router.url; // Get the active URL
@@ -49,7 +53,18 @@ export class DashboardComponent implements OnInit{
     this.websocketService.onMessage().subscribe((message) => {
       console.log("MSG", message)
       if(message =="ORDER_CREATED"){
+        const notification = {
+          id: 0,
+          message: 'New order arrived! Click to view details.',
+          route: '/d/order',
+          type: 'NEW_ORDER',
+          isRead: 1,
+        };
+
+        this.notifications.unshift(notification); // Add to the notification list
+        this.unreadCount++;
         this.toastr.info("New order is arrived! | Go to check ","Alert");
+        this.ngOnInit();
       }
     });
   }
@@ -71,6 +86,8 @@ export class DashboardComponent implements OnInit{
     } else {
       this.isLoggedIn = true;
     }
+      // Fetch notifications
+      this.getNotifications();
   }
 
   // Fetch business names and toggle collapse
@@ -105,9 +122,51 @@ export class DashboardComponent implements OnInit{
   getImageUrl(imagePath: string): string {
     return this.businessService.getImageUrl(imagePath);
   }
+
+  markAllAsRead(): void {
+    console.log('User ID:', this.userId);
+    this.notificationService.markAllAsRead(this.userId).subscribe(() => {
+        this.notifications.forEach((n) => (n.isRead = 1));
+        this.unreadCount = 0;
+      },
+      (error) => console.error('Error marking all as read:', error)
+    );
+    this.ngOnInit();
+  }
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+  getNotifications(): void {
+    this.notificationService.getNotificationsByReceiver(this.userId).subscribe(
+      (notifications) => {
+        this.notifications = notifications;
+        this.unreadCount = notifications.filter((n) => n.isRead === 0).length;
+      },
+      (error) => console.error('Error fetching notifications:', error)
+    );
+  }
+  markNotificationAsRead(notificationId: number): void {
+    this.notificationService.markAsRead(notificationId).subscribe(
+      () => {
+        // Remove the notification from the list or mark it as read locally
+        const notification  = this.notifications.find((n) => n.id === notificationId);
+        if (notification) {
+          notification.isRead = 1; // Mark as read
+        }
+        this.unreadCount = this.notifications.filter((n) => n.isRead === 0).length;
+        this.ngOnInit(); // Refresh the notifications
+      },
+      (error) => console.error('Error marking notification as read:', error)
+    );
+  }
+
+  getSortedNotifications(): any[] {
+    return this.notifications.sort((a, b) => a.isRead - b.isRead);
+
   isSidebarCollapsed = false;
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
+
   }
 }
