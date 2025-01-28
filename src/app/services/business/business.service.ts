@@ -123,6 +123,13 @@ getBusinessIncome(id: number): Observable<any[]> {
   });
 }
 
+calculateAmountToPay(id: number): Observable<any>{
+   
+  return this.http.get(`${this.BASE_URL}/api/businesses/${id}/amount-to-pay`, {
+    responseType: 'json'
+  });
+}
+
 payOwner(request: { businessId: number; desiredPercentage: number }): Observable<any> {
   if (request.desiredPercentage <= 0 || request.desiredPercentage > 100) {
     return throwError(() => new Error("Invalid profit percentage. It must be between 1 and 100."));
@@ -137,5 +144,17 @@ payOwner(request: { businessId: number; desiredPercentage: number }): Observable
 getPaidHistory(businessId: number): Observable<any> {
   return this.http.get(`${this.BASE_URL}/api/businesses/${businessId}/paid-history`);
 }
+
+updatePercentage(id: number, percentage: any): Observable<any> {
+  return this.http.get(`${this.BASE_URL}/api/businesses/update-percent/${id}/${percentage}`);
+}
+
+generatePaidHistoryReport(type: 'pdf' | 'excel', businessId: number | null): Observable<Blob> {
+    const url = `${this.BASE_URL}/api/businesses/paid-history-report`;
+    const params = { reportType: type, businessId: businessId?.toString() || '' };
+    const responseType = type === 'excel' ? 'arraybuffer' : 'blob'; // Use 'arraybuffer' for Excel
+    return this.http.get(url, { responseType: responseType as 'blob', params });
+}
+
 
 }

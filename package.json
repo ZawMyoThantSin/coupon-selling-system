@@ -24,6 +24,7 @@
     "@angular/router": "^18.2.0",
     "@angular/ssr": "^18.2.11",
     "@fortawesome/fontawesome-free": "^6.7.1",
+    "@ng-select/ng-select": "^14.2.0",
     "@zxing/browser": "^0.1.5",
     "@zxing/library": "^0.21.3",
     "@zxing/ngx-scanner": "^19.0.0",

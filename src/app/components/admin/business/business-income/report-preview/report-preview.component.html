@@ -1,0 +1,61 @@
+<div class="card mx-auto mt-4 shadow-sm" style="max-width: 1000px; border-radius: 12px;">
+  <!-- Card Header -->
+  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center rounded-top p-3">
+   
+    <button class="btn btn-light btn-back" (click)="goBack()">
+      <i class="fas fa-arrow-left me-2"></i> Back
+    </button>
+    <!-- Custom Business Filter Dropdown -->
+    <div class="custom-dropdown">
+      <button class="custom-dropdown-toggle" (click)="toggleDropdown()">
+        <i class="fas fa-filter me-2"></i>
+        <span>{{ selectedBusinessName || 'All Businesses' }}</span>
+      </button>
+      <ul class="custom-dropdown-menu" [class.show]="isDropdownOpen">
+        <li>
+          <a class="custom-dropdown-item" (click)="filterReport(null)">All Businesses</a>
+        </li>
+        <li *ngFor="let business of businesses">
+          <a class="custom-dropdown-item" (click)="filterReport(business.id)">
+            {{ business.name }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Download Buttons -->
+    <div class="d-flex gap-2">
+      <button class="btn btn-light btn-download" (click)="downloadReport('pdf')" [disabled]="!reportUrl">
+        <i class="fas fa-file-pdf me-2"></i> Download PDF
+      </button>
+      <button class="btn btn-light btn-download" (click)="downloadReport('excel')" [disabled]="!reportUrl">
+        <i class="fas fa-file-excel me-2"></i> Download Excel
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading" class="d-flex flex-column align-items-center my-5 py-4">
+    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-muted fs-5">Generating your report, please wait...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-danger d-flex align-items-center mx-3 mt-3" role="alert">
+    <i class="fas fa-exclamation-triangle me-3 fs-5"></i>
+    <span class="fs-5">{{ error }}</span>
+  </div>
+
+  <!-- Report Preview -->
+  <div *ngIf="reportUrl" class="card-body p-4">
+    <h4 class="text-center mb-4 fw-bold">Generated Report Preview</h4>
+    <iframe
+      [src]="reportUrl"
+      width="100%"
+      height="600px"
+      style="border: none; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);"
+    ></iframe>
+  </div>
+</div>

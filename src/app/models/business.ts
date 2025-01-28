@@ -23,4 +23,5 @@ export interface Business {
   lastPaidAmount:any;
   paymentStatus:any;
   imageFile?:File | null;
+  amountToPay: any;
 }

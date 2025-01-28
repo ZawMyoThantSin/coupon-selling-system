@@ -23,6 +23,7 @@
           <tr>
             <th scope="col">Date</th>
             <th scope="col">Paid Amount</th>
+            <th scope="col">Admin Profit</th>
             <th scope="col">Percentage</th>
           </tr>
         </thead>
@@ -30,6 +31,7 @@
           <tr *ngFor="let record of paymentHistory">
             <td>{{ record.paymentDate | date: 'medium' }}</td>
             <td>{{ record.paidAmount | currency }}</td>
+            <td>{{ record.adminProfit | currency }}</td>
             <td>
               <span
                 *ngIf="record.desiredPercentage === 0.0"

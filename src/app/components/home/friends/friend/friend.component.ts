@@ -19,6 +19,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
+import { MessageService } from '../../../../services/user/message.service';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-friend',
@@ -30,7 +32,8 @@ import { MatListModule } from '@angular/material/list';
     MatTableModule,
     MatIconModule,
     MatDialogModule,
-    MatListModule
+    MatListModule,
+    RouterModule
   ],
   templateUrl: './friend.component.html',
   styleUrls: ['./friend.component.css']
@@ -55,12 +58,13 @@ export class FriendComponent implements OnInit {
   friendIdToDelete: number = 0;
   friendRequestIdToDelete: number = 0;
 
-  messages: { [friendId: number]: { sender: string; content: string }[] } = {};
+  messages: { [key: number]: { sender: string; content: string; sendAt: any }[] } = {};
   activeChat: { friendId: number; friendName: string } | null = null;
   newMessage: string = '';
 
   constructor(
     private friendshipService: FriendsService,
+    private messageService: MessageService,
     private storageService: StorageService,
     private userService: UserService,
     private toastr: ToastrService,
@@ -315,49 +319,6 @@ closeConfirmCanelModal() {
     return profile
       ? this.userService.getImageUrl(profile)
       : '/images/default-avatar.png';
-  }
-
-  // Open Chat Window
-  openChatWindow(friendId: number, friendName: string): void {
-    this.activeChat = { friendId, friendName };
-    this.loadChatMessages(friendId);
-  }
-
-  // Close Chat Window
-  closeChatWindow(): void {
-    this.activeChat = null;
-  }
-
-  // Load Messages from Backend
-  loadChatMessages(friendId: number): void {
-    // this.friendshipService.getChatMessages(friendId).subscribe({
-    //   next: (messages) => {
-    //     this.messages[friendId] = messages;
-    //   },
-    //   error: () => this.toastr.error('Error loading messages.', 'Error'),
-    // });
-  }
-
-  // Send Message
-  sendMessage(): void {
-    if (this.activeChat && this.newMessage.trim()) {
-      const message = {
-        senderId: this.loggedInUserId,
-        recipientId: this.activeChat.friendId,
-        content: this.newMessage.trim(),
-      };
-
-      // this.friendshipService.sendChatMessage(message).subscribe({
-      //   next: () => {
-      //     this.messages[this.activeChat!.friendId].push({
-      //       sender: 'You',
-      //       content: this.newMessage.trim(),
-      //     });
-      //     this.newMessage = '';
-      //   },
-      //   error: () => this.toastr.error('Error sending message.', 'Error'),
-      // });
-    }
   }
 
   private handleWebSocketMessage(message: string): void {

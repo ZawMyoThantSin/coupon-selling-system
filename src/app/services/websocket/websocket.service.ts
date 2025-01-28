@@ -14,6 +14,7 @@ export class WebsocketService {
   private readonly maxReconnectAttempts = 10;
   private readonly reconnectDelay = 5000;
   private token!: string | null;
+  private pingIntervalId!: any;
 
   constructor(private ngZone: NgZone, private storageService: StorageService) {
     this.token = this.storageService.getItem('token');
@@ -39,6 +40,7 @@ export class WebsocketService {
     this.socket.onopen = () => {
       console.log('WebSocket connected');
       this.reconnectAttempts = 0;
+      this.startHeartbeat();
     };
 
     this.socket.onmessage = (event: MessageEvent) => {
@@ -46,8 +48,13 @@ export class WebsocketService {
       console.log('WebSocket message received:', event.data);
 
       this.ngZone.run(() => {
-        // Since messages are plain strings, no JSON parsing
-        this.messageSubject.next(event.data);
+        try {
+          const message = JSON.parse(event.data); // Parse JSON message if applicable
+          this.messageSubject.next(message);
+        } catch (error) {
+          console.error('Failed to parse WebSocket message:', error);
+          this.messageSubject.next(event.data);
+        }
       });
     };
 
@@ -57,6 +64,7 @@ export class WebsocketService {
 
     this.socket.onclose = (event: CloseEvent) => {
       console.warn('WebSocket disconnected:', event.reason);
+      this.stopHeartbeat(); // Stop heartbeat on disconnection
       this.handleReconnection();
     };
   }
@@ -70,6 +78,7 @@ export class WebsocketService {
   disconnect(): void {
     if (this.socket) {
       this.socket.close();
+      this.stopHeartbeat(); // Stop heartbeat on disconnection
       console.log('WebSocket disconnected manually.');
     }
   }
@@ -104,4 +113,20 @@ export class WebsocketService {
   private calculateReconnectDelay(): number {
     return Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1), 30000);
   }
+
+  private startHeartbeat(): void {
+    this.pingIntervalId = setInterval(() => {
+      if (this.socket?.readyState === WebSocket.OPEN) {
+        this.socket.send(JSON.stringify({ type: 'PING' }));
+      }
+    }, 30000); // Ping every 30 seconds
+  }
+
+  private stopHeartbeat(): void {
+    if (this.pingIntervalId) {
+      clearInterval(this.pingIntervalId);
+      this.pingIntervalId = null;
+    }
+  }
+
 }
