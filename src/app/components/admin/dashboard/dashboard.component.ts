@@ -18,6 +18,7 @@ import { NotificationService } from '../../../services/notification/notification
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit{
+  isCollapsed: boolean = false;
   sidebarOpen: boolean = true; // Flag to control the sidebar visibility
   activeRoute: any = '';
   isLoggedIn: boolean = false;
@@ -110,9 +111,6 @@ export class DashboardComponent implements OnInit{
     }
   }
 
-  toggleSidebar(): void {
-    this.sidebarOpen = !this.sidebarOpen; // Toggle the sidebar visibility
-  }
 
   logoutButton(): void{
     this.storageService.removeItem("token");
@@ -124,6 +122,7 @@ export class DashboardComponent implements OnInit{
   getImageUrl(imagePath: string): string {
     return this.businessService.getImageUrl(imagePath);
   }
+
   markAllAsRead(): void {
     console.log('User ID:', this.userId);
     this.notificationService.markAllAsRead(this.userId).subscribe(() => {
@@ -163,5 +162,11 @@ export class DashboardComponent implements OnInit{
 
   getSortedNotifications(): any[] {
     return this.notifications.sort((a, b) => a.isRead - b.isRead);
+
+  isSidebarCollapsed = false;
+
+  toggleSidebar() {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+
   }
 }

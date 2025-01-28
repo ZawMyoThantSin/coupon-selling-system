@@ -326,21 +326,21 @@ closeConfirmCanelModal() {
 
     switch (message) {
       case 'FRIEND_REQUEST_RECEIVED':
-        // this.toastr.info('You have a new friend request!', 'Info');
+        this.toastr.info('You have a new friend request!', 'Info');
         this.loadPendingRequests();
         break;
       case 'FRIEND_REQUEST_ACCEPTED':
-        // this.toastr.success('Your friend request was accepted!', 'Success');
+        this.toastr.success('Your friend request was accepted!', 'Success');
         this.loadFriends();
         this.loadPendingRequests();
         this.loadPendingRequests();
         break;
       case 'FRIEND_REQUEST_DENIED':
-        // this.toastr.info('Your friend request was denied.', 'Info');
+        this.toastr.info('Your friend request was denied.', 'Info');
         this.loadPendingRequests();
         break;
       case 'FRIEND_REQUEST_CANCELLED':
-        // this.toastr.warning('A friend request sent to you was canceled.', 'Info');
+        this.toastr.warning('A friend request sent to you was canceled.', 'Info');
         this.loadPendingRequests();
         break;
       case 'UNFRIENDED':

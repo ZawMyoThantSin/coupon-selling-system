@@ -3,11 +3,14 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { BusinessService } from '../../../../services/business/business.service';
 import { CommonModule } from '@angular/common';
 import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
+import { QRCodeModule } from 'angularx-qrcode';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-sale-coupon-report',
   standalone: true,
-  imports: [CommonModule,MdbDropdownModule],
+  imports: [CommonModule,FormsModule,QRCodeModule],
   templateUrl: './sale-coupon-report.component.html',
   styleUrl: './sale-coupon-report.component.css'
 })
@@ -18,27 +21,40 @@ export class SaleCouponReportComponent implements OnInit{
   // isPdfDropdownOpen: boolean = false;
   // isExcelDropdownOpen: boolean = false;
   loading: boolean = false;
-  defaultBusinessId: number = 36; // Default business ID
+  businessId: number = 0; // Default business ID
   pdfTitle: string = '';
-  currentReportType: 'sale_coupon_weekly' | 'sale_coupon_monthly' | 'product' = 'sale_coupon_weekly';
-
+  startDate: string | null = null;
+  endDate: string | null = null;
+  currentParentReportType: string = '';
+  currentReportType: 'sale_coupon_weekly' | 'sale_coupon_monthly' | 'product' |'used_coupon_weekly' | 'used_coupon_monthly' | 'coupon' |'used_coupon'|'sale_coupon' |'remain_coupon'|'expired_coupon' |'all_products' | 'best_products'= 'sale_coupon_weekly';
+  qrCodeUrl: string | null = null;
   constructor(
     private businessService: BusinessService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-
+    this.route.params.subscribe((params) => {
+      this.businessId = +params['id'];
+      console.log('Business ID:', this.businessId);
+    });
   }
 
   generateReport(
     type: 'pdf' | 'excel',
-    reportType: 'sale_coupon_weekly' | 'sale_coupon_monthly' | 'product',
-    businessId: number = this.defaultBusinessId
+    reportType: 'sale_coupon_weekly' | 'sale_coupon_monthly' | 'product'|'used_coupon_weekly' | 'used_coupon_monthly' | 'coupon' |'used_coupon'|'sale_coupon' |'remain_coupon'|'expired_coupon' |'all_products' | 'best_products',
+    businessId: number = this.businessId
   ) {
     this.loading = true;
     this.error = null;
     this.currentReportType = reportType;
+
+    // Append default time to startDate and endDate
+  const params = {
+    startDate: this.startDate ? `${this.startDate}T00:00:00` : '', // Add default time (00:00:00)
+    endDate: this.endDate ? `${this.endDate}T23:59:59` : '', // Add default time (23:59:59)
+  };
 
     let service;
     switch (reportType) {
@@ -48,8 +64,35 @@ export class SaleCouponReportComponent implements OnInit{
       case 'sale_coupon_monthly':
         service = this.businessService.saleCouponReportForMonthly.bind(this.businessService);
         break;
+        case 'used_coupon_weekly':
+          service = this.businessService.usedCouponReportForWeekly.bind(this.businessService);
+          break;
+        case 'used_coupon_monthly':
+          service = this.businessService.usedCouponReportForMonthly.bind(this.businessService);
+          break;
       case 'product':
         service = this.businessService.productReport.bind(this.businessService);
+        break;
+        case 'coupon':
+        service = this.businessService.couponReport.bind(this.businessService);
+        break;
+        case 'sale_coupon':
+        service = this.businessService.saleCouponReport.bind(this.businessService);
+        break;
+        case 'used_coupon':
+        service = this.businessService.usedCouponReport.bind(this.businessService);
+        break;
+        case 'remain_coupon':
+            service = this.businessService.reaminCouponReport.bind(this.businessService);
+        break;
+        case 'expired_coupon':
+          service = this.businessService.expiredCouponReport.bind(this.businessService);
+      break;
+      case 'all_products':
+        service = this.businessService.productReport.bind(this.businessService);
+        break;
+        case 'best_products':
+        service = this.businessService.bestProductListReport.bind(this.businessService);
         break;
       default:
         this.error = 'Invalid report type.';
@@ -57,13 +100,12 @@ export class SaleCouponReportComponent implements OnInit{
         return;
     }
 
-    service(type, businessId).subscribe({
+    service(type, businessId,params).subscribe({
       next: (data: Blob) => {
         const url = URL.createObjectURL(data);
         if (type === 'pdf') {
           this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
           this.excelSrc = null;
-          this.pdfTitle = `${reportType.replace('_', ' ')} Report PDF`;
         } else {
           this.excelSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
           this.pdfSrc = null;
@@ -78,7 +120,7 @@ export class SaleCouponReportComponent implements OnInit{
     });
   }
 
-  downloadReport(type: 'pdf' | 'excel', businessId: number = this.defaultBusinessId) {
+  downloadReport(type: 'pdf' | 'excel', businessId: number = this.businessId) {
     this.loading = true;
     this.error = null;
 
@@ -90,8 +132,35 @@ export class SaleCouponReportComponent implements OnInit{
       case 'sale_coupon_monthly':
         service = this.businessService.saleCouponReportForMonthly.bind(this.businessService);
         break;
+        case 'used_coupon_weekly':
+          service = this.businessService.usedCouponReportForWeekly.bind(this.businessService);
+          break;
+        case 'used_coupon_monthly':
+          service = this.businessService.usedCouponReportForMonthly.bind(this.businessService);
+          break;
       case 'product':
         service = this.businessService.productReport.bind(this.businessService);
+        break;
+        case 'coupon':
+          service = this.businessService.couponReport.bind(this.businessService);
+          break;
+          case 'sale_coupon':
+        service = this.businessService.saleCouponReport.bind(this.businessService);
+        break;
+        case 'used_coupon':
+        service = this.businessService.usedCouponReport.bind(this.businessService);
+        break;
+        case 'remain_coupon':
+            service = this.businessService.reaminCouponReport.bind(this.businessService);
+        break;
+        case 'expired_coupon':
+          service = this.businessService.expiredCouponReport.bind(this.businessService);
+      break;
+      case 'all_products':
+        service = this.businessService.productReport.bind(this.businessService);
+        break;
+        case 'best_products':
+        service = this.businessService.bestProductListReport.bind(this.businessService);
         break;
       default:
         this.error = 'Invalid report type.';
@@ -99,7 +168,13 @@ export class SaleCouponReportComponent implements OnInit{
         return;
     }
 
-    service(type, businessId).subscribe({
+    // Pass the params object, even if it's empty
+  const params = {
+    startDate: this.startDate || '',
+    endDate: this.endDate || '',
+  };
+
+    service(type, businessId,params).subscribe({
       next: (data: Blob) => {
         const url = URL.createObjectURL(data);
         const link = document.createElement('a');
@@ -120,5 +195,4 @@ export class SaleCouponReportComponent implements OnInit{
       },
     });
   }
-
 }

@@ -126,13 +126,13 @@ cellRenderer: (params: any) => {
           class="form-control discount-input"
           style="width: 70px; margin-right: 8px;"
         />
-        <button class="btn btn-success btn-sm save-discount-btn d-flex align-items-center"
+        <a class=" me-1 save-discount-btn d-flex align-items-center"
           style="margin-right: 4px;" ${this.isSaving ? 'disabled' : ''}>
-          <i class="fas fa-check me-1"></i>
-        </button>
-        <button class="btn btn-danger  btn-sm cancel-discount-btn d-flex align-items-center">
-          <i class="fas fa-times me-1"></i>
-        </button>
+          <i class="fas fa-check me-1 text-success"></i>
+        </a>
+        <a class=" cancel-discount-btn d-flex align-items-center">
+          <i class="fas fa-times me-1 text-danger"></i>
+        </a>
       </div>
     `;
 

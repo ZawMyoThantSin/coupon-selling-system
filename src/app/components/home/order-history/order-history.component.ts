@@ -43,7 +43,10 @@ export class OrderHistoryComponent implements OnInit{
  }
  handleWebSocketMessages():void{
   this.websocketService.onMessage().subscribe((message) => {
+
     if(message =="ORDER_ACCEPTED"|| message == 'ORDER_REJECTED'){
+      this.loadOrders(this.user_id);
+    }else{
       this.loadOrders(this.user_id);
     }
   });

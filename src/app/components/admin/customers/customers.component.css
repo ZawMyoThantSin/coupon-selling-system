@@ -1,0 +1,37 @@
+/* Adjusting the table and its columns */
+.table {
+  margin-bottom: 0;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+  vertical-align: middle;
+  padding: 12px; /* Adjust the padding for better spacing */
+}
+
+.table thead {
+  background-color: #f8f9fa; /* Light background for the header */
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f9f9f9;
+}
+
+.table-responsive {
+  overflow-x: auto; /* Ensures horizontal scrolling on smaller screens */
+}
+
+.table .badge-success {
+  background-color: #28a745;
+}
+
+.table .badge-warning {
+  background-color: #ffc107;
+}
+
+.card {
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}

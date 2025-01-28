@@ -2,74 +2,108 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../../../services/customer/customer.service';
 import { Customer } from '../../../models/customer';
-import { RouterLink } from '@angular/router';
-import SimpleDatatables from 'simple-datatables';
 import { FormsModule } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { UserService } from '../../../services/user/user.service';
+
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [CommonModule,RouterLink,FormsModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule],
   templateUrl: './customers.component.html',
-  styleUrl: './customers.component.css'
+  styleUrls: ['./customers.component.css']
 })
-export class CustomersComponent {
-  fund:any;
-  customers:Customer[]= [];
+export class CustomersComponent implements OnInit {
+  customers: Customer[] = [];
+  filteredCustomers: Customer[] = [];
+  uniqueRoles: string[] = [];
+  selectedRole: string = '';
+  searchTerm: string = '';
+  currentPage: number = 1;
+  fund: any;
   editMode: number | null = null; // Track the ID of the row being edited
-  searchTerm: string = '';      
 
-  constructor(private customerService: CustomerService,
-              private toastr: ToastrService
-  ){}
+
+  constructor(
+    private customerService: CustomerService,
+    private userService: UserService,
+    private toastr: ToastrService
+  ) {}
+
+
   ngOnInit(): void {
-    this.customerService.getCustomers().subscribe((data:any) =>  {
-      this.fund = data.funds
+    this.customerService.getCustomers().subscribe((data: any) => {
       this.customers = data;
+      this.filteredCustomers = this.customers; // Initialize with all customers
+      this.uniqueRoles = [...new Set(this.customers.map((c) => c.role))]; // Get unique roles
     });
+  }
+
+  filterByRole(): void {
+    const roleFiltered = this.selectedRole
+      ? this.customers.filter((customer) => customer.role === this.selectedRole)
+      : this.customers;
+
+    this.filteredCustomers = this.searchTerm
+      ? roleFiltered.filter((customer) =>
+          customer.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+        )
+      : roleFiltered;
+  }
+  filterByName(): void {
+    // Filter customers based on the search term
+    if (this.searchTerm) {
+      this.filteredCustomers = this.customers.filter((customer) =>
+        customer.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    } else {
+      this.filteredCustomers = this.customers; // Show all if search term is empty
+    }
+
+    // Apply role filter if selected
+    if (this.selectedRole) {
+      this.filteredCustomers = this.filteredCustomers.filter(
+        (customer) => customer.role === this.selectedRole
+      );
+    }
   }
   editFunds(item: any) {
     this.editMode = item.id; // Set the edit mode for the specific item by ID
+    this.fund = item.funds; // Load the current fund value for editing
   }
 
   saveFunds(item: any) {
     this.editMode = null; // Exit edit mode
     const partialUpdate = {
-      id: item.id,      // Include the user ID
-      fund: this.fund   // Include only the updated fund value
+      id: item.id,
+      fund: this.fund
     };
 
-    // console.log('Funds updated:', partialUpdate);
-
     this.customerService.editUserFund(partialUpdate).subscribe(
-      (res) => {
-        // console.log("Update successful:", res);
-        // Update the local customer data with the new fund value
-        this.toastr.success("Updated Successfully...","Success");
-        const customer = this.customers.find(c => c.id === item.id);
+      () => {
+        this.toastr.success('Funds updated successfully.', 'Success');
+        const customer = this.customers.find((c) => c.id === item.id);
         if (customer) {
           customer.funds = this.fund;
         }
       },
       (error) => {
-        this.toastr.error("Error In Update...","Error");
-        console.log("Error updating fund:", error)}
+        this.toastr.error('Error updating funds.', 'Error');
+        console.error('Error updating funds:', error);
+      }
     );
   }
 
-
-  cancelEdit(item: any) {
+  cancelEdit() {
     this.editMode = null; // Disable edit mode
-    // Optionally reset the fund value if needed
-    this.fund = item.funds; // Reset the field to the original value
+    this.fund = null; // Reset the fund value
   }
 
-  getImageUrl(path:any){
+
+  getImageUrl(image: any): string {
+    return this.userService.getImageUrl(image);
+
   }
-  
-  get filteredCustomers(): Customer[] {
-    return this.customers.filter((customer) =>
-      customer.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
-  }
+
 }

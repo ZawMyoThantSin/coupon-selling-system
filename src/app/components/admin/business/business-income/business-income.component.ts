@@ -9,6 +9,7 @@ import { PaymentHistoryModalComponent } from './payment-history-modal/payment-hi
 import { MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { Router } from '@angular/router';
 
+
 @Component({
   selector: 'app-business-income',
   standalone: true,
@@ -38,6 +39,7 @@ export class BusinessIncomeComponent implements OnInit {
               private modalService: MdbModalService,
               private cdr: ChangeDetectorRef,
               private router: Router
+
   ) {}
 
   ngOnInit(): void {
@@ -59,8 +61,7 @@ export class BusinessIncomeComponent implements OnInit {
         })
         this.cdr.detectChanges();
         this.loadIncomes();
-        this.loadPaidHistories();
-        
+        this.loadPaidHistories();    
         console.log("Business Incomes " , this.businesses);
         
       },
@@ -123,7 +124,6 @@ export class BusinessIncomeComponent implements OnInit {
       this.toastr.error('Invalid profit percentage. It must be between 1 and 100.');
       return;
     }
-
     this.businessService
       .payOwner({ businessId: business.id, desiredPercentage: business.profitPercentage })
       .subscribe({
@@ -151,6 +151,7 @@ export class BusinessIncomeComponent implements OnInit {
           businesses.income = incomeData;
           
           this.updateProfits(businesses);          
+
         },
         error: (error) => {
           console.error(`Failed to fetch income for business ID ${businesses.id}:`, error);
@@ -194,6 +195,7 @@ export class BusinessIncomeComponent implements OnInit {
     return (
       business.paymentStatus !== 'PAID' &&
       business.income > business.lastPaidAmount 
+
     );
   }
 
@@ -202,7 +204,6 @@ export class BusinessIncomeComponent implements OnInit {
     console.log("Business Name " , business.name),
     this.modalService.open(PaymentHistoryModalComponent, {
       modalClass: 'modal-lg',
-      
       data: { businessId: business.id, businessName: business.name },
     });
   }

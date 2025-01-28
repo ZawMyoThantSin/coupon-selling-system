@@ -14,7 +14,9 @@ import { ToastrService } from 'ngx-toastr';
   <button type="button" class="btn-close" aria-label="Close" (click)="modalRef.close()"></button>
 </div>
 <div class="modal-body">
+
 <form [formGroup]="userForm" (ngSubmit)="showConfirmation()">
+
     <div class="mb-3">
       <label for="name" class="form-label">Username</label>
       <input
@@ -129,4 +131,30 @@ showConfirmation(): void {
     this.modalRef.close();
     this.toastr.info('Submission canceled.');
   }
+  if (this.userForm.invalid) {
+    return;
+  }
+
+  // Prepare preview data for confirmation modal
+  this.formDataPreview = {
+    name: this.userForm.value.name,
+    email: this.userForm.value.email,
+    password: this.userForm.value.password,
+  };
+
+  this.showConfirmationModal = true; // Show confirmation modal
+}
+
+confirmSubmission(): void {
+  if (this.userForm.valid) {
+    this.modalRef.close(this.userForm.value); // Pass the form values
+  }
+  this.showConfirmationModal = false; // Hide confirmation modal
+}
+
+cancelSubmission(): void {
+  this.showConfirmationModal = false;
+  this.modalRef.close();
+  this.toastr.info('Submission canceled.');
+}
 }

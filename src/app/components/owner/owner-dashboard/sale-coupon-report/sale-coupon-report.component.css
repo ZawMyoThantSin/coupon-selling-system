@@ -1,48 +1,111 @@
-.report-container {
-  max-width: 800px;
+/* General container for spacing */
+.container {
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 20px;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
+
+
+/* Modernizing the select dropdown */
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
-.loading, .error {
-  text-align: center;
-  margin: 20px 0;
+.form-control {
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #9d9595;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.error {
-  color: red;
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(38, 143, 255, 0.5);
 }
 
-.pdf-viewer {
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-}
+/* Modern buttons with hover effect */
+.btn {
 
-.button-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-button {
   padding: 10px 20px;
+  font-size: 10px;
+
+}
+
+/* Primary button */
+.btn-primary {
   background-color: #007bff;
-  color: white;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
-button:disabled {
-  background-color: #cccccc;
-  cursor: not-allowed;
-}
-
-button:hover:not(:disabled) {
+.btn-primary:hover {
   background-color: #0056b3;
+}
+
+/* Success button */
+.btn-success {
+  background-color: #28a745;
+  border: none;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+}
+
+/* Warning button */
+.btn-warning {
+  background-color: #ffc107;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #e0a800;
+}
+
+/* Spinner inside buttons */
+.spinner-border-sm {
+  width: 20px;
+  height: 20px;
+  border-width: 2px;
+}
+
+/* Modernize the iframe for displaying the PDF */
+iframe {
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Error message styling */
+.alert {
+  border-radius: 10px;
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 15px;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+/* Modern buttons container layout */
+.d-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mt-4 {
+  margin-top: 30px;
+}
+
+.mb-4 {
+  margin-bottom: 30px;
+}
+
+.ml-2 {
+  margin-left: 10px;
+}
+
+/* Reduce padding for the select box */
+.form-select.form-select-sm {
+  padding: 0.25rem 0.5rem; /* Adjust the values as needed */
 }

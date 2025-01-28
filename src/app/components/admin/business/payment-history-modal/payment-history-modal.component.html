@@ -1,0 +1,59 @@
+<div class="modal-header bg-primary text-white">
+  <h5 class="modal-title">Payment History for {{ businessName }}</h5>
+  <button
+    type="button"
+    class="btn-close text-white"
+    aria-label="Close"
+    (click)="closeModal()"
+  ></button>
+</div>
+<div class="modal-body">
+  <!-- Loader -->
+  <div *ngIf="loading" class="d-flex justify-content-center my-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Payment History Table -->
+  <div *ngIf="!loading && paymentHistory.length > 0">
+    <div class="table-responsive">
+      <table class="table table-hover table-striped align-middle">
+        <thead class="bg-light">
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Paid Amount</th>
+            <th scope="col">Percentage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let record of paymentHistory">
+            <td>{{ record.paymentDate | date: 'medium' }}</td>
+            <td>{{ record.paidAmount | currency }}</td>
+            <td>
+              <span
+                *ngIf="record.desiredPercentage === 0.0"
+                class="badge bg-danger text-white"
+              >
+                Not Paid
+              </span>
+              <span *ngIf="record.desiredPercentage > 0.0">
+                {{ record.desiredPercentage }}%
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- No Payment History -->
+  <div *ngIf="!loading && paymentHistory.length === 0" class="text-center">
+    <p class="text-muted mt-3">No payment history available.</p>
+  </div>
+</div>
+<div class="modal-footer bg-light d-flex justify-content-end">
+  <button type="button" class="btn btn-secondary" (click)="closeModal()">
+    Close
+  </button>
+</div>

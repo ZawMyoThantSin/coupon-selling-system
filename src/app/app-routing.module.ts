@@ -50,28 +50,36 @@ import { BusinessIncomeComponent } from './components/admin/business/business-in
 import { OwnerOrderComponent } from './components/owner/owner-order/owner-order.component';
 import { UsedCouponComponent } from './components/owner/owner-dashboard/used-coupon/used-coupon.component';
 import { CouponCardComponent } from './components/home/homepage/coupon-card/coupon-card.component';
+
 import { MessageComponent } from './components/home/friends/friend/message/message.component';
 import { NotificationComponent } from './components/admin/notification/notification.component';
 import { ReportPreviewComponent } from './components/admin/business/business-income/report-preview/report-preview.component';
+import { AllBusinessImcome } from './components/admin/charts/all-business-income/all-business-income.component';
+import { BusinessIncomeComponent } from './components/admin/business/business-income/business-income.component';
+import { AdminReportsComponent } from './components/admin/report/admin-reports/admin-reports.component';
+
 
 const routes: Routes = [
   {path:'', redirectTo:'d', pathMatch:'full'},
   {path:'d', component:DashboardComponent, title:'Dashboard', canActivate: [dashboardGuard],
     children:[
+      {path:'', component:AllBusinessImcome},
       {path:'carousel', component:HomeCarouselComponent},
       {path:'business', component:BusinessComponent, title:'Business'},
       {path:'orders', component:OrdersComponent, title:'Orders'},
       {path:'order' , component:OrderListComponent},
+      {path:'report', component:AdminReportsComponent, title:'Report'},
       {path:'order/:id', component:OrderDetailComponent},
       {path:'payments',component:PaymentComponent, title:'Payments',children:[
         {path:'', component:PaymentListComponent},
         {path:'create', component:PaymentCreateComponent},
         {path:'edit', component:PaymentEditComponent}
       ]},
-      {path:'customers', component:CustomersComponent, title:'Customers'},
+      {path:'users', component:CustomersComponent, title:'Customers'},
       {path:'b/edit/:id', component:BusinessEditComponent, title:'Edit'},
       {path:'category', component:CategoryComponent, title:'Business Category'},
       {path:'payment', component:PaymentComponent, title:'Payment'},
+      {path: 'business-income', component: BusinessIncomeComponent},
       {path: 'excel-import', component: ExcelImportComponent },
       {path: 'business-income', component: BusinessIncomeComponent},
       {path: 'notification', component: NotificationComponent},
@@ -84,7 +92,7 @@ const routes: Routes = [
       {path:'',  component:CouponSaleBarChartComponent},
       {path:'order', component:OwnerOrderComponent, title:'order'},
       {path:'qr-scanner', component:QrScannerComponent},
-      {path:'report', component:SaleCouponReportComponent, title:'Report'},
+      {path:'report/:id', component:SaleCouponReportComponent, title:'Report'},
       { path: 'edit-shop/:id', component: EditShopComponent },
       {path:'used-coupon/:shopId',component:UsedCouponComponent},
       {path:'qr-result', component:QrResultComponent},

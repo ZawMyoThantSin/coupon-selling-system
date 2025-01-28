@@ -1,127 +1,21 @@
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 60px;
-  padding: 0;
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  z-index: 1000;
-  transition: background-color 0.3s ease, border-bottom-color 0.3s ease;
+.container {
+  max-width: 600px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
 }
 
-.navbar:hover {
-  background-color: rgba(255, 255, 255, 0.9);
-  border-bottom-color: rgba(0, 0, 0, 0.1);
+.form-group {
+  margin-bottom: 15px;
 }
 
-.navbar-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.btn {
+  display: block;
   width: 100%;
-  padding: 0 1rem;
-  height: 100%;
 }
 
-.navbar-brand {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-}
-
-.nav-items {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.nav-items a {
-  text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  font-size: 0.9rem;
-  transition: color 0.2s ease;
-}
-
-.nav-items a:hover {
-  color: #000;
-}
-
-.nav-items a.active {
-  color: #000;
-  font-weight: 600;
-}
-
-main {
-  margin-top: 60px;
-  padding: 1rem;
-}
-
-.hamburger {
-  display: none;
-  cursor: pointer;
-  transition: transform 0.3s ease-in-out;
-}
-
-
-@media (max-width: 991.98px) {
-  .hamburger {
-    display: block;
-    margin-left: auto;
-  }
-
-  .nav-items {
-    display: none;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    right: 0;
-    flex-direction: column;
-    background: white;
-    padding: 1rem;
-    gap: 1rem;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    transform: translateY(-20px);
-    opacity: 0;
-    pointer-events: none;
-
-  }
-
-  .nav-items.show {
-    display: flex;
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease;
-  }
-
-  .nav-items a {
-    width: 100%;
-    padding: 0.5rem 0;
-  }
-
-  .pro-button {
-    display: none;
-  }
-
-  .nav-items.show + .pro-button {
-    display: block;
-    width: 100%;
-    margin-top: 1rem;
-    opacity: 0;
-    animation: fadeIn 0.3s ease forwards;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.result {
+  background: #f9f9f9;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
 }

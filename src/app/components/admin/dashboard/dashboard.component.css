@@ -1,63 +1,79 @@
-.sidebar {
-  min-height: 100vh;
-  background-color: #818375;
-  transition: width 0.3s;
-  position: fixed;
-  top: 0px; /* Adjust based on the height of your navbar */
-  left: 0;
-  height: 100%;
-  width: 250px; /* Adjust based on your sidebar width */
-  z-index: 999; /* Ensure it stays on top */
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background-color: #060008ce;
+    transition: width 0.3s;
+    overflow: hidden;
+    z-index: 999;
+  }
 
-  &.expanded {
+  .sidebar.expanded {
     width: 256px;
   }
 
-  &.collapsed {
+  .sidebar.collapsed {
     width: 80px;
   }
-}
 
-.sidebar-link {
-  color: rgba(255, 255, 255, 0.8);
-  transition: all 0.3s;
+  .sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s;
+  }
 
-  &:hover {
+  .sidebar .nav-link:hover {
     color: white;
     background-color: rgba(255, 255, 255, 0.1);
   }
-}
 
-.notification-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-}
+  /* Navbar */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    z-index: 888;
+  }
 
-.progress-bar-custom {
-  height: 8px;
-}
+  /* Main Content */
+  .main-content {
+    margin-top: 70px; /* Height of the navbar */
+    margin-left: 256px; /* Default expanded sidebar width */
+    padding: 16px;
+    overflow-y: auto;
+    min-height: calc(100vh - 70px); /* Full height minus navbar height */
+    transition: margin-left 0.3s;
+  }
 
-.active {
-  color: white;
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.inActive {
-  background-color: #4e73df;
-}
-
-.disabled {
-  pointer-events: none;
-  opacity: 0.5;
-}
+  /* Adjust margin-left when the sidebar is collapsed */
+  .sidebar.collapsed ~ .main-content {
+    margin-left: 80px;
+  }
 
 
-/* Adjust the main content to account for the fixed navbar and sidebar */
-.main-content {
-  margin-top: 60px; /* Adjust based on the height of your navbar */
-  margin-left: 250px; /* Adjust based on your sidebar width */
-}
+    /* Utility Classes */
+    .notification-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+    }
+
+    .progress-bar-custom {
+      height: 8px;
+    }
+
+    .active {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .inActive {
+      background-color: #4e73df;
+    }
+
 
 .unread-mark {
   display: inline-block;
@@ -68,4 +84,10 @@
   margin-left: 8px; /* Space between message and dot */
 }
 
+
+
+    .disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
 

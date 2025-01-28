@@ -24,6 +24,7 @@
   </button>
   </div>
 
+
   </div>
 
   <!-- Card Body -->
@@ -85,7 +86,9 @@
                   [disabled]="business.paid || business.profitPercentage <= 0 || business.profitPercentage > 100 || business.income === 0 || business.paymentStatus === 'PAID'"
                   matTooltip="Cannot pay because the business is already paid or has no valid income"
                 >
+
                   <i class="fas fa-money-bill-wave"></i> 
+
                 </button>
 
                 <!-- Paid Status -->
@@ -118,7 +121,7 @@
         [responsive]="true"
         previousLabel="Prev"
         nextLabel="Next"
-       
+
         class="pagination-sm"
       ></pagination-controls>
     </div>

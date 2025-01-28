@@ -24,7 +24,7 @@ export const dashboardGuard: CanActivateFn = (route, state) => {
   console.log("Role detected:", userRole);
 
   if (userRole === 'ROLE_ADMIN') {
-    if (state.url === '/d') {
+    if (state.url.startsWith('/d')) { // Allow any URL starting with "/d"
       return true;
     } else {
       router.navigate(['/d']);
@@ -33,7 +33,7 @@ export const dashboardGuard: CanActivateFn = (route, state) => {
   }
 
   if (userRole === 'OWNER') {
-    if (state.url === '/o') {
+    if (state.url.startsWith('/o')) { // Allow any URL starting with "/o"
       return true;
     } else {
       router.navigate(['/o']);
@@ -42,7 +42,7 @@ export const dashboardGuard: CanActivateFn = (route, state) => {
   }
 
   if (userRole === 'ROLE_USER') {
-    if (state.url === '/homepage') {
+    if (state.url.startsWith('/homepage')) { // Allow any URL starting with "/homepage"
       return true;
     } else {
       router.navigate(['/homepage']);
@@ -54,4 +54,3 @@ export const dashboardGuard: CanActivateFn = (route, state) => {
   router.navigate(['/login']);
   return false;
 };
-

@@ -79,11 +79,15 @@ export class BusinessComponent implements OnInit {
 
           }
         });
-
       }
 
       getImageUrl(imagePath: string): string {
         return this.businessService.getImageUrl(imagePath);
+      }
+      get filteredBusinesses(): Business[] {
+        return this.businesses.filter((business) =>
+          business.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
       }
 
       get filteredBusinesses(): Business[] {

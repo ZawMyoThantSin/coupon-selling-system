@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrl: './create-category-modal.component.css'
 })
 export class CreateCategoryModalComponent {
+  showConfirmationModal: boolean = false;
 
   showConfirmationModal: boolean = false;
 
@@ -41,7 +42,11 @@ export class CreateCategoryModalComponent {
     formData.append('name', this.formData.name);
     this.modalRef.close(formData); // Pass FormData to the parent
   }
+<<<<<<< main
   
+=======
+
+>>>>>>> main
   cancelSubmission(): void {
     this.showConfirmationModal = false;
     this.toastr.info('Submission canceled.');

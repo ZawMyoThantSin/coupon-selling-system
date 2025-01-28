@@ -1,29 +1,57 @@
-<mat-toolbar class="navbar">
-  <div class="navbar-container">
-    <!-- Logo -->
-    <a class="navbar-brand" routerLink="/">
-      <img src="assets/logo.svg" alt="Logo" width="24" height="24">
-    </a>
+<div class="container">
+  <h1>Encode & Decode String</h1>
 
-    <!-- Hamburger for mobile -->
-    <button mat-icon-button class="hamburger" (click)="toggleMenu()" *ngIf="!isDesktop">
-      <mat-icon>{{ isMenuOpen ? 'close' : 'menu' }}</mat-icon>
-    </button>
-
-    <!-- Desktop Navigation -->
-    <div class="nav-items" [class.show]="isMenuOpen || isDesktop">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-      <a routerLink="/products" routerLinkActive="active">Promotions</a>
-      <a routerLink="/about" routerLinkActive="active">Coupons</a>
-      <a routerLink="/articles" routerLinkActive="active">Contact us</a>
+  <form [formGroup]="encodeDecodeForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="inputString">Input String</label>
+      <input
+        id="inputString"
+        type="text"
+        class="form-control"
+        formControlName="inputString"
+        placeholder="Enter string to encode or decode"
+      />
+      <div *ngIf="encodeDecodeForm.get('inputString')?.invalid && encodeDecodeForm.get('inputString')?.touched" class="text-danger">
+        Input is required.
+      </div>
     </div>
 
-   <div>Avatar</div>
-  </div>
-</mat-toolbar>
+    <div class="form-group">
+      <label for="operation">Operation</label>
+      <div>
+        <input
+          type="radio"
+          id="encode"
+          value="encode"
+          formControlName="operation"
+        />
+        <label for="encode">Encode</label>
 
-<!-- Main Content Area -->
-<main>
-  <div class="vh-100 bg-danger">1</div>
-  <router-outlet></router-outlet>
-</main>
+        <input
+          type="radio"
+          id="decode"
+          value="decode"
+          formControlName="operation"
+        />
+        <label for="decode">Decode</label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="encodeDecodeForm.invalid">
+      Submit
+    </button>
+  </form>
+
+  <div class="result mt-3">
+    <h2>Results</h2>
+    <div *ngIf="errorMessage" class="text-danger">
+      <strong>Error:</strong> {{ errorMessage }}
+    </div>
+    <div *ngIf="encodedCode">
+      <strong>Encoded String:</strong> {{ encodedCode }}
+    </div>
+    <div *ngIf="decodedCode">
+      <strong>Decoded String:</strong> {{ decodedCode }}
+    </div>
+  </div>
+</div>

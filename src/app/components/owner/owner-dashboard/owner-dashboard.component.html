@@ -72,7 +72,7 @@
 
           <div class="nav flex-column">
             <a
-            routerLink="/o/report"
+            [routerLink]="'/o/report/' + businessId"
             routerLinkActive="active"
             [ngClass]="{ 'disabled': !shopExist }"
              class="sidebar-link nav-link d-flex align-items-center rounded p-3"
@@ -206,7 +206,7 @@
                 </ng-template>
               </a>
 
-    <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuButton">
+    <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end px-2 py-2" aria-labelledby="userMenuButton">
       <div class="px-3 py-2">
         <span class="d-block fw-bold">{{ userInfo.name || 'John Doe' }}</span>
         <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
