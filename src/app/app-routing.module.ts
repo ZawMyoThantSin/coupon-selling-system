@@ -55,7 +55,6 @@ import { MessageComponent } from './components/home/friends/friend/message/messa
 import { NotificationComponent } from './components/admin/notification/notification.component';
 import { ReportPreviewComponent } from './components/admin/business/business-income/report-preview/report-preview.component';
 import { AllBusinessImcome } from './components/admin/charts/all-business-income/all-business-income.component';
-import { BusinessIncomeComponent } from './components/admin/business/business-income/business-income.component';
 import { AdminReportsComponent } from './components/admin/report/admin-reports/admin-reports.component';
 
 

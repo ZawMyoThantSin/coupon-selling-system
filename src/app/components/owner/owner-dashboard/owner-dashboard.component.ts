@@ -63,14 +63,10 @@ export class OwnerDashboardComponent {
     this.userService.getUserInfo().subscribe((response)=>{
       this.userInfo = response;
       this.userId = this.userInfo.id;
+      this.isLoggedIn = true;
       this.fetchBusinessInfo(this.userId);
     },error => console.log('Error in Fetching UserInfo', error));
-    if (this.token == '' || this.token == null) {
-      // console.log('Token is not defined or is invalid.');
-      this.isLoggedIn = false;
-    } else {
-      this.isLoggedIn = true;
-    }
+
 
   }
 

@@ -43,7 +43,7 @@
             />
             </svg>
           <span *ngIf="!isSidebarCollapsed" class="ms-2">Shops</span>
-            <i class="fas" [class.ms-5]="!isSidebarCollapsed" [class.fa-chevron-right]="isCollapsed && !isSidebarCollapsed" [class.fa-chevron-down]="!isCollapsed && !isSidebarCollapsed"></i>
+            <i class="fas" [class.ms-5]="!isSidebarCollapsed" [class.fa-chevron-right]="isCollapsed" [class.fa-chevron-down]="!isCollapsed && !isSidebarCollapsed"></i>
           </a>
 
 
@@ -92,308 +92,264 @@
             </div>
 
             <a
-              routerLink="/d/users"
-              routerLinkActive="active"
-              class="sidebar-link nav-link d-flex align-items-center rounded p-3"
-              [class.justify-content-center]="isSidebarCollapsed">
-              <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z"/></svg>
-              <span *ngIf="!isSidebarCollapsed" class="ms-2">Users</span>
-              <!-- <i *ngIf="!isSidebarCollapsed" class="fas fa-chevron-right ms-auto"></i> -->
-            </a>
-
-
-            <a
-              [routerLink]="'/d/payments'"
-              routerLinkActive="active"
-              class="sidebar-link nav-link d-flex align-items-center rounded p-3"
-              [class.justify-content-center]="isSidebarCollapsed">
-              <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M880-720v480q0 33-23.5 56.5T800-160H160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720Zm-720 80h640v-80H160v80Zm0 160v240h640v-240H160Zm0 240v-480 480Z"/></svg>
-              <span *ngIf="!isSidebarCollapsed" class="ms-2">Payments</span>
-              <!-- <i *ngIf="!isSidebarCollapsed" class="fas fa-chevron-right ms-auto"></i> -->
-            </a>
-            <a
-            [routerLink]="'/d/category'"
+            routerLink="/d/users"
             routerLinkActive="active"
-             class="sidebar-link nav-link d-flex align-items-center rounded p-3"
-             [class.justify-content-center]="isSidebarCollapsed">
-             <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 0 24 24" width="20px" fill="#FFFFFF">
-              <path d="M12 2L2 7l10 5 10-5-10-5zm0 7.77L4.61 7 12 11l7.39-4-7.39 3.77zM2 17l10 5 10-5-2-1.2-8 4-8-4-2 1.2z"/>
-            </svg>
-            <span *ngIf="!isSidebarCollapsed" class="ms-2">Categories</span>
-            </a>
-            <a
-            [routerLink]="'/d/report'"
+            class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+            [class.justify-content-center]="isSidebarCollapsed">
+            <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M40-160v-112q0-34 17.5-62.5T104-378q62-31 126-46.5T360-440q66 0 130 15.5T616-378q29 15 46.5 43.5T680-272v112H40Zm720 0v-120q0-44-24.5-84.5T666-434q51 6 96 20.5t84 35.5q36 20 55 44.5t19 53.5v120H760ZM360-480q-66 0-113-47t-47-113q0-66 47-113t113-47q66 0 113 47t47 113q0 66-47 113t-113 47Zm400-160q0 66-47 113t-113 47q-11 0-28-2.5t-28-5.5q27-32 41.5-71t14.5-81q0-42-14.5-81T544-792q14-5 28-6.5t28-1.5q66 0 113 47t47 113ZM120-240h480v-32q0-11-5.5-20T580-306q-54-27-109-40.5T360-360q-56 0-111 13.5T140-306q-9 5-14.5 14t-5.5 20v32Zm240-320q33 0 56.5-23.5T440-640q0-33-23.5-56.5T360-720q-33 0-56.5 23.5T280-640q0 33 23.5 56.5T360-560Zm0 320Zm0-400Z"/></svg>
+            <span *ngIf="!isSidebarCollapsed" class="ms-2">Users</span>
+            <!-- <i *ngIf="!isSidebarCollapsed" class="fas fa-chevron-right ms-auto"></i> -->
+          </a>
+
+
+          <a
+            [routerLink]="'/d/payments'"
             routerLinkActive="active"
-             class="sidebar-link nav-link d-flex align-items-center rounded p-3"
-             [class.justify-content-center]="isSidebarCollapsed">
-             <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M320-600q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm0 160q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0 160q17 0 28.5-11.5T360-320q0-17-11.5-28.5T320-360q-17 0-28.5 11.5T280-320q0 17 11.5 28.5T320-280ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h440l200 200v440q0 33-23.5 56.5T760-120H200Zm0-80h560v-400H600v-160H200v560Zm0-560v160-160 560-560Z"/></svg>
-             <span *ngIf="sidebarOpen" class="ms-2">Reports</span>
-            </a>
-            <a
-            [routerLink]="'/d/order'"
-            routerLinkActive="active"
-             class="sidebar-link nav-link d-flex align-items-center rounded p-3"
-             [class.justify-content-center]="isSidebarCollapsed">
-             <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M160-160v-516L82-846l72-34 94 202h464l94-202 72 34-78 170v516H160Zm240-280h160q17 0 28.5-11.5T600-480q0-17-11.5-28.5T560-520H400q-17 0-28.5 11.5T360-480q0 17 11.5 28.5T400-440ZM240-240h480v-358H240v358Zm0 0v-358 358Z"/></svg>
-            <span *ngIf="!isSidebarCollapsed" class="ms-2">Orders</span>
-            </a>
+            class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+            [class.justify-content-center]="isSidebarCollapsed">
+            <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M880-720v480q0 33-23.5 56.5T800-160H160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720Zm-720 80h640v-80H160v80Zm0 160v240h640v-240H160Zm0 240v-480 480Z"/></svg>
+            <span *ngIf="!isSidebarCollapsed" class="ms-2">Payments</span>
+            <!-- <i *ngIf="!isSidebarCollapsed" class="fas fa-chevron-right ms-auto"></i> -->
+          </a>
+          <a
+          [routerLink]="'/d/category'"
+          routerLinkActive="active"
+           class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+           [class.justify-content-center]="isSidebarCollapsed">
+           <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 0 24 24" width="20px" fill="#FFFFFF">
+            <path d="M12 2L2 7l10 5 10-5-10-5zm0 7.77L4.61 7 12 11l7.39-4-7.39 3.77zM2 17l10 5 10-5-2-1.2-8 4-8-4-2 1.2z"/>
+          </svg>
+          <span *ngIf="!isSidebarCollapsed" class="ms-2">Categories</span>
+          </a>
+          <a
+          [routerLink]="'/d/order'"
+          routerLinkActive="active"
+           class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+           [class.justify-content-center]="isSidebarCollapsed">
+           <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M160-160v-516L82-846l72-34 94 202h464l94-202 72 34-78 170v516H160Zm240-280h160q17 0 28.5-11.5T600-480q0-17-11.5-28.5T560-520H400q-17 0-28.5 11.5T360-480q0 17 11.5 28.5T400-440ZM240-240h480v-358H240v358Zm0 0v-358 358Z"/></svg>
+          <span *ngIf="!isSidebarCollapsed" class="ms-2">Orders</span>
+          </a>
 
-          </div>
-        </div>
+          <a
+          [routerLink]="'/d/report'"
+          routerLinkActive="active"
+           class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+           [class.justify-content-center]="isSidebarCollapsed">
+           <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M320-600q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm0 160q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0 160q17 0 28.5-11.5T360-320q0-17-11.5-28.5T320-360q-17 0-28.5 11.5T280-320q0 17 11.5 28.5T320-280ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h440l200 200v440q0 33-23.5 56.5T760-120H200Zm0-80h560v-400H600v-160H200v560Zm0-560v160-160 560-560Z"/></svg>
+           <span *ngIf="!isSidebarCollapsed" class="ms-2">Report</span>
+          </a>
 
-        <!-- Addons Section -->
-        <div>
-          <div class="nav flex-column">
-            <span
-              class="btn btn-circle text-white p-4 my-3 mx-auto"
-              (click)="toggleSidebar()"
-              style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%;"
-            >
-              <i
-                class="fas"
-                [class.fa-chevron-right]="isSidebarCollapsed"
-                [class.fa-chevron-left]="!isSidebarCollapsed">
-              </i>
-            </span>
-
-          </div>
         </div>
       </div>
 
-      <!-- Toggle Button -->
-      <!-- <button class="btn text-white p-3 w-100 rounded-0 mb-5" (click)="toggleSidebar()">
-        <i class="fas" [class.fa-chevron-right]="isSidebarCollapsed" [class.fa-chevron-left]="!isSidebarCollapsed"></i>
-      </button> -->
-
-
-    </div>
-
-  </nav>
-  <header class="bg-white navbar bg-white shadow-sm px-3 py-2 d-flex justify-content-between align-items-center">
-    <div class="flex-grow-1 me-4">
-      <!-- write search box -->
-    </div>
-
-    <div class="d-flex align-items-center">
-      <!-- Notification button triggering the dropdown -->
-      <div mdbDropdown class="d-flex me-3">
-        <button
-          class="btn btn-link position-relative me-2"
-          id="notificationDropdown"
-          mdbDropdownToggle
-          aria-expanded="false"
-        >
-          <i class="fas fa-bell fs-6"></i>
-          <span class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger">
-            3+
-          </span>
-        </button>
-
-        <!-- Notification dropdown menu -->
-        <ul
-          mdbDropdownMenu
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="notificationDropdown"
-        >
-          <li>
-            <a class="dropdown-item" href="#">
-              <i class="fas fa-envelope me-2"></i>
-              New message received
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">
-              <i class="fas fa-user-plus me-2"></i>
-              New follower
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">
-              <i class="fas fa-exclamation-circle me-2"></i>
-              Alert: Action required
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider" />
-          </li>
-          <li>
-            <a class="dropdown-item text-center" href="#">
-              View all notifications
-            </a>
-          </li>
-        </ul>
-      </div>
-
-      <div class="d-flex align-items-center">
-        <!-- Notification button triggering the dropdown -->
-        <div mdbDropdown class="d-flex me-3">
-          <button
-            class="btn btn-link position-relative me-2"
-            id="notificationDropdown"
-            mdbDropdownToggle
-            aria-expanded="false"
+      <!-- Addons Section -->
+      <div>
+        <div class="nav flex-column">
+          <span
+            class="btn btn-circle text-white p-4 my-3 mx-auto"
+            (click)="toggleSidebar()"
+            style="display: inline-flex; align-items: center; justify-content: center; width: 50px; height: 50px; border-radius: 50%;"
           >
-            <i class="fas fa-sharp fa-light fa-bell fs-4"></i>
-            <span
-            *ngIf="unreadCount > 0" 
-            class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger">
-              {{ unreadCount }}
-            </span>
-          </button>
-
-          <!-- Notification dropdown menu -->
-          <ul
-            mdbDropdownMenu
-            class="dropdown-menu dropdown-menu-end"
-            aria-labelledby="notificationDropdown"
-          >
-          <li *ngFor="let notification of getSortedNotifications().slice(0, 3)">
-            <a *ngIf="notification.isRead === 0"
-          class="dropdown-item"
-          href="javascript:void(0);"
-          (click)="markNotificationAsRead(notification.id); navigateTo(notification.route)"
-        >
-          <!-- Icon for NEW_ORDER notifications -->
-          <i
-            *ngIf="notification.type === 'NEW_ORDER'"
-            class="fas fa-shopping-cart me-2 text-primary"
-            [ngClass]="{ 'text-primary': notification.isRead === 0, 'text-muted': notification.isRead === 1 }"
-          ></i>
-          <!-- Icon for other notifications -->
-          <i
-            *ngIf="notification.type !== 'NEW_ORDER'"
-            class="fas fa-info-circle me-2 text-secondary"
-            [ngClass]="{ 'text-secondary': notification.isRead === 0, 'text-muted': notification.isRead === 1 }"
-          ></i>
-          <span class="notification-message">
-            {{ notification.message }}
+            <i
+              class="fas"
+              [class.fa-chevron-right]="isSidebarCollapsed"
+              [class.fa-chevron-left]="!isSidebarCollapsed">
+            </i>
           </span>
-      
-          <!-- Unread mark (dot) -->
-          <span *ngIf="notification.isRead === 0" class="unread-mark"></span>
-        </a>
-
-        <a *ngIf="notification.isRead === 1"
-          class="dropdown-item"
-          href="javascript:void(0);"
-          (click)="markNotificationAsRead(notification.id); navigateTo('d/notification')"
-        >
-          <!-- Icon for NEW_ORDER notifications -->
-          <i
-            *ngIf="notification.type === 'NEW_ORDER'"
-            class="fas fa-shopping-cart me-2 text-primary"
-          ></i>
-          <!-- Icon for other notifications -->
-          <i
-            *ngIf="notification.type !== 'NEW_ORDER'"
-            class="fas fa-info-circle me-2 text-secondary"
-          ></i>
-          <span class="notification-message">
-            {{ notification.message }}
-          </span>
-        </a>
-          </li>         
-
-          <li *ngIf="notifications.length > 3">
-            <a
-              class="dropdown-item text-center"
-              href="javascript:void(0);"
-              (click)="navigateTo('d/notification')"
-            >
-              {{notifications.length - 3}} more
-            </a>
-          </li>
-          <li *ngIf="notifications.length > 0 && notifications.length <= 3">
-            <a
-              class="dropdown-item text-center"
-              href="javascript:void(0);"
-              (click)="navigateTo('d/notification')"
-            >
-              See all notifications
-            </a>
-          </li>
-
-            <li *ngIf="notifications.length === 0">
-              <span class="dropdown-item text-muted">No notifications</span>
-            </li>  
-            <li>
-              <hr class="dropdown-divider" />
-            </li>
-            <li *ngIf="notifications.length > 0">
-              <a class="dropdown-item text-center" href="javascript:void(0);" (click)="markAllAsRead()">
-                Mark all as read
-
-
-      <!-- User Info -->
-      <div class="me-5">
-        <ul class="navbar-nav flex-row d-flex align-items-center me-4">
-          <li *ngIf="!isLoggedIn" class="nav-item me-3"><a routerLink="/login" class="text-decoration-underline text-dark">Login</a></li>
-            <li *ngIf="isLoggedIn" mdbDropdown class="nav-item ">
-              <a
-                class="nav-link d-flex align-items-center"
-                id="userMenuButton"
-                role="button"
-                mdbDropdownToggle
-                aria-expanded="false"
-              >
-                <img *ngIf="userInfo.authProvider == 'LOCAL'; else elseNoProfile"
-                  [src]="userInfo.profile == null ? '/images/default-avatar.png' : getUserProfile(userInfo.profile)  " alt="User Avatar"
-                  class="rounded-circle"
-                  height="40"
-                  width="40"
-                  alt="User Avatar"
-                />
-                <ng-template #elseNoProfile>
-                  <img
-                  [src]="userInfo.profile "
-                  class="rounded-circle"
-                  height="40"
-                  width="40"
-                  alt="User Avatar"
-                />
-                </ng-template>
-
-              </a>
-
-    <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end px-2 py-2" aria-labelledby="userMenuButton">
-      <div class="px-3 py-2">
-        <span class="d-block fw-bold">{{ userInfo.name || 'John Doe' }}</span>
-        <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
-      </div>
-
-      <div class="dropdown-divider mt-2 mb-2"></div>
-
-      <li>
-        <a class="dropdown-item" routerLink="/profile">
-          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-          <span class="ms-2">Profile</span>
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" routerLink="/change-password">
-          <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-         <span class="ms-2">Change Password</span>
-        </a>
-      </li>
-      <div class="dropdown-divider"></div>
-      <li>
-        <a class="dropdown-item" (click)="logoutButton()" >
-          <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-         <span class="ms-2">Logout</span>
-        </a>
-      </li>
-    </ul>
-  </li>
-
-        </ul>
+        </div>
       </div>
     </div>
 
+    <!-- Toggle Button -->
+    <!-- <button class="btn text-white p-3 w-100 rounded-0 mb-5" (click)="toggleSidebar()">
+      <i class="fas" [class.fa-chevron-right]="isSidebarCollapsed" [class.fa-chevron-left]="!isSidebarCollapsed"></i>
+    </button> -->
 
-  </header>
-
-  <div class="main-content">
-    <router-outlet></router-outlet>
 
   </div>
+
+</nav>
+<header class="bg-white navbar bg-white shadow-sm px-3 py-2 d-flex justify-content-between align-items-center">
+  <div class="flex-grow-1 me-4">
+    <!-- write search box -->
+  </div>
+
+  <div class="d-flex align-items-center">
+    <!-- Notification button triggering the dropdown -->
+    <div mdbDropdown class="d-flex me-3">
+      <button
+        class="btn btn-link position-relative me-2"
+        id="notificationDropdown"
+        mdbDropdownToggle
+        aria-expanded="false"
+      >
+        <i class="fas fa-sharp fa-light fa-bell fs-6"></i>
+        <span
+        *ngIf="unreadCount > 0"
+        class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger">
+          {{ unreadCount }}
+        </span>
+      </button>
+
+      <!-- Notification dropdown menu -->
+      <ul
+        mdbDropdownMenu
+        class="dropdown-menu dropdown-menu-end"
+        aria-labelledby="notificationDropdown"
+      >
+      <li *ngFor="let notification of getSortedNotifications().slice(0, 3)">
+        <a *ngIf="notification.isRead === 0"
+      class="dropdown-item"
+      href="javascript:void(0);"
+      (click)="markNotificationAsRead(notification.id); navigateTo(notification.route)"
+    >
+      <!-- Icon for NEW_ORDER notifications -->
+      <i
+        *ngIf="notification.type === 'NEW_ORDER'"
+        class="fas fa-shopping-cart me-2 text-primary"
+        [ngClass]="{ 'text-primary': notification.isRead === 0, 'text-muted': notification.isRead === 1 }"
+      ></i>
+      <!-- Icon for other notifications -->
+      <i
+        *ngIf="notification.type !== 'NEW_ORDER'"
+        class="fas fa-info-circle me-2 text-secondary"
+        [ngClass]="{ 'text-secondary': notification.isRead === 0, 'text-muted': notification.isRead === 1 }"
+      ></i>
+      <span class="notification-message">
+        {{ notification.message }}
+      </span>
+
+      <!-- Unread mark (dot) -->
+      <span *ngIf="notification.isRead === 0" class="unread-mark"></span>
+    </a>
+
+    <a *ngIf="notification.isRead === 1"
+      class="dropdown-item"
+      href="javascript:void(0);"
+      (click)="markNotificationAsRead(notification.id); navigateTo('d/notification')"
+    >
+      <!-- Icon for NEW_ORDER notifications -->
+      <i
+        *ngIf="notification.type === 'NEW_ORDER'"
+        class="fas fa-shopping-cart me-2 text-primary"
+      ></i>
+      <!-- Icon for other notifications -->
+      <i
+        *ngIf="notification.type !== 'NEW_ORDER'"
+        class="fas fa-info-circle me-2 text-secondary"
+      ></i>
+      <span class="notification-message">
+        {{ notification.message }}
+      </span>
+    </a>
+      </li>
+
+      <li *ngIf="notifications.length > 3">
+        <a
+          class="dropdown-item text-center"
+          href="javascript:void(0);"
+          (click)="navigateTo('d/notification')"
+        >
+          {{notifications.length - 3}} more
+        </a>
+      </li>
+      <li *ngIf="notifications.length > 0 && notifications.length <= 3">
+        <a
+          class="dropdown-item text-center"
+          href="javascript:void(0);"
+          (click)="navigateTo('d/notification')"
+        >
+          See all notifications
+        </a>
+      </li>
+
+        <li *ngIf="notifications.length === 0">
+          <span class="dropdown-item text-muted">No notifications</span>
+        </li>
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li *ngIf="notifications.length > 0">
+          <a class="dropdown-item text-center" href="javascript:void(0);" (click)="markAllAsRead()">
+            Mark all as read
+          </a>
+        </li>
+      </ul>
+    </div>
+
+
+
+    <!-- User Info -->
+    <div class="me-5">
+      <ul class="navbar-nav flex-row d-flex align-items-center me-4">
+        <li *ngIf="!isLoggedIn" class="nav-item me-3">
+          <a routerLink="/login" class="text-decoration-underline text-dark">Login</a>
+        </li>
+        <li *ngIf="isLoggedIn" mdbDropdown class="nav-item ">
+            <a
+              class="nav-link d-flex align-items-center"
+              id="userMenuButton"
+              role="button"
+              mdbDropdownToggle
+              aria-expanded="false"
+            >
+              <img *ngIf="userInfo.authProvider == 'LOCAL'; else elseNoProfile"
+                [src]="userInfo.profile == null ? '/images/default-avatar.png' : getUserProfile(userInfo.profile)  " alt="User Avatar"
+                class="rounded-circle"
+                height="40"
+                width="40"
+                alt="User Avatar"
+              />
+              <ng-template #elseNoProfile>
+                <img
+                [src]="userInfo.profile "
+                class="rounded-circle"
+                height="40"
+                width="40"
+                alt="User Avatar"
+              />
+              </ng-template>
+            </a>
+
+  <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end px-2 py-2" aria-labelledby="userMenuButton">
+    <div class="px-3 py-2">
+      <span class="d-block fw-bold">{{ userInfo.name || 'John Doe' }}</span>
+      <span class="text-muted">{{ userInfo.email || 'johndoe@example.com' }}</span>
+    </div>
+
+    <div class="dropdown-divider mt-2 mb-2"></div>
+
+    <li>
+      <a class="dropdown-item" routerLink="/profile">
+        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+        <span class="ms-2">Profile</span>
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item" routerLink="/change-password">
+        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+       <span class="ms-2">Change Password</span>
+      </a>
+    </li>
+    <div class="dropdown-divider"></div>
+    <li>
+      <a class="dropdown-item" (click)="logoutButton()" >
+        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+       <span class="ms-2">Logout</span>
+      </a>
+    </li>
+  </ul>
+</li>
+
+      </ul>
+    </div>
+  </div>
+
+
+</header>
+
+<div class="main-content">
+  <router-outlet></router-outlet>
+
+</div>
 </div>

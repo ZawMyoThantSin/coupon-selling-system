@@ -9,6 +9,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
+import { StorageService } from '../../../services/storage.service';
+import { JwtService } from '../../../services/jwt.service';
 
 @Component({
   selector: 'app-notification',
@@ -27,11 +29,14 @@ export class NotificationComponent implements OnInit {
   notifications: any[] = []; // All notifications
   filteredNotifications: any[] = []; // Filtered notifications
   filter: string = 'all'; // Current filter ('all', 'unread', 'read')
-  unreadCount: number = 0; 
+  unreadCount: number = 0;
 
   constructor(private notificationService: NotificationService,
               private snackBar: MatSnackBar,
-              private websocketService: WebsocketService ) {}
+              private websocketService: WebsocketService,
+              private jwtService: JwtService,
+              private storageService: StorageService,
+             ) {}
 
   ngOnInit(): void {
     this.loadNotifications();
@@ -51,18 +56,25 @@ export class NotificationComponent implements OnInit {
 
   // Load notifications from the backend
   loadNotifications(): void {
-    const receiverId = 1; // Replace with the actual receiver ID (e.g., from auth service)
-    this.notificationService.getNotificationsByReceiver(receiverId).subscribe({
-      next: (data) => {
-        this.notifications = data;
-        this.applyFilter(this.filter); // Apply default filter
-      },
-      error: (err) => {
-        this.snackBar.open('Failed to load notifications', 'Close', {
-          duration: 3000,
-        });
-      },
-    });
+    let receiverId = 1; // Replace with the actual receiver ID (e.g., from auth service)
+    let token: string | null = this.storageService.getItem("token");
+    if(token != null){
+      receiverId = this.jwtService.getUserId(token);
+    }
+
+    if(receiverId != 0){
+      this.notificationService.getNotificationsByReceiver(receiverId).subscribe({
+        next: (data) => {
+          this.notifications = data;
+          this.applyFilter(this.filter); // Apply default filter
+        },
+        error: (err) => {
+          this.snackBar.open('Failed to load notifications', 'Close', {
+            duration: 3000,
+          });
+        },
+      });
+    }
   }
 
   // Load unread notification count

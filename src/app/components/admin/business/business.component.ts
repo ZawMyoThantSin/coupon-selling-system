@@ -16,7 +16,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-business',
   standalone: true,
-  imports: [MdbTooltipModule, MdbRippleModule, CommonModule,RouterLink,NgxPaginationModule, FormsModule],
+  imports: [MdbTooltipModule, MdbRippleModule, CommonModule,NgxPaginationModule, FormsModule],
   templateUrl: './business.component.html',
   styleUrl: './business.component.css'
 })
@@ -90,10 +90,4 @@ export class BusinessComponent implements OnInit {
         );
       }
 
-      get filteredBusinesses(): Business[] {
-          return this.businesses.filter((business) =>
-            business.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-          );
-        }
-      
 }

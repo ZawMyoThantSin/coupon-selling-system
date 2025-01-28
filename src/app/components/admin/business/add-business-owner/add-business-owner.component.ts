@@ -103,34 +103,7 @@ constructor(
     password: ['OWN001']
   });
 }
-
 showConfirmation(): void {
-    if (this.userForm.invalid) {
-      return;
-    }
-
-    // Prepare preview data for confirmation modal
-    this.formDataPreview = {
-      name: this.userForm.value.name,
-      email: this.userForm.value.email,
-      password: this.userForm.value.password,
-    };
-
-    this.showConfirmationModal = true; // Show confirmation modal
-  }
-
-  confirmSubmission(): void {
-    if (this.userForm.valid) {
-      this.modalRef.close(this.userForm.value); // Pass the form values
-    }
-    this.showConfirmationModal = false; // Hide confirmation modal
-  }
-
-  cancelSubmission(): void {
-    this.showConfirmationModal = false;
-    this.modalRef.close();
-    this.toastr.info('Submission canceled.');
-  }
   if (this.userForm.invalid) {
     return;
   }

@@ -5,12 +5,11 @@ import { BusinessService } from '../../../../../services/business/business.servi
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import {NgSelectModule} from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-report-preview',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgSelectModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './report-preview.component.html',
   styleUrl: './report-preview.component.css'
 })
@@ -104,7 +103,7 @@ export class ReportPreviewComponent implements OnInit {
       this.toastr.error('No report available to download.');
       return;
     }
-  
+
     const link = document.createElement('a');
     link.href = URL.createObjectURL(this.reportBlob);
     link.download = `paid_history_report.${format}`;
@@ -119,5 +118,5 @@ export class ReportPreviewComponent implements OnInit {
   goBack() {
     this.location.back();
   }
-  
+
 }

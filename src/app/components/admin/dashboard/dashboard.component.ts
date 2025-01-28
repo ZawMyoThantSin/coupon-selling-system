@@ -74,19 +74,11 @@ export class DashboardComponent implements OnInit{
     this.userId = this.jwtService.getUserId(this.token);
 
     this.userService.getUserInfo().subscribe((response)=>{
-      // console.log("Provider: " , response.authProvider)
-      // console.log("UserInfo: ",response)
       this.userInfo = response;
+      this.isLoggedIn = true;
     },error => console.log('Error in Fetching UserInfo', error));
 
     this.handleWebSocketMessages();
-    if (this.token == '' || this.token == null) {
-      console.log('Token is not defined or is invalid.');
-      this.isLoggedIn = false;
-    } else {
-      this.isLoggedIn = true;
-    }
-      // Fetch notifications
       this.getNotifications();
   }
 
@@ -162,11 +154,10 @@ export class DashboardComponent implements OnInit{
 
   getSortedNotifications(): any[] {
     return this.notifications.sort((a, b) => a.isRead - b.isRead);
-
+  }
   isSidebarCollapsed = false;
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
-
   }
 }

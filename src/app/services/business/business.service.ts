@@ -120,12 +120,6 @@ export class BusinessService {
     );
   }
 
-  getBusinessIncome(id: number): Observable<any[]> {
-
-    return this.http.get<any[]>(`${this.BASE_URL}/api/businesses/${id}/income`, {
-      responseType: 'json'
-    });
-  }
 
   payOwner(request: { businessId: number; desiredPercentage: number }): Observable<any> {
     if (request.desiredPercentage <= 0 || request.desiredPercentage > 100) {
@@ -170,26 +164,12 @@ getBusinessIncome(id: number): Observable<any[]> {
 }
 
 calculateAmountToPay(id: number): Observable<any>{
-   
+
   return this.http.get(`${this.BASE_URL}/api/businesses/${id}/amount-to-pay`, {
     responseType: 'json'
   });
 }
 
-payOwner(request: { businessId: number; desiredPercentage: number }): Observable<any> {
-  if (request.desiredPercentage <= 0 || request.desiredPercentage > 100) {
-    return throwError(() => new Error("Invalid profit percentage. It must be between 1 and 100."));
-  }
-
-  return this.http.post(
-    `${this.BASE_URL}/api/businesses/pay-owner`,request,
-    { }
-  );
-}
-
-getPaidHistory(businessId: number): Observable<any> {
-  return this.http.get(`${this.BASE_URL}/api/businesses/${businessId}/paid-history`);
-}
 
 updatePercentage(id: number, percentage: any): Observable<any> {
   return this.http.get(`${this.BASE_URL}/api/businesses/update-percent/${id}/${percentage}`);
