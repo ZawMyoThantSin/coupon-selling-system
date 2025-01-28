@@ -121,3 +121,23 @@ header {
     box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
   }
 }
+
+.scanner-shell {
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.video-container {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+@media (max-width: 768px) {
+  .input-container {
+    flex-direction: column;
+  }
+  .btn {
+    width: 100%;
+  }
+}

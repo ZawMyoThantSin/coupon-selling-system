@@ -54,7 +54,7 @@ export class CouponComponent implements OnInit {
       valueGetter: (params) => {
         const quantity = params.data.quantity || 0;
         const originalQuantity = params.data.originalQuantity || 0;
-        return `${quantity} | ${originalQuantity} (Remaining)`;
+        return `${originalQuantity} | ${quantity} (Remaining)`;
       }
     },
 

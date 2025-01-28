@@ -51,6 +51,7 @@ import { UsedCouponComponent } from './components/owner/owner-dashboard/used-cou
 import { CouponCardComponent } from './components/home/homepage/coupon-card/coupon-card.component';
 import { AllBusinessImcome } from './components/admin/charts/all-business-income/all-business-income.component';
 import { BusinessIncomeComponent } from './components/admin/business/business-income/business-income.component';
+import { AdminReportsComponent } from './components/admin/report/admin-reports/admin-reports.component';
 
 const routes: Routes = [
   {path:'', redirectTo:'d', pathMatch:'full'},
@@ -61,6 +62,7 @@ const routes: Routes = [
       {path:'business', component:BusinessComponent, title:'Business'},
       {path:'orders', component:OrdersComponent, title:'Orders'},
       {path:'order' , component:OrderListComponent},
+      {path:'report', component:AdminReportsComponent, title:'Report'},
       {path:'order/:id', component:OrderDetailComponent},
       {path:'payments',component:PaymentComponent, title:'Payments',children:[
         {path:'', component:PaymentListComponent},

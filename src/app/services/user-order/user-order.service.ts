@@ -26,7 +26,14 @@ export class UserOrderService {
       reportProgress: true,
       observe: 'events'
     });
-}
+  }
+
+  getOrderStatus(): Observable<any> {
+    return this.http.get<any>(this.BASE_URL + 'api/orders/status', {
+      responseType: 'json'
+    });
+  }
+
 
 }
 

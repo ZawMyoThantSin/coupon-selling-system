@@ -30,35 +30,19 @@ export class OrderListComponent {
   ngOnInit() {
     this.adminOrderService.getAllOrders().subscribe((data) => {
       this.orders = data;
-      this.filteredOrders = data; // Initialize filteredOrders with all orders
+
+      // Sort by created_at (most recent first)
+      this.orders = data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+      // Filter to show pending orders first on initial load
+      this.filteredOrders = this.orders.filter(order => order.status === this.statusMap['pending']);
+
     });
   }
 
   viewOrderDetails(orderId: number) {
     this.router.navigate(['/d/order', orderId]);
   }
-
-  // acceptOrder(orderId: string) {
-  //   this.adminOrderService
-  //     .updateOrderStatus(orderId, 'accepted')
-  //     .subscribe((updatedOrder) => {
-  //       this.orders = this.orders.map((order) =>
-  //         order.id === orderId ? updatedOrder : order
-  //       );
-  //       this.filterOrders(); // Reapply filters after status change
-  //     });
-  // }
-
-  // rejectOrder(orderId: string) {
-  //   this.adminOrderService
-  //     .updateOrderStatus(orderId, 'rejected')
-  //     .subscribe((updatedOrder) => {
-  //       this.orders = this.orders.map((order) =>
-  //         order.id === orderId ? updatedOrder : order
-  //       );
-  //       this.filterOrders(); // Reapply filters after status change
-  //     });
-  // }
   // Map status strings to numeric values
   statusMap: { [key: string]: number } = {
     pending: 0,

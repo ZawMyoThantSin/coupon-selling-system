@@ -24,6 +24,19 @@
           <input
             class="form-check-input"
             type="radio"
+            id="couponReport"
+            name="reportType"
+            value="coupon"
+            [(ngModel)]="currentReportType"
+            (change)="currentParentReportType "
+          />
+          <label class="form-check-label small" for="couponReport">All Coupon</label>
+        </div>
+
+        <div class="form-check me-4">
+          <input
+            class="form-check-input"
+            type="radio"
             id="saleCoupon"
             name="reportType"
             value="sale_coupon"
@@ -42,6 +55,31 @@
           />
           <label class="form-check-label small" for="usedCoupon">Used Coupon</label>
         </div>
+
+        <div class="form-check me-4">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="remaincoupon"
+            name="reportType"
+            value="remain_coupon"
+            [(ngModel)]="currentReportType"
+          />
+          <label class="form-check-label small" for="remaincoupon">Remain Coupon</label>
+        </div>
+
+        <div class="form-check me-4">
+          <input
+            class="form-check-input"
+            type="radio"
+            id="expiredcoupon"
+            name="reportType"
+            value="expired_coupon"
+            [(ngModel)]="currentReportType"
+          />
+          <label class="form-check-label small" for="expiredcoupon">Expired Coupon</label>
+        </div>
+
         <div class="form-check me-4">
           <input
             class="form-check-input"
@@ -49,13 +87,36 @@
             id="productReport"
             name="reportType"
             value="product"
-            [(ngModel)]="currentReportType"
+            [(ngModel)]="currentParentReportType"
           />
-          <label class="form-check-label small" for="couponReport">Product Report</label>
+          <label class="form-check-label small" for="productReport">Products</label>
         </div>
-      </div>
 
-     <!-- Conditionally Render Select Box for Sale Coupon -->
+      </div>
+      <!-- Date Range Selection -->
+      <div *ngIf="currentReportType === 'sale_coupon' || currentReportType === 'used_coupon' " class="mb-4">
+        <div class="row g-3">
+          <div class="col-md-2">
+            <label for="startDate" class="form-label">Start Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="startDate"
+              [(ngModel)]="startDate"
+            />
+          </div>
+          <div class="col-md-2">
+            <label for="endDate" class="form-label">End Date</label>
+            <input
+              type="date"
+              class="form-control"
+              id="endDate"
+              [(ngModel)]="endDate"
+            />
+          </div>
+        </div>
+        </div>
+<!-- Conditionally Render Select Box for Sale Coupon -->
 <div *ngIf="currentParentReportType === 'sale_coupon'" class="mt-3 col-md-3">
   <label for="saleCouponSelect" class="form-label">Select Sale Coupon Report</label>
   <select
@@ -67,6 +128,7 @@
     <option value="" disabled selected>Select an option</option>
     <option value="sale_coupon_weekly">Sale Coupon Weekly Report</option>
     <option value="sale_coupon_monthly">Sale Coupon Monthly Report</option>
+    <option value="sale_coupon">Sale Coupon Report</option>
   </select>
 </div>
 
@@ -82,9 +144,24 @@
     <option value="" disabled selected>Select an option</option>
     <option value="used_coupon_weekly">Used Coupon Weekly Report</option>
     <option value="used_coupon_monthly">Used Coupon Monthly Report</option>
+    <option value="used_coupon">Used Coupon Report</option>
   </select>
 </div>
 
+<!-- Conditionally Render Select Box for Product Report -->
+<div *ngIf="currentParentReportType === 'product'" class="mt-3 col-md-3">
+  <label for="productReportSelect" class="form-label">Select Product Report</label>
+  <select
+    id="productReportSelect"
+    class="form-select form-select-sm"
+    [(ngModel)]="currentReportType"
+    aria-label="Product Report Selection"
+  >
+    <option value="" disabled selected>Select an option</option>
+    <option value="all_products">All Products List</option>
+    <option value="best_products">Best Products List</option>
+  </select>
+</div>
 
       <!-- Generate Report Button -->
       <div class="d-flex justify-content-center mt-4">

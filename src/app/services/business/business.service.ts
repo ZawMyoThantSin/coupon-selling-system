@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StorageService } from '../storage.service';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
@@ -160,6 +160,106 @@ update(id: number, data: any): Observable<any> {
   return this.http.put(`${this.BASE_URL}/api/businesses/${id}`, data, {
     responseType: 'json'
   });
+}
+
+couponReport(type: 'pdf' | 'excel', businessId: number): Observable<Blob> {
+  return this.http.get(`${this.BASE_URL}/api/coupon/coupon-report/${businessId}`, {
+    responseType: 'blob',
+    params: {
+      reportType: type, // Pass `reportType` as a query parameter
+    },
+  });
+
+}
+
+
+bestProductListReport(type: 'pdf' | 'excel', businessId: number): Observable<Blob> {
+  return this.http.get(`${this.BASE_URL}/api/coupon/best-selling-product-report/${businessId}`, {
+    responseType: 'blob',
+    params: {
+      reportType: type, // Pass `reportType` as a query parameter
+    },
+  });
+
+}
+reaminCouponReport(type: 'pdf' | 'excel', businessId: number): Observable<Blob> {
+  return this.http.get(`${this.BASE_URL}/api/coupon/remaining-coupon-report/${businessId}`, {
+    responseType: 'blob',
+    params: {
+      reportType: type, // Pass `reportType` as a query parameter
+    },
+  });
+
+}
+expiredCouponReport(type: 'pdf' | 'excel', businessId: number): Observable<Blob> {
+  return this.http.get(`${this.BASE_URL}/api/coupon/expired-coupon-report/${businessId}`, {
+    responseType: 'blob',
+    params: {
+      reportType: type, // Pass `reportType` as a query parameter
+    },
+  });
+
+}
+
+businessReport(type: 'pdf' | 'excel', reportType: string): Observable<Blob> {
+  return this.http.get(`${this.BASE_URL}/api/businesses/business-report`, {
+    responseType: 'blob',
+    params: {
+      reportType: type, // Pass `reportType` as a query parameter
+    },
+  });
+
+}
+
+generateCustomerListReport(
+  reportType: 'pdf' | 'excel',
+  startDate?: string,
+  endDate?: string
+ ): Observable<Blob> {
+  let params = new HttpParams().set('reportType', reportType);
+  if (startDate) {
+    params = params.set('startDate', new Date(startDate).toISOString());
+  }
+  if (endDate) {
+    params = params.set('endDate', new Date(endDate).toISOString());
+  }
+  return this.http.get(`${this.BASE_URL}/api/customers/report`, {
+    responseType: 'blob',
+    params,
+  });
+}
+
+usedCouponReport(
+  type: 'pdf' | 'excel',
+  businessId: number,
+  params: { startDate?: string; endDate?: string } // Add params as an argument
+ ): Observable<Blob> {
+  return this.http.get(`${this.BASE_URL}/api/coupon/report`, {
+    responseType: 'blob',
+    params: {
+      reportType: type, // Pass `reportType` as a query parameter
+      businessId: businessId.toString(), // Include businessId as a query parameter
+      startDate: params.startDate || '', // Pass startDate if it exists
+      endDate: params.endDate || '', // Pass endDate if it exists
+    },
+  });
+}
+
+saleCouponReport(
+  type: 'pdf' | 'excel',
+  businessId: number,
+  params: { startDate?: string; endDate?: string } // Add params as an argument
+ ): Observable<Blob> {
+  return this.http.get(`${this.BASE_URL}/api/coupon/coupon-sales-report`, {
+    responseType: 'blob',
+    params: {
+      reportType: type, // Pass `reportType` as a query parameter
+      businessId: businessId.toString(), // Include businessId as a query parameter
+      startDate: params.startDate || '', // Pass startDate if it exists
+      endDate: params.endDate || '', // Pass endDate if it exists
+    },
+  });
+
 }
 
 }

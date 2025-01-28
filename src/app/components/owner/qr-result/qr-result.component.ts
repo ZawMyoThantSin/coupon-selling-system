@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { QrValidateService } from '../../../services/qr-validate/qr-validate.service';
 import { CommonModule } from '@angular/common';
 import { BusinessService } from '../../../services/business/business.service';
@@ -10,7 +10,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-qr-result',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl:'./qr-result.component.html' ,
   styleUrl: './qr-result.component.css'
 })
@@ -106,11 +106,11 @@ export class QrResultComponent {
   // }
   onSubmitValidate(): void {
     const saleCouponId = this.qrCodeDetails.saleCouponId;
-  
+
     this.qrCodeService.validateTheCoupon(saleCouponId).subscribe(
       (res) => {
         this.toastr.success("Coupon Validate Successfully!", "Success");
-  
+
         // Dynamically navigate using the actual shopId
         const shopId = this.qrCodeDetails.businessId; // Replace with the actual property holding shopId
         if (shopId) {
@@ -124,7 +124,7 @@ export class QrResultComponent {
       }
     );
   }
-  
+
 
   getProductImage(imagePath: string): string{
     return this.proudctService.getImageUrl(imagePath);

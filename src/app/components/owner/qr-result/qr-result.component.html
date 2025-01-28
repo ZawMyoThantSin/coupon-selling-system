@@ -66,8 +66,11 @@
 
     <div *ngIf="!isLoading && isError">
       <div class="d-flex flex-column justify-content-center align-items-center vh-100 text-center text-danger">
-        {{ qrResultMessage }}
+        <span>{{ qrResultMessage }}</span>
+        <div>
+          <button class="btn btn-primary" routerLink="/o/qr-scanner">Scan Again</button>
         </div>
+      </div>
     </div>
 
 </div>

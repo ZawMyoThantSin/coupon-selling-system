@@ -1,0 +1,15 @@
+.encoded-code-card {
+  background-color: #f8f9fa; /* Light background */
+  border: 1px solid #ddd; /* Light border */
+  border-radius: 12px; /* Rounded corners */
+  padding: 15px; /* Some padding inside the card */
+  max-width: 300px; /* Limit the width of the card */
+  margin: 0 auto; /* Center it horizontally */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for the card */
+  text-align: center; /* Center the text inside the card */
+}
+
+.encoded-code-card p {
+  font-size: 1.2rem; /* Increase font size slightly */
+  word-wrap: break-word; /* Ensure long codes break if necessary */
+}

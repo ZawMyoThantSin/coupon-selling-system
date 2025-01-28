@@ -43,7 +43,7 @@
             />
             </svg>
           <span *ngIf="!isSidebarCollapsed" class="ms-2">Shops</span>
-            <i class="fas" [class.ms-5]="!isSidebarCollapsed" [class.fa-chevron-right]="isCollapsed" [class.fa-chevron-down]="!isCollapsed"></i>
+            <i class="fas" [class.ms-5]="!isSidebarCollapsed" [class.fa-chevron-right]="isCollapsed && !isSidebarCollapsed" [class.fa-chevron-down]="!isCollapsed && !isSidebarCollapsed"></i>
           </a>
 
 
@@ -91,26 +91,6 @@
               </a>
             </div>
 
-
-            <!-- <a
-            [routerLink]="'/d/business'"
-            routerLinkActive="active"
-            class="sidebar-link nav-link d-flex align-items-center rounded p-3"
-               [class.justify-content-center]="isSidebarCollapsed">
-               <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M841-518v318q0 33-23.5 56.5T761-120H201q-33 0-56.5-23.5T121-200v-318q-23-21-35.5-54t-.5-72l42-136q8-26 28.5-43t47.5-17h556q27 0 47 16.5t29 43.5l42 136q12 39-.5 71T841-518Zm-272-42q27 0 41-18.5t11-41.5l-22-140h-78v148q0 21 14 36.5t34 15.5Zm-180 0q23 0 37.5-15.5T441-612v-148h-78l-22 140q-4 24 10.5 42t37.5 18Zm-178 0q18 0 31.5-13t16.5-33l22-154h-78l-40 134q-6 20 6.5 43t41.5 23Zm540 0q29 0 42-23t6-43l-42-134h-76l22 154q3 20 16.5 33t31.5 13ZM201-200h560v-282q-5 2-6.5 2H751q-27 0-47.5-9T663-518q-18 18-41 28t-49 10q-27 0-50.5-10T481-518q-17 18-39.5 28T393-480q-29 0-52.5-10T299-518q-21 21-41.5 29.5T211-480h-4.5q-2.5 0-5.5-2v282Zm560 0H201h560Z"/></svg>
-               <span *ngIf="!isSidebarCollapsed" class="ms-2">Businesses</span>
-
-            </a>
-            <a routerLink="/d/business-income"
-            class="sidebar-link nav-link d-flex align-items-center rounded p-3"
-            [class.justify-content-center]="!sidebarOpen">
-            <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="24px" viewBox="0 0 24 24" width="24px" fill="#FFFFFF">
-              <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
-              <path d="M0 0h24v24H0z" fill="none"/>
-            </svg>
-              <span *ngIf="sidebarOpen" class="ms-2">Income</span>
-            </a> -->
-
             <a
               routerLink="/d/users"
               routerLinkActive="active"
@@ -140,6 +120,14 @@
               <path d="M12 2L2 7l10 5 10-5-10-5zm0 7.77L4.61 7 12 11l7.39-4-7.39 3.77zM2 17l10 5 10-5-2-1.2-8 4-8-4-2 1.2z"/>
             </svg>
             <span *ngIf="!isSidebarCollapsed" class="ms-2">Categories</span>
+            </a>
+            <a
+            [routerLink]="'/d/report'"
+            routerLinkActive="active"
+             class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+             [class.justify-content-center]="isSidebarCollapsed">
+             <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M320-600q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm0 160q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0 160q17 0 28.5-11.5T360-320q0-17-11.5-28.5T320-360q-17 0-28.5 11.5T280-320q0 17 11.5 28.5T320-280ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h440l200 200v440q0 33-23.5 56.5T760-120H200Zm0-80h560v-400H600v-160H200v560Zm0-560v160-160 560-560Z"/></svg>
+             <span *ngIf="sidebarOpen" class="ms-2">Reports</span>
             </a>
             <a
             [routerLink]="'/d/order'"

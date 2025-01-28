@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../../../../../services/product/product.service';
 import { Product } from '../../../../../models/product';
 import { MdbModalService, MdbModalRef } from 'mdb-angular-ui-kit/modal';
@@ -32,10 +32,9 @@ export class EditProductComponent implements OnInit {
     description: '',
     imageFile: null // Initialize as null
   };
-
+  productId: number = 0;
   isLoading: boolean = true;
   errorMessage: string = '';
-  modalRef: MdbModalRef<any> | null = null;
   isSaving: boolean = false;
   imagePreview: string | ArrayBuffer | null = null;
   imageError: string | null = null;
@@ -43,10 +42,13 @@ export class EditProductComponent implements OnInit {
   @ViewChild('editProductModal') editProductModal: any; // Reference to modal template
 
   constructor(
+    private router: Router,
     private productService: ProductService,
     private modalService: MdbModalService,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public modalRef: MdbModalRef<EditProductComponent>,
+    private cdr: ChangeDetectorRef //
   ) {}
 
   ngOnInit(): void {
@@ -59,7 +61,7 @@ export class EditProductComponent implements OnInit {
     }
   }
 
-  loadProduct(id: number): void {
+  loadProduct(id: any): void {
     this.productService.getProductById(id).subscribe({
       next: (product) => {
         if (product) {
@@ -102,8 +104,12 @@ export class EditProductComponent implements OnInit {
         this.isSaving = false;
         this.product = updatedProduct;
         this.toastr.success('Product updated successfully!', 'Success'); // Toastr for success
+        this.loadProduct(updatedProduct.id);
+        this.router.navigate(['/o']).then(() => {
+          this.router.navigate(['/o/p/detail-product/', updatedProduct.id]);
+        });
         this.closeModal();
-        window.location.reload();
+
       },
       error: (error) => {
         this.isSaving = false;

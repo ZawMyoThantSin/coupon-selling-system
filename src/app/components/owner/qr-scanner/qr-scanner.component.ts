@@ -4,46 +4,52 @@ import { AfterViewInit, CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit, VE
 import {  ZXingScannerComponent, ZXingScannerModule } from '@zxing/ngx-scanner';
 import { BarcodeFormat, Result } from '@zxing/library';
 import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { EncodingUtils } from '../../../services/encoding-utils';
+import { getDefaultAppConfig } from '../../../models/appConfig';
+import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-qr-scanner',
   standalone: true,
-  imports: [ZXingScannerModule, CommonModule], // Import ZXingScannerModule to use the scanner component
+  imports: [ZXingScannerModule, CommonModule, FormsModule], // Import ZXingScannerModule to use the scanner component
   template: `
-  <div class="scanner-shell" [hidden]="!hasDevices">
-  <header>
-    <select (change)="onDeviceSelectChange($event)">
-      <option value="" [selected]="!currentDevice">Select Camera</option>
-      <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">
-        {{ device.label }}
-      </option>
-    </select>
-  </header>
+ <div class="row">
+  <button class="btn btn-primary my-3 col-12 col-md-6 offset-md-3 text-center" *ngIf="hasDevices" (click)="toggleInputBox()">
+    {{ showInputBox ? 'Show Scanner' : 'Enter Code' }}
+  </button>
 
-  <!-- MAIN SCANNER AREA -->
-  <div *ngIf="cameraVisible" class="scanner-container">
-    <div class="scan-area">
-      <div class="scan-line"></div>
-      <zxing-scanner #scanner
-        [ngClass]="'videee'"
-        start="true"
-        [device]="currentDevice"
-        (scanSuccess)="handleQrCodeResult($event)"
-        [formats]="formats">
-      </zxing-scanner>
+  <div class="scanner-shell col-12 col-md-6 offset-md-3" [hidden]="!hasDevices">
+    <header *ngIf="!showInputBox" class="d-flex justify-content-center mb-3">
+      <select class="form-select w-75" (change)="onDeviceSelectChange($event)">
+        <option value="" [selected]="!currentDevice">Select Camera</option>
+        <option *ngFor="let device of availableDevices" [value]="device.deviceId" [selected]="currentDevice && device.deviceId === currentDevice.deviceId">
+          {{ device.label }}
+        </option>
+      </select>
+    </header>
+
+    <!-- MAIN SCANNER AREA -->
+    <div *ngIf="cameraVisible && !showInputBox" class="scanner-container">
+      <div class="scan-area position-relative">
+        <div class="scan-line position-absolute"></div>
+        <zxing-scanner #scanner
+          class="video-container w-100"
+          start="true"
+          [device]="currentDevice"
+          (scanSuccess)="handleQrCodeResult($event)"
+          [formats]="formats">
+        </zxing-scanner>
+      </div>
+    </div>
+
+    <!-- INPUT BOX AREA -->
+    <div *ngIf="showInputBox" class="input-container d-flex flex-column flex-md-row align-items-center mt-3">
+      <input type="text" [(ngModel)]="enteredCode" class="form-control mb-2 mb-md-0 me-md-2 py-2" placeholder="Enter your code" />
+      <button class="btn btn-success w-100 w-md-auto" (click)="submitCode()">Submit</button>
     </div>
   </div>
 </div>
 
-<!-- LOADING AND PERMISSION HANDLING -->
-<!-- BIG COMMENT: Loading Spinner and Permission Messages -->
-<!-- <div class="loading-container" *ngIf="hasDevices === undefined && hasPermission === undefined">
-  <!-- BOOTSTRAP LOADING SPINNER -->
-  <!-- <div class="spinner-border" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-  <h2>Loading... Please wait.</h2>
-  <p>We're checking for devices and permissions.</p>
-</div> -->
 
 <!-- Permission Pending -->
 <ng-container *ngIf="hasPermission === undefined && hasDevices !== undefined">
@@ -131,6 +137,7 @@ export class QrScannerComponent implements OnInit,AfterViewInit {
   hasPermission: boolean | undefined;
   qrResultString: string | undefined;
   qrResult: Result | undefined;
+  decodedCode:string = '';
 
   availableDevices: MediaDeviceInfo[] = [];
   currentDevice: MediaDeviceInfo | undefined;
@@ -142,6 +149,12 @@ export class QrScannerComponent implements OnInit,AfterViewInit {
   ];
 
   cameraVisible = true;
+  showInputBox = false;
+  enteredCode: string = '';
+
+  constructor(private http:HttpClient) {
+
+  }
 
   ngOnInit(): void {
 
@@ -184,22 +197,17 @@ export class QrScannerComponent implements OnInit,AfterViewInit {
   handleQrCodeResult(resultString: string): void {
     console.debug('Result: ', resultString);
     this.qrResultString = resultString;
-    // ======== HIDE CAMERA BOX AND PLAY BEEP SOUND AFTER SCAN ========
-    // how to send qr result
     this.cameraVisible = false; // Hide the camera box
 
     this.playBeepSound(); // Play the beep sound
     this.router.navigate(['o/qr-result', { result: this.qrResultString }]);
-    // ==============================================================
   }
 
   playBeepSound(): void {
-    // ======== FUNCTION TO PLAY A BEEP SOUND ========
     const beep = new Audio();
-    beep.src = '/beep.MP3'; // Replace with the path to your beep sound file
+    beep.src = '/beep.MP3';
     beep.load();
     beep.play();
-    // =============================================
   }
 
   onDeviceSelectChange(event: Event): void {
@@ -223,5 +231,27 @@ export class QrScannerComponent implements OnInit,AfterViewInit {
 
     // Safely convert state to a string key
     return states[String(state)]; // Convert `state` to string for indexing
+  }
+
+  submitCode(): void {
+    console.log('Entered Code:', this.enteredCode);
+    this.http.get<any>(`${getDefaultAppConfig().backendHost}/api/qrcode/${this.enteredCode}`)
+    .subscribe(
+      (res) => {
+        this.router.navigate(['o/qr-result', { result: res.qrCode }]);
+      },
+      (err) => {
+        console.error('Error fetching QR Code data:', err);
+
+      }
+    );
+
+  }
+
+
+
+  toggleInputBox(): void {
+    this.showInputBox = !this.showInputBox;
+    this.cameraVisible = !this.showInputBox;
   }
 }
