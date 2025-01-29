@@ -11,6 +11,8 @@ import { error } from 'console';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
 import { ToastrService } from 'ngx-toastr';
 import { NotificationService } from '../../../services/notification/notification.service';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { ChangePasswordComponent } from '../../change-password/change-password.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,6 +33,8 @@ export class DashboardComponent implements OnInit{
   userId:any;
   notifications: { id:number; message: string; route: string; isRead: number; type:string }[] = [];
   unreadCount: number = 0;
+  changePasswordModalRef: MdbModalRef<ChangePasswordComponent> | null = null;
+
 
   constructor(
     private toastr: ToastrService,
@@ -40,7 +44,8 @@ export class DashboardComponent implements OnInit{
     private userService: UserService,
     private jwtService: JwtService,
     private websocketService: WebsocketService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private modalService: MdbModalService
   ) {
     this.router.events.subscribe(() => {
       this.activeRoute = this.router.url; // Get the active URL
@@ -155,6 +160,18 @@ export class DashboardComponent implements OnInit{
   getSortedNotifications(): any[] {
     return this.notifications.sort((a, b) => a.isRead - b.isRead);
   }
+
+  openChangePasswordModal() {
+    this.changePasswordModalRef = this.modalService.open(ChangePasswordComponent, {
+      modalClass: 'modal-lg',
+    });
+
+    this.changePasswordModalRef.onClose.subscribe(() => {
+      console.log('Change password modal closed');
+
+    });
+  }
+
   isSidebarCollapsed = false;
 
   toggleSidebar() {

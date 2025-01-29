@@ -67,4 +67,10 @@ getImageUrl(imagePath: string): string {
       responseType: 'json'
     });
   }
+
+  getUserCount(): Observable<any> {
+    return this.http.get<any>(`${this.BASE_URL}/count`, {
+      responseType: 'json'
+    });
+  }
 }

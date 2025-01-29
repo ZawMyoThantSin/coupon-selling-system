@@ -101,7 +101,7 @@ export type ChartOptions = {
               Upcoming Amount
             </div>
           <div class="h5 mb-0 font-weight-bold text-gray-800 d-flex align-items-center">
-          
+
           <div class="h5 mb-0 font-weight-bold text-gray-800" *ngIf="amountToPay && amountToPay > 0">
             <span>{{ amountToPay - (amountToPay * desiredPercentage) / 100 | number: '1.0-0' }} MMK
             </span>
@@ -112,21 +112,21 @@ export type ChartOptions = {
               {{ desiredPercentage }}%
             </span>
           </div>
-        
+
           <div class="h5 mb-0 font-weight-bold text-gray-800" *ngIf="!amountToPay && amountToPay == 0">
             <span>{{ amountToPay - (amountToPay * desiredPercentage) / 100 | number: '1.0-0' }} MMK
             </span>
           </div>
-          
+
         </div>
-         
-          
+
+
         </div>
         <div class="col-auto">
-          <svg xmlns="http://www.w3.org/2000/svg" 
-          height="40px" 
-          viewBox="0 -960 960 960" 
-          width="40px" 
+          <svg xmlns="http://www.w3.org/2000/svg"
+          height="40px"
+          viewBox="0 -960 960 960"
+          width="40px"
           fill="#FFC107"
           (click)="openPaymentHistoryModal(business)"
           style="cursor: pointer;"
@@ -139,7 +139,7 @@ export type ChartOptions = {
   </div>
 </div>
 
-    
+
     </div>
     <div class="chart-container">
   <div class="toggle-buttons">
@@ -316,8 +316,11 @@ export class CouponSaleBarChartComponent {
     });
 
     this.websocketService.onMessage().subscribe((message) => {
-      console.log("MSG", message);
-      this.desiredPercentage = message;
+      // console.log("MSG",message );
+      if(typeof(message) == 'number'){
+        this.desiredPercentage = message;
+      }
+
     });
   }
 

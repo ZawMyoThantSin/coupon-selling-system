@@ -52,8 +52,8 @@ export class BusinessService {
     });
   }
 
-  getBusinessCount(): Observable<number> {
-    return this.http.get<number>(`${this.BASE_URL}/api/businesses/count`, {
+  getBusinessCount(): Observable<any> {
+    return this.http.get<any>(`${this.BASE_URL}/api/businesses/count`, {
       responseType: 'json'
     });
   }

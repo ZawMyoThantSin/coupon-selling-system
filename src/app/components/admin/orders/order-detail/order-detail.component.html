@@ -68,21 +68,43 @@
         </ul>
       </div>
 
-      <!-- Notes Section -->
-      <h5 class="mt-3">Notes:</h5>
-      <p>{{ order.message || 'No additional notes provided.' }}</p>
 
-      <!-- Payment Proof Section -->
-      <h5 class="mt-3">Payment Proof:</h5>
-      <div class="d-flex align-items-center">
+
+<!-- Payment Proof Section -->
+<div class="card shadow-sm p-3 mt-3">
+  <h5 class="mb-3">Payment Proof</h5>
+  <div class="row align-items-center">
+    <!-- Left Side: Payment Method & Phone Number -->
+    <div class="col-md-6">
+      <div class="p-3 border rounded bg-light">
+        <p class="mb-2">Payment Method: <strong>{{ order.paymentInfo.paymentType }}</strong></p>
+        <p class="mb-0">Phone Number:  <strong>{{ order.paymentInfo.accountNumber }}</strong></p>
+      </div>
+    </div>
+    <!-- Right Side: Image & View Button (Outside) -->
+    <div class="col-md-6 d-flex align-items-center justify-content-end">
+      <div class="p-2 border rounded d-inline-block d-flex flex-column align-items-center">
         <img
           [src]="getOrderImage(order.screenshot)"
           alt="Payment Proof"
-          width="150"
-          class="mr-3 rounded"
+          width="200"
+          class="rounded shadow-sm"
         />
-        <a [href]="getOrderImage(order.screenshot)" target="_blank" class="btn btn-link">View Full Size</a>
+        <p class="text-muted mt-2 text-center">Payment Screenshot</p>
       </div>
+
+      <!-- Button Positioned Outside (Right Side) -->
+      <a
+        [href]="getOrderImage(order.screenshot)"
+        target="_blank"
+        class="btn btn-primary btn-sm ml-3"
+      >
+        View Full Size
+      </a>
+    </div>
+  </div>
+</div>
+
 
       <!-- Actions -->
       <div class="actions mt-4 text-center">

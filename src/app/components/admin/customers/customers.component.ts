@@ -35,7 +35,9 @@ export class CustomersComponent implements OnInit {
   ngOnInit(): void {
     this.customerService.getCustomers().subscribe((data: any) => {
       this.customers = data;
-      this.filteredCustomers = this.customers; // Initialize with all customers
+      this.filteredCustomers = this.customers.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+
+       console.log(this.filteredCustomers);
       this.uniqueRoles = [...new Set(this.customers.map((c) => c.role))]; // Get unique roles
     });
   }
@@ -68,38 +70,6 @@ export class CustomersComponent implements OnInit {
       );
     }
   }
-  editFunds(item: any) {
-    this.editMode = item.id; // Set the edit mode for the specific item by ID
-    this.fund = item.funds; // Load the current fund value for editing
-  }
-
-  saveFunds(item: any) {
-    this.editMode = null; // Exit edit mode
-    const partialUpdate = {
-      id: item.id,
-      fund: this.fund
-    };
-
-    this.customerService.editUserFund(partialUpdate).subscribe(
-      () => {
-        this.toastr.success('Funds updated successfully.', 'Success');
-        const customer = this.customers.find((c) => c.id === item.id);
-        if (customer) {
-          customer.funds = this.fund;
-        }
-      },
-      (error) => {
-        this.toastr.error('Error updating funds.', 'Error');
-        console.error('Error updating funds:', error);
-      }
-    );
-  }
-
-  cancelEdit() {
-    this.editMode = null; // Disable edit mode
-    this.fund = null; // Reset the fund value
-  }
-
 
   getImageUrl(image: any): string {
     return this.userService.getImageUrl(image);

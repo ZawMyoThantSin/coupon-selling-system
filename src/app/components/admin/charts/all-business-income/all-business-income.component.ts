@@ -18,6 +18,8 @@ import {
 import { PurchaseCouponService } from '../../../../services/purchase-coupon/purchase-coupon.service';
 import { UserOrderService } from '../../../../services/user-order/user-order.service';
 import { Router } from '@angular/router';
+import { UserService } from '../../../../services/user/user.service';
+import { BusinessService } from '../../../../services/business/business.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -40,20 +42,31 @@ export type ChartOptions = {
   <div class="dashboard-container">
   <!-- Cards Section -->
   <div class="card-container">
-    <div class="card">
-      <div class="card-icon">
-        <i class="fas fa-briefcase text-dark"></i> <!-- Icon for Total Businesses -->
+
+  <div class="card">
+    <div class="card-icon">
+      <i class="fas fa-briefcase text-dark"></i> <!-- Icon for Total Businesses -->
+      <div class="plus-users" *ngIf="todayBusiness>0">
+        <i class="fas fa-caret-up ms-2"></i>
+        <span>+{{ todayBusiness|| 0 }}</span>
       </div>
-      <h3>Total Businesses</h3>
-      <p>{{ totalBusinesses || 0 }}</p>
     </div>
-    <div class="card">
+    <h3>Total Businesses</h3>
+    <p>{{ totalBusinesses || 0 }}</p>
+  </div>
+
+    <div class="card" (click)="usersPage()">
       <div class="card-icon">
         <i class="fas fa-users text-dark"></i> <!-- Icon for Total User Count -->
+        <div class="plus-users" *ngIf="todayUsers> 0">
+          <i class="fas fa-caret-up ms-2"></i>
+          <span>+{{ todayUsers || 0 }}</span>
+        </div>
       </div>
-      <h3>Total User Count</h3>
+      <h3>Total User</h3>
       <p>{{ totalUsers || 0 }}</p>
     </div>
+
     <div class="card">
       <div class="card-icon">
       <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000"><path d="M880-720v480q0 33-23.5 56.5T800-160H160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720Zm-720 80h640v-80H160v80Zm0 160v240h640v-240H160Zm0 240v-480 480Z"/></svg>
@@ -61,6 +74,7 @@ export type ChartOptions = {
       <h3>Payment Method</h3>
       <p>{{  0 }}</p>
     </div>
+
     <div class="card" (click)="orderPage()">
       <div class="card-icon">
         <i class="fas fa-shopping-cart text-dark"></i> <!-- Icon for Pending Orders -->
@@ -200,11 +214,37 @@ export type ChartOptions = {
   padding: 10px !important; /* Add padding */
 }
 
+.card {
+  text-align: center; /* Center the text inside the card */
+}
+
+.card-icon {
+  display: flex;
+  justify-content: center; /* Center the fa-users icon horizontally */
+  align-items: center; /* Center the fa-users icon vertically */
+  position: relative; /* For positioning the plus-users section */
+}
+
+.plus-users {
+  display: flex;
+  align-items: center;
+  position: absolute; /* Position the plus-users section absolutely */
+  left: calc(50% + 20px); /* Move it to the right of the centered fa-users icon */
+  color: green; /* Change color to indicate positive growth */
+  font-size: 16px;
+}
+
+.plus-users i {
+  margin-right: 5px;
+}
+
   `]
 })
 export class AllBusinessImcome implements OnInit {
-  totalBusinesses: number = 123;
-  totalUsers: number = 4567;
+  totalBusinesses: number = 0;
+  todayBusiness: number = 0;
+  totalUsers: number = 0;
+  todayUsers: number = 0;
   pendingOrders: number = 0;
   totalOrders: number = 0;
   completedOrder: number = 0;
@@ -219,6 +259,8 @@ export class AllBusinessImcome implements OnInit {
     private router: Router,
     private purchaseCouponService: PurchaseCouponService,
     private orderService: UserOrderService,
+    private userService: UserService,
+    private businessService: BusinessService,
     private cdr: ChangeDetectorRef  // Inject ChangeDetectorRef
   ) {
     this.chartOptions = this.getInitialChartOptions();
@@ -228,6 +270,8 @@ export class AllBusinessImcome implements OnInit {
   ngOnInit() {
     this.loadBusinessEarningsData();  // Ensure the data is loaded when component initializes
     this.loadOrderStatus();
+    this.loadUserCount();
+    this.loadBusinessCount();
   }
 
 
@@ -260,6 +304,24 @@ export class AllBusinessImcome implements OnInit {
 
       // Update chart options after data is loaded
       this.completedOrderChart = this.getCompletedOrderChartOptions();
+    });
+  }
+
+  loadUserCount(): void {
+    this.userService.getUserCount().subscribe((data) => {
+      this.totalUsers = data.totalUsersCount;
+      this.todayUsers = data.todayUserCount;
+    }, (error) => {
+      console.error('Error fetching user count:', error);
+    });
+  }
+
+  loadBusinessCount(): void {
+    this.businessService.getBusinessCount().subscribe((data) => {
+      this.totalBusinesses = data.totalBusinessCount;
+      this.todayBusiness = data.todayBusinessCount;
+    }, (error) => {
+      console.error('Error fetching user count:', error);
     });
   }
 
@@ -355,5 +417,8 @@ export class AllBusinessImcome implements OnInit {
 
   orderPage(): void{
     this.router.navigate(['/d/order']);
+  }
+  usersPage(): void{
+    this.router.navigate(['/d/users']);
   }
 }
