@@ -189,6 +189,26 @@ color: #28a745; /* Green for active */
 color: #dc3545; /* Red for inactive */
 }
 
+.about-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.about-content, .map-container {
+  flex: 1;
+  background-color: white; /* Ensure same background color */
+  border: 1px solid #ddd; /* Set consistent border */
+  border-radius: 10px; /* Same border radius */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Same shadow effect */
+  padding: 20px; /* Add consistent padding */
+}
+
+.map-container iframe {
+  border-radius: 10px; /* Same rounded corners for the iframe */
+}
+
 
 @media screen and (max-width: 768px) {
 

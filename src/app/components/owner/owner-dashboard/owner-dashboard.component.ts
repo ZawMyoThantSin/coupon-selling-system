@@ -159,6 +159,7 @@ export class OwnerDashboardComponent {
 
 
   logoutButton(): void{
+    this.websocketService.disconnect();
     this.storageService.removeItem("token");
     this.router.navigate(['login']);
   }

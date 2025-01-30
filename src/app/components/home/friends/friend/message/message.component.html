@@ -1,1 +1,82 @@
-<p>message works!</p>
+<div class="chat-container mt-2">
+ <div class="d-flex justify-content-between align-items-center">
+  <a class="btn " (click)="goBack()">
+    <i class="fas fa-times text-white fs-4"></i>
+  </a>
+  <h1>Talk with {{ friendDetails.name }}</h1>
+  <a class="btn btn-link" >
+  </a>
+ </div>
+
+
+  <div class="messages" #messageContainer>
+      <div class="chat-date" *ngIf="messages.length > 0">
+          {{ messages[0].sendAt | date:'fullDate' }}
+      </div>
+
+      <div *ngFor="let message of messages"
+           class="message"
+           [ngClass]="{'sent': message.senderId === loggedInUserId, 'received': message.senderId !== loggedInUserId,
+              'shared-coupon': message.isSharedCouponMessage
+           }"
+           (dblclick)="openMessageMenu(message, $event)"
+           (click)="handleMessageClick(message)"
+           (contextmenu)="openMessageMenu(message, $event); $event.preventDefault()">
+
+          <img *ngIf="message.senderId !== loggedInUserId"
+               [src]="getFriendImageUrl(friendDetails?.profile)"
+               alt="{{ friendDetails?.name }}"
+               class="profile-pic" />
+
+          <div class="message-content">
+              <span class="sender">
+                  {{ message.senderId === loggedInUserId ? 'You' : friendDetails.name }}
+              </span>
+              <span class="text">{{ message.content }}</span>
+              <span *ngIf="message.isSharedCouponMessage" class="coupon-icon">🎟️</span>
+
+              <span *ngIf="message.senderId !== loggedInUserId" class="timestamp-1">
+                  {{ message.sendAt | date:'shortTime' }}
+              </span>
+              <span *ngIf="message.senderId === loggedInUserId" class="timestamp-2">
+                  {{ message.sendAt | date:'shortTime' }}
+              </span>
+
+              <!-- Message Reactions -->
+              <div class="reactions" *ngIf="message.reactions.length > 0">
+                  <span *ngFor="let reaction of message.reactions" class="reaction">
+                      {{ reaction.reaction }}
+                  </span>
+              </div>
+          </div>
+      </div>
+
+      <!-- Floating Menu for Message Actions -->
+      <div class="floating-menu" *ngIf="activeMessage" [ngStyle]="menuPosition">
+          <div class="menu-content">
+              <button *ngIf="activeMessage.senderId !== loggedInUserId"(click)="reactToMessage(activeMessage, '👍')">👍</button>
+              <button *ngIf="activeMessage.senderId !== loggedInUserId"(click)="reactToMessage(activeMessage, '❤️')">❤️</button>
+              <button *ngIf="activeMessage.senderId !== loggedInUserId"(click)="reactToMessage(activeMessage, '😂')">😂</button>
+              <button *ngIf="activeMessage.senderId !== loggedInUserId"(click)="reactToMessage(activeMessage, '😮')">😮</button>
+              <button *ngIf="activeMessage.senderId !== loggedInUserId"(click)="reactToMessage(activeMessage, '😢')">😢</button>
+              <button *ngIf="activeMessage.senderId !== loggedInUserId"(click)="reactToMessage(activeMessage, '🔥')">🔥</button>
+              <button *ngIf="activeMessage.senderId === loggedInUserId && !activeMessage.isSharedCouponMessage" (click)="editMessage(activeMessage)">✏️</button>
+              <button *ngIf="activeMessage.senderId === loggedInUserId && !activeMessage.isSharedCouponMessage" (click)="deleteMessage(activeMessage.id)">🗑️</button>
+          </div>
+      </div>
+  </div>
+
+
+
+  <div class="typing-indicator" *ngIf="isFriendTyping">{{ friendDetails.name }} is typing...</div>
+
+  <div class="input-area">
+      <input [(ngModel)]="newMessage"
+             (keyup.enter)="sendMessage()"
+             (input)="onTyping()"
+             placeholder="Type a message...">
+      <button (click)="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+      </button>
+  </div>
+</div>

@@ -1,0 +1,38 @@
+.map {
+  height: 300px;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  font-size: 1.5em;
+  color: #555;
+}
+.leaflet-control-search {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: white;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+.leaflet-control-search input[type="text"] {
+  width: 400px !important; /* Ensures width is applied */
+  max-width: 400px; /* Prevents it from shrinking */
+  height: 40px; /* Adjust height */
+  padding: 10px; /* Extra padding for better usability */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px; /* Increases font size */
+}

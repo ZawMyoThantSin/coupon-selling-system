@@ -20,7 +20,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormField } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MessageService } from '../../../../services/user/message.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-friend',
@@ -69,7 +69,8 @@ export class FriendComponent implements OnInit {
     private userService: UserService,
     private toastr: ToastrService,
     private websocketService: WebsocketService,
-    private modalService: MdbModalService
+    private modalService: MdbModalService,
+    private router: Router
  ) {}
 
   ngOnInit(): void {
@@ -319,6 +320,11 @@ closeConfirmCanelModal() {
     return profile
       ? this.userService.getImageUrl(profile)
       : '/images/default-avatar.png';
+  }
+
+
+  navigateToChat(friendId: number): void {
+    this.router.navigate(['/homepage/message', friendId]);
   }
 
   private handleWebSocketMessage(message: string): void {

@@ -11,6 +11,9 @@
 <div class="modal-body px-4">
   <div class="d-flex">
     <!-- Image Preview Section -->
+   <!-- Image and Map Section -->
+   <div class="image-map-container">
+    <!-- Image Preview -->
     <div class="image-preview-container">
       <div
         class="image-preview"
@@ -21,6 +24,12 @@
         <p>No image selected</p>
       </div>
     </div>
+
+    <!-- Map -->
+    <div class="map-container">
+      <div id="map" class="map"></div>
+    </div>
+  </div>
 
     <!-- Form Section -->
     <form
@@ -58,12 +67,13 @@
           name="location"
           class="form-control"
           placeholder="Location"
-          [(ngModel)]="formData.location"
+          [(ngModel)]="formData.tempLocation"
           #location="ngModel"
           required
+            [disabled]="!formData.tempLocation"
         />
         <label for="location">Location</label>
-        <div *ngIf="location.invalid && location.touched" class="text-danger">
+        <div *ngIf="locationError" class="text-danger">
           Location is required.
         </div>
       </div>
@@ -147,6 +157,9 @@
           (change)="onFileChange($event)"
         />
         <label for="image">Upload Image</label>
+        <div *ngIf="imageError" class="text-danger">
+          {{ imageError }}
+        </div>
       </div>
     </form>
   </div>

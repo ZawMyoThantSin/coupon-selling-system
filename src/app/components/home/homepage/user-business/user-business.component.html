@@ -22,18 +22,6 @@
     </figure>
   <div class="tabs-section">
     <mdb-tabs>
-      <mdb-tab>
-        <ng-template mdbTabTitle>
-          <span>
-            <i class="fas fa-box-open fa-fw me-2"></i>
-            Products
-          </span>
-        </ng-template>
-          <div class="tab-content">
-          <app-business-product></app-business-product>
-
-          </div>
-      </mdb-tab>
 
       <mdb-tab>
         <ng-template mdbTabTitle>
@@ -42,51 +30,79 @@
             About
           </span>
         </ng-template>
-          <div class="tab-content">
-            <h3>About {{ business.name }}</h3>
-          <div class="about-content">
-            <div class="about-item">
-              <i class="fas fa-map-marker-alt about-icon"></i>
-              <p><strong>Location:</strong> {{ business.location }}</p>
-            </div>
-            <!-- Business Description -->
-            <div class="about-item">
-              <i class="fas fa-clipboard about-icon"></i>
-              <p><strong>Description:</strong> {{ business.description }}</p>
-            </div>
-            <!-- Business Contact -->
-            <div class="about-item">
-              <i class="fas fa-phone-alt about-icon"></i>
-              <p><strong>Contact:</strong> {{ business.contactNumber }}</p>
-            </div>
-            <!-- Business Owner -->
-            <div class="about-item">
-              <i class="fas fa-user-tie about-icon"></i>
-              <p><strong>Owner:</strong> {{ business.userName }} ({{ business.userEmail }})</p>
-            </div>
-             <!-- Business Status -->
-            <div class="about-item">
-              <i class="fas fa-check-circle about-icon"></i>
+        <div class="tab-content">
+          <h3>About {{ business.name }}</h3>
+          <div class="about-container">
+            <!-- Left Side: Business Information -->
+            <div class="about-content py-5">
+              <div class="about-item">
+                <i class="fas fa-map-marker-alt about-icon"></i>
+                <p><strong>Location:</strong> {{ business.location }}</p>
+              </div>
+              <div class="about-item">
+                <i class="fas fa-clipboard about-icon"></i>
+                <p><strong>Description:</strong> {{ business.description }}</p>
+              </div>
+              <div class="about-item">
+                <i class="fas fa-phone-alt about-icon"></i>
+                <p><strong>Contact:</strong> {{ business.contactNumber }}</p>
+              </div>
+              <div class="about-item">
+                <i class="fas fa-user-tie about-icon"></i>
+                <p><strong>Owner:</strong> {{ business.userName }} ({{ business.userEmail }})</p>
+              </div>
+              <div class="about-item">
+                <i class="fas fa-check-circle about-icon"></i>
                 <p><strong>Open:</strong>
-              <span [ngClass]="{'text-success': business.status, 'text-danger': !business.status}">
-                {{ business.status ? 'Open' : 'Closed' }}
-              </span>
+                  <span [ngClass]="{'text-success': business.status, 'text-danger': !business.status}">
+                    {{ business.status ? 'Open' : 'Closed' }}
+                  </span>
                 </p>
+              </div>
+            </div>
+            <!-- Right Side: Map Container -->
+            <div class="map-container">
+              <iframe
+                width="100%"
+                height="300"
+                frameborder="0"
+                style="border:0"
+                [src]="mapUrl"
+                allowfullscreen>
+              </iframe>
+
             </div>
           </div>
         </div>
       </mdb-tab>
 
-      <mdb-tab>
+
+      <mdb-tab >
         <ng-template mdbTabTitle>
-          <span>
+          <span (click)="loadProductComponent()">
+            <i class="fas fa-box-open fa-fw me-2"></i>
+            Products
+          </span>
+        </ng-template>
+        <div class="tab-content">
+          <ng-container *ngIf="businessProductComponent">
+            <ng-container *ngComponentOutlet="businessProductComponent"></ng-container>
+          </ng-container>
+        </div>
+      </mdb-tab>
+
+      <mdb-tab >
+        <ng-template mdbTabTitle>
+          <span (click)="loadReviewComponent()">
             <i class="fas fa-history fa-fw me-2"></i>
             Rating
           </span>
         </ng-template>
-          <div class="tab-content">
-            <app-business-review></app-business-review>
-          </div>
+        <div class="tab-content">
+          <ng-container *ngIf="businessReviewComponent">
+            <ng-container *ngComponentOutlet="businessReviewComponent"></ng-container>
+          </ng-container>
+        </div>
       </mdb-tab>
 
     </mdb-tabs>

@@ -6,10 +6,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterLinkActive, RouterOutlet } from '@angular/router';
 import { EncodingUtils } from '../../services/encoding-utils';
+import { MapComponent } from "../map/map.component";
 @Component({
   selector: 'app-test-dash',
   standalone: true,
-  imports: [CommonModule,  MatIconModule, MatButtonModule, MatListModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, MatListModule, FormsModule, ReactiveFormsModule, MapComponent],
   templateUrl: './test-dash.component.html',
   styleUrl: './test-dash.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

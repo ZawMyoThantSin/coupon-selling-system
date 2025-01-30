@@ -14,22 +14,29 @@ export class MessageService {
   constructor(
     private http: HttpClient,
     private websocketService: WebsocketService,
-    private storageService: StorageService // Token management (if required)
   ) {}
 
   sendMessage(message: any): Observable<any> {
     return this.http.post<any>(`${this.BASE_URL}/send`, message, {});
   }
 
+  editMessage(messageId : number, message: any): Observable<any> {
+    return this.http.put<any>(`${this.BASE_URL}/edit/${messageId}`, message, {});
+  }
+
+  deleteMessage(messageId: number): Observable<any> {
+    return this.http.delete<any>(`${this.BASE_URL}/delete/${messageId}`, {});
+  }
+
   getChatMessages(userId1: number, userId2: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.BASE_URL}/chat/${userId1}/${userId2}`, {});
   }
 
-  connectWebSocket(): void {
-    this.websocketService.connect();
+  addReaction(messageId: number, userId: number, reaction: string): Observable<any> {
+    return this.http.post<any>(`${this.BASE_URL}/react/${messageId}/${userId}`, reaction);
   }
 
-  disconnectWebSocket(): void {
-    this.websocketService.disconnect();
+  removeReaction(messageId: number, userId: number): Observable<any> {
+    return this.http.delete<any>(`${this.BASE_URL}/unreact/${messageId}/${userId}`);
   }
 }

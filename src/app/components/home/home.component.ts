@@ -179,6 +179,7 @@ export class HomeComponent implements OnInit{
   }
 
   logoutButton(): void{
+    this.websocketService.disconnect();
     this.storageService.removeItem("token");
     this.router.navigate(['login']);
   }

@@ -8,6 +8,7 @@ import { PurchaseCouponService } from '../../../services/purchase-coupon/purchas
 import { PurchaseCoupon } from '../../../models/purchase-coupon';
 import { ToastrService } from 'ngx-toastr';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
+import { MessageService } from '../../../services/user/message.service';
 @Component({
   selector: 'app-share-coupon-model',
   standalone: true,
@@ -33,7 +34,8 @@ export class ShareCouponModalComponent {
     private userService: UserService,
     private purchaseCouponService: PurchaseCouponService ,
     private toastr: ToastrService,
-    private websocketService: WebsocketService
+    private websocketService: WebsocketService,
+    private messageService: MessageService,
   ) {}
 
   close(): void {
@@ -115,8 +117,19 @@ export class ShareCouponModalComponent {
     if (this.saleCouponId && this.selectedUserId) {
       this.purchaseCouponService.transferCoupon(this.saleCouponId, this.selectedUserId).subscribe({
         next: (message) => {
+          const sentmessage = {
+            senderId: this.loggedInUserId,
+            receiverId: this.selectedUserId,
+            content: "0| I just shared a coupon with you! 🎉",
+          };
+          this.messageService.sendMessage(sentmessage).subscribe({
+            next: (response) => {
+            },
+            error: (err) => console.error('Error sending message:', err),
+          });
           console.log(message);
           this.toastr.success(`Coupon successfully transferred to ${this.selectedFriendName}!`);
+
           this.modalRef.close(message);  // Close the modal after success
         },
         error: (err) => {

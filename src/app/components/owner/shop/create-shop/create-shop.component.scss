@@ -1,34 +1,102 @@
-.image-preview-container {
-  width: 40%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 1rem;
-
-  .image-preview {
-    width: 100%;
-    height: 300px;
-    background-size: cover;
-    background-position: center;
-    border-radius: 8px;
-  }
-
-  .image-placeholder {
-    width: 100%;
-    height: 300px;
+.modal-body {
+  .image-map-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    font-size: 1.2rem;
-    color: #888;
+    flex-direction: column;
+    width: 40%;
+    margin-left: 2rem;
+
+    .image-preview-container {
+      width: 100%;
+      max-width: 350px;
+      height: 200px; // Adjusted height
+      margin-bottom: 1rem;
+
+      .image-preview {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-position: center;
+        border-radius: 8px;
+      }
+
+      .image-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        color: #888;
+      }
+    }
+
+    .map-container {
+      width: 100%; /* Set to match the parent width */
+      max-width: 350px; /* Optional: Limit the maximum width */
+      height: 250px; /* Set the height explicitly */
+      overflow: hidden; /* Prevent content from overflowing */
+      border-radius: 8px; /* Optional: Add rounded corners */
+      border: 1px solid #ccc; /* Optional: Add a border for better visibility */
+
+      app-map {
+        width: 100%; /* Make the map fill the container */
+        height: 100%; /* Make the map fill the container */
+        display: block; /* Ensure proper layout */
+      }
+    }
+
+  }
+
+  .form-container {
+    flex-grow: 1;
   }
 }
 
-.form-container {
-  width: 60%;
+.map {
+  height: 300px;
+  width: 100%;
+  max-width: 350px;
+  margin: 0 auto;
+  border-radius: 8px;
+  border: 1px solid #ccc;
 }
+
+.loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  font-size: 1.5em;
+  color: #555;
+}
+.leaflet-control-search {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: white;
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+.leaflet-control-search input[type="text"] {
+  width: 400px !important; /* Ensures width is applied */
+  max-width: 400px; /* Prevents it from shrinking */
+  height: 40px; /* Adjust height */
+  padding: 10px; /* Extra padding for better usability */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px; /* Increases font size */
+}
+
+
+// .form-container {
+//   width: 60%;
+// }
 
 .modal-footer {
   justify-content: flex-end;

@@ -44,4 +44,39 @@ export class PaymentHistoryModalComponent implements OnInit {
   closeModal(): void {
     this.modalRef.close();
   }
+
+  downloadReport(type: 'pdf' | 'excel', businessId: number = this.businessId) {
+    this.loading = true;
+
+    this.businessService.ownerProfitReport(type, businessId).subscribe(
+      (response: Blob) => {
+        this.loading = false;
+        this.downloadFile(response, type);
+      },
+      (error) => {
+        this.loading = false;
+        console.error('Error downloading report:', error);
+      }
+    );
+  }
+
+  downloadFile(response: Blob, type: 'pdf' | 'excel') {
+    const blob = new Blob([response], { type: type === 'pdf' ? 'application/pdf' : 'application/vnd.ms-excel' });
+    const link = document.createElement('a');
+
+    // Dynamically set the file name and extension
+    const fileName = `payment_history_for_${this.businessName}.${type === 'pdf' ? 'pdf' : 'xlsx'}`;
+
+    // Create a URL for the Blob and set it as the download link
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+
+    // Trigger the download
+    link.click();
+  }
+
+
+
+
+
 }

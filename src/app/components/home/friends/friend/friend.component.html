@@ -50,7 +50,7 @@
             </button>
             <button
               class="btn btn-outline-success btn-sm mt-2"
-              [routerLink]="['message', friend.friendId]"
+              (click)="navigateToChat(friend.friendId)"
             >
             <i class="fas fa-comment-alt"></i> Chat
             </button>

@@ -15,10 +15,12 @@ export class WebsocketService {
   private readonly reconnectDelay = 5000;
   private token!: string | null;
   private pingIntervalId!: any;
+  private isManualDisconnect = false; // Flag to track manual disconnection
 
   constructor(private ngZone: NgZone, private storageService: StorageService) {
     this.token = this.storageService.getItem('token');
   }
+
   connect(): void {
     if (this.socket && (this.socket.readyState === WebSocket.OPEN || this.socket.readyState === WebSocket.CONNECTING)) {
       console.warn('WebSocket is already connected or connecting.');
@@ -30,13 +32,12 @@ export class WebsocketService {
       return;
     }
 
+    this.isManualDisconnect = false; // Reset the flag on connect
     const wsUrl = `${this.serverUrl}?token=${encodeURIComponent(this.token)}`;
     console.log('Attempting to connect to WebSocket:', wsUrl);
 
-    console.log('Attempting to connect to WebSocket:', wsUrl);
     this.socket = new WebSocket(wsUrl);
 
-    // On successful connection
     this.socket.onopen = () => {
       console.log('WebSocket connected');
       this.reconnectAttempts = 0;
@@ -44,12 +45,11 @@ export class WebsocketService {
     };
 
     this.socket.onmessage = (event: MessageEvent) => {
-
       console.log('WebSocket message received:', event.data);
 
       this.ngZone.run(() => {
         try {
-          const message = JSON.parse(event.data); // Parse JSON message if applicable
+          const message = JSON.parse(event.data);
           this.messageSubject.next(message);
         } catch (error) {
           console.error('Failed to parse WebSocket message:', error);
@@ -60,27 +60,33 @@ export class WebsocketService {
 
     this.socket.onerror = (event: Event) => {
       console.error('WebSocket error:', event);
+      if (!this.isManualDisconnect) {
+        this.handleReconnection();
+      }
     };
 
     this.socket.onclose = (event: CloseEvent) => {
       console.warn('WebSocket disconnected:', event.reason);
-      this.stopHeartbeat(); // Stop heartbeat on disconnection
-      this.handleReconnection();
+      this.stopHeartbeat();
+      if (!this.isManualDisconnect) {
+        this.handleReconnection();
+      }
     };
+  }
+
+  disconnect(): void {
+    this.isManualDisconnect = true; // Set the flag to true for manual disconnection
+    if (this.socket) {
+      this.socket.close();
+      this.stopHeartbeat();
+      console.log('WebSocket disconnected manually.');
+    }
   }
 
   reconnect(token: string): void {
     this.token = token;
     this.disconnect(); // Close existing connection if any
     this.connect(); // Establish new connection
-  }
-
-  disconnect(): void {
-    if (this.socket) {
-      this.socket.close();
-      this.stopHeartbeat(); // Stop heartbeat on disconnection
-      console.log('WebSocket disconnected manually.');
-    }
   }
 
   send(message: string): void {
@@ -102,13 +108,17 @@ export class WebsocketService {
       return;
     }
 
+    if (!this.token) {
+      console.error('WebSocket reconnection requires a valid JWT token.');
+      return;
+    }
+
     this.reconnectAttempts++;
     const delay = this.calculateReconnectDelay();
     console.log(`Reconnecting in ${delay / 1000} seconds (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})...`);
 
     setTimeout(() => this.connect(), delay);
   }
-
 
   private calculateReconnectDelay(): number {
     return Math.min(this.reconnectDelay * Math.pow(2, this.reconnectAttempts - 1), 30000);
@@ -129,4 +139,8 @@ export class WebsocketService {
     }
   }
 
+  ngOnDestroy(): void {
+    this.disconnect();
+    this.stopHeartbeat();
+  }
 }

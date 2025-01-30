@@ -111,9 +111,8 @@ const routes: Routes = [
       {path:'order', component:UserOrderComponent, },
       {path:'order-history', component:OrderHistoryComponent, title:'History'},
       {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
-      {path:'friends', component:FriendComponent, title:'Friends', children:[
-        { path: 'message/:friendId', component: MessageComponent },
-      ] },
+      {path:'friends', component:FriendComponent, title:'Friends'},
+      {path: 'message/:friendId', component: MessageComponent },
       {path:'products', component:CouponCardComponent, title:'Products'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
       {path:'history', component:HistoryComponent, title:'History'},

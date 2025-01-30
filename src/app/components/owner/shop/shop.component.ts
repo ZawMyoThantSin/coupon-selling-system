@@ -23,7 +23,7 @@ import { RatingModalComponent } from './rating-modal/rating-modal.component';
   styleUrl: './shop.component.scss'
 })
 export class ShopComponent {
-  
+
 
   businessId!: number;
 
@@ -72,7 +72,7 @@ export class ShopComponent {
 
 
      // Fetch all ratings and then sort
-     
+
      this.businessReviewService.getAllRating(this.businessId).subscribe(
       (response) => {
         this.rating = response;
@@ -91,6 +91,7 @@ export class ShopComponent {
       (response) => {
         if(this.userId == response.userId){
           this.business = response;
+          this.getLocationName(this.business.location);
           this.shopExist = this.business.id != null ? true : false;//data is null the shop isn't created yet!
           this.loading = false;
         }else{
@@ -122,7 +123,7 @@ export class ShopComponent {
   editBusiness(): void {
     this.router.navigate(['/o/edit-shop', this.businessId]); // Navigate to the route
   }
-  
+
 
   sortReviews() {
     this.rating = this.rating.sort((a, b) => {
@@ -143,22 +144,43 @@ export class ShopComponent {
   }
   openRatingModal(event: MouseEvent): void {
     event.preventDefault(); // Prevent default navigation behavior
-  
+
     // Open the modal and pass data using the `data` property
     const modalRef = this.modalService.open(RatingModalComponent, {
       data: { ratingList: this.rating } // Pass the rating data
     });
-  
+
     // Optional: handle the result when the modal is closed
     modalRef.onClose.subscribe((result: any) => {
       console.log('Modal closed with result:', result);
     });
   }
-  
-  
-  
+
+
+
 
   closeModal() {
     this.showModal = false; // Close the modal
+  }
+
+  getLocationName(location: string) {
+    const trimmedInput = location.trim();
+
+    if (/^\d/.test(trimmedInput)) {
+      const [lat, lon] = location.split(',').map(coord => parseFloat(coord.trim()));
+    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        const locationName = data.display_name;
+        this.business.location = locationName;
+      })
+      .catch((error) => {
+        console.error('Error fetching location name:', error);
+      });
+    }else{
+      this.business.location = location;
+    }
+
   }
 }
