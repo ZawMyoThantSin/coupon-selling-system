@@ -2,7 +2,7 @@
 <div class="container my-4">
   <!-- Search and Filter Section -->
   <div class="d-flex justify-content-between align-items-center mb-3">
-    
+
     <!-- Search Box with Calendar -->
     <div class="d-flex align-items-center gap-2 w-100" style="max-width: 500px;">
       <div class="input-group w-100">
@@ -25,7 +25,7 @@
           />
         </span>
       </div>
-      
+
       <!-- Clear Date Filter Button beside the Search Bar -->
       <button
         *ngIf="specificDate"
@@ -53,7 +53,7 @@
               id="startDate"
             />
           </div>
-    
+
           <!-- End Date -->
           <div class="d-flex flex-column">
             <label for="endDate">End Date:</label>
@@ -65,7 +65,7 @@
               id="endDate"
             />
           </div>
-    
+
           <!-- Clear Search Button beside date input -->
           <div class="d-flex flex-column justify-content-end mt-3">
             <button
@@ -78,11 +78,51 @@
             <span class="text-white">&times;</span>
           </button>
           </div>
-          
+
         </div>
       </div>
     </div>
-  </div>    
+  </div>
+
+  <!-- Product Report Button and Dropdown (Right Side) -->
+  <div class="me-4 d-flex align-items-center position-relative">
+    <!-- Product Report Button -->
+    <button
+      type="button"
+      class="btn btn-secondary "
+      (click)="onReportTypeChange('used_coupon')">
+      Report
+    </button>
+
+
+    <!-- Show the select dropdown beside the 'product' button when selected -->
+    <div *ngIf="currentParentReportType === 'used_coupon'" class="mt-2 col-md-2 ms-3">
+      <select id="usedCouponSelect" class="form-select form-select-sm" [(ngModel)]="currentReportType"  (ngModelChange)="onReportTypeChange()">
+        <option value="" disabled selected>Select an option</option>
+        <option value="used_coupon_weekly">Used Coupon Weekly Report</option>
+        <option value="used_coupon_monthly">Used Coupon Monthly Report</option>
+        <option value="used_coupon">Used Coupon Report</option>
+        <option value="remain_coupon">Remain Coupon</option>
+      </select>
+    </div>
+  </div>
+
+
+<!-- Download Report Buttons (Under Products Section and Excel Import) -->
+<div *ngIf="currentParentReportType === 'used_coupon' && currentReportType" class="mt-4 d-flex justify-content-between align-items-center">
+  <button class="btn btn-warning" (click)="downloadReport('pdf', businessId)" style="height: 40px;">
+    <i class="fas fa-file-pdf"></i> Download PDF
+  </button>
+  <button class="btn btn-success"  (click)="downloadReport('excel', businessId)" style="height: 40px;">
+    <i class="fas fa-file-excel"></i> Download Excel
+  </button>
+</div>
+
+<!-- Display Generated Report (PDF) -->
+<div *ngIf="showPreview" class="mt-4">
+  <h4>Generated PDF Report</h4>
+  <iframe [src]="pdfSrc" width="100%" height="600px"></iframe>
+</div>
 
   <!-- Used-Coupon Table -->
   <div class="table-responsive">

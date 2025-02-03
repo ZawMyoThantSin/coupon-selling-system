@@ -26,7 +26,8 @@ export class SaleCouponReportComponent implements OnInit{
   startDate: string | null = null;
   endDate: string | null = null;
   currentParentReportType: string = '';
-  currentReportType: 'sale_coupon_weekly' | 'sale_coupon_monthly' | 'product' |'used_coupon_weekly' | 'used_coupon_monthly' | 'coupon' |'used_coupon'|'sale_coupon' |'remain_coupon'|'expired_coupon' |'all_products' | 'best_products'= 'sale_coupon_weekly';
+  currentReportType: 'sale_coupon_weekly' | 'sale_coupon_monthly' | 'product' |'used_coupon_weekly' | 'used_coupon_monthly' | 'coupon' |'used_coupon'|'sale_coupon' |'remain_coupon'|'expired_coupon' |'all_products' | 'best_products' | ''= '';
+  showPreview: boolean = false;
   qrCodeUrl: string | null = null;
   constructor(
     private businessService: BusinessService,
@@ -41,6 +42,36 @@ export class SaleCouponReportComponent implements OnInit{
     });
   }
 
+  reports = [
+    { id: 'couponReport', value: 'coupon', label: 'All Coupon' },
+    { id: 'saleCoupon', value: 'sale_coupon', label: 'Sale Coupon' },
+    { id: 'usedCoupon', value: 'used_coupon', label: 'Used Coupon' },
+    { id: 'remaincoupon', value: 'remain_coupon', label: 'Remain Coupon' },
+    { id: 'expiredcoupon', value: 'expired_coupon', label: 'Expired Coupon' },
+    { id: 'productReport', value: 'all_products', label: 'Products' }
+  ];
+
+  onReportTypeChange() {
+    if (this.currentReportType) {
+      this.startDate = '';
+      this.endDate = '';
+
+      if (['sale_coupon', 'used_coupon'].includes(this.currentReportType)) {
+        this.currentParentReportType = this.currentReportType;
+      } else {
+        this.currentParentReportType = ''; // Reset if not in sale/used category
+      }
+
+      this.generateReport('pdf', this.currentReportType, this.businessId);
+    }
+  }
+
+  onDateChange() {
+    if (this.currentReportType) {
+      this.generateReport('pdf', this.currentReportType, this.businessId);
+    }
+  }
+
   generateReport(
     type: 'pdf' | 'excel',
     reportType: 'sale_coupon_weekly' | 'sale_coupon_monthly' | 'product'|'used_coupon_weekly' | 'used_coupon_monthly' | 'coupon' |'used_coupon'|'sale_coupon' |'remain_coupon'|'expired_coupon' |'all_products' | 'best_products',
@@ -49,12 +80,12 @@ export class SaleCouponReportComponent implements OnInit{
     this.loading = true;
     this.error = null;
     this.currentReportType = reportType;
+    this.showPreview = false;
 
-    // Append default time to startDate and endDate
-  const params = {
-    startDate: this.startDate ? `${this.startDate}T00:00:00` : '', // Add default time (00:00:00)
-    endDate: this.endDate ? `${this.endDate}T23:59:59` : '', // Add default time (23:59:59)
-  };
+    const params = {
+      startDate: this.startDate ? `${this.startDate}T00:00:00.000Z` : '',
+      endDate: this.endDate ? `${this.endDate}T23:59:59.999Z` : '',
+    };
 
     let service;
     switch (reportType) {
@@ -119,6 +150,9 @@ export class SaleCouponReportComponent implements OnInit{
       },
     });
   }
+  togglePreview() {
+    this.showPreview = !this.showPreview;
+  }
 
   downloadReport(type: 'pdf' | 'excel', businessId: number = this.businessId) {
     this.loading = true;
@@ -168,11 +202,10 @@ export class SaleCouponReportComponent implements OnInit{
         return;
     }
 
-    // Pass the params object, even if it's empty
-  const params = {
-    startDate: this.startDate || '',
-    endDate: this.endDate || '',
-  };
+    const params = {
+      startDate: this.startDate ? `${this.startDate}T00:00:00.000Z` : '',
+      endDate: this.endDate ? `${this.endDate}T23:59:59.999Z` : '',
+    };
 
     service(type, businessId,params).subscribe({
       next: (data: Blob) => {
@@ -195,4 +228,11 @@ export class SaleCouponReportComponent implements OnInit{
       },
     });
   }
+
+  clearDates() {
+    this.startDate = null;
+    this.endDate = null;
+    this.onDateChange();
+  }
+
 }

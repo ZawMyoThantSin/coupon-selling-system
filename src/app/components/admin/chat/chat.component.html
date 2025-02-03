@@ -1,0 +1,78 @@
+<div class="card mx-auto mt-4" style="max-width: 1000px;">
+  <!-- Card Header -->
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <!-- Search Box -->
+    <div class="input-group" style="max-width: 300px;">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search..."
+        aria-label="Search"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="filterByName()"
+      />
+      <button class="btn btn-outline-secondary" type="button">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+
+    <div class="title">
+      <h3>Chat with Owners</h3>
+    </div>
+
+  </div>
+
+  <!-- Card Body (Table) -->
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-striped align-middle mb-0 bg-white">
+        <thead class="bg-light">
+          <tr>
+            <th class="col-4">User</th>
+            <th class="col-3">Last Active</th>
+            <th class="col-2">Status</th>
+            <th class="col-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of filteredUsers | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
+            <td>
+              <div class="d-flex align-items-center">
+                <img [src]="user.profile ? getImageUrl(user.profile) : '/images/default-avatar.png'"
+                  alt="Avatar"
+                  class="rounded-circle border"
+                  style="width: 45px; height: 45px;"
+                />
+                <div class="ms-3">
+                  <p class="fw-bold mb-1">{{ user.name }}</p>
+                  <p class="text-muted mb-0">{{ user.email }}</p>
+                </div>
+              </div>
+            </td>
+            <td>
+              <p class="text-dark mb-1">{{ user.created_at| date: 'mediumDate' }}</p>
+            </td>
+            <td>
+              <span *ngIf="user.status " class="badge badge-success rounded-pill d-inline">Online</span>
+              <span *ngIf="user.status" class="badge badge-secondary rounded-pill d-inline">Offline</span>
+            </td>
+            <td>
+              <button class="btn btn-primary btn-sm" (click)="startChat(user.id)">
+                <i class="fas fa-comment-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+          <!-- Pagination Controls -->
+          <div class="d-flex justify-content-end mt-3">
+              <pagination-controls
+              (pageChange)="currentPage = $event"
+              [responsive]="true"
+              previousLabel="Previous"
+              nextLabel="Next"
+              ></pagination-controls>
+          </div>
+</div>

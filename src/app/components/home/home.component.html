@@ -16,18 +16,87 @@
     <div class="nav-items" [class.show]="isMenuOpen || isDesktop">
       <a class="mx-2" routerLink="/homepage" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
       <a class="mx-2" routerLink="/homepage/products" routerLinkActive="active">Promotions</a>
-      <a class="mx-2" routerLink="/homepage/purchase-coupon" routerLinkActive="active">Coupons</a>
+      <a class="mx-2" routerLink="/homepage/purchase-coupon" routerLinkActive="active" [class.disabled]="!isLoggedIn">My Coupons</a>
       <a class="mx-2" routerLink="/homepage/aboutus" routerLinkActive="active">About us</a>
     </div>
 
    <div class="avatar ">
     <div class="">
       <ul class="navbar-nav flex-row d-flex align-items-center me-4">
-        <li class="nav-item me-3">
+        <li *ngIf="isLoggedIn" mdbDropdown class="nav-item me-3 notification-container">
+          <a
+            class="nav-link d-flex align-items-center position-relative"
+            id="notificationDropdown"
+            role="button"
+            mdbDropdownToggle
+            aria-expanded="false"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343">
+              <path d="M480-80q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80Zm-280-160v-80h80v-240q0-75 41-136.5T440-800v-40q0-17 11.5-28.5T480-880q17 0 28.5 11.5T520-840v40q78 10 129 71t51 137v240h80v80H200Zm280-320Zm0 400q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80Z"/>
+            </svg>
+            <!-- Notification Badge -->
+            <span *ngIf="unreadCount > 0" class="notification-badge badge rounded-pill badge-notification bg-danger">
+              {{ unreadCount }}
+            </span>
+          </a>
+
+          <!-- Notification Dropdown -->
+          <ul mdbDropdownMenu class="dropdown-menu dropdown-menu-end px-3 py-2" aria-labelledby="notificationDropdown">
+            <li *ngFor="let notification of getSortedNotifications().slice(0, 3)" class="dropdown-item">
+              <a *ngIf="notification.isRead === 0"
+              href="javascript:void(0);"
+              (click)="markNotificationAsRead(notification.id);  navigateTo(notification.route)">
+                <i
+                *ngIf="notification.type === 'ORDER_ACCEPTED' || notification.type === 'ORDER_REJECTED'"
+                class="fas fa-shopping-cart me-2 text-primary"
+                [ngClass]="{ 'text-primary': notification.isRead === 0, 'text-muted': notification.isRead === 1 }"
+              ></i>
+                <span class="notif-title">{{ notification.message }}</span>
+              </a>
+
+              <a *ngIf="notification.isRead === 1"
+              href="javascript:void(0);"
+              (click)="markNotificationAsRead(notification.id);  navigateTo(notification.route)">
+                <i
+                *ngIf="notification.type === 'ORDER_ACCEPTED' || notification.type === 'ORDER_REJECTED'"
+                class="fas fa-shopping-cart me-2 text-primary"
+                [ngClass]="{ 'text-primary': notification.isRead === 0, 'text-muted': notification.isRead === 1 }"
+              ></i>
+                <span class="notif-title">{{ notification.message }}</span>
+              </a>
+            </li>
+
+            <li *ngIf="notifications.length > 3">
+              <a
+                class="dropdown-item text-center"
+                href="javascript:void(0);"
+                (click)="navigateTo('homepage/user-noti')"
+              >
+                {{notifications.length - 3}} more
+              </a>
+            </li>
+            <li *ngIf="notifications.length > 0 && notifications.length <= 3">
+              <a
+                class="dropdown-item text-center"
+                href="javascript:void(0);"
+                (click)="navigateTo('homepage/user-noti')"
+              >
+                See all notifications
+              </a>
+            </li>
+
+            <li *ngIf="notifications.length === 0" class="dropdown-item text-center text-muted"
+            (click)="navigateTo('homepage/user-noti')">
+              No new notifications
+            </li>
+          </ul>
+        </li>
+        <li *ngIf="isLoggedIn" class="nav-item me-3">
           <a routerLink="/homepage/cart">
             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM246-720l96 200h280l110-200H246Zm-38-80h590q23 0 35 20.5t1 41.5L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68-39.5t-2-78.5l54-98-144-304H40v-80h130l38 80Zm134 280h280-280Z"/></svg>
           </a>
         </li>
+        <li *ngIf="!isLoggedIn" class="me-2 text-decoration-underline" ><a routerLink="/login" class="text-muted">Login</a></li>
         <li *ngIf="isLoggedIn" mdbDropdown class="nav-item ">
           <a
             class="nav-link d-flex align-items-center"

@@ -1,0 +1,79 @@
+.container {
+  max-width: 100%;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #003ffa;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.75rem;
+  color: #003ffa;
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1rem;
+  color: rgb(0, 0, 0);
+  margin-bottom: 20px;
+}
+
+/* Chat Button Styles */
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #075ff8;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+
+}
+
+.chat-button:hover {
+  background-color: #0d05ae;
+  box-shadow: 0 6px 20px rgba(255, 77, 77, 0.5);
+  transform: translateY(-2px);
+}
+
+.chat-button .icon {
+  font-size: 1.2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+      margin: 20px;
+      padding: 15px;
+  }
+
+  h1 {
+      font-size: 2rem;
+  }
+
+  h2 {
+      font-size: 1.5rem;
+  }
+
+  .chat-button {
+      padding: 10px 20px;
+      font-size: 0.9rem;
+  }
+}

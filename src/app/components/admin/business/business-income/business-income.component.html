@@ -1,6 +1,6 @@
-<div class="card mx-auto mt-4 shadow-sm" style="max-width: 1000px; border-radius: 8px;">
+<div class="card mx-auto mt-4 shadow-sm" style=" border-radius: 8px;">
   <!-- Card Header -->
-  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center rounded-top">
+  <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center rounded-top">
     <!-- Search Box -->
     <div class="input-group" style="max-width: 350px;">
       <input
@@ -60,7 +60,7 @@
                 </div>
               </div>
             </td>
-            <td>{{ business.income | currency }}</td>
+            <td>{{ business.income }} MMK</td>
             <td>
               <input
                 type="number"
@@ -73,8 +73,8 @@
                 style="width: 80px; margin: auto;"
               />
             </td>
-            <td>{{ business.adminProfit | currency }}</td>
-            <td>{{ business.ownerProfit | currency }}</td>
+            <td>{{ business.adminProfit }} MMK</td>
+            <td>{{ business.ownerProfit  }} MMK</td>
             <td>
               <div class="d-flex gap-2 justify-content-center">
                 <!-- Pay Button -->
@@ -87,7 +87,7 @@
                   matTooltip="Cannot pay because the business is already paid or has no valid income"
                 >
 
-                  <i class="fas fa-money-bill-wave"></i> 
+                  <i class="fas fa-money-bill-wave"></i>
 
                 </button>
 

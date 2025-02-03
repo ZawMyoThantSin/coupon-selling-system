@@ -28,6 +28,21 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     border-bottom-right-radius: 5px;
   }
+
+  .upcoming-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px 10px;
+    z-index: 1;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    border-bottom-right-radius: 5px;
+  }
+
   .sold-out-card {
     position: relative;
     opacity: 0.8; /* Slightly fade the card */

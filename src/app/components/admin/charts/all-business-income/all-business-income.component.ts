@@ -20,6 +20,7 @@ import { UserOrderService } from '../../../../services/user-order/user-order.ser
 import { Router } from '@angular/router';
 import { UserService } from '../../../../services/user/user.service';
 import { BusinessService } from '../../../../services/business/business.service';
+import { PaymentService } from '../../../../services/payment/payment.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -72,7 +73,7 @@ export type ChartOptions = {
       <svg xmlns="http://www.w3.org/2000/svg" class="me-2" height="40px" viewBox="0 -960 960 960" width="40px" fill="#000000"><path d="M880-720v480q0 33-23.5 56.5T800-160H160q-33 0-56.5-23.5T80-240v-480q0-33 23.5-56.5T160-800h640q33 0 56.5 23.5T880-720Zm-720 80h640v-80H160v80Zm0 160v240h640v-240H160Zm0 240v-480 480Z"/></svg>
       </div>
       <h3>Payment Method</h3>
-      <p>{{  0 }}</p>
+      <p>{{  totalPayment  }}</p>
     </div>
 
     <div class="card" (click)="orderPage()">
@@ -249,6 +250,7 @@ export class AllBusinessImcome implements OnInit {
   totalOrders: number = 0;
   completedOrder: number = 0;
   newOrders: number = 0;
+  totalPayment: number = 0;
 
   public completedOrderChart: any;
   @ViewChild("chart") chart: ChartComponent | undefined;
@@ -260,6 +262,7 @@ export class AllBusinessImcome implements OnInit {
     private purchaseCouponService: PurchaseCouponService,
     private orderService: UserOrderService,
     private userService: UserService,
+    private pyamentService: PaymentService,
     private businessService: BusinessService,
     private cdr: ChangeDetectorRef  // Inject ChangeDetectorRef
   ) {
@@ -272,6 +275,7 @@ export class AllBusinessImcome implements OnInit {
     this.loadOrderStatus();
     this.loadUserCount();
     this.loadBusinessCount();
+    this.loadPayment();
   }
 
 
@@ -320,6 +324,13 @@ export class AllBusinessImcome implements OnInit {
     this.businessService.getBusinessCount().subscribe((data) => {
       this.totalBusinesses = data.totalBusinessCount;
       this.todayBusiness = data.todayBusinessCount;
+    }, (error) => {
+      console.error('Error fetching user count:', error);
+    });
+  }
+  loadPayment(): void {
+    this.pyamentService.getAllPaymentsCount().subscribe((data) => {
+      this.totalPayment = data.count;
     }, (error) => {
       console.error('Error fetching user count:', error);
     });

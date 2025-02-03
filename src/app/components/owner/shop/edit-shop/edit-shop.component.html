@@ -11,14 +11,22 @@
 <div class="modal-body px-5">
   <div class="d-flex">
     <!-- Image Preview Section -->
-    <div class="image-preview-container">
-      <div
+    <div class="image-map-container">
+      <!-- Image Preview -->
+      <div class="image-preview-container">
+        <div
         class="image-preview"
         *ngIf="imagePreview || business?.photo"
         [style.backgroundImage]="'url(' + (imagePreview || getImageUrl(business.photo)) + ')'"
       ></div>
-      <div class="image-placeholder" *ngIf="!imagePreview && !business?.photo">
-        <p>No image selected</p>
+        <div class="image-placeholder" *ngIf="!imagePreview && !business?.photo">
+          <p>No image selected</p>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container">
+        <div id="map" class="map"></div>
       </div>
     </div>
 
@@ -90,7 +98,7 @@
           mdbInput
           type="text"
           id="location"
-          formControlName="location"
+          formControlName="tempLocation"
           class="form-control"
           placeholder="Location"
           required

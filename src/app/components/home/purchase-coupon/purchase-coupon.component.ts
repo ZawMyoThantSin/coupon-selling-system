@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { PurchaseCouponService } from '../../../services/purchase-coupon/purchase-coupon.service';
@@ -22,8 +22,9 @@ import { forkJoin } from 'rxjs';
   imports: [CommonModule, MatIconModule,MdbTooltipModule,RouterLink],
   templateUrl: './purchase-coupon.component.html',
   styleUrls: ['./purchase-coupon.component.css'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class PurchaseCouponComponent implements OnInit,OnDestroy {
+export class PurchaseCouponComponent implements OnInit {
 
   modalRef: MdbModalRef<QrCodeModalComponent> | null = null;//
   modalRefShareCoupon: MdbModalRef<ShareCouponModalComponent> | null = null;
@@ -49,6 +50,8 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
   userId!: number; // Holds user ID
   businessData: any; // Holds data fetched by userId
   token!: string | null; // JWT token
+  isLoading: boolean = false; // Loading state
+  apiCallsInProgress: number = 0; // Counter for API calls in progress
 
   constructor(
     private purchaseCouponService: PurchaseCouponService,
@@ -65,21 +68,31 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
     if (this.token != null) {
       this.userId = this.tokenService.getUserId(this.token);
       const accepterId = this.userId;
+      this.isLoading = true;
+      this.apiCallsInProgress = 2;
       this.loadCoupons(this.userId);
       this.loadAcceptCoupons();
     }
     this.setupWebSocket();
   }
 
-  ngOnDestroy(): void {
-    this.websocketService.disconnect();
-  }
+
   // Fetch all coupons by user ID
   loadCoupons(userId: number): void {
+    this.isLoading= true;
     this.purchaseCouponService.getAllCouponsByUserId(userId).subscribe(
-      (coupons) => {
-        this.availableCoupons = coupons;
-        console.log("jjjj", this.availableCoupons);
+      async (coupons) => {
+        // Wait for all `businessLocation` updates to complete
+        const updatedCoupons = await Promise.all(
+          coupons.map(async (coupon) => ({
+            ...coupon,
+            // businessLocation: await this.getLocationName(coupon.businessLocation),
+          }))
+        );
+        this.isLoading = false;
+        this.availableCoupons = updatedCoupons; // Assign enriched coupons to the array
+        // console.log("Updated Coupons with Business Location:", this.availableCoupons);
+
         this.filterCoupons(); // Filter coupons by status
 
 
@@ -105,7 +118,8 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
           // Assign the enriched data to filteredTransferredCoupons
           this.filteredTransferredCoupons = enrichedCoupons;
 
-          console.log("Enriched Transferred Coupons:", this.filteredTransferredCoupons);
+          // console.log("Enriched Transferred Coupons:", this.filteredTransferredCoupons);
+          this.checkLoadingStatus();
         },
         (error) => {
           console.error("Error fetching SaleCoupon data:", error);
@@ -120,12 +134,14 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
       },
       (error) => {
         console.error('Error fetching coupons:', error);
+        this.checkLoadingStatus();
       }
     );
   }
    // Fetch accepted coupons
    loadAcceptCoupons(): void {
     // Fetch accepted coupons
+    this.isLoading = true;
     this.purchaseCouponService.getTransferCouponDataByAccepter(this.userId).subscribe(
       (response) => {
         console.log('Response:', response);
@@ -138,16 +154,26 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
 
         // Wait for all SaleCoupon fetch calls to complete
         forkJoin(saleCouponObservables).subscribe(
-          (coupons) => {
+          async (coupons) => {
             const currentDate = new Date();
 
-            // Enrich coupons with senderName
-            const enrichedCoupons = coupons.map((coupon, index) => ({
-              ...coupon,
-              senderName: this.transferData[index]?.senderName || '', // Populate senderName
+            // Enrich coupons with senderName and businessLocation
+            const enrichedCoupons = await Promise.all(
+              coupons.map(async (coupon, index) => ({
+                ...coupon,
+                senderName: this.transferData[index]?.senderName || '', // Populate senderName
+                // businessLocation: await this.getLocationName(coupon.businessLocation), // Add businessLocation
+              }))
+            );
+          // (coupons) => {
+          //   const currentDate = new Date();
 
-            }));
-            console.log('TEE',enrichedCoupons)
+          //   // Enrich coupons with senderName
+          //   const enrichedCoupons = coupons.map((coupon, index) => ({
+          //     ...coupon,
+          //     senderName: this.transferData[index]?.senderName || '', // Populate senderName
+
+          //   }));
 
             // Separate accepted and expired coupons using enriched data
             this.acceptedCoupons = enrichedCoupons.filter(
@@ -164,6 +190,7 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
             // Combine all coupons and filter
             this.availableCoupons = [...this.availableCoupons, ...this.acceptedCoupons];
             // this.filterCoupons();
+            this.checkLoadingStatus();
           },
           (error) => {
             console.error('Error fetching SaleCoupon data:', error);
@@ -173,6 +200,7 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
       },
       (error) => {
         console.error('Error fetching accepted coupons:', error);
+        this.checkLoadingStatus();
       }
     );
   }
@@ -249,10 +277,10 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
       ),
       ...this.expiredAcceptedCoupons,
     ];
-
+    this.isLoading = false;
   }
-  
-  
+
+
   // Generate image URL for the product
   getImageUrl(imagePath: string): any {
     return this.productService.getImageUrl(imagePath);
@@ -276,7 +304,7 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
       }
     });
   }
-  
+
   // Open modal with coupon details
   openQrModal(coupon: any) {
       this.modalRef = this.modalService.open(QrCodeModalComponent, {
@@ -284,7 +312,7 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
       data: { coupon: coupon },
     });
   }
-  
+
   // Close modal
   closeModal(): void {
     this.modalRef?.close();
@@ -303,6 +331,33 @@ export class PurchaseCouponComponent implements OnInit,OnDestroy {
         return this.filteredExpiredCoupons;
       default:
         return [];
+    }
+  }
+
+  // async getLocationName(location: string): Promise<string> {
+  //   const trimmedInput = location.trim();
+
+  //   if (/^\d/.test(trimmedInput)) {
+  //     const [lat, lon] = location.split(',').map(coord => parseFloat(coord.trim()));
+  //     const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+
+  //     try {
+  //       const response = await fetch(url);
+  //       const data = await response.json();
+  //       return data.display_name || location; // Return fetched location name or original value if not found
+  //     } catch (error) {
+  //       console.error('Error fetching location name:', error);
+  //       return location; // Return original location in case of error
+  //     }
+  //   } else {
+  //     return location; // Return as-is if already a name
+  //   }
+  // }
+
+  checkLoadingStatus(): void {
+    this.apiCallsInProgress--;
+    if (this.apiCallsInProgress === 0) {
+        this.isLoading = false;
     }
   }
 }

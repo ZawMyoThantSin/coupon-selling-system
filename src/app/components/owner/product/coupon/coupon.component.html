@@ -1,3 +1,62 @@
+<div class="me-4 d-flex align-items-center position-relative">
+  <!-- Flex container to align the Report button to the right -->
+  <div class="d-flex justify-content-end flex-grow-1">
+    <button type="button" class="btn btn-secondary" (click)="onReportButtonClick()">
+      Report
+    </button>
+  </div>
+
+  <div *ngIf="isReportButtonClicked" class="mt-2 col-md-2 ms-3" >
+    <select
+    id="usedCouponSelect"
+    class="form-select form-select-sm"
+    [(ngModel)]="currentReportType"
+    (ngModelChange)="onReportTypeChange($event)">
+    <option value="" disabled selected>Select an option</option>
+    <option value="coupon">All Coupons</option>
+    <option value="expired_coupon">Expired Coupon</option>
+    <option value="sale_coupon">Sale Coupon Report</option>
+    <option value="sale_coupon_weekly">Sale Coupon Weekly Report</option>
+    <option value="sale_coupon_monthly">Sale Coupon Monthly Report</option>
+  </select>
+
+
+  </div>
+  </div>
+
+  <!-- Report Type Selection -->
+  <div  *ngIf="currentParentReportType === 'coupon' && currentReportType && isReportButtonClicked" class="mt-4 d-flex justify-content-between align-items-center">
+    <button class="btn btn-warning" (click)="downloadReport('pdf', businessId)" style="height: 40px;">
+      <i class="fas fa-file-pdf "></i> Download PDF
+    </button>
+
+
+    <button class="btn btn-success" (click)="downloadReport('excel', businessId)" style="height: 40px;">
+      <i class="fas fa-file-excel "></i> Download Excel
+    </button>
+  </div>
+
+  <!-- Display Generated Report (PDF) -->
+  <div *ngIf="showPreview" class="mt-4">
+    <h4>Generated PDF Report</h4>
+    <iframe [src]="pdfSrc" width="100%" height="600px"></iframe>
+  </div>
+    <!-- Date Range Selection -->
+    <div *ngIf="currentReportType === 'sale_coupon' && isReportButtonClicked " class="mb-4">
+      <div class="row g-3">
+        <div class="col-md-2">
+          <label for="startDate" class="form-label">Start Date</label>
+          <input type="date" class="form-control" id="startDate" [(ngModel)]="startDate" />
+        </div>
+        <div class="col-md-2">
+          <label for="endDate" class="form-label">End Date</label>
+          <input type="date" class="form-control" id="endDate" [(ngModel)]="endDate" />
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-secondary" (click)="clearDates()">Clear</button>
+        </div>
+      </div>
+    </div>
 
 
 <ag-grid-angular
@@ -11,7 +70,6 @@
     [paginationPageSizeSelector]="paginationPageSizeSelector"
     [rowSelection]="rowSelection"
     [modules]="modules"
-
     [rowData]="displayedCoupons"
     (gridReady)="onGridReady($event)"
     (paginationChanged)="onPaginationChanged()"
@@ -20,6 +78,21 @@
 
 </ag-grid-angular>
 
+<!-- Expiration Status Color Boxes with Labels -->
+<div class="expiration-status-boxes">
+  <div class="status-box-container">
+    <div class="status-box" [ngStyle]="{backgroundColor: 'green'}"></div>
+    <span>Not Expiry Date</span>
+  </div>
+  <div class="status-box-container">
+    <div class="status-box" [ngStyle]="{backgroundColor: 'yellow'}"></div>
+    <span>Near Expiry Date</span>
+  </div>
+  <div class="status-box-container">
+    <div class="status-box" [ngStyle]="{backgroundColor: 'red'}"></div>
+    <span>Expired Date</span>
+  </div>
+</div>
 
 
 
@@ -38,4 +111,3 @@
       <button [disabled]="!hasNextPage" (click)="onNextPage()">Next</button>
     </div>
   </div>
-

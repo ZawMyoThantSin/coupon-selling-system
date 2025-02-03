@@ -36,4 +36,8 @@ export class PaymentService {
   getPaymentTempData() {
     return this.paymentData;
   }
+
+  getAllPaymentsCount(): Observable<any>{
+    return this.http.get(`${this.BASE_URL}/payment/count`);
+  }
 }

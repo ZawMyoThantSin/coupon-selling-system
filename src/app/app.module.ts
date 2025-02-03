@@ -36,7 +36,6 @@ import { OwnerOrderComponent } from './components/owner/owner-order/owner-order.
     LoginComponent,
     SignupComponent,
     DashboardComponent,
-    
 
   ],
   imports: [

@@ -146,3 +146,12 @@
   background-color: #3464f3; /* Darker soft yellow when active */
   transform: translateY(1px);
 }
+
+.unread-mark {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #007bff; /* Blue dot for unread notifications */
+  border-radius: 50%;
+  margin-left: 8px; /* Space between message and dot */
+}

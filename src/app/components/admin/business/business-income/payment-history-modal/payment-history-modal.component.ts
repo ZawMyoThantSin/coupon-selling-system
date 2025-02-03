@@ -16,6 +16,8 @@ export class PaymentHistoryModalComponent implements OnInit {
   @Input() businessName!: string;// ID of the business to fetch history for
   paymentHistory: any[] = [];
   loading = true;
+  totalPaidAmount: number = 0;
+  totalAdminProfit: number = 0;
 
   constructor(public modalRef: MdbModalRef<PaymentHistoryModalComponent>,
               private businessService: BusinessService,) {}
@@ -24,6 +26,7 @@ export class PaymentHistoryModalComponent implements OnInit {
     if (this.businessId) {
       this.fetchPaymentHistory();
     }
+    this.calculateTotals();
   }
 
   fetchPaymentHistory(): void {
@@ -31,6 +34,7 @@ export class PaymentHistoryModalComponent implements OnInit {
     this.businessService.getPaidHistory(this.businessId).subscribe({
       next: (history) => {
         this.paymentHistory = history;
+        this.calculateTotals();
         this.loading = false; // Hide loader once data is fetched
       },
       error: (error) => {
@@ -75,7 +79,10 @@ export class PaymentHistoryModalComponent implements OnInit {
     link.click();
   }
 
-
+  calculateTotals() {
+    this.totalPaidAmount = this.paymentHistory.reduce((sum, record) => sum + (record.paidAmount || 0), 0);
+    this.totalAdminProfit = this.paymentHistory.reduce((sum, record) => sum + (record.adminProfit || 0), 0);
+  }
 
 
 

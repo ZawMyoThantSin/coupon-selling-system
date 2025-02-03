@@ -56,6 +56,12 @@ import { NotificationComponent } from './components/admin/notification/notificat
 import { ReportPreviewComponent } from './components/admin/business/business-income/report-preview/report-preview.component';
 import { AllBusinessImcome } from './components/admin/charts/all-business-income/all-business-income.component';
 import { AdminReportsComponent } from './components/admin/report/admin-reports/admin-reports.component';
+import { UserNotiComponent } from './components/home/user-noti/user-noti.component';
+import { OwnerNotiComponent } from './components/owner/owner-noti/owner-noti.component';
+import { AdminMessageComponent } from './components/owner/admin-message/admin-message.component';
+import { AdminContactComponent } from './components/owner/admin-contact/admin-contact.component';
+import { ChatComponent } from './components/admin/chat/chat.component';
+import { OwnerMessageComponent } from './components/admin/chat/owner-message/owner-message.component';
 
 
 const routes: Routes = [
@@ -83,10 +89,12 @@ const routes: Routes = [
       {path: 'business-income', component: BusinessIncomeComponent},
       {path: 'notification', component: NotificationComponent},
       {path: 'report-preview', component: ReportPreviewComponent},
+      {path: 'chat', component: ChatComponent},
+      {path: 'owner-message/:userId', component: OwnerMessageComponent}
 
     ]
   },
-  {path:'o', component:OwnerDashboardComponent, canActivate: [dashboardGuard],
+  {path:'o', component:OwnerDashboardComponent, title:'Dashboard', canActivate: [dashboardGuard],
     children:[
       {path:'',  component:CouponSaleBarChartComponent},
       {path:'order', component:OwnerOrderComponent, title:'order'},
@@ -101,25 +109,27 @@ const routes: Routes = [
       ]
     },
     {path:'p/detail-product/:id',component:DetailProductComponent},
-
+    {path:'contact', component:AdminContactComponent},
+    {path:'admin-message', component:AdminMessageComponent},
+    {path:'owner-noti', component:OwnerNotiComponent, title:'Notification'}
     ]
   },
-  {path:'homepage', component:HomeComponent, title:'Home Page', canActivate: [dashboardGuard],
+  {path:'homepage', component:HomeComponent, title:'Home Page',
     children:[
       {path: '', component:HomepageComponent, title:'Home'},
-      {path:'cart', component:AddToCartComponent},
-      {path:'order', component:UserOrderComponent, },
+      {path:'cart', component:AddToCartComponent, title:'Cart' , canActivate:[dashboardGuard]},
+      {path:'order', component:UserOrderComponent, canActivate:[dashboardGuard]},
       {path:'order-history', component:OrderHistoryComponent, title:'History'},
       {path:'userprofile', component:UserprofileComponent, title:'User Profile'},
-      {path:'friends', component:FriendComponent, title:'Friends'},
-      {path: 'message/:friendId', component: MessageComponent },
+      {path:'friends', component:FriendComponent, title:'Friends', canActivate:[dashboardGuard]},
+      {path:'message/:friendId', component: MessageComponent },
       {path:'products', component:CouponCardComponent, title:'Products'},
       {path:'aboutus', component:AboutusComponent, title:'About Us'},
-      {path:'history', component:HistoryComponent, title:'History'},
-      {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
-      {path:'purchase-coupon', component:PurchaseCouponComponent, title:'purchase'},
+      {path:'history', component:HistoryComponent, title:'History', canActivate:[dashboardGuard]},
+      {path:'purchase-coupon', component:PurchaseCouponComponent, title:'Coupon'},
       {path:'p/:id', component:ProductdetailsComponent,title:'productdetail'},
       {path:'u/detail-business/:id', component:UserBusinessComponent, title:'businessDetail'},
+      {path:'user-noti', component:UserNotiComponent, title:'Notifications'}
     ]
   },
   {path:'test-dash', component:TestDashComponent},

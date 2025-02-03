@@ -1,0 +1,72 @@
+<div class="chat-container">
+  <!-- Chat Header -->
+  <div class="chat-header">
+      <button class="back-button" (click)="goBack()">&#8592;</button>
+      <div class="header-right">
+          <h2>Admin Support</h2>
+          <img src="images/admin-avatar.png" alt="Admin Avatar" class="user-avatar">
+      </div>
+  </div>
+
+  <!-- Chat Messages -->
+  <div class="chat-messages" #messageContainer>
+      <div class="chat-date" *ngIf="messages.length > 0">
+          {{ messages[0].sendAt | date: 'fullDate' }}
+      </div>
+
+      <div *ngFor="let message of messages"
+           class="message-container"
+           [ngClass]="{'sent': message.senderId === loggedInUserId, 'received': message.senderId !== loggedInUserId}"
+           (dblclick)="openMessageMenu(message, $event)"
+           (click)="handleMessageClick(message)"
+           (contextmenu)="openMessageMenu(message, $event); $event.preventDefault()">
+
+          <img *ngIf="message.senderId !== loggedInUserId"
+               src="images/admin-avatar.png"
+               alt="Admin"
+               class="profile-pic" />
+
+          <div class="message-content">
+              <span class="sender">
+                  {{ message.senderId === loggedInUserId ? 'You' : 'Admin' }}
+              </span>
+              <span class="text">{{ message.content }}</span>
+
+              <span class="timestamp">
+                  {{ message.sendAt | date:'shortTime' }}
+              </span>
+
+              <!-- Reactions -->
+              <div class="reactions" *ngIf="message.reactions.length > 0">
+                  <span *ngFor="let reaction of message.reactions" class="reaction">
+                      {{ reaction.reaction }}
+                  </span>
+              </div>
+          </div>
+      </div>
+
+      <!-- Floating Menu for Message Actions -->
+      <div class="floating-menu" *ngIf="activeMessage" [ngStyle]="menuPosition">
+          <div class="menu-content">
+              <button *ngIf="activeMessage.senderId !== loggedInUserId" (click)="reactToMessage(activeMessage, '👍')">👍</button>
+              <button *ngIf="activeMessage.senderId !== loggedInUserId" (click)="reactToMessage(activeMessage, '❤️')">❤️</button>
+              <button *ngIf="activeMessage.senderId !== loggedInUserId" (click)="reactToMessage(activeMessage, '😂')">😂</button>
+              <button *ngIf="activeMessage.senderId !== loggedInUserId" (click)="reactToMessage(activeMessage, '😮')">😮</button>
+              <button *ngIf="activeMessage.senderId !== loggedInUserId" (click)="reactToMessage(activeMessage, '😢')">😢</button>
+              <button *ngIf="activeMessage.senderId !== loggedInUserId" (click)="reactToMessage(activeMessage, '🔥')">🔥</button>
+              <button *ngIf="activeMessage.senderId === loggedInUserId" (click)="editMessage(activeMessage)">✏️</button>
+              <button *ngIf="activeMessage.senderId === loggedInUserId" (click)="deleteMessage(activeMessage.id)">🗑️</button>
+          </div>
+      </div>
+  </div>
+
+  <!-- Message Input -->
+  <div class="input-area">
+      <input [(ngModel)]="newMessage"
+             (keyup.enter)="sendMessage()"
+             placeholder="Type a message...">
+      <button (click)="sendMessage()">
+          <i class="fas fa-paper-plane"></i>
+      </button>
+  </div>
+</div>

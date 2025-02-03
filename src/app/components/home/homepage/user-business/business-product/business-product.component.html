@@ -7,6 +7,11 @@
       [ngClass]="{ 'sold-out-card': isSoldOut(product.id) }"
       (click)="!isSoldOut(product.id) && viewProductDetails(product.id)"
     >
+
+    <div *ngIf="getCouponPrice(product.id) === 0" class="upcoming-badge">
+      UPCOMING
+    </div>
+
       <!-- Discount Badge -->
       <div class="discount-badge" *ngIf="product.discount">
 

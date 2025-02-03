@@ -1,0 +1,40 @@
+<div class="modal fade show d-block" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header bg-primary text-white d-flex align-items-center px-3">
+        <h5 class="modal-title">Monthly Earnings</h5>
+        <button type="button" class="btn-close text-white ms-auto" (click)="closeModal()" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+
+        <!-- Loading Indicator -->
+        <div *ngIf="isLoading" class="d-flex justify-content-center my-4">
+          <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+        <!-- Month List -->
+        <ul *ngIf="!isLoading" class="list-group">
+          <li *ngFor="let month of availableMonths"
+              class="list-group-item d-flex justify-content-between align-items-center">
+            <span class="text-uppercase fw-bold">{{ month.month }}</span>
+            <span class="badge bg-primary text-white fs-6 px-3 py-2">
+              {{ month.earnings | number:'1.0-0' }} MMK
+            </span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer bg-light d-flex justify-content-end">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>

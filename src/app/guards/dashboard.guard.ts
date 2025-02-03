@@ -2,8 +2,10 @@ import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { StorageService } from '../services/storage.service';
 import { JwtService } from '../services/jwt.service';
+import { Toast, ToastrService } from 'ngx-toastr';
 
 export const dashboardGuard: CanActivateFn = (route, state) => {
+  const toastr: ToastrService = inject(ToastrService);
   const router: Router = inject(Router);
   const storageService: StorageService = inject(StorageService);
   const tokenService: JwtService = inject(JwtService);
@@ -15,6 +17,8 @@ export const dashboardGuard: CanActivateFn = (route, state) => {
 
   const token = storageService.getItem("token");
   if (!token) {
+    toastr.warning("You Haven't Login ");
+
     console.warn("No token found. Redirecting to login.");
     router.navigate(['/login']);
     return false;
@@ -41,7 +45,7 @@ export const dashboardGuard: CanActivateFn = (route, state) => {
     }
   }
 
-  if (userRole === 'ROLE_USER') {
+  if (userRole !== 'ROLE_ADMIN' && userRole !== 'OWNER') {
     if (state.url.startsWith('/homepage')) { // Allow any URL starting with "/homepage"
       return true;
     } else {
@@ -49,7 +53,7 @@ export const dashboardGuard: CanActivateFn = (route, state) => {
       return false;
     }
   }
-
+  toastr.warning("You Haven't Login ");
   console.warn("Invalid or missing role. Redirecting to login.");
   router.navigate(['/login']);
   return false;

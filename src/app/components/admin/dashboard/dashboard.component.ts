@@ -52,6 +52,19 @@ export class DashboardComponent implements OnInit{
     });
   }
 
+  ngOnInit(): void {
+
+    this.handleWebSocketMessages();
+    this.token = this.storageService.getItem('token');
+    this.userId = this.jwtService.getUserId(this.token);
+
+    this.userService.getUserInfo().subscribe((response)=>{
+      this.userInfo = response;
+      this.isLoggedIn = true;
+    },error => console.log('Error in Fetching UserInfo', error));
+    this.getNotifications();
+  }
+
   handleWebSocketMessages():void{
     this.websocketService.connect();
 
@@ -73,20 +86,6 @@ export class DashboardComponent implements OnInit{
       }
     });
   }
-
-  ngOnInit(): void {
-    this.token = this.storageService.getItem('token');
-    this.userId = this.jwtService.getUserId(this.token);
-
-    this.userService.getUserInfo().subscribe((response)=>{
-      this.userInfo = response;
-      this.isLoggedIn = true;
-    },error => console.log('Error in Fetching UserInfo', error));
-
-    this.handleWebSocketMessages();
-      this.getNotifications();
-  }
-
   // Fetch business names and toggle collapse
   toggleBusinessCollapse(): void {
     this.isBusinessCollapsed = !this.isBusinessCollapsed;
@@ -177,5 +176,8 @@ export class DashboardComponent implements OnInit{
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
+  navigateToChat(){
+    this.router.navigate(['/d/chat']);
   }
 }

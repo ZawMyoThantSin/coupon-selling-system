@@ -35,7 +35,7 @@ export class BusinessService {
   }
 
   getById(id:number):Observable<any>{
-    return this.http.get(`${this.BASE_URL}/api/businesses/${id}`,{
+    return this.http.get(`${this.BASE_URL}/public/businesses/${id}`,{
       responseType:'json'
     })
   }
@@ -143,7 +143,7 @@ export class BusinessService {
   }
 
   getAllBusinesses(): Observable<any> {
-    return this.http.get(`${this.BASE_URL}/api/businesses`, {
+    return this.http.get(`${this.BASE_URL}/public/businesses`, {
       responseType: 'json',
     });
   }

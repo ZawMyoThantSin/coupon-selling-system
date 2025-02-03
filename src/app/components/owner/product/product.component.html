@@ -1,21 +1,51 @@
-
-
 <div class="d-flex justify-content-between align-items-center mb-6">
-  <!-- Add Product Button -->
+  <!-- Add Product Button (Left Side) -->
   <button class="btn btn-primary d-flex align-items-center" (click)="navigateToModal()" mdbRipple>
     <i class="fas fa-plus mr-2"></i> Add Product
   </button>
 
-  <!-- Import Excel Button -->
-  <button class="btn btn-success d-flex align-items-center" (click)="openExcelImportModal()">
-    <i class="fa-solid fa-file-excel mr-2"></i> Import Excel
+  <!-- Excel Import Button (Center) -->
+  <div class="d-flex justify-content-center flex-grow-1">
+    <button class="btn btn-success d-flex align-items-center" (click)="openExcelImportModal()">
+      <i class="fa-solid fa-file-excel mr-2"></i> Import Excel
+    </button>
+  </div>
+
+  <!-- Product Report Button and Dropdown (Right Side) -->
+  <div class="me-4 d-flex align-items-center position-relative">
+    <!-- Product Report Button -->
+    <button
+      type="button"
+      class="btn btn-secondary "
+      (click)="onReportTypeChange('product')">
+      Report
+    </button>
+
+    <!-- Show the select dropdown beside the 'product' button when selected -->
+    <div *ngIf="currentParentReportType === 'product'" class="ms-3">
+      <select id="productReportSelect" class="form-select form-select-sm" [(ngModel)]="currentReportType" (ngModelChange)="onReportTypeChange()">
+        <option value="" disabled selected>Select an option</option>
+        <option value="all_products">All Products List</option>
+        <option value="best_products">Best Products List</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- Download Report Buttons (Under Products Section and Excel Import) -->
+<div *ngIf="currentParentReportType === 'product' && currentReportType" class="mt-4 d-flex justify-content-between align-items-center">
+  <button class="btn btn-warning" (click)="downloadReport('pdf', businessId)" style="height: 40px;">
+    <i class="fas fa-file-pdf"></i> Download PDF
+  </button>
+  <button class="btn btn-success"  (click)="downloadReport('excel', businessId)" style="height: 40px;">
+    <i class="fas fa-file-excel"></i> Download Excel
   </button>
 </div>
 
 
 <!-- ag-grid component -->
 <ag-grid-angular
-  style="width: 100%; height: 485px;"
+  style="width: 100%; height: 485px; margin-top: 20px;"
   class="ag-theme-alpine"
   [rowData]="products"
   [columnDefs]="columnDefs"

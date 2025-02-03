@@ -5,6 +5,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { UsedCoupon } from '../../../../models/coupon-validation';
 import { CouponService } from '../../../../services/coupon/coupon.service';
 import { ActivatedRoute } from '@angular/router';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BusinessService } from '../../../../services/business/business.service';
 
 @Component({
   selector: 'app-used-coupon',
@@ -31,15 +33,29 @@ export class UsedCouponComponent implements OnInit {
   usedCoupons: UsedCoupon[] = [];
   filteredUsedCoupon: UsedCoupon[] = [];
 
+  error: string | null = null;
+  pdfSrc: SafeResourceUrl | null = null;
+  excelSrc: SafeResourceUrl | null = null;
+      // isPdfDropdownOpen: boolean = false;
+      // isExcelDropdownOpen: boolean = false;
+  loading: boolean = false;
+  pdfTitle: string = '';
+  currentParentReportType: string = '';
+  currentReportType:'used_coupon_weekly' | 'used_coupon_monthly'  |'used_coupon' | "remain_coupon"= 'used_coupon'; // Corrected the type
+  showPreview: boolean = false;
+  businessId: number = 0;
   constructor(
     private couponService: CouponService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private businessService: BusinessService,
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params) => {
       const shopId = +params['shopId']; // Assuming the route has a 'shopId' parameter
       if (shopId) {
+        this.businessId = shopId;
         this.loadUsedCoupons(shopId);
       } else {
         console.error('shopId is missing in the route.');
@@ -102,6 +118,7 @@ export class UsedCouponComponent implements OnInit {
 
       return matchesSearch && matchesDateRange;
     });
+    this.generateReport('pdf', this.currentReportType, this.businessId);
   }
 
   // Helper function to reset the time to midnight (00:00:00)
@@ -111,14 +128,11 @@ export class UsedCouponComponent implements OnInit {
     return reset;
   }
 
-  // Method to filter coupons by specific date
-  filterUsedCouponBySpecificDate(): void {
-    if (!this.specificDate) {
-      // If no specific date is selected, reset the filtered list
-      this.filteredUsedCoupon = [...this.usedCoupons];
-      return;
-    }
-
+ // Method to filter coupons by specific date
+ filterUsedCouponBySpecificDate(): void {
+  if (!this.specificDate) {
+    this.filteredUsedCoupon = [...this.usedCoupons]; // Reset to original list
+  } else {
     const selectedDate = new Date(this.specificDate);
 
     this.filteredUsedCoupon = this.usedCoupons.filter((coupon) => {
@@ -129,7 +143,6 @@ export class UsedCouponComponent implements OnInit {
         return false;
       }
 
-      // Compare dates (ignoring time component)
       return (
         usedAt.getFullYear() === selectedDate.getFullYear() &&
         usedAt.getMonth() === selectedDate.getMonth() &&
@@ -137,6 +150,10 @@ export class UsedCouponComponent implements OnInit {
       );
     });
   }
+
+  // Regenerate report after filtering by specific date
+  this.generateReport('pdf', this.currentReportType, this.businessId);
+}
 
   // Method to clear the search input
   clearSearch() {
@@ -163,5 +180,131 @@ export class UsedCouponComponent implements OnInit {
         : dateB.getTime() - dateA.getTime(); // Descending order
     });
     this.filteredUsedCoupon = [...this.usedCoupons]; // Reapply filtered list after sorting
+  }
+  onReportTypeChange(reportType?: string) {
+    if (reportType) {
+      this.currentParentReportType = this.currentParentReportType === reportType ? '' : reportType;
+      this.currentReportType = 'used_coupon';
+    }
+    if (this.currentParentReportType && this.currentReportType) {
+      this.generateReport('pdf', this.currentReportType, this.businessId);
+    }
+  }
+
+
+
+  generateReport(
+    type: 'pdf' | 'excel',
+    reportType: 'used_coupon_weekly' | 'used_coupon_monthly' | 'used_coupon'| "remain_coupon",
+    businessId: number = this.businessId
+  ) {
+    this.loading = true;
+    this.error = null;
+    this.currentReportType = reportType;
+    this.showPreview = false;
+
+    const params = {
+      startDate: this.startDate ? `${this.startDate}T00:00:00.000Z` : '',
+      endDate: this.endDate ? `${this.endDate}T23:59:59.999Z` : '',
+    };
+
+
+
+    let service;
+    switch (reportType) {
+      case 'used_coupon_weekly':
+        service = this.businessService.usedCouponReportForWeekly.bind(this.businessService);
+        break;
+      case 'used_coupon_monthly':
+        service = this.businessService.usedCouponReportForMonthly.bind(this.businessService);
+        break;
+        case 'used_coupon':
+        service = this.businessService.usedCouponReport.bind(this.businessService);
+        break;
+        case 'remain_coupon':
+        service = this.businessService.reaminCouponReport.bind(this.businessService);
+        break;
+      default:
+        this.error = 'Invalid report type.';
+        this.loading = false;
+        return;
+    }
+
+
+    service(type, businessId,params).subscribe({
+      next: (data: Blob) => {
+        const url = URL.createObjectURL(data);
+        if (type === 'pdf') {
+          this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+          this.excelSrc = null;
+        } else {
+          this.excelSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+          this.pdfSrc = null;
+        }
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error generating report:', error);
+        this.error = 'An error occurred while generating the report. Please try again.';
+        this.loading = false;
+      },
+    });
+  }
+
+  togglePreview() {
+    this.showPreview = !this.showPreview;
+  }
+
+  downloadReport(type: 'pdf' | 'excel', businessId: number = this.businessId) {
+    this.loading = true;
+    this.error = null;
+
+    let service;
+    switch (this.currentReportType) {
+      case 'used_coupon_weekly':
+        service = this.businessService.usedCouponReportForWeekly.bind(this.businessService);
+        break;
+      case 'used_coupon_monthly':
+        service = this.businessService.usedCouponReportForMonthly.bind(this.businessService);
+        break;
+        case 'used_coupon':
+        service = this.businessService.usedCouponReport.bind(this.businessService);
+        break;
+        case 'remain_coupon':
+        service = this.businessService.reaminCouponReport.bind(this.businessService);
+        break;
+      default:
+        this.error = 'Invalid report type.';
+        this.loading = false;
+        return;
+    }
+
+    const params = {
+      startDate: this.startDate ? `${this.startDate}T00:00:00.000Z` : '',
+      endDate: this.endDate ? `${this.endDate}T23:59:59.999Z` : '',
+    };
+
+
+
+    service(type, businessId,params).subscribe({
+      next: (data: Blob) => {
+        const url = URL.createObjectURL(data);
+        const link = document.createElement('a');
+        link.href = url;
+        const extension = type === 'pdf' ? 'pdf' : 'xlsx';
+        const reportTypeName = this.currentReportType.replace('_', ' ');
+        link.download = `${reportTypeName}_report_${businessId}.${extension}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error downloading report:', error);
+        this.error = 'An error occurred while downloading the report. Please try again.';
+        this.loading = false;
+      },
+    });
   }
 }

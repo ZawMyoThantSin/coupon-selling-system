@@ -16,6 +16,7 @@ import { ChangePasswordComponent } from '../change-password/change-password.comp
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
+import { NotificationService } from '../../services/notification/notification.service';
 
 @Component({
   standalone:true,
@@ -32,12 +33,11 @@ export class HomeComponent implements OnInit{
   isLoggedIn: boolean = false;
   decodedToken!:string;
   userInfo!:UserResponse;
-  pendingFriendRequestsCount: number = 0;
-
+  userId:any;
+  notifications: { id:number; message: string; route: string; isRead: number; type:string }[] = [];
+  unreadCount: number = 0;
   token!:any;
 
-  notifications: Array<{ id: number; message: string; link: string; read: boolean }> = [];
-  unreadNotifications: number = 0;
   changePasswordModalRef: MdbModalRef<ChangePasswordComponent> | null = null;
 
 
@@ -49,7 +49,9 @@ export class HomeComponent implements OnInit{
               private sharedService: SharedService,
               private friendService: FriendsService,
               private websocketService: WebsocketService,
-              private modalService: MdbModalService
+              private modalService: MdbModalService,
+              private notificationService: NotificationService,
+              private jwtService: JwtService
               ) {
     this.router.events.subscribe(() => {
       this.activeRoute = this.router.url; // Get the active URL
@@ -65,6 +67,123 @@ export class HomeComponent implements OnInit{
         }
       });
     }
+  }
+
+  // private setupWebSocket(): void {
+  //   this.websocketService.connect();
+
+  //   this.websocketService.onMessage().subscribe((message) => {
+  //     this.handleWebSocketMessage(message);
+  //   });
+  // }
+
+  // private handleWebSocketMessage(message: string): void {
+  //   console.log('WebSocket update:', message);
+  //   switch (message) {
+  //     case 'FRIEND_REQUEST_RECEIVED':
+  //       this.toastr.info('You have a new friend request!', 'Info');
+  //       break;
+  //     case 'FRIEND_REQUEST_ACCEPTED':
+  //       this.toastr.success('Your friend request was accepted!', 'Success');
+  //       break;
+  //     case 'FRIEND_REQUEST_DENIED':
+  //       this.toastr.info('Your friend request was denied.', 'Info');
+  //       break;
+  //     case 'FRIEND_REQUEST_CANCELLED':
+  //       this.toastr.warning('A friend request sent to you was canceled.', 'Info');
+  //       break;
+  //     case 'UNFRIENDED':
+  //         this.toastr.warning('You have been unfriended by someone.', 'Info');
+  //       break;
+  //       case 'COUPON_TRANSFER_TRANSFERRED':
+  //         this.toastr.info('You have a new coupon transfer request!', 'Coupon Transfer');
+  //         break;
+  //       case 'ORDER_ACCEPTED':
+  //         this.toastr.info("Your Order has finished! | Go to check ","Alert");
+  //         break;
+  //       case 'ORDER_REJECTED':
+  //         this.toastr.warning("Oops! Your Order has rejected | Go to check ","Alert");
+  //         break;
+  //     default:
+  //       console.warn('Unknown WebSocket message:', message);
+  //   }
+  // }
+
+
+
+  ngOnInit(): void {
+
+    this.userService.getUserInfo().subscribe((response)=>{
+      this.userInfo = response;
+      this.isLoggedIn = true;
+    },error => console.log('Error in Fetching UserInfo', error));
+    this.token = this.storageService.getItem('token');
+    this.userId = this.jwtService.getUserId(this.token);
+    this.setupWebSocket();
+    this.getNotifications();
+  }
+
+
+
+
+
+  getImageUrl(imagePath: string): string {
+    return this.userService.getImageUrl(imagePath);
+  }
+
+
+
+  logoutButton(): void{
+    this.websocketService.disconnect();
+    this.storageService.removeItem("token");
+    this.router.navigate(['login']);
+  }
+  openChangePasswordModal() {
+    this.changePasswordModalRef = this.modalService.open(ChangePasswordComponent, {
+      modalClass: 'modal-lg',
+    });
+
+    this.changePasswordModalRef.onClose.subscribe(() => {
+      console.log('Change password modal closed');
+
+    });
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+  getNotifications(): void {
+    console.log('This is notifications userId :',this.userId );
+    this.notificationService.getNotificationsByReceiver(this.userId).subscribe(
+      (notifications) => {
+        this.notifications = notifications;
+        this.unreadCount = notifications.filter((n) => n.isRead === 0).length;
+      },
+      (error) => console.error('Error fetching notifications:', error)
+    );
+  }
+  markNotificationAsRead(notificationId: number): void {
+    this.notificationService.markAsRead(notificationId).subscribe(
+      () => {
+        // Remove the notification from the list or mark it as read locally
+        const notification  = this.notifications.find((n) => n.id === notificationId);
+        if (notification) {
+          notification.isRead = 1; // Mark as read
+        }
+        this.unreadCount = this.notifications.filter((n) => n.isRead === 0).length;
+        this.ngOnInit(); // Refresh the notifications
+      },
+      (error) => console.error('Error marking notification as read:', error)
+    );
+  }
+
+  getSortedNotifications(): any[] {
+    return this.notifications.sort((a, b) => a.isRead - b.isRead);
+  }
+
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
   }
 
   private setupWebSocket(): void {
@@ -97,7 +216,9 @@ export class HomeComponent implements OnInit{
           this.toastr.info('You have a new coupon transfer request!', 'Coupon Transfer');
           break;
         case 'ORDER_ACCEPTED':
+          this.unreadCount++;
           this.toastr.info("Your Order has finished! | Go to check ","Alert");
+          this.ngOnInit();
           break;
         case 'ORDER_REJECTED':
           this.toastr.warning("Oops! Your Order has rejected | Go to check ","Alert");
@@ -105,96 +226,5 @@ export class HomeComponent implements OnInit{
       default:
         console.warn('Unknown WebSocket message:', message);
     }
-  }
-
-
-
-  ngOnInit(): void {
-
-    this.userService.getUserInfo().subscribe((response)=>{
-      console.log("UserInfo: ",response)
-      this.userInfo = response;
-      this.loadPendingFriendRequestsCount();
-    },error => console.log('Error in Fetching UserInfo', error));
-    this.token = this.storageService.getItem('token');
-    if (this.token == '' || this.token == null) {
-      console.log('Token is not defined or is invalid.');
-      this.isLoggedIn = false;
-    } else {
-      this.isLoggedIn = true;
-    }
-
-    this.setupWebSocket();
-  }
-
-
-
-
-  loadNotifications() {
-    // Example data; replace with a service call to fetch notifications
-    this.notifications = [
-      { id: 1, message: 'Your coupon is expiring soon!', link: '/homepage/coupons', read: false },
-      { id: 2, message: 'New coupon added in your area!', link: '/homepage/coupons', read: false },
-      { id: 3, message: 'Welcome to Coupon Sell System!', link: '/homepage/aboutus', read: true }
-    ];
-
-    // Calculate unread notifications
-    this.updateUnreadCount();
-  }
-
-  getImageUrl(imagePath: string): string {
-    return this.userService.getImageUrl(imagePath);
-  }
-  // Mark notification as read
-  markAsRead(notificationId: number) {
-    const notification = this.notifications.find((n) => n.id === notificationId);
-    if (notification && !notification.read) {
-      notification.read = true;
-      this.updateUnreadCount();
-    }
-  }
-
-  // Update unread notifications count
-  updateUnreadCount() {
-    this.unreadNotifications = this.notifications.filter((n) => !n.read).length;
-  }
-
-  loadPendingFriendRequestsCount() {
-    const loggedInUserId = this.userInfo?.id;
-    if (!loggedInUserId) {
-      console.error('Logged-in user ID is missing.');
-      return;
-    }
-
-    this.friendService.getPendingRequests(loggedInUserId).subscribe({
-      next: (requests) => {
-
-        this.pendingFriendRequestsCount = requests.length;
-        this.sharedService.setPendingRequestsCount(this.pendingFriendRequestsCount);
-      },
-      error: (err) => {
-        console.error('Error fetching pending friend requests:', err);
-      },
-    });
-  }
-
-  logoutButton(): void{
-    this.websocketService.disconnect();
-    this.storageService.removeItem("token");
-    this.router.navigate(['login']);
-  }
-  openChangePasswordModal() {
-    this.changePasswordModalRef = this.modalService.open(ChangePasswordComponent, {
-      modalClass: 'modal-lg',
-    });
-
-    this.changePasswordModalRef.onClose.subscribe(() => {
-      console.log('Change password modal closed');
-
-    });
-  }
-
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
   }
 }

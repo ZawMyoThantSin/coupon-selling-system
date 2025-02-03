@@ -23,4 +23,8 @@ export class CustomerService {
     return this.http.post(`${this.BASE_URL}/${data.id}`,  dataToSend);
   }
 
+  addAdmin(creatorId: number, signupRequest: any): Observable<any> {
+    return this.http.post(`${this.BASE_URL}/add-admin?creatorId=${creatorId}`, signupRequest);
+  }
+
 }

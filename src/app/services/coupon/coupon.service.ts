@@ -45,7 +45,7 @@ export class CouponService {
   }
 
   getAllUserCoupons():Observable<Coupon[]>{
-    return this.http.get<Coupon[]>(this.BASE_URL +'api/coupon',{
+    return this.http.get<Coupon[]>(this.BASE_URL +'public/coupons',{
       // headers:this.createAuthHeader(),
       responseType:'json'
     })
@@ -65,6 +65,11 @@ export class CouponService {
     })
   }
 
+  deleteCoupon(id:number):Observable<any>{
+    return this.http.delete(`${this.BASE_URL}api/coupon/${id}`,{
+      responseType:'json'
+    })
+  }
   createCoupon(data:any): Observable<any>{
     const header = new HttpHeaders({'Content-Type':'application/json'})
 

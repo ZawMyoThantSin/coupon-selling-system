@@ -181,6 +181,5 @@ export class ShopComponent {
     }else{
       this.business.location = location;
     }
-
   }
 }

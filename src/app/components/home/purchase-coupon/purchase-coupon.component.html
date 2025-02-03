@@ -10,46 +10,67 @@
   </button>
 </div>
 
+
+
 <div class="content px-3 px-md-5 mt-2">
   <!-- Available Coupons -->
   <ng-container *ngIf="activeTab === 'available'">
     <div class="coupon-container">
-      <div class="coupon-card" *ngFor="let coupon of filteredAvailableCoupons" (click)="openQrModal(coupon)">
-        <div class="coupon-image">
-          <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
-        </div>
-        <div class="coupon-details">
-          <h4>
-           {{ coupon.productName }}
-              <a
-              [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
-            ({{ coupon.businessName }})</a>
-          </h4>
-          <p>
-            <span>
-            <img src="/images/product/maps-and-flags.png" alt="location icon" class="location-icon"/>{{ coupon.businessLocation}}
-          </span>
-        </div>
-        <div class="coupon-actions">
-          <p class="expiry-date" [ngClass]="{ 'red-text': isNearExpiry(coupon.expiryDate) }">Expiry Date: {{ coupon.expiryDate | date: 'mediumDate' }}
-            <span *ngIf="getExpiryMessage(coupon.expiryDate) !== 'Expired'">
-              ({{ getExpiryMessage(coupon.expiryDate) }})
-            </span>
-          </p>
-          <button
-          mdbTooltip="Share To Your Friend."
-          class="btn btn-link"
-          (click)="shareCoupon(coupon); $event.stopPropagation()"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M680-80q-50 0-85-35t-35-85q0-6 3-28L282-392q-16 15-37 23.5t-45 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q24 0 45 8.5t37 23.5l281-164q-2-7-2.5-13.5T560-760q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-24 0-45-8.5T598-672L317-508q2 7 2.5 13.5t.5 14.5q0 8-.5 14.5T317-452l281 164q16-15 37-23.5t45-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T720-200q0-17-11.5-28.5T680-240q-17 0-28.5 11.5T640-200q0 17 11.5 28.5T680-160ZM200-440q17 0 28.5-11.5T240-480q0-17-11.5-28.5T200-520q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440Zm480-280q17 0 28.5-11.5T720-760q0-17-11.5-28.5T680-800q-17 0-28.5 11.5T640-760q0 17 11.5 28.5T680-720Zm0 520ZM200-480Zm480-280Z"/></svg>
-          </button>
+    <h3 *ngIf="filteredAvailableCoupons.length > 0">My Coupons</h3>
 
-        </div>
-      </div>
+      <section class="dots-container" *ngIf="isLoading">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </section>
+
+      <ng-container *ngIf="!isLoading">
+        <ng-container *ngIf="filteredAvailableCoupons.length > 0; else noCoupons">
+          <div class="coupon-card" *ngFor="let coupon of filteredAvailableCoupons" (click)="openQrModal(coupon)">
+            <div class="coupon-image">
+              <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
+            </div>
+            <div class="coupon-details">
+              <h4>
+              {{ coupon.productName }}
+                  <a
+                  [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
+                ({{ coupon.businessName }})</a>
+              </h4>
+              <p>
+                <span>
+                <!-- <img src="/images/product/maps-and-flags.png" alt="location icon" class="location-icon"/>{{ coupon.businessLocation}} -->
+                 {{ coupon.discount }}% Discount
+              </span>
+            </div>
+            <div class="coupon-actions">
+              <p class="expiry-date" [ngClass]="{ 'red-text': isNearExpiry(coupon.expiryDate) }">Expiry Date: {{ coupon.expiryDate | date: 'mediumDate' }}
+                <span *ngIf="getExpiryMessage(coupon.expiryDate) !== 'Expired'">
+                  ({{ getExpiryMessage(coupon.expiryDate) }})
+                </span>
+              </p>
+              <button
+              mdbTooltip="Share To Your Friend."
+              class="btn btn-link"
+              (click)="shareCoupon(coupon); $event.stopPropagation()"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#434343"><path d="M680-80q-50 0-85-35t-35-85q0-6 3-28L282-392q-16 15-37 23.5t-45 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q24 0 45 8.5t37 23.5l281-164q-2-7-2.5-13.5T560-760q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-24 0-45-8.5T598-672L317-508q2 7 2.5 13.5t.5 14.5q0 8-.5 14.5T317-452l281 164q16-15 37-23.5t45-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Zm0-80q17 0 28.5-11.5T720-200q0-17-11.5-28.5T680-240q-17 0-28.5 11.5T640-200q0 17 11.5 28.5T680-160ZM200-440q17 0 28.5-11.5T240-480q0-17-11.5-28.5T200-520q-17 0-28.5 11.5T160-480q0 17 11.5 28.5T200-440Zm480-280q17 0 28.5-11.5T720-760q0-17-11.5-28.5T680-800q-17 0-28.5 11.5T640-760q0 17 11.5 28.5T680-720Zm0 520ZM200-480Zm480-280Z"/></svg>
+              </button>
+
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noCoupons>
+          <p class="text-center text-muted">You haven't bought any coupons yet.</p>
+        </ng-template>
+      </ng-container>
+
     </div>
 
     <!-- Part 2: Accepted Coupons from Friends -->
-    <div class="coupon-container mt-4">
+    <div class="coupon-container mt-4" *ngIf="acceptedCoupons.length >0">
       <h2>Accepted Coupons</h2>
       <div class="coupon-card" *ngFor="let coupon of acceptedCoupons" (click)="openQrModal(coupon)">
         <div class="coupon-image">
@@ -62,7 +83,11 @@
                [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
              ({{ coupon.businessName }})</a>
            </h4>
-          <p><img src="/images/product/maps-and-flags.png" alt="location icon" class="location-icon"/>{{ coupon.businessLocation}}</p>
+          <p>
+            <!-- <img src="/images/product/maps-and-flags.png" alt="location icon" class="location-icon"/>{{ coupon.businessLocation}}
+              -->
+            {{ coupon.discount }}% Discount
+          </p>
         </div>
         <div class="coupon-actions">
           <p class="sender-name">
@@ -81,79 +106,98 @@
   <!-- Used Coupons -->
   <ng-container *ngIf="activeTab === 'used'">
     <div class="coupon-container">
-      <div class="coupon-card" *ngFor="let coupon of filteredUsedCoupons">
-        <div class="coupon-image">
-          <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
+      <ng-container *ngIf="filteredUsedCoupons.length>0; else noCoupons">
+        <div class="coupon-card" *ngFor="let coupon of filteredUsedCoupons">
+          <div class="coupon-image">
+            <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
+          </div>
+          <div class="coupon-details">
+            <h4>
+              {{ coupon.productName }}
+                 <a
+                 [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
+               ({{ coupon.businessName }})</a>
+             </h4>
+            <p>
+              {{ coupon.discount }}% Discount
+            </p>
+          </div>
+          <div class="coupon-actions">
+            <p class="expiry-date">Expiry Date: {{ coupon.expiryDate | date: 'mediumDate' }}</p>
+          </div>
         </div>
-        <div class="coupon-details">
-          <h4>
-            {{ coupon.productName }}
-               <a
-               [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
-             ({{ coupon.businessName }})</a>
-           </h4>
-          <p><img src="/images/product/maps-and-flags.png" alt="location icon" class="location-icon"/>{{ coupon.businessLocation}}</p>
-        </div>
-        <div class="coupon-actions">
-          <p class="expiry-date">Expiry Date: {{ coupon.expiryDate | date: 'mediumDate' }}</p>
-        </div>
-      </div>
+      </ng-container>
+      <ng-template #noCoupons>
+        <p class="text-center text-muted">You haven't Used any coupons yet.</p>
+      </ng-template>
     </div>
   </ng-container>
 
   <ng-container *ngIf="activeTab === 'expired'">
     <div class="coupon-container">
-      <div class="coupon-card" *ngFor="let coupon of filteredExpiredCoupons">
-        <div class="coupon-image">
-          <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
+      <ng-container *ngIf="filteredExpiredCoupons.length > 0; else noCoupons">
+        <div class="coupon-card" *ngFor="let coupon of filteredExpiredCoupons">
+          <div class="coupon-image">
+            <img [src]="getImageUrl(coupon.imageUrl)" alt="{{ coupon.productName }}" />
+          </div>
+          <div class="coupon-details">
+            <h4>
+              {{ coupon.productName }}
+                 <a
+                 [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
+               ({{ coupon.businessName }})</a>
+             </h4>
+            <p>
+              {{ coupon.discount }}% Discount
+            </p>
+          </div>
+          <div class="coupon-actions">
+            <p class="sender-name" *ngIf="coupon.senderName">
+              Sent By: <strong>{{ coupon.senderName }}</strong>
+            </p>
+            <p class="expiry-date">Expiry Date: {{ coupon.expiryDate | date: 'mediumDate' }}</p>
+          </div>
         </div>
-        <div class="coupon-details">
-          <h4>
-            {{ coupon.productName }}
-               <a
-               [routerLink]="'/homepage/u/detail-business/' + coupon.businessId" class="small-business-name">
-             ({{ coupon.businessName }})</a>
-           </h4>
-          <p><img src="/images/product/maps-and-flags.png" alt="location icon" class="location-icon"/>{{ coupon.businessLocation}}</p>
-        </div>
-        <div class="coupon-actions">
-          <p class="sender-name" *ngIf="coupon.senderName">
-            Sent By: <strong>{{ coupon.senderName }}</strong>
-          </p>
-          <p class="expiry-date">Expiry Date: {{ coupon.expiryDate | date: 'mediumDate' }}</p>
-        </div>
-      </div>
+      </ng-container>
+      <ng-template #noCoupons>
+        <p class="text-center text-muted">No Coupon was Expired yet.</p>
+      </ng-template>
     </div>
   </ng-container>
 
  <!-- Transferred Coupons -->
 <ng-container *ngIf="activeTab === 'transferred'">
   <div class="coupon-container">
-    <div class="coupon-card" *ngFor="let coupon of filteredTransferredCoupons">
-      <div class="coupon-image">
-        <img [src]="getImageUrl(coupon.saleCouponData?.imageUrl)" alt="{{ coupon.saleCouponData?.productName }}" />
+    <ng-container *ngIf="filteredTransferredCoupons.length> 0; else noCoupons">
+      <div class="coupon-card" *ngFor="let coupon of filteredTransferredCoupons">
+        <div class="coupon-image">
+          <img [src]="getImageUrl(coupon.saleCouponData?.imageUrl)" alt="{{ coupon.saleCouponData?.productName }}" />
+        </div>
+        <div class="coupon-details">
+          <h4>
+            {{ coupon.saleCouponData?.productName }}
+            <a
+              [routerLink]="'/homepage/u/detail-business/' + coupon.saleCouponData?.businessId"
+              class="small-business-name">
+              ({{ coupon.saleCouponData?.businessName }})
+            </a>
+          </h4>
+          <p>
+            <!-- <img src="/images/product/maps-and-flags.png" alt="location icon" class="location-icon"/> -->
+           {{coupon.saleCouponData?.discount}}% Discount
+          </p>
+        </div>
+        <div class="coupon-actions">
+          <p class="accepter-name">
+            Sent To: <strong>{{ coupon.accepterName }}</strong>
+          </p>
+          <p class="expiry-date">Expiry Date: {{ coupon.saleCouponData?.expiryDate | date: 'mediumDate' }}</p>
+        </div>
       </div>
-      <div class="coupon-details">
-        <h4>
-          {{ coupon.saleCouponData?.productName }}
-          <a
-            [routerLink]="'/homepage/u/detail-business/' + coupon.saleCouponData?.businessId"
-            class="small-business-name">
-            ({{ coupon.saleCouponData?.businessName }})
-          </a>
-        </h4>
-        <p>
-          <img src="/images/product/maps-and-flags.png" alt="location icon" class="location-icon"/>
-          {{ coupon.saleCouponData?.businessLocation }}
-        </p>
-      </div>
-      <div class="coupon-actions">
-        <p class="accepter-name">
-          Sent To: <strong>{{ coupon.accepterName }}</strong>
-        </p>
-        <p class="expiry-date">Expiry Date: {{ coupon.saleCouponData?.expiryDate | date: 'mediumDate' }}</p>
-      </div>
-    </div>
+    </ng-container>
+    <ng-template #noCoupons>
+      <p class="text-center text-muted">You haven't transferred any coupons yet.</p>
+    </ng-template>
   </div>
 </ng-container>
 

@@ -50,7 +50,7 @@
               Item Name: <strong>{{ item.name || 'N/A' }}</strong>
              </p>
              <p>
-             Quantity: <strong>{{ item.quantity || 'N/A' }}</strong> | Unit Price: <strong>Ks {{ item.unitPrice || 'N/A' }}</strong>
+             Quantity: <strong>{{ item.quantity || 'N/A' }}</strong> | Unit Price: <strong>{{ item.unitPrice || 'N/A' }} MMK</strong>
              </p>
           </div>
       </div>
@@ -58,9 +58,12 @@
       <!-- Order Summary -->
       <div class="order-summary">
          <p class="total-items">
-          Total Items: <strong>{{ order.orderItems.length }}</strong> | Total Price: <strong>Ks {{ order.totalPrice | number }}</strong>
+          Total Items: <strong>{{ order.orderItems.length }}</strong> | Total Price: <strong>{{ order.totalPrice | number }} MMK</strong>
          </p>
 
+         <button *ngIf="order.status === 1" class="btn btn-primary mt-2" (click)="saveOrderAsImage(order.order_id)">
+          <i class="fa fa-download"></i>
+        </button>
 
       </div>
 

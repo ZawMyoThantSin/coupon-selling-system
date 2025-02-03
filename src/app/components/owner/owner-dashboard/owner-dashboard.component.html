@@ -14,10 +14,6 @@
       <div class="flex-grow-1 p-3">
         <!-- Interface Section -->
         <div class="mb-4">
-          <div [class]="'text-white-50 small ' + (isSidebarCollapsed ? 'text-center' : 'ps-3')">
-            <span *ngIf="!isSidebarCollapsed">INTERFACE</span>
-          </div>
-
           <div class="nav flex-column">
             <a routerLink="/o"
                class="sidebar-link nav-link d-flex align-items-center rounded p-3"
@@ -33,7 +29,7 @@
             class="sidebar-link nav-link d-flex align-items-center rounded p-3"
                [class.justify-content-center]="isSidebarCollapsed">
                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M841-518v318q0 33-23.5 56.5T761-120H201q-33 0-56.5-23.5T121-200v-318q-23-21-35.5-54t-.5-72l42-136q8-26 28.5-43t47.5-17h556q27 0 47 16.5t29 43.5l42 136q12 39-.5 71T841-518Zm-272-42q27 0 41-18.5t11-41.5l-22-140h-78v148q0 21 14 36.5t34 15.5Zm-180 0q23 0 37.5-15.5T441-612v-148h-78l-22 140q-4 24 10.5 42t37.5 18Zm-178 0q18 0 31.5-13t16.5-33l22-154h-78l-40 134q-6 20 6.5 43t41.5 23Zm540 0q29 0 42-23t6-43l-42-134h-76l22 154q3 20 16.5 33t31.5 13ZM201-200h560v-282q-5 2-6.5 2H751q-27 0-47.5-9T663-518q-18 18-41 28t-49 10q-27 0-50.5-10T481-518q-17 18-39.5 28T393-480q-29 0-52.5-10T299-518q-21 21-41.5 29.5T211-480h-4.5q-2.5 0-5.5-2v282Zm560 0H201h560Z"/></svg>
-               <span *ngIf="!isSidebarCollapsed" class="ms-3">Shop</span>
+               <span *ngIf="!isSidebarCollapsed" class="ms-3">My Shop</span>
 
             </a>
 
@@ -61,16 +57,6 @@
               <span *ngIf="!isSidebarCollapsed" class="ms-2">Used Coupon</span>
               <!-- <i *ngIf="!isSidebarCollapsed" class="fas fa-chevron-right ms-auto"></i> -->
             </a>
-          </div>
-        </div>
-
-        <!-- Addons Section -->
-        <div>
-          <div [class]="'text-white-50 small ' + (isSidebarCollapsed ? 'text-center' : 'ps-3')">
-            <span *ngIf="!isSidebarCollapsed">ADDONS</span>
-          </div>
-
-          <div class="nav flex-column">
             <a
             [routerLink]="'/o/report/' + businessId"
             routerLinkActive="active"
@@ -80,6 +66,20 @@
                <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#FFFFFF"><path d="M320-600q17 0 28.5-11.5T360-640q0-17-11.5-28.5T320-680q-17 0-28.5 11.5T280-640q0 17 11.5 28.5T320-600Zm0 160q17 0 28.5-11.5T360-480q0-17-11.5-28.5T320-520q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440Zm0 160q17 0 28.5-11.5T360-320q0-17-11.5-28.5T320-360q-17 0-28.5 11.5T280-320q0 17 11.5 28.5T320-280ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h440l200 200v440q0 33-23.5 56.5T760-120H200Zm0-80h560v-400H600v-160H200v560Zm0-560v160-160 560-560Z"/></svg>
               <span *ngIf="!isSidebarCollapsed" class="ms-3">Report</span>
             </a>
+            <a
+            [routerLink]="'/o/contact/'"
+            routerLinkActive="active"
+             class="sidebar-link nav-link d-flex align-items-center rounded p-3"
+             [class.justify-content-center]="isSidebarCollapsed">
+             <i class="fas fa-comment fs-6"></i>
+            <span *ngIf="!isSidebarCollapsed" class="ms-3">Contact</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Addons Section -->
+        <div>
+          <div class="nav flex-column">
             <span
               class="btn btn-circle text-white p-4 my-5 mx-auto"
               (click)="toggleSidebar()"
@@ -120,54 +120,71 @@
         </button>
       </div>
 
-      <!-- Notification button triggering the dropdown -->
-      <div mdbDropdown class="d-flex me-3" *ngIf="shopExist" >
-        <button
-          class="btn btn-link position-relative me-2"
-          id="notificationDropdown"
-          mdbDropdownToggle
-          aria-expanded="false"
-        >
-          <i class="fas fa-bell fs-6"></i>
-          <span class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger">
-            3+
-          </span>
-        </button>
+     <!-- Notification button triggering the dropdown -->
+     <div mdbDropdown class="d-flex me-3" *ngIf="shopExist" >
+      <button
+        class="btn btn-link position-relative me-2"
+        id="notificationDropdown"
+        mdbDropdownToggle
+        aria-expanded="false"
+      >
+        <i class="fas fa-bell fs-6"></i>
+        <span  *ngIf="unreadCount > 0" class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger">
+          {{ unreadCount }}
+        </span>
+      </button>
 
-        <!-- Notification dropdown menu -->
-        <ul
-          mdbDropdownMenu
-          class="dropdown-menu dropdown-menu-end"
-          aria-labelledby="notificationDropdown"
-        >
-          <li>
-            <a class="dropdown-item" href="#">
-              <i class="fas fa-envelope me-2"></i>
-              New message received
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">
-              <i class="fas fa-user-plus me-2"></i>
-              New follower
-            </a>
-          </li>
-          <li>
-            <a class="dropdown-item" href="#">
-              <i class="fas fa-exclamation-circle me-2"></i>
-              Alert: Action required
-            </a>
-          </li>
-          <li>
-            <hr class="dropdown-divider" />
-          </li>
-          <li>
-            <a class="dropdown-item text-center" href="#">
-              View all notifications
-            </a>
-          </li>
-        </ul>
-      </div>
+      <!-- Notification dropdown menu -->
+      <ul
+        mdbDropdownMenu
+        class="dropdown-menu dropdown-menu-end"
+        aria-labelledby="notificationDropdown"
+      >
+        <li *ngFor="let notification of getSortedNotifications().slice(0, 3)">
+          <a *ngIf="notification.isRead === 0"
+          class="dropdown-item" href="javascript:void(0);"
+          (click)="markNotificationAsRead(notification.id);  navigateTo(notification.route)">
+            <i class="fas fa-envelope me-2"></i>
+            <span> {{ notification.message }}</span>
+            <!-- Unread mark (dot) -->
+            <span *ngIf="notification.isRead === 0" class="unread-mark"></span>
+          </a>
+
+          <a *ngIf="notification.isRead === 1"
+          class="dropdown-item" href="javascript:void(0);"
+          (click)="navigateTo(notification.route)">
+            <i class="fas fa-envelope me-2"></i>
+            <span> {{ notification.message }}</span>
+          </a>
+
+
+
+        </li>
+
+        <li>
+          <hr class="dropdown-divider" />
+        </li>
+        <li *ngIf="notifications.length > 3">
+          <a
+            class="dropdown-item text-center"
+            href="javascript:void(0);"
+            (click)="navigateTo('o/owner-noti')"
+          >
+            {{notifications.length - 3}} more
+          </a>
+        </li>
+        <li *ngIf="notifications.length > 0 && notifications.length <= 3">
+          <a class="dropdown-item text-center" href="javascript:void(0);"
+          (click)="navigateTo('o/owner-noti')">
+            View all notifications
+          </a>
+        </li>
+        <li *ngIf="notifications.length === 0" class="dropdown-item text-center text-muted"
+          (click)="navigateTo('o/owner-noti')">
+           No new notifications
+        </li>
+      </ul>
+    </div>
 
 
       <!-- User Info -->
@@ -207,13 +224,6 @@
       </div>
 
       <div class="dropdown-divider mt-2 mb-2"></div>
-
-      <li>
-        <a class="dropdown-item" routerLink="/profile">
-          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-          <span class="ms-2">Profile</span>
-        </a>
-      </li>
       <li>
         <a class="dropdown-item" routerLink="/change-password">
           <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>

@@ -32,13 +32,13 @@ export class ProductService {
 
   // Fetch all products
   getAllProducts(id:any): Observable<Product[]> {
-    return this.http.get<Product[]>(this.BASE_URL + 'api/products/b/'+id, {
+    return this.http.get<Product[]>(this.BASE_URL + 'public/products/b/'+id, {
       responseType: 'json'
     });
   }
 
   getEveryProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.BASE_URL}api/products`, {
+    return this.http.get<Product[]>(`${this.BASE_URL}public/products`, {
       responseType: 'json',
     });
   }
@@ -46,7 +46,7 @@ export class ProductService {
 
   // Fetch product by ID
   getProductById(id: number): Observable<any> {
-    return this.http.get(`${this.BASE_URL}api/products/${id}`, {
+    return this.http.get(`${this.BASE_URL}public/products/${id}`, {
       headers: this.createAuthHeader(),
       responseType: 'json'
     });

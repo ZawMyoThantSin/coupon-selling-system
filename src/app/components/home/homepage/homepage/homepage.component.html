@@ -94,43 +94,51 @@
 
 <!-- Additional Components -->
 <app-coupon-card></app-coupon-card>
-<!-- Footer -->
+<!-- Footer Section -->
 <hr />
-<footer class="bg-light text-dark py-4 ">
-  <div >
+<footer class="bg-light text-dark py-4" >
+  <div>
     <div class="row px-5">
       <!-- Quick Links -->
       <div class="col-md-3">
         <h5>Quick links</h5>
         <ul class="list-unstyled">
-          <li><a href="#" class="text-dark">About</a></li>
+          <li><a href="#" class="text-dark">About Us</a></li>
           <li><a href="#" class="text-dark">Terms and conditions</a></li>
-          <li><a href="#" class="text-dark">Privacy policy</a></li>
-          <li><a href="#" class="text-dark">Faq</a></li>
+
         </ul>
       </div>
 
-      <!-- Categories -->
-      <div class="col-md-3">
-        <h5>Categories</h5>
-        <ul class="list-unstyled">
-          <li><a href="#" class="text-dark">Restaurant</a></li>
-          <li><a href="#" class="text-dark">Shopping</a></li>
-          <li><a href="#" class="text-dark">Fitness</a></li>
-          <li><a href="#" class="text-dark">Beauty</a></li>
-          <li><a href="#" class="text-dark">Food</a></li>
-          <li><a href="#" class="text-dark">General Service</a></li>
-          <li><a href="#" class="text-primary">View all categories</a></li>
-        </ul>
-      </div>
+
+<!-- Categories Section (Vertical) -->
+<div class="col-md-3">
+  <h5>Categories</h5>
+  <ul class="list-unstyled">
+    <li *ngFor="let category of categories">
+      <a href="javascript:void(0);"
+         class="category-link"
+         [ngClass]="{'selected-text': selectedCategory === category.id}"
+         (click)="onCategorySelect(category.id)">
+        {{ category.name }}
+      </a>
+    </li>
+    <li>
+      <a href="#" class="text-primary">View all categories</a>
+    </li>
+  </ul>
+</div>
+
+
+
 
       <!-- Contacts -->
       <div class="col-md-3">
         <h5>Contacts</h5>
         <ul class="list-unstyled">
-          <li><i class="fas fa-home me-2 text-primary"></i> Yangon Myanmar</li>
-          <li><i class="fas fa-phone me-2 text-primary"></i> +95-9-795 500 555</li>
-          <li><i class="fas fa-envelope me-2 text-primary"></i> admi.com</li>
+          <li><i class="fas fa-home me-2 text-primary"></i> Team Ichigo</li>
+          <li><i class="fas fa-phone me-2 text-primary"></i> +959798221336</li>
+          <li><i class="fas fa-envelope me-2 text-primary"></i> www.firstupconsultants.com
+            </li>
         </ul>
       </div>
 

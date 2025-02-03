@@ -11,3 +11,61 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Global Toast Styling */
+.toast-container {
+  font-family: 'Poppins', sans-serif;
+}
+
+.toast-title {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.toast-message {
+  font-size: 14px;
+}
+
+/* Success Toast */
+.toast-success {
+  background: linear-gradient(135deg, #28a745, #56d879) !important;
+  color: white !important;
+  border-left: 5px solid #1e7e34;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Error Toast */
+.toast-error {
+  background: linear-gradient(135deg, #dc3545, #ff6b81) !important;
+  color: white !important;
+  border-left: 5px solid #a71d2a;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Warning Toast */
+.toast-warning {
+  background: linear-gradient(135deg, #ffc107, #ffdd57) !important;
+  color: black !important;
+  border-left: 5px solid #d39e00;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Info Toast */
+.toast-info {
+  background: linear-gradient(135deg, #17a2b8, #5bc0de) !important;
+  color: white !important;
+  border-left: 5px solid #117a8b;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Toast with Progress Bar */
+.toast-progress {
+  background: rgba(255, 255, 255, 0.3) !important;
+  height: 3px !important;
+  border-radius: 8px;
+}
+

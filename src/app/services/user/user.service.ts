@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { UserResponse } from '../../models/user-response.models';
 import { StorageService } from '../storage.service';
 import { getDefaultAppConfig } from '../../models/appConfig';
@@ -11,6 +11,12 @@ import { getDefaultAppConfig } from '../../models/appConfig';
   providedIn: 'root'
 })
 export class UserService {
+  private userIdSource = new BehaviorSubject<number | null>(null);
+  userId$ = this.userIdSource.asObservable();
+
+  updateBusinessId(id: number): void {
+    this.userIdSource.next(id);
+  }
 
   BASE_URL = `${getDefaultAppConfig().backendHost}/api/user`; // Base URL for user-related endpoints
   public token: any;
@@ -39,8 +45,8 @@ export class UserService {
     });
   }
 
-  getUserById(id: number): Observable<UserResponse> {
-    return this.http.get<UserResponse>(`${this.BASE_URL}/${id}`, {
+  getUserById(id: number): Observable<any> {
+    return this.http.get(`${this.BASE_URL}/${id}`, {
       headers: this.createAuthHeader(),
       responseType: 'json'
     });

@@ -67,6 +67,79 @@ main {
 }
 
 
+.notification-dropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  width: 200px;
+  background: white;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  z-index: 1000;
+  padding: 10px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+ /* Utility Classes */
+ .notification-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+}
+.notification-dropdown.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.notification-item a {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.2s ease;
+}
+
+.notification-item:hover {
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+.notif-title {
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.notif-time {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.dropdown-header {
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  margin-bottom: 10px;
+}
+
+.list-unstyled {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: #666;
+}
+
 @media (max-width: 991.98px) {
   .hamburger {
     display: block;
@@ -118,6 +191,11 @@ main {
     opacity: 0;
     animation: fadeIn 0.3s ease forwards;
   }
+}
+a.disabled {
+  pointer-events: none; /* Disables click events */
+  opacity: 0.5; /* Makes it visually disabled */
+  cursor: not-allowed; /* Shows a "not-allowed" cursor */
 }
 
 @keyframes fadeIn {

@@ -12,7 +12,7 @@
       <!-- Image Section -->
       <div class="col-md-5 d-flex justify-content-center align-items-center mb-4 mb-md-0">
         <img
-        [src]="getImageUrl(selectedProduct.imagePath)"
+        [src]="selectedProduct.imagePath == null ? 'images/product-default.jpg' : getImageUrl(selectedProduct.imagePath)"
           alt="Product Photo"
           style="width: 100%; max-width: 300px; height: 200px; border-radius: 10px; border: 2px solid #ccc;"
         />

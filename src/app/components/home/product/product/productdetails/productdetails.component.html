@@ -6,12 +6,15 @@
 
     <div class="row align-items-center">
       <!-- Product Image Section -->
-      <div class="col-md-6 text-center">
-        <img
-          [src]="getImageUrl(product.imagePath)"
-          alt="{{ product.name }}"
-          class="product-image img-fluid"
-        />
+      <div class="col-12 col-md-6 text-center">
+        <div class="image-container rounded ">
+          <img
+            [src]="getImageUrl(product.imagePath)"
+            alt="{{ product.name }}"
+            class="product-image "
+            loading="lazy"
+          />
+        </div>
       </div>
 
       <!-- Product Details Section -->
@@ -22,17 +25,24 @@
 
           <!-- Product Price Section -->
           <div class="product-price-section" style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
-            <img
+            <img *ngIf="getCouponPrice(product.id) !== 0"
               src="/images/sign.jpg"
               alt="Coupon Image"
               style="width: 24px; height: 24px; vertical-align: middle; margin-right: 10px;"
             />
-            <span class="text-decoration-line-through ">{{ product.price }}</span>
-            <span class="text-success">{{ getCouponPrice(product.id) }} Ks</span>
+            <span class="text-decoration-line-through" *ngIf="getCouponPrice(product.id)>0" >{{ product.price }}</span>
+            <span class="text-decoration" *ngIf="getCouponPrice(product.id)===0">{{ product.price }} MMK</span>
+            <span class="text-success" *ngIf="getCouponPrice(product.id)>0">{{ getCouponPrice(product.id) }} MMK</span>
           </div>
 
+          <!-- Upcoming Badge -->
+            <div *ngIf="getCouponPrice(product.id) === 0" class="upcoming-badge">
+              Coming Soon...
+            </div>
+
           <!-- Quantity Section -->
-          <div class="product-actions mb-3 d-flex align-items-center" style="margin-bottom: 15px;">
+          <div class="product-actions mb-3 d-flex align-items-center" style="margin-bottom: 15px;"
+          *ngIf="getCouponPrice(product.id)>0">
             <label for="quantity" class="me-2">Quantity:</label>
             <button
               class="btn btn-link px-2"
@@ -62,7 +72,7 @@
           </div>
 
           <!-- Add to Cart Button -->
-          <div class="card-buttons d-flex">
+          <div class="card-buttons d-flex" *ngIf="getCouponPrice(product.id) !== 0">
             <button
             class="btn btn-dark btn-sm rounded rounded-pill mr-2"
             (click)="addToCart()"
@@ -75,6 +85,7 @@
             class="btn btn-warning rounded rounded-pill"
             (click)="Buy(product.name, product.imagePath,quantity, getCouponPrice(product.id) * quantity,getCouponPrice(product.id))"
             [disabled]="couponRemain[product.id] <= 0"
+            *ngIf="getCouponPrice(product.id) !== 0"
             >
               <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EFEFEF"><path d="m480-560-56-56 63-64H320v-80h167l-64-64 57-56 160 160-160 160ZM280-80q-33 0-56.5-23.5T200-160q0-33 23.5-56.5T280-240q33 0 56.5 23.5T360-160q0 33-23.5 56.5T280-80Zm400 0q-33 0-56.5-23.5T600-160q0-33 23.5-56.5T680-240q33 0 56.5 23.5T760-160q0 33-23.5 56.5T680-80ZM40-800v-80h131l170 360h280l156-280h91L692-482q-11 20-29.5 31T622-440H324l-44 80h480v80H280q-45 0-68.5-39t-1.5-79l54-98-144-304H40Z"/></svg>
               <span class="ms-1">Buy Now</span>
@@ -106,7 +117,8 @@
         <div class="when-you-get" style="order: 2;">
           <h3>When you get</h3>
           <ul>
-            <li>Sunday 05:00 PM ~ 11:00 PM</li>
+            <li *ngIf="getCouponPrice(product.id) !== 0">Sunday 05:00 PM ~ 11:00 PM</li>
+            <li *ngIf="getCouponPrice(product.id) === 0">Coming Soon... </li>
           </ul>
         </div>
 
@@ -122,11 +134,10 @@
         <div class="fine-print" style="order: 4;">
           <h4>Fine Print</h4>
           <ul>
-            <li>This Coupon is only for one day, on December 29, 2024.</li>
+            <li *ngIf="getCouponPrice(product.id) !== 0">This Coupon is only for one day, on December 29, 2024.</li>
             <li>This ticket is valid for the date of show issued only.</li>
             <li>Tickets are non-refundable.</li>
             <li>No extension of the redemption of coupon that is expired.</li>
-            <li>Present your WOWme coupon QR at the outlet.</li>
           </ul>
         </div>
       </div>

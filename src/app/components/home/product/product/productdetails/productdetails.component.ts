@@ -34,6 +34,7 @@ export class ProductdetailsComponent {
     userId: number = 0;
     product:any;
     quantity: number = 1;
+    couponExpDates: { [key: number]: Date } = {};
     couponPrices: { [key: number]: number } = {};
     couponDescriptions: { [key: number]: string } = {};
     couponIds: { [key: number]: number } = {};
@@ -51,12 +52,13 @@ export class ProductdetailsComponent {
   // Fetch coupon prices and populate the map
 this.couponService.getAllUserCoupons().subscribe(
   (coupons: any) => {
-    console.log('Coupons:', coupons); // Check the expDate field here
+    // console.log('Coupons:', coupons); // Check the expDate field here
     coupons.forEach((coupon:any) => {
-      console.log(coupon);
+      // console.log(coupon);
       this.couponRemain[coupon.productId] = coupon.quantity;
       this.couponPrices[coupon.productId] = coupon.price;  // Map productId to discount price
       this.couponDescriptions[coupon.productId] = coupon.description;
+      this.couponExpDates[coupon.productId] = new Date(coupon.expiredDate);
       this.couponIds[coupon.productId] = coupon.id;
     });
 
@@ -94,7 +96,7 @@ this.couponService.getAllUserCoupons().subscribe(
     }
   }
     goBack(){
-      this.router.navigate(['/homepage']);
+      history.back();
     }
     updateQuantity(action: 'increment' | 'decrement', productId: number): void {
       const couponRemain = this.getCouponRemain(productId);
@@ -151,6 +153,6 @@ this.couponService.getAllUserCoupons().subscribe(
         state: { action: 'buy-now', cartData: cartData, total: totalPrice, couponId: couponId },
       });
     }
-  
+
 
   }

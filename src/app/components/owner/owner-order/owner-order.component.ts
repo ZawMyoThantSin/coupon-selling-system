@@ -11,7 +11,10 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ProductService } from '../../../services/product/product.service';
 import { FormsModule } from '@angular/forms';
 import { BusinessService } from '../../../services/business/business.service';
-
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import * as XLSX from 'xlsx';
+import { ToastrService } from 'ngx-toastr';
 
 interface ownerOrder{
 
@@ -54,7 +57,8 @@ export class OwnerOrderComponent {
     constructor(
       private ownerOrderService:AdminOrderService,
       private businessService: BusinessService,
-       private productService:ProductService
+       private productService:ProductService,
+       private toastr: ToastrService
     ) {}
 
     ngOnInit(): void {
@@ -121,6 +125,90 @@ export class OwnerOrderComponent {
   //     );
   //   });
   // }
+
+  clearDateFilter() {
+    this.dateFilterStart = '';  // Clear the start date filter
+    this.dateFilterEnd = '';    // Clear the end date filter
+    this.applyDateFilter();     // Reapply the filter to reset the list
+  }
+
+
+
+
+  // Export Orders as PDF
+  exportAsPDF(): void {
+    if (this.filteredOrders.length === 0) {
+      this.toastr.warning("No data available.", "Warning");  // Toast instead of alert
+      return;
+    }
+
+    const doc = new jsPDF();
+    doc.text("Orders Report", 12, 10);
+
+    const tableData = this.filteredOrders.map((order, index) => [
+      index + 1,
+      order.userName,
+      order.userEmail,
+      order.productName,
+      order.quantity,
+      order.totalPrice.toFixed(2),
+      order.orderDate ? new Date(order.orderDate).toLocaleDateString() : ""
+    ]);
+
+    (doc as any).autoTable({
+    head: [["#", "User Name", "Email", "Product", "Quantity", "Total Price", "Order Date"]],
+    body: tableData,
+    startY: 20, // Start table below title
+    columnStyles: {
+      0: { cellWidth: 10 },
+      1: { cellWidth: 30 },
+      2: { cellWidth: 40 },
+      3: { cellWidth: 35 },
+      4: { cellWidth: 20 },
+      5: { cellWidth: 25 },
+      6: { cellWidth: 25 }
+    },
+    styles: { fontSize: 10, cellPadding: 3 },
+  });
+
+    const finalY = (doc as any).autoTable.previous.finalY || 20;
+    doc.text(`Total Earnings: ${this.getTotalPriceForBusiness().toFixed(2)} MMK`, 10, finalY + 10);
+    doc.save("orders_report.pdf");
+  }
+
+  // Export Orders as Excel
+  exportAsExcel(): void {
+    if (this.filteredOrders.length === 0) {
+      this.toastr.warning("No data available.", "Warning");  // Toast instead of alert
+      return;
+    }
+
+    const worksheet = XLSX.utils.json_to_sheet(
+      this.filteredOrders.map((order, index) => ({
+        "#": index + 1,
+        "User Name": order.userName,
+        "Email": order.userEmail,
+        "Product": order.productName,
+        "Quantity": order.quantity,
+        "Total Price": order.totalPrice.toFixed(2),
+        "Order Date": order.orderDate
+      }))
+    );
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Orders Report");
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "orders_report.xlsx";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
   }
 
 

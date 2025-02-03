@@ -59,12 +59,12 @@ import { EncodingUtils } from '../../../services/encoding-utils';
     <!-- Business Details -->
     <h4>
       <i class="fas fa-store me-2 fs-6"></i> <!-- Icon for business -->
-      {{ coupon.businessName }}
+      <span class="text-muted"  style="font-size: 15px;">{{ coupon.businessName }}</span>
     </h4>
-    <h4>
+    <!-- <h4>
       <i class="fas fa-map-marker-alt me-2 fs-6"></i> <!-- Icon for location -->
-      {{ coupon.businessLocation }}
-    </h4>
+      <!-- <span class="text-muted"  style="font-size: 15px;">{{ coupon.businessLocation }}</span> -->
+    <!-- </h4> -->
 
     <!-- Save QR Code -->
     <div>

@@ -17,7 +17,9 @@ import { MdbDropdownModule } from 'mdb-angular-ui-kit/dropdown';
 import { ClientSideRowModelModule, ColDef, ColumnAutoSizeModule, GridApi, GridOptions, GridReadyEvent, GridSizeChangedEvent, ModuleRegistry, RenderApiModule, RowModelType, ValidationModule } from 'ag-grid-community';
 import { AgGridModule } from 'ag-grid-angular';
 import { ExcelImportComponent } from './excel-import/excel-import.component';
-
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { BusinessService } from '../../../services/business/business.service';
+import Swal from 'sweetalert2';
 
 ModuleRegistry.registerModules([ClientSideRowModelModule, ColumnAutoSizeModule, ValidationModule,RenderApiModule ]);
 
@@ -41,7 +43,17 @@ export class ProductComponent implements OnInit{
   editableProduct: any = {};
   selectedProduct: Product | null = null;
   private gridApi!: GridApi;
-
+  error: string | null = null;
+    pdfSrc: SafeResourceUrl | null = null;
+    excelSrc: SafeResourceUrl | null = null;
+    // isPdfDropdownOpen: boolean = false;
+    // isExcelDropdownOpen: boolean = false;
+    loading: boolean = false;
+    pdfTitle: string = '';
+    startDate: string | null = null;
+    endDate: string | null = null;
+    currentParentReportType: string = '';
+    currentReportType: 'product' | 'all_products' | 'best_products' = 'all_products';
 
   allProducts: Product[] = [];
 
@@ -82,7 +94,7 @@ export class ProductComponent implements OnInit{
       headerName: 'Photo',
       width: 100,
       cellRenderer: (params: any) => {
-        const imageUrl = this.getImageUrl(params.value);
+        const imageUrl =params.value == null ? 'images/product-default.jpg': this.getImageUrl(params.value);
         return `
           <img
             src="${imageUrl}"
@@ -98,7 +110,7 @@ export class ProductComponent implements OnInit{
       field: 'price',
       headerName: 'Price',
       width: 120,
-      valueFormatter: (params) => `${params.value} kyat`
+      valueFormatter: (params) => `${params.value} MMK`
     },
     {
       field: 'status',
@@ -154,7 +166,18 @@ cellRenderer: (params: any) => {
 
     if (saveBtn) {
       saveBtn.addEventListener('click', () => {
-        this.saveDiscountChanges(params.data.id);
+        Swal.fire({
+          title: 'Create Coupon?',
+          text: 'Once coupon is created, it cannot be edited.It can only deleted after the expiration date.Are you sure want to create it!',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, create it!',
+          cancelButtonText: 'No, cancel',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.saveDiscountChanges(params.data.id);
+          }
+        });
       });
     }
 
@@ -224,7 +247,9 @@ cellRenderer: (params: any) => {
     private tokenService: JwtService,
     private couponService: CouponService,
     private router: Router,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private businessService: BusinessService,
+    private sanitizer: DomSanitizer,
   ) {}
 
 
@@ -454,6 +479,117 @@ openModal(id: any): void {
       this.editableProduct = {}; // Clear the editable product data
       this.gridApi.refreshCells({ force: true }); // Refresh the grid to revert changes
     }
+  }
+
+  onReportTypeChange(reportType?: string) {
+    if (reportType) {
+      this.currentParentReportType = this.currentParentReportType === reportType ? '' : reportType;
+      this.currentReportType = 'all_products';
+    }
+    if (this.currentParentReportType && this.currentReportType) {
+      this.generateReport('pdf', this.currentReportType, this.businessId);
+    }
+  }
+
+
+
+  generateReport(
+    type: 'pdf' | 'excel',
+    reportType: 'product'|'all_products' | 'best_products',
+    businessId: number = this.businessId
+  ) {
+    this.loading = true;
+    this.error = null;
+    this.currentReportType = reportType;
+
+
+
+  const params = {
+    startDate: this.startDate ? `${this.startDate}T00:00:00` : '',
+    endDate: this.endDate ? `${this.endDate}T23:59:59` : '',
+  };
+
+    let service;
+    switch (reportType) {
+      case 'product':
+        service = this.businessService.productReport.bind(this.businessService);
+        break;
+      case 'all_products':
+        service = this.businessService.productReport.bind(this.businessService);
+        break;
+        case 'best_products':
+        service = this.businessService.bestProductListReport.bind(this.businessService);
+        break;
+      default:
+        this.error = 'Invalid report type.';
+        this.loading = false;
+        return;
+    }
+
+
+    service(type, businessId).subscribe({
+      next: (data: Blob) => {
+        const url = URL.createObjectURL(data);
+        if (type === 'pdf') {
+          this.pdfSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+          this.excelSrc = null;
+        } else {
+          this.excelSrc = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+          this.pdfSrc = null;
+        }
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error generating report:', error);
+        this.error = 'An error occurred while generating the report. Please try again.';
+        this.loading = false;
+      },
+    });
+  }
+
+  downloadReport(type: 'pdf' | 'excel', businessId: number = this.businessId) {
+    this.loading = true;
+    this.error = null;
+
+    let service;
+    switch (this.currentReportType) {
+      case 'product':
+        service = this.businessService.productReport.bind(this.businessService);
+        break;
+      case 'all_products':
+        service = this.businessService.productReport.bind(this.businessService);
+        break;
+        case 'best_products':
+        service = this.businessService.bestProductListReport.bind(this.businessService);
+        break;
+      default:
+        this.error = 'Invalid report type.';
+        this.loading = false;
+        return;
+    }
+
+
+
+    service(type, businessId).subscribe({
+      next: (data: Blob) => {
+        const url = URL.createObjectURL(data);
+        const link = document.createElement('a');
+        link.href = url;
+        const extension = type === 'pdf' ? 'pdf' : 'xlsx';
+        const reportTypeName = this.currentReportType.replace('_', ' ');
+        link.download = `${reportTypeName}_report_${businessId}.${extension}`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error downloading report:', error);
+        this.error = 'An error occurred while downloading the report. Please try again.';
+        this.loading = false;
+      },
+    });
   }
 
 }

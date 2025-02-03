@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   template: `
     <div class="modal-header bg-white" style="display: flex; justify-content: center; align-items: center;">
   <h5 class="modal-title" style="color: darkslategray;">Create Coupon</h5>
-  <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+  <!-- <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button> -->
 </div>
 
 
@@ -95,7 +95,7 @@ import { FormsModule } from '@angular/forms';
 
 
 <div class="modal-footer">
-  <button type="button" class="btn btn-secondary btn-sm" (click)="close()">Close</button>
+  <!-- <button type="button" class="btn btn-secondary btn-sm" (click)="close()">Close</button> -->
   <button
     type="button"
     class="btn btn-primary btn-sm"

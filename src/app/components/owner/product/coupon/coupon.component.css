@@ -1,36 +1,64 @@
+/* Ensure there's no extra margin or padding between the grid and the expiration status boxes */
+.ag-theme-alpine {
+  margin-bottom: 0; /* Removes any margin below the grid */
+}
 
+/* Expiration Status Boxes */
+.expiration-status-boxes {
+  display: flex;
+  justify-content: flex-start;
+  gap: 15px;
+  margin-top: 0;  /* Removes space above the status boxes */
+  margin-bottom: 10px; /* Optional: Adjust space below the status boxes if needed */
+}
 
+.status-box-container {
+  display: flex;
+  align-items: center;
+}
+
+.status-box {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+/* Pagination Container - Reduce margin between table and pagination */
 .pagination-controls {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px 0;
+  margin-top: 50px;  /* Reduce vertical space between table and pagination */
 }
 
+/* Inner action bar for pagination controls */
 .action-bar {
   display: flex;
   align-items: center;
-  gap: 15px; /* Adds space between elements */
+  gap: 10px;   /* Reduced gap between elements */
   font-family: Arial, sans-serif;
   font-size: 14px;
 }
 
+/* Page Size select input styling */
 #pageSize {
-  padding: 5px 10px;
+  padding: 5px 8px;   /* Reduced padding */
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #f9f9f9;
   cursor: pointer;
 }
 
+/* Focus state for Page Size select */
 #pageSize:focus {
   outline: none;
   border-color: #007bff;
 }
 
-button {
-  padding: 6px 12px;
-  font-size: 14px;
+/* Pagination buttons */
+.bt {
+  padding: 5px 10px;   /* Reduced padding */
+  font-size: 13px;     /* Reduced font size */
   border: 1px solid #007bff;
   border-radius: 4px;
   background-color: #007bff;
@@ -39,18 +67,28 @@ button {
   transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-button:disabled {
+/* Disabled pagination buttons */
+.bt:disabled {
   background-color: #ccc;
   border-color: #ccc;
   cursor: not-allowed;
 }
 
-button:not(:disabled):hover {
-  background-color: #170b9a;
+/* Hover effect for pagination buttons */
+.bt:not(:disabled):hover {
+  background-color: #585761;
   border-color: #0056b3;
 }
 
-span {
-  font-size: 16px;
+/* Page indicator text */
+.pagination-controls span {
+  font-size: 14px;  /* Adjusted font size */
   font-weight: bold;
+}
+
+/* AG Grid - Adjust the height and margin to make table more compact */
+ag-grid-angular {
+  width: 100%;
+  height: 400px;  /* Adjust the height for a more compact display */
+  margin-bottom: 10px;  /* Reduced space between table and pagination */
 }

@@ -5,10 +5,9 @@
   <div class="ms-auto d-flex align-items-center me-3">
     <span class="me-2">Download:</span>
     <button class="btn btn-danger btn-sm me-2" (click)="downloadReport('pdf')">
-      <svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#F3F3F3"><path d="M360-460h40v-80h40q17 0 28.5-11.5T480-580v-40q0-17-11.5-28.5T440-660h-80v200Zm40-120v-40h40v40h-40Zm120 120h80q17 0 28.5-11.5T640-500v-120q0-17-11.5-28.5T600-660h-80v200Zm40-40v-120h40v120h-40Zm120 40h40v-80h40v-40h-40v-40h40v-40h-80v200ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"/></svg>
-     PDF
+      PDF
     </button>
-    <button class="btn btn-success   btn-sm" (click)="downloadReport('excel')">
+    <button class="btn btn-success btn-sm" (click)="downloadReport('excel')">
       <i class="bi bi-file-earmark-excel"></i> Excel
     </button>
   </div>
@@ -21,7 +20,7 @@
   ></button>
 </div>
 
-<div class="modal-body">
+<div class="modal-body" style="max-height: 400px; overflow-y: auto;">
   <!-- Loader -->
   <div *ngIf="loading" class="d-flex justify-content-center my-4">
     <div class="spinner-border text-primary" role="status">
@@ -44,8 +43,8 @@
         <tbody>
           <tr *ngFor="let record of paymentHistory">
             <td>{{ record.paymentDate | date: 'medium' }}</td>
-            <td>{{ record.paidAmount | currency }}</td>
-            <td>{{ record.adminProfit | currency }}</td>
+            <td>{{ record.paidAmount | number:'1.0-0' }} MMK</td>
+            <td>{{ record.adminProfit | number:'1.0-0' }} MMK</td>
             <td>
               <span
                 *ngIf="record.desiredPercentage === 0.0"
@@ -68,8 +67,21 @@
     <p class="text-muted mt-3">No payment history available.</p>
   </div>
 </div>
-<div class="modal-footer bg-light d-flex justify-content-end">
-  <button type="button" class="btn btn-secondary" (click)="closeModal()">
+
+<div class="modal-footer bg-light d-flex align-items-center">
+  <div class="w-100">
+    <div class="d-flex justify-content-between">
+      <div>
+        <span class="fw-bold">Total Paid Amount:</span>
+        <span>{{ totalPaidAmount | number:'1.0-0' }} MMK</span>
+      </div>
+      <div>
+        <span class="fw-bold">Total Admin Profit:</span>
+        <span>{{ totalAdminProfit | number:'1.0-0' }} MMK</span>
+      </div>
+    </div>
+  </div>
+  <button type="button" class="btn btn-secondary ms-auto" (click)="closeModal()">
     Close
   </button>
 </div>

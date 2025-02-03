@@ -1,0 +1,98 @@
+<mat-card class="notification-container">
+  <mat-card-header class="notification-header">
+    <mat-card-title class="notification-title">
+      Notifications
+      <span class="total-count-badge">{{ notifications.length }}</span>
+    </mat-card-title>
+    <mat-card-subtitle class="notification-subtitle">
+      You have {{ unreadCount }} unread notifications
+    </mat-card-subtitle>
+    <!-- Floating read counter -->
+    <div class="read-counter">
+      <mat-icon>done_all</mat-icon>
+      <span>{{ notifications.length - unreadCount }} Read</span>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content class="notification-content">
+
+
+    <!-- Filter options -->
+    <div class="filter-options">
+      <button
+        mat-button
+        (click)="applyFilter('all')"
+        [class.active]="filter === 'all'"
+      >
+        All
+      </button>
+      <button
+        mat-button
+        (click)="applyFilter('unread')"
+        [class.active]="filter === 'unread'"
+      >
+        Unread
+      </button>
+      <button
+        mat-button
+        (click)="applyFilter('read')"
+        [class.active]="filter === 'read'"
+      >
+        Read
+      </button>
+    </div>
+
+    <!-- Notification list -->
+    <mat-list >
+      <ng-container *ngFor="let notification of filteredNotifications">
+        <mat-list-item
+          [class.unread]="notification.isRead === 0"
+          class="notification-item"
+          (click)="navigateTo(notification.route)"
+        >
+          <div class="notification-content-wrapper">
+            <!-- Notification Icon -->
+            <mat-icon class="notification-icon">
+              {{
+                notification.type === 'ORDER'
+                  ? 'shopping_cart'
+                  : 'notifications'
+              }}
+            </mat-icon>
+
+            <!-- Notification Details -->
+            <div class="notification-details">
+              <h3 class="notification-title">
+                {{
+                  notification.type === 'ORDER'
+                    ? 'New Order'
+                    : 'System Notification'
+                }}
+              </h3>
+              <p class="notification-message">{{ notification.message }}</p>
+              <small class="notification-time">{{
+                notification.createdAt | date: 'medium'
+              }}</small>
+              <span class="topic-badge">{{ notification.type }}</span>
+            </div>
+
+            <!-- Notification Actions -->
+            <div class="notification-actions">
+              <button
+                mat-icon-button
+                (click)="markAsRead(notification.id)"
+                *ngIf="notification.isRead === 0"
+              >
+                <mat-icon>mark_email_read</mat-icon>
+              </button>
+              <button mat-icon-button (click)="deleteNotification(notification.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-list-item>
+        <mat-divider class="dotted-divider"></mat-divider>
+      </ng-container>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

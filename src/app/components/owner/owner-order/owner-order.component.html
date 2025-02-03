@@ -21,12 +21,34 @@
         class="form-control"
       />
     </div>
-  </div>
+    <div class="d-flex flex-column justify-content-end mt-3">
+      <button
+        *ngIf="dateFilterStart || dateFilterEnd"
+        type="button"
+        class="btn btn-sm bg-danger ms-2"
+        (click)="clearDateFilter()"
+        style="height: 30px; width: 30px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 4px;"
+      >
+        <span class="text-white">&times;</span>
+      </button>
+    </div>
+
+      </div>
+
+       <!-- Export Buttons -->
+       <div class="d-flex gap-2">
+        <button (click)="exportAsPDF()" class="btn btn-danger">
+          <i class="fas fa-file-pdf"></i> PDF Report
+        </button>
+        <button (click)="exportAsExcel()" class="btn btn-success">
+          <i class="fas fa-file-excel"></i> Excel Report
+        </button>
+      </div>
 
   <!-- Total Price Card -->
   <div class="card p-3 text-center">
     <h5 class="fw-bold mb-2">Total Price</h5>
-    <h4 class="text-warning fw-bold">{{ getTotalPriceForBusiness() | currency }}</h4>
+    <h4 class="text-warning fw-bold">{{ getTotalPriceForBusiness() | number: '1.0-0' }} MMK</h4>
   </div>
 </div>
 
@@ -62,11 +84,11 @@
           </td>
           <td>
             <p class="fw-bold mb-1">{{ order.userName }}</p>
-            <p class="text-muted mb-0">{{ order.userEmail }} (owner)</p>
+            <p class="text-muted mb-0">{{ order.userEmail }}</p>
           </td>
           <td>{{ order.orderDate ? (order.orderDate | date: 'medium') : '' }}</td>
           <td>{{ order.quantity }}</td>
-          <td>{{ order.totalPrice }}</td>
+          <td>{{ order.totalPrice | number: '1.0-0' }} MMK</td>
         </tr>
       </tbody>
     </table>

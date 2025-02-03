@@ -28,8 +28,7 @@ export class CategoryService {
 
   getAllCategories(): Observable<businessCategory[]> {
     const headers = this.createAuthHeader()
-    console.log('Request Headers: ', headers)
-    return this.http.get<businessCategory[]>(this.BASE_URL, {
+    return this.http.get<businessCategory[]>(`${getDefaultAppConfig().backendHost}/public/business-categories`, {
       headers: headers
     });
   }

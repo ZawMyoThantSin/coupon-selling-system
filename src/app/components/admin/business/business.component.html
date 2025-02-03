@@ -28,8 +28,29 @@
         <i class="fas fa-user-plus"></i>
       </button>
 
-    </div>
+      <!-- Report Button -->
+      <button
+      type="button"
+      class="btn btn-sm btn-outline-secondary"
+      mdbRipple
+      mdbTooltip="Generate Business Report"
+      placement="left"
+      (click)="generateBothReports()"
+    >
+      Generate Report
+    </button>
   </div>
+  </div>
+
+<!-- Buttons for PDF and Excel Download -->
+<div *ngIf="pdfSrc || excelSrc" class="d-flex justify-content-end p-3">
+<button *ngIf="pdfSrc" class="btn btn-sm btn-danger me-2" (click)="downloadReport('pdf')">
+  Download PDF
+</button>
+<button *ngIf="excelSrc" class="btn btn-sm btn-success" (click)="downloadReport('excel')">
+  Download Excel
+</button>
+</div>
 
   <!-- Card Body (Table) -->
   <div class="card-body p-0">
@@ -41,6 +62,7 @@
             <th>Category</th>
             <th>Status</th>
             <th>Location</th>
+            <th>Join At</th>
           </tr>
         </thead>
         <tbody>
@@ -67,7 +89,8 @@
               <span *ngIf="item.status" class="badge badge-success rounded-pill d-inline">Active</span>
               <span *ngIf="!item.status" class="badge badge-warning rounded-pill d-inline">Pending</span>
             </td>
-            <td>{{ item.location}}</td>
+            <td [mdbTooltip]="item.location">{{ truncateText(item.location, 20)  }}</td>
+            <td>{{ item.createdAt | date}}</td>
           </tr>
 
 
@@ -84,4 +107,5 @@
  </div>
     </div>
   </div>
+
 </div>

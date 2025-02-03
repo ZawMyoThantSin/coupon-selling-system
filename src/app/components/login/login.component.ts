@@ -5,6 +5,7 @@ import { StorageService } from '../../services/storage.service';
 import e from 'express';
 import { ToastrService } from 'ngx-toastr';
 import { JwtService } from '../../services/jwt.service';
+import { getDefaultAppConfig } from '../../models/appConfig';
 
 @Component({
   selector: 'app-login',
@@ -89,9 +90,9 @@ onLoginSubmit(form:any) {
 }
 
 loginWithGoogle() {
-  window.location.href = 'http://localhost:8080/oauth2/authorization/google';
+  window.location.href = `${getDefaultAppConfig().backendHost}/oauth2/authorization/google`;
 }
 loginWithGitHub() {
-  window.location.href = 'http://localhost:8080/oauth2/authorization/github';
+  window.location.href = `${getDefaultAppConfig().backendHost}/oauth2/authorization/github`;
 }
 }

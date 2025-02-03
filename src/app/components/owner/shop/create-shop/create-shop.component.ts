@@ -5,6 +5,7 @@ import { CategoryService } from '../../../../services/category/category.service'
 import { FormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { get } from 'jquery';
 
 @Component({
   selector: 'app-create-shop',
@@ -203,7 +204,9 @@ onFileChange(event: any): void {
           .addTo(this.map)
           .bindPopup(`<b>${display_name}</b>`)
           .openPopup();
-
+        this.formData.location = `${lat}, ${lon}`;
+        const locationName:any = this.getLocationName(lat, lon);
+        this.formData.tempLocation = locationName; // Update the formData location
         // Move the map to the searched location
         this.map.setView([lat, lon], 15);
       } else {
@@ -212,7 +215,7 @@ onFileChange(event: any): void {
     });
   }
 
-  getLocationName(lat: number, lon: number) {
+  getLocationName(lat: number, lon: number):string | void {
     const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
 
     fetch(url)
@@ -222,6 +225,7 @@ onFileChange(event: any): void {
         this.formData.location = `${lat}, ${lon}`;
         console.log(`Location Name: ${locationName}`);
         this.formData.tempLocation = locationName; // Update the formData location
+        return locationName;
       })
       .catch((error) => {
         console.error('Error fetching location name:', error);

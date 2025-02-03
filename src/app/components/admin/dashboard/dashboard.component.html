@@ -6,7 +6,7 @@
       <div class="p-3 d-flex align-items-center" [class.justify-content-center]="isSidebarCollapsed">
         <span class="fs-3"></span>
         <span *ngIf="!isSidebarCollapsed" class="ms-2 fs-4 fw-bold text-white">
-           CS ADMIN
+          <span class="text-primary">Admin</span> Dashboard
         </span>
       </div>
 
@@ -174,7 +174,7 @@
     <!-- write search box -->
   </div>
 
-  <div class="d-flex align-items-center">
+  <div class="d-flex align-items-center ">
     <!-- Notification button triggering the dropdown -->
     <div mdbDropdown class="d-flex me-3">
       <button
@@ -277,7 +277,20 @@
       </ul>
     </div>
 
-
+  <!-- Add this near the notification dropdown in the header -->
+  <div class="d-flex align-items-center me-3">
+    <button
+      class="btn btn-link position-relative"
+      (click)="navigateToChat()"
+      aria-label="Open chat"
+    >
+      <i class="fas fa-comment-dots fs-6"></i>
+      <span
+        class="position-absolute notification-badge badge rounded-pill badge-notification bg-danger"
+      >
+      </span>
+    </button>
+  </div>
 
     <!-- User Info -->
     <div class="me-5">
@@ -318,13 +331,6 @@
     </div>
 
     <div class="dropdown-divider mt-2 mb-2"></div>
-
-    <li>
-      <a class="dropdown-item" routerLink="/profile">
-        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-        <span class="ms-2">Profile</span>
-      </a>
-    </li>
     <li>
       <a class="dropdown-item" (click)="openChangePasswordModal()">
         <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>

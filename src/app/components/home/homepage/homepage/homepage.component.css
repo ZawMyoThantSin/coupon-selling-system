@@ -383,3 +383,17 @@
     display: block;
   }
 }
+.category-link {
+  text-decoration: none;
+  font-size: 16px;
+  padding: 5px;
+  display: block;
+  color: black;
+  /* Default blue */
+  transition: color 0.3s;
+}
+
+.category-link.selected-text {
+  color: #007bff !important; /* Change to black when clicked */
+
+}

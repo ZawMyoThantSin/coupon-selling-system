@@ -13,6 +13,7 @@ export interface Business {
   userEmail:string;
   count:number;
   income:any;
+  createdAt:any;
   paid:any;
   profitPercentage:any;
   lastProfitPercentage: any;

@@ -9,10 +9,11 @@ import { PurchaseCoupon } from '../../../models/purchase-coupon';
 import { ToastrService } from 'ngx-toastr';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
 import { MessageService } from '../../../services/user/message.service';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-share-coupon-model',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLink],
   templateUrl: './share-coupon-modal.component.html',
   styleUrl: './share-coupon-modal.component.css'
 })

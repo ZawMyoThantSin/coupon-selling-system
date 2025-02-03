@@ -1,0 +1,74 @@
+<div class="modal-header">
+  <h5 class="modal-title">Add Admin</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="modalRef.close()"></button>
+</div>
+<div class="modal-body">
+
+<form [formGroup]="userForm" (ngSubmit)="showConfirmation()">
+
+    <div class="mb-3">
+      <label for="name" class="form-label">Username</label>
+      <input
+        type="text"
+        id="name"
+        class="form-control"
+        placeholder="Enter admin's name"
+        formControlName="name"
+        [class.is-invalid]="userForm.get('name')?.invalid && userForm.get('name')?.touched"
+      />
+      <div *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched" class="invalid-feedback">
+        <div *ngIf="userForm.get('name')?.errors?.['required']">Admin name is required.</div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        id="email"
+        class="form-control"
+        placeholder="Enter admin's email"
+        formControlName="email"
+        [class.is-invalid]="userForm.get('email')?.invalid && userForm.get('email')?.touched"
+      />
+      <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="invalid-feedback">
+        <div *ngIf="userForm.get('email')?.errors?.['required']">Email is required.</div>
+        <div *ngIf="userForm.get('email')?.errors?.['email']">Please enter a valid email.</div>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="defaultPassword" class="form-label">Password</label>
+      <input
+        type="text"
+        id="defaultPassword"
+        class="form-control readonly"
+        placeholder=""
+        formControlName="password"
+        readonly='readonly'
+      />
+    </div>
+    <div class="d-flex justify-content-end">
+      <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Submit</button>
+    </div>
+  </form>
+</div>
+
+<!-- Confirmation Modal -->
+<div *ngIf="showConfirmationModal" class="modal-backdrop">
+  <div class="confirmation-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Submission</h5>
+        <button type="button" class="btn-close" (click)="cancelSubmission()"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Username:</strong> {{ formDataPreview.name }}</p>
+        <p><strong>Email:</strong> {{ formDataPreview.email }}</p>
+        <p><strong>Password:</strong> {{ formDataPreview.password }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="cancelSubmission()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" (click)="confirmSubmission()">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>

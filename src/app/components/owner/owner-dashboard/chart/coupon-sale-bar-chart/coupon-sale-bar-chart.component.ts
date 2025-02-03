@@ -17,8 +17,9 @@ import {
 } from "ng-apexcharts";
 import { PurchaseCouponService } from '../../../../../services/purchase-coupon/purchase-coupon.service';
 import { WebsocketService } from '../../../../../services/websocket/websocket.service';
-import { MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
 import { PaymentHistoryModalComponent } from '../../../../admin/business/business-income/payment-history-modal/payment-history-modal.component';
+import { MonthSelectionModalComponent } from '../month-selection-modal/month-selection-modal.component';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -62,8 +63,10 @@ export type ChartOptions = {
                 </div>
               </div>
               <div class="col-auto">
-                <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#DDDFEB"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
-
+              <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#DDDFEB"
+                style="cursor: pointer;" (click)="openMonthSelectionModal(business)">
+                <path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/>
+              </svg>
               </div>
             </div>
           </div>
@@ -141,7 +144,7 @@ export type ChartOptions = {
 
 
     </div>
-    <div class="chart-container">
+  <div class="chart-container">
   <div class="toggle-buttons">
     <button (click)="loadDailyCouponSalesData()" [class.active]="view === 'daily'">Daily</button>
     <button (click)="loadMonthlyCouponSalesData()" [class.active]="view === 'monthly'">Monthly</button>
@@ -162,6 +165,7 @@ export type ChartOptions = {
   </div>
   <p class="no-data-message" *ngIf="chartOptions.series[0].data.length === 0">No data available to display for this business.</p>
 </div>
+
 </div>
 
   `,
@@ -239,7 +243,7 @@ export type ChartOptions = {
 
 
     .chart-container {
-      max-width: 50%;
+      max-width:100%;
   margin: 20px auto;
       background-color: #ffffff;
       border-radius: 12px; /* Reduced corner radius */
@@ -291,6 +295,10 @@ export class CouponSaleBarChartComponent {
   lastPaidAmount: number = 0;
   desiredPercentage: number = 0;
   business: any;
+  availableMonths: string[] = [];
+  selectedMonthEarnings: number | null = null;
+  selectedMonth: string | null = null;
+  modalRef: MdbModalRef<any> | null = null;
 
   constructor(private businessService: BusinessService,
     private saleCouponService: PurchaseCouponService,
@@ -375,50 +383,40 @@ export class CouponSaleBarChartComponent {
   loadDailyCouponSalesData() {
     this.view = 'daily';
 
-    // Dynamically calculate 'today'
-    const today = new Date().toISOString().split('T')[0];
+    // Get today's date and the last 7 days
+    const today = new Date();
+    const last7Days = Array.from({ length: 7 }, (_, i) => {
+      const date = new Date();
+      date.setDate(today.getDate() - i);
+      return date.toISOString().split('T')[0];
+    }).reverse(); // Reverse to keep in ascending order
 
     this.businessService.getCouponSalesData(this.businessId).subscribe(
       (data: { businessId: number; soldCount: number; buyDate: string }[]) => {
-        console.log("DATA: ",data)
+        console.log("DATA: ", data);
         const businessData = data.filter(item => item.businessId === this.businessId);
 
         if (businessData?.length > 0) {
-          // Filter dates up to and including today
-          const filteredData = businessData.filter(
-            item => new Date(item.buyDate).toISOString().split('T')[0] <= today
-          );
+          // Initialize sales data for the last 7 days with 0 sales
+          const salesDataMap: Record<string, number> = last7Days.reduce((acc, date) => {
+            acc[date] = 0;
+            return acc;
+          }, {} as Record<string, number>);
 
-          // Extract unique dates and ensure they're sorted
-          const uniqueDates = Array.from(
-            new Set(filteredData.map(item => new Date(item.buyDate).toISOString().split('T')[0]))
-          ).sort();
-
-          // Ensure the final date is always today, and take the last 5 dates
-          if (!uniqueDates.includes(today)) {
-            uniqueDates.push(today);
-          }
-
-          const last5Dates = uniqueDates.slice(-5);
-          const salesData = last5Dates.map(date => ({ date, soldCount: 0 }));
-
-          // Populate sales data
-          filteredData.forEach(item => {
+          // Populate sales data from API response
+          businessData.forEach(item => {
             const buyDate = new Date(item.buyDate).toISOString().split('T')[0];
-            const dateEntry = salesData.find(entry => entry.date === buyDate);
-            if (dateEntry) dateEntry.soldCount += item.soldCount;
+            if (salesDataMap[buyDate] !== undefined) {
+              salesDataMap[buyDate] += item.soldCount;
+            }
           });
 
-          // Update chart with the calculated data
-          const soldCounts = salesData.map(entry => entry.soldCount);
-          const highestIndex = this.getHighestSalesDay(soldCounts);
+          // Convert data into arrays for the chart
+          const dates = Object.keys(salesDataMap);
+          const soldCounts = Object.values(salesDataMap);
 
-          this.updateChartOptions(
-            salesData.map(entry => entry.date),
-            soldCounts,
-            highestIndex,
-            `Daily Coupon Sales`
-          );
+          const highestIndex = this.getHighestSalesDay(soldCounts);
+          this.updateChartOptions(dates, soldCounts, highestIndex, `Daily Coupon Sales (Last 7 Days)`);
         } else {
           this.clearChart();
         }
@@ -426,6 +424,7 @@ export class CouponSaleBarChartComponent {
       error => this.clearChart()
     );
   }
+
 
 
 
@@ -506,4 +505,13 @@ export class CouponSaleBarChartComponent {
     });
   }
 
+  // Open modal and fetch available months
+  openMonthSelectionModal(business: any): void {
+    if (this.businessId) {
+      this.modalService.open(MonthSelectionModalComponent, {
+        modalClass: 'modal-lg',
+        data: { businessId: business.id},
+      });
+    }
+  }
 }

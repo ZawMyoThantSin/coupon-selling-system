@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MdbTooltipModule } from 'mdb-angular-ui-kit/tooltip';
 import { PurchaseCouponService } from '../../../services/purchase-coupon/purchase-coupon.service';
 import { WebsocketService } from '../../../services/websocket/websocket.service';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 @Component({
   selector: 'app-owner-dashboard',
@@ -38,6 +39,10 @@ export class OwnerDashboardComponent {
   seeAll = false;
   userInfo!:UserResponse;
   userId:any;
+  isChatOpen = false;
+
+  notifications: { id:number; message: string; route: string; isRead: number; type:string }[] = [];
+  unreadCount: number = 0;
 
   constructor(
     private router: Router,
@@ -48,7 +53,9 @@ export class OwnerDashboardComponent {
     private saleCouponService: PurchaseCouponService,
     private userService: UserService,
     private modalService: MdbModalService,
-    private websocketService: WebsocketService
+    private websocketService: WebsocketService,
+    private notificationService: NotificationService,
+    private jwtService: JwtService
   ) {
     this.router.events.subscribe(() => {
       this.activeRoute = this.router.url; // Get the active URL
@@ -60,6 +67,7 @@ export class OwnerDashboardComponent {
     this.handleWebSocketMessages();
 
     this.token = this.storageService.getItem('token');
+    this.userId = this.jwtService.getUserId(this.token);
     this.userService.getUserInfo().subscribe((response)=>{
       this.userInfo = response;
       this.userId = this.userInfo.id;
@@ -67,6 +75,7 @@ export class OwnerDashboardComponent {
       this.fetchBusinessInfo(this.userId);
     },error => console.log('Error in Fetching UserInfo', error));
 
+    this.getNotifications();
 
   }
 
@@ -169,13 +178,64 @@ export class OwnerDashboardComponent {
   getImageUrl(imagePath: string): string {
     return this.businessService.getImageUrl(imagePath);
   }
-isSidebarCollapsed = false;
+isSidebarCollapsed = true;
 
   toggleSidebar() {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 
+
+  getNotifications(): void {
+    console.log('This is notifications userId :',this.userId );
+    this.notificationService.getNotificationsByReceiver(this.userId).subscribe(
+      (notifications) => {
+        this.notifications = notifications;
+        this.unreadCount = notifications.filter((n) => n.isRead === 0).length;
+      },
+      (error) => console.error('Error fetching notifications:', error)
+    );
+  }
+  markNotificationAsRead(notificationId: number): void {
+    this.notificationService.markAsRead(notificationId).subscribe(
+      () => {
+        // Remove the notification from the list or mark it as read locally
+        const notification  = this.notifications.find((n) => n.id === notificationId);
+        if (notification) {
+          notification.isRead = 1; // Mark as read
+        }
+        this.unreadCount = this.notifications.filter((n) => n.isRead === 0).length;
+        this.ngOnInit(); // Refresh the notifications
+      },
+      (error) => console.error('Error marking notification as read:', error)
+    );
+  }
+
+  getSortedNotifications(): any[] {
+    return this.notifications.sort((a, b) => a.isRead - b.isRead);
+  }
+
+  navigateTo(route: string): void {
+    this.router.navigate([route]);
+  }
+
   handleWebSocketMessages():void{
     this.websocketService.connect();
+
+    this.websocketService.onMessage().subscribe((message) => {
+      if(message =="OWNER_PAID"){
+        this.unreadCount++;
+        this.toastr.info("Admin has paid your amount.","Alert");
+        this.ngOnInit();
+      }
+    });
+
+  }
+
+  openAdminChat() {
+    this.isChatOpen = true;
+  }
+
+  closeAdminChat() {
+    this.isChatOpen = false;
   }
 }

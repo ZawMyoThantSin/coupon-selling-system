@@ -32,10 +32,10 @@ export class OrderListComponent {
       this.orders = data;
 
       // Sort by created_at (most recent first)
-      this.orders = data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      this.filteredOrders  = data.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-      // Filter to show pending orders first on initial load
-      this.filteredOrders = this.orders.filter(order => order.status === this.statusMap['pending']);
+      // // Filter to show pending orders first on initial load
+      // this.filteredOrders = this.orders.filter(order => order.status === this.statusMap['pending']);
 
     });
   }
